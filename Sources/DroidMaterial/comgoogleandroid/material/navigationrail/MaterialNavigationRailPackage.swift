@@ -5,6 +5,9 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
+import Droid
+import CDroidJNI
+
 extension ComGoogleAndroidPackage.MaterialPackage {
     public class NavigationRailPackage: AndroidClassName {}
     

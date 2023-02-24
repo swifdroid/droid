@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.CircularRevealPackage.CoordinatorLayout {
+extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage.CoordinatorLayoutPackage {
     public class CircularRevealFrameLayoutClass: AndroidClassName {}
     
     public var CircularRevealFrameLayout: CircularRevealFrameLayoutClass { .init(superClass: self, "CircularRevealFrameLayout") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.CircularRevealPackage.CoordinatorLayo
 
 class CircularRevealFrameLayout: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.coordinatorlayout.CircularRevealFrameLayout])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.coordinatorlayout.CircularRevealFrameLayout], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

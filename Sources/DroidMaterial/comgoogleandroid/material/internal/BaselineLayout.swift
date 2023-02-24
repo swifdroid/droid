@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.InternalPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.InternalPackage {
     public class BaselineLayoutClass: AndroidClassName {}
     
     public var BaselineLayout: BaselineLayoutClass { .init(superClass: self, "BaselineLayout") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.InternalPackage {
 
 class BaselineLayout: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.internal.BaselineLayout])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.internal.BaselineLayout], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

@@ -8,6 +8,7 @@
 import DroidFoundation
 import Foundation
 import CDroidJNI
+import JNIKit
 
 extension AndroidPackage.ViewPackage {
     public class ViewClass: AndroidClassName {}

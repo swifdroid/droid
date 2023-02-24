@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.BottomAppBarPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.BottomAppBarPackage {
     public class BottomAppBarClass: AndroidClassName {}
     
     public var BottomAppBar: BottomAppBarClass { .init(superClass: self, "BottomAppBar") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.BottomAppBarPackage {
 
 class BottomAppBar: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.bottomappbar.BottomAppBar])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.bottomappbar.BottomAppBar], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

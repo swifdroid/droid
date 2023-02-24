@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.ChipPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.ChipPackage {
     public class ChipClass: AndroidClassName {}
     
     public var Chip: ChipClass { .init(superClass: self, "Chip") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.ChipPackage {
 
 class Chip: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.chip.Chip])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.chip.Chip], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

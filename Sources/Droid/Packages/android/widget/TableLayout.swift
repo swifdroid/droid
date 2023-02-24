@@ -7,6 +7,7 @@
 
 import DroidFoundation
 import Foundation
+import JNIKit
 import CDroidJNI
 
 extension AndroidPackage.WidgetPackage {

@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.ButtonPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
     public class MaterialButtonToggleGroupClass: AndroidClassName {}
     
     public var MaterialButtonToggleGroup: MaterialButtonToggleGroupClass { .init(superClass: self, "MaterialButtonToggleGroup") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.ButtonPackage {
 
 class MaterialButtonToggleGroup: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.button.MaterialButtonToggleGroup])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.button.MaterialButtonToggleGroup], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

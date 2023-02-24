@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.SwitchMaterialPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.SwitchMaterialPackage {
     public class SwitchMaterialClass: AndroidClassName {}
     
     public var SwitchMaterial: SwitchMaterialClass { .init(superClass: self, "SwitchMaterial") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.SwitchMaterialPackage {
 
 class SwitchMaterial: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.switchmaterial.SwitchMaterial])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.switchmaterial.SwitchMaterial], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

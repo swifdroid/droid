@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.TextFieldPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.TextFieldPackage {
     public class MaterialAutoCompleteTextViewClass: AndroidClassName {}
     
     public var MaterialAutoCompleteTextView: MaterialAutoCompleteTextViewClass { .init(superClass: self, "MaterialAutoCompleteTextView") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.TextFieldPackage {
 
 class MaterialAutoCompleteTextView: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.MaterialAutoCompleteTextView])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.MaterialAutoCompleteTextView], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

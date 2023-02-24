@@ -68,7 +68,7 @@ open class DroidApp {
         switch item {
         case .items(let v): v.forEach { parseAppBuilderItem($0) }
         case .lifecycle(let v): _lifecycles.append(v)
-		case .manifest(let v): break
+		case .manifest(_): break
 //        case .activities(let v): activities = v
         case .none: break
         }

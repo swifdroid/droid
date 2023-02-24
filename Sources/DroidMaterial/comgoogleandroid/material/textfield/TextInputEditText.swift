@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.TextFieldPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.TextFieldPackage {
     public class TextInputEditTextClass: AndroidClassName {}
     
     public var TextInputEditText: TextInputEditTextClass { .init(superClass: self, "TextInputEditText") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.TextFieldPackage {
 
 class TextInputEditText: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.TextInputEditText])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.TextInputEditText], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

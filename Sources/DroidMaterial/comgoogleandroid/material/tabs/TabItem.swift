@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.TabsPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.TabsPackage {
     public class TabItemClass: AndroidClassName {}
     
     public var TabItem: TabItemClass { .init(superClass: self, "TabItem") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.TabsPackage {
 
 class TabItem: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.tabs.TabItem])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.tabs.TabItem], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

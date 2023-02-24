@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 23.10.2021.
 //
 
-@_exported import DroidFoundation
 import CDroidJNI
 import Foundation
 #if os(Android)
@@ -21,7 +20,7 @@ class AnyActivity: JClass {
 @_cdecl("Java_swift_App_initialize")
 public func initialize(env: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject: jobject) {
     print(.debug, "DROID", "hello from swift13 ♥️")
-    let context = JavaContext(env, appObject, callerObject)
+//    let context = JavaContext(env, appObject, callerObject)
     let env = JEnvironment(env)
     
     let rrr = JObjectReference(callerObject)

@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.ProgressIndicatorPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.ProgressIndicatorPackage {
     public class CircularProgressIndicatorClass: AndroidClassName {}
     
     public var CircularProgressIndicator: CircularProgressIndicatorClass { .init(superClass: self, "CircularProgressIndicator") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.ProgressIndicatorPackage {
 
 class CircularProgressIndicator: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.CircularProgressIndicator])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.CircularProgressIndicator], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

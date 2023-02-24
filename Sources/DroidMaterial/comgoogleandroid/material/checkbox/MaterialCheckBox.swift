@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.CheckBoxPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.CheckBoxPackage {
     public class MaterialCheckBoxClass: AndroidClassName {}
     
     public var MaterialCheckBox: MaterialCheckBoxClass { .init(superClass: self, "MaterialCheckBox") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.CheckBoxPackage {
 
 class MaterialCheckBox: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.checkbox.MaterialCheckBox])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.checkbox.MaterialCheckBox], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

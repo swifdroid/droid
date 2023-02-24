@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.ProgressIndicatorPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.ProgressIndicatorPackage {
     public class LinearProgressIndicatorClass: AndroidClassName {}
     
     public var LinearProgressIndicator: LinearProgressIndicatorClass { .init(superClass: self, "LinearProgressIndicator") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.ProgressIndicatorPackage {
 
 class LinearProgressIndicator: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.LinearProgressIndicator])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.LinearProgressIndicator], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

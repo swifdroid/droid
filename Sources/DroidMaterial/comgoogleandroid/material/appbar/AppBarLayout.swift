@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.AppBarPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage {
     public class AppBarLayoutClass: AndroidClassName {}
     
     public var AppBarLayout: AppBarLayoutClass { .init(superClass: self, "AppBarLayout") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.AppBarPackage {
 
 class AppBarLayout: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.appbar.AppBarLayout])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.appbar.AppBarLayout], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

@@ -34,6 +34,7 @@ class NativeOnSeekBarChangeListener: JClass {
     
     var _onProgressChanged: (Int, Bool) -> Void = { _,_ in }
     
+    @discardableResult
     public func onProgressChanged(_ handler: @escaping (_ progress: Int, _ fromUser: Bool) -> Void) -> Self {
         _onProgressChanged = handler
         return self
@@ -41,6 +42,7 @@ class NativeOnSeekBarChangeListener: JClass {
     
     var _onStartTrackingTouch: () -> Void = {}
     
+    @discardableResult
     public func onStartTrackingTouch(_ handler: @escaping () -> Void) -> Self {
         _onStartTrackingTouch = handler
         return self
@@ -48,6 +50,7 @@ class NativeOnSeekBarChangeListener: JClass {
     
     var _onStopTrackingTouch: () -> Void = {}
     
+    @discardableResult
     public func onStopTrackingTouch(_ handler: @escaping () -> Void) -> Self {
         _onStopTrackingTouch = handler
         return self

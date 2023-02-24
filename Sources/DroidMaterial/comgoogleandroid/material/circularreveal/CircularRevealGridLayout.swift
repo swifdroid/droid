@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.CircularRevealPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage {
     public class CircularRevealGridLayoutClass: AndroidClassName {}
     
     public var CircularRevealGridLayout: CircularRevealGridLayoutClass { .init(superClass: self, "CircularRevealGridLayout") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.CircularRevealPackage {
 
 class CircularRevealGridLayout: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.CircularRevealGridLayout])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.CircularRevealGridLayout], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

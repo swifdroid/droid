@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.TabsPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.TabsPackage {
     public class TabLayoutClass: AndroidClassName {}
     
     public var TabLayout: TabLayoutClass { .init(superClass: self, "TabLayout") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.TabsPackage {
 
 class TabLayout: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.tabs.TabLayout])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.tabs.TabLayout], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {

@@ -5,10 +5,10 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Foundation
+import Droid
 import CDroidJNI
 
-extension ComGoogleAndroidPackage.Material.RadioButtonPackage {
+extension ComGoogleAndroidPackage.MaterialPackage.RadioButtonPackage {
     public class MaterialRadioButtonClass: AndroidClassName {}
     
     public var MaterialRadioButton: MaterialRadioButtonClass { .init(superClass: self, "MaterialRadioButton") }
@@ -16,7 +16,7 @@ extension ComGoogleAndroidPackage.Material.RadioButtonPackage {
 
 class MaterialRadioButton: View {
     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.radiobutton.MaterialRadioButton])
+        super.init(environment, context, classes: [.comGoogleAndroid.material.radiobutton.MaterialRadioButton], args: [])
     }
     
     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
