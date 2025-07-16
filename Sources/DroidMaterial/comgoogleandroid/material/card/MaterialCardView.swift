@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.CardPackage {
-    public class MaterialCardViewClass: AndroidClassName {}
+    public class MaterialCardViewClass: JClassName, @unchecked Sendable {}
     
-    public var MaterialCardView: MaterialCardViewClass { .init(superClass: self, "MaterialCardView") }
+    public var MaterialCardView: MaterialCardViewClass { .init(parent: self, name: "MaterialCardView") }
 }
 
-class MaterialCardView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.card.MaterialCardView], args: [])
-    }
+// class MaterialCardView: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.card.MaterialCardView], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage {
-    public class CollapsingToolbarLayoutClass: AndroidClassName {}
+    public class CollapsingToolbarLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var CollapsingToolbarLayout: CollapsingToolbarLayoutClass { .init(superClass: self, "CollapsingToolbarLayout") }
+    public var CollapsingToolbarLayout: CollapsingToolbarLayoutClass { .init(parent: self, name: "CollapsingToolbarLayout") }
 }
 
-class CollapsingToolbarLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.appbar.CollapsingToolbarLayout], args: [])
-    }
+// class CollapsingToolbarLayout: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.appbar.CollapsingToolbarLayout], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

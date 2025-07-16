@@ -5,27 +5,28 @@
 //  Created by Mihael Isaev on 21.04.2022.
 //
 
-import Foundation
+import FoundationEssentials
 
 protocol XMLGeneratable {
 	func generateXML(indentation: UInt) -> String
 }
 
-class Indentation {
+class Indentation: CustomStringConvertible {
 	var value: UInt
 	
-	init(_ value: UInt) {
+	required init(_ value: UInt) {
 		self.value = value
 	}
 	
 	func tab() -> Self {
-		value = value + 4
-		return self
+        return .init(value + 3)
 	}
 	
 	var string: String {
 		value == 0 ? "" : (0...value).map { _ in " " }.joined(separator: "")
 	}
+    
+    var description: String { string }
 }
 
 func + (lhs: Indentation, rhs: String) -> String {
@@ -36,24 +37,26 @@ protocol StringValuable {
 	var value: String { get }
 }
 
-extension Array where Element == ManifestTag {
-	func contains<T: ManifestTag>(_ tag: T.Type) -> Bool {
+extension Array where Element == DroidApp.ManifestTag {
+    func contains<T: DroidApp.ManifestTag>(_ tag: T.Type) -> Bool {
 		contains(where: { $0.name == tag.name })
 	}
 }
 
-extension Array where Element == ManifestTagParam {
-	func contains(_ name: ManifestTagParamName) -> Bool {
-		contains(where: { $0.name.value == name.value })
-	}
-}
-
-struct ManifestTagParamName: ExpressibleByStringLiteral {
+struct ManifestTagParamName: ExpressibleByStringLiteral, Hashable, Equatable {
 	let value: String
 	
 	init(stringLiteral value: StringLiteralType) {
 		self.value = value
 	}
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(value)
+    }
+    
+    static func == (lhs: ManifestTagParamName, rhs: ManifestTagParamName) -> Bool {
+        lhs.value == rhs.value
+    }
 	
 	static var xmlnsAndroid: Self { "xmlns:android" }
 	static var package: Self { "package" }
@@ -93,7 +96,6 @@ struct ManifestTagParamName: ExpressibleByStringLiteral {
 	static var androidHasCode: Self { "android:hasCode" }
 	static var androidHasFragileUserData: Self { "android:hasFragileUserData" }
 	static var androidHardwareAccelerated: Self { "android:hardwareAccelerated" }
-	static var androidIsGame: Self { "android:isGame" }
 	static var androidKillAfterRestore: Self { "android:killAfterRestore" }
 	static var androidLargeHeap: Self { "android:largeHeap" }
 	static var androidLogo: Self { "android:logo" }
@@ -160,100 +162,127 @@ struct ManifestTagParamName: ExpressibleByStringLiteral {
 	static var androidWindowSoftInputMode: Self { "android:windowSoftInputMode" }
 }
 
-struct ManifestTagParam {
-	let name: ManifestTagParamName
-	let value: String
+struct ManifestTagParamValue {
+    let value: String
 	
-	init (_ name: ManifestTagParamName, _ value: String) {
-		self.name = name
+	init (_ value: String) {
 		self.value = value
 	}
 	
-	init (_ name: ManifestTagParamName, _ value: Bool) {
-		self.name = name
+	init (_ value: Bool) {
 		self.value = value ? "true" : "false"
 	}
 	
-	init (_ name: ManifestTagParamName, _ value: Int) {
-		self.name = name
+	init (_ value: Int) {
 		self.value = "\(value)"
 	}
 	
-	init (_ name: ManifestTagParamName, _ value: Double) {
-		self.name = name
+	init (_ value: Double) {
 		self.value = "\(value)"
 	}
 	
-	init (_ name: ManifestTagParamName, values: [String]) {
-		self.name = name
+	init (values: [String]) {
 		self.value = values.joined(separator: "|")
 	}
 	
-	init <R>(_ name: ManifestTagParamName, _ value: R) where R: RawRepresentable, R.RawValue == String {
-		self.name = name
+	init <R>(_ value: R) where R: RawRepresentable, R.RawValue == String {
 		self.value = value.rawValue
 	}
 	
-	init <R>(_ name: ManifestTagParamName, values: [R]) where R: RawRepresentable, R.RawValue == String {
-		self.name = name
+	init <R>(values: [R]) where R: RawRepresentable, R.RawValue == String {
 		self.value = values.map { $0.rawValue }.joined(separator: "|")
 	}
 	
-	init <S>(_ name: ManifestTagParamName, _ value: S) where S: StringValuable {
-		self.name = name
+	init <S>(_ value: S) where S: StringValuable {
 		self.value = value.value
 	}
 	
-	init <S>(_ name: ManifestTagParamName, values: [S]) where S: StringValuable {
-		self.name = name
+	init <S>(values: [S]) where S: StringValuable {
 		self.value = values.map { $0.value }.joined(separator: "|")
 	}
-	
-	var result: String { "\(name.value)=\"\(value)\"" }
 }
 
-protocol ManifestTag: AnyObject, XMLGeneratable {
-	static var name: String { get }
-	var params: [ManifestTagParam] { get set }
-	var items: [ManifestTag] { get set }
-	func missingParams() -> [String]
-	func missingItems() -> [String]
+extension DroidApp {
+    public class ManifestTag: XMLGeneratable, Hashable, Equatable {
+        class var name: String { "" }
+        
+        var order: Int { 10 }
+        
+        var params: [ManifestTagParamName: String] = [:]
+        var items: [ManifestTag] = []
+        
+        func uniqueParams() -> [ManifestTagParamName] { [] }
+        func missingParams() -> [String] { [] }
+        func missingItems() -> [String] { [] }
+        
+        func merge(with tag: ManifestTag) {
+            for (key, value) in tag.params {
+                params[key] = value
+            }
+            for tagItem in tag.items {
+                if let foundItem = items.first(where: { $0 == tagItem }) {
+                    foundItem.merge(with: tagItem)
+                } else {
+                    items.append(tagItem)
+                }
+            }
+        }
+        
+        public static func == (lhs: DroidApp.ManifestTag, rhs: DroidApp.ManifestTag) -> Bool {
+            return lhs.name == rhs.name
+                && lhs.uniqueParams().compactMap { lhs.params[$0] }.joined() == rhs.uniqueParams().compactMap { rhs.params[$0] }.joined()
+        }
+        
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(name)
+            for key in uniqueParams() {
+                if let v = params[key] {
+                    hasher.combine(v)
+                }
+            }
+        }
+    }
 }
 
-extension ManifestTag {
+extension DroidApp.ManifestTag {
 	var name: String { Self.name }
 	
 	@discardableResult
 	func param(_ name: ManifestTagParamName, _ value: String) -> Self {
-		params.append(.init(name, value))
+		params[name] = value
 		return self
 	}
 	
 	@discardableResult
-	func item(_ handler: () -> ManifestTag) -> Self {
+    func item(_ handler: () -> DroidApp.ManifestTag) -> Self {
 		items.append(handler())
 		return self
 	}
 	
 	func generateXML(indentation: UInt = 0) -> String {
 		let indentation = Indentation(indentation)
-		var lines = [indentation + "<\(Self.name)" + (params.count > 0 ? "" : ">")]
+        var lines: [String] = []
+        if indentation.value == 0 {
+            lines.append(##"<?xml version="1.0" encoding="utf-8"?>"##)
+            lines.append(indentation + "<!--managed by SwifDroid-->")
+        }
+        lines.append(indentation + "<\(Self.name)" + (params.count == 0 ? ">" : ""))
 		if params.count > 0 {
 			params.enumerated().forEach { offset, element in
-				if offset == params.count - 1 {
-					lines.append(indentation.tab() + element.result + ">")
+				let result = "\(element.key.value)=\"\(element.value)\""
+                if offset == params.count - 1 {
+                    lines.append(indentation.tab().string + result + (items.count > 0 ? ">" : " />"))
 				} else {
-					lines.append(indentation.tab() + element.result)
+					lines.append(indentation.tab().string + result)
 				}
 			}
 		}
-		items.forEach {
-			lines.append(indentation.tab() + $0.generateXML(indentation: indentation.tab().value))
+        items.sorted(by: { $0.order < $1.order }).forEach {
+			lines.append($0.generateXML(indentation: indentation.tab().value))
 		}
-		lines.append(indentation + "</\(Self.name)>")
+        if items.count > 0 {
+            lines.append(indentation + "</\(Self.name)>")
+        }
 		return lines.joined(separator: "\n")
 	}
-	
-	func missingParams() -> [String] { [] }
-	func missingItems() -> [String] { [] }
 }

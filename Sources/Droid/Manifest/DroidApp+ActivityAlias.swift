@@ -12,12 +12,15 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element)
 	public class ActivityAlias: ManifestTag {
-		static var name: String { "activity-alias" }
+        class override var name: String { "activity-alias" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+        required override init() {
+            super.init()
+        }
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 		
 		// MARK: -
 		
@@ -28,7 +31,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#enabled)
 		public func enabled(_ value: Bool) -> Self {
-			params.append(.init(.androidEnabled, value))
+			params[.androidEnabled] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -54,7 +57,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#exported)
 		public func exported(_ value: Bool) -> Self {
-			params.append(.init(.androidExported, value))
+			params[.androidExported] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -77,7 +80,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#icon)
 		public func icon(_ value: String) -> Self { // TODO: drawable resource
-			params.append(.init(.androidIcon, value))
+			params[.androidIcon] = value
 			return self
 		}
 		
@@ -94,7 +97,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#label)
 		public func label(_ value: String) -> Self { // string or string resource
-			params.append(.init(.androidLabel, value))
+			params[.androidLabel] = value
 			return self
 		}
 		
@@ -114,7 +117,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#nm)
 		public func name(_ value: String) -> Self {
-			params.append(.init(.androidName, value))
+			params[.androidName] = value
 			return self
 		}
 		
@@ -135,7 +138,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#prmsn)
 		public func permission(_ value: String) -> Self {
-			params.append(.init(.androidPermission, value))
+			params[.androidPermission] = value
 			return self
 		}
 		
@@ -153,7 +156,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#trgt)
 		public func targetActivity(_ value: String) -> Self {
-			params.append(.init(.androidTargetActivity, value))
+			params[.androidTargetActivity] = value
 			return self
 		}
 		

@@ -13,16 +13,20 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/queries-element#package)
 	public class Package: ManifestTag {
-		static var name: String { "package" }
+        class override var name: String { "package" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
 		
 		public init (_ name: String) {
-			params.append(.init(.androidName, name))
+            super.init()
+			params[.androidName] = name
 		}
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 	}
 }
 

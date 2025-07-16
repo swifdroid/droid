@@ -1,39 +1,37 @@
-//
-//  Button.swift
-//  Droid
-//
-//  Created by Mihael Isaev on 16.01.2022.
-//
+// //
+// //  Button.swift
+// //  Droid
+// //
+// //  Created by Mihael Isaev on 16.01.2022.
+// //
 
-import DroidFoundation
-import Foundation
-import CDroidJNI
+// import DroidFoundation
+// import FoundationEssentials
+// extension AndroidPackage.WidgetPackage {
+//     public class ButtonClass: JClassName, @unchecked Sendable {}
+    
+//     public var Button: ButtonClass { .init(parent: self, name: "Button") }
+// }
 
-extension AndroidPackage.WidgetPackage {
-    public class ButtonClass: AndroidClassName {}
+// class Button: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.android.widget.Button], args: [.object(.android.content.Context) / context])
+//     }
     
-    public var Button: ButtonClass { .init(superClass: self, "Button") }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+    
+//     func setText(_ text: String) {
+//         text.withCString { cstr in
+//             let jsss = environment.pointer.pointee?.pointee.NewStringUTF(environment.pointer, cstr)
+//             callVoidWithMethod("setText", .object(.java.lang.CharSequence) / JStringWrapper.init(v: jsss!))
+//         }
+//     }
+// }
 
-class Button: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.Button], args: [.object(.android.content.Context) / context])
-    }
+// struct JStringWrapper: JValuable {
+//     let v: jstring
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-    
-    func setText(_ text: String) {
-        text.withCString { cstr in
-            let jsss = environment.pointer.pointee?.pointee.NewStringUTF(environment.pointer, cstr)
-            callVoidWithMethod("setText", .object(.java.lang.CharSequence) / JStringWrapper.init(v: jsss!))
-        }
-    }
-}
-
-struct JStringWrapper: JValuable {
-    let v: jstring
-    
-    var jValue: jvalue { .init(l: v) }
-}
+//     var jValue: jvalue { .init(l: v) }
+// }

@@ -12,12 +12,15 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-tree-element)
 	public class PermissionTree: ManifestTag {
-		static var name: String { "permission-tree" }
+        class override var name: String { "permission-tree" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 		
 		// MARK: -
 		
@@ -27,7 +30,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-tree-element#icon)
 		public func icon(_ value: String) -> Self { // TODO: drawable resource
-			params.append(.init(.androidIcon, value))
+			params[.androidIcon] = value
 			return self
 		}
 		
@@ -51,7 +54,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-tree-element#label)
 		public func label(_ value: String) -> Self { // TODO: string or string resource
-			params.append(.init(.androidLabel, value))
+			params[.androidLabel] = value
 			return self
 		}
 		
@@ -79,7 +82,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-tree-element#nm)
 		public func name(_ value: String) -> Self {
-			params.append(.init(.androidName, value))
+			params[.androidName] = value
 			return self
 		}
 		

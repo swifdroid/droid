@@ -8,7 +8,7 @@
 import DroidFoundation
 
 extension AndroidPackage {
-    public class ContentPackage: AndroidClassName {}
+    public class ContentPackage: JClassName, @unchecked Sendable {}
     
-    public var content: ContentPackage { .init(superClass: self, "content") }
+    public var content: ContentPackage { .init(parent: self, name: "content") }
 }

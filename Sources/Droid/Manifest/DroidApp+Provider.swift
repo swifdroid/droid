@@ -10,12 +10,15 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element)
 	public class Provider: ManifestTag {
-		static var name: String { "provider" }
+        class override var name: String { "provider" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 		
 		// MARK: -
 		
@@ -26,7 +29,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#auth)
 		public func authorities(_ value: [String]) -> Self {
-			params.append(.init(.androidAuthorities, value.joined(separator: ";")))
+            params[.androidAuthorities] = ManifestTagParamValue(value.joined(separator: ";")).value
 			return self
 		}
 		
@@ -68,7 +71,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#directBootAware)
 		public func enabled(_ value: Bool) -> Self {
-			params.append(.init(.androidEnabled, value))
+			params[.androidEnabled] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -89,7 +92,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#enabled)
 		public func directBootAware(_ value: Bool) -> Self {
-			params.append(.init(.androidDirectBootAware, value))
+			params[.androidDirectBootAware] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -116,7 +119,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#exported)
 		public func exported(_ value: Bool) -> Self {
-			params.append(.init(.androidExported, value))
+			params[.androidExported] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -144,7 +147,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#gprmsn)
 		public func grantUriPermissions(_ value: Bool) -> Self {
-			params.append(.init(.androidGrantUriPermissions, value))
+			params[.androidGrantUriPermissions] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -167,7 +170,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#icon)
 		public func icon(_ value: String) -> Self { // TODO: drawable resource
-			params.append(.init(.androidIcon, value))
+			params[.androidIcon] = value
 			return self
 		}
 		
@@ -187,7 +190,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#init)
 		public func initOrder(_ value: Int) -> Self {
-			params.append(.init(.androidInitOrder, value))
+			params[.androidInitOrder] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -204,7 +207,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#label)
 		public func label(_ value: String) -> Self { // TODO: string or string resource
-			params.append(.init(.androidLabel, value))
+			params[.androidLabel] = value
 			return self
 		}
 		
@@ -228,7 +231,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#multi)
 		public func multiprocess(_ value: Bool) -> Self {
-			params.append(.init(.androidMultiprocess, value))
+			params[.androidMultiprocess] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -258,7 +261,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#nm)
 		public func name(_ value: String) -> Self {
-			params.append(.init(.androidName, value))
+			params[.androidName] = value
 			return self
 		}
 		
@@ -281,7 +284,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#prmsn)
 		public func permission(_ value: String) -> Self {
-			params.append(.init(.androidPermission, value))
+			params[.androidPermission] = value
 			return self
 		}
 		
@@ -298,7 +301,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#proc)
 		public func process(_ value: String) -> Self {
-			params.append(.init(.androidProcess, value))
+			params[.androidProcess] = value
 			return self
 		}
 		
@@ -315,7 +318,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#rprmsn)
 		public func readPermission(_ value: String) -> Self {
-			params.append(.init(.androidReadPermission, value))
+			params[.androidReadPermission] = value
 			return self
 		}
 		
@@ -333,7 +336,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#sync)
 		public func syncable(_ value: Bool) -> Self {
-			params.append(.init(.androidSyncable, value))
+			params[.androidSyncable] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -351,7 +354,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#wprmsn)
 		public func writePermission(_ value: String) -> Self {
-			params.append(.init(.androidWritePermission, value))
+			params[.androidWritePermission] = value
 			return self
 		}
 		
@@ -432,12 +435,12 @@ extension DroidApp {
 			Self().pathPermission(handler)
 		}
 		
-		func missingParams() -> [String] {
+        override func missingParams() -> [String] {
 			var missing: [ManifestTagParamName] = []
-			if !params.contains(.androidName) {
+            if !params.keys.contains(.androidName) {
 				missing.append(.androidName)
 			}
-			if !params.contains(.androidAuthorities) {
+            if !params.keys.contains(.androidAuthorities) {
 				missing.append(.androidAuthorities)
 			}
 			return missing.map { $0.value }

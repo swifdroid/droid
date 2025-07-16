@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage {
-    public class MaterialPackage: AndroidClassName {}
+    public class MaterialPackage: JClassName, @unchecked Sendable {}
     
-    public var material: MaterialPackage { .init(superClass: self, "material") }
+    public var material: MaterialPackage { .init(parent: self, name: "material") }
 }

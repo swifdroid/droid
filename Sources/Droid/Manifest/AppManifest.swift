@@ -5,17 +5,41 @@
 //  Created by Mihael Isaev on 20.04.2022.
 //
 
-import Foundation
+import FoundationEssentials
 
-public class AppManifest: ManifestTag {
-	static var name: String { "manifest" }
+public class AppManifest: DroidApp.ManifestTag {
+	class override var name: String { "manifest" }
 	
-	var params: [ManifestTagParam] = []
-	var items: [ManifestTag] = []
-	
-	required init () {
-		params.append(.init(.xmlnsAndroid, "http://schemas.android.com/apk/res/android"))
+    required override init () {
+        super.init()
+		params[.xmlnsAndroid] = "http://schemas.android.com/apk/res/android"
+        
 	}
+    
+    func merge(with manifest: AppManifest) {
+        for (key, value) in manifest.params {
+            print("manifest k: \(key) v: \(value)")
+			params[key] = value
+        }
+        for tagItem in manifest.items {
+            if let foundItem = items.first(where: { $0 == tagItem }) {
+                foundItem.merge(with: tagItem)
+            } else {
+                items.append(tagItem)
+            }
+        }
+    }
+    
+    func placeholders() -> Self {
+        params[.package] = "__APPLICATION_ID__"
+        params[.androidVersionCode] = "__VERSION_CODE__"
+        params[.androidVersionName] = "__VERSION_NAME__"
+        return self
+    }
+    
+    public static func placeholders() -> Self {
+        Self().placeholders()
+    }
 	
 	// MARK: -
 	
@@ -23,7 +47,7 @@ public class AppManifest: ManifestTag {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/manifest-element#package)
 	public func package(_ value: String) -> Self {
-		params.append(.init(.package, value))
+		params[.package] = value
 		return self
 	}
 	
@@ -42,7 +66,7 @@ public class AppManifest: ManifestTag {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/manifest-element#uid)
 	public func sharedUserId(_ value: String) -> Self {
-		params.append(.init(.androidSharedUserId, value))
+		params[.androidSharedUserId] = value
 		return self
 	}
 	
@@ -63,7 +87,7 @@ public class AppManifest: ManifestTag {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/manifest-element#uidlabel)
 	public func sharedUserLabel(_ value: String) -> Self { // TODO: string resource
-		params.append(.init(.androidSharedUserLabel, value))
+		params[.androidSharedUserLabel] = value
 		return self
 	}
 	
@@ -87,7 +111,7 @@ public class AppManifest: ManifestTag {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/manifest-element#vcode)
 	public func versionCode(_ value: Int) -> Self {
-		params.append(.init(.androidVersionCode, value))
+		params[.androidVersionCode] = "\(value)"
 		return self
 	}
 	
@@ -113,7 +137,7 @@ public class AppManifest: ManifestTag {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/manifest-element#vname)
 	public func versionName(_ value: String) -> Self {
-		params.append(.init(.androidVersionName, value))
+		params[.androidVersionName] = value
 		return self
 	}
 	
@@ -136,7 +160,7 @@ public class AppManifest: ManifestTag {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/manifest-element#install)
 	public func installLocation(_ value: InstallLocation) -> Self {
-		params.append(.init(.androidInstallLocation, value))
+        params[.androidInstallLocation] = value.rawValue
 		return self
 	}
 	
@@ -147,15 +171,15 @@ public class AppManifest: ManifestTag {
 		Self().installLocation(value)
 	}
 	
-	func missingParams() -> [String] {
+    override func missingParams() -> [String] {
 		var missing: [ManifestTagParamName] = []
-		if !params.contains(.package) {
+        if !params.keys.contains(.package) {
 			missing.append(.package)
 		}
-		if !params.contains(.androidVersionCode) {
+		if !params.keys.contains(.androidVersionCode) {
 			missing.append(.androidVersionCode)
 		}
-		if !params.contains(.androidVersionName) {
+		if !params.keys.contains(.androidVersionName) {
 			missing.append(.androidVersionName)
 		}
 		return missing.map { $0.value }
@@ -203,8 +227,8 @@ public class AppManifest: ManifestTag {
 	/// to specific components or features of this or other applications.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element)
-	public func permission(_ handler: () -> DroidApp.Permission) -> Self {
-		items.append(handler())
+    public func usesPermission(_ name: DroidApp.Permission.PermissionName) -> Self {
+        items.insert(DroidApp.Permission().name(name), at: 0)
 		return self
 	}
 	
@@ -212,8 +236,8 @@ public class AppManifest: ManifestTag {
 	/// to specific components or features of this or other applications.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element)
-	public static func permission(_ handler: @escaping () -> DroidApp.Permission) -> Self {
-		Self().permission(handler)
+	public static func usesPermission(_ name: DroidApp.Permission.PermissionName) -> Self {
+		Self().usesPermission(name)
 	}
 	
 	// MARK: -
@@ -271,11 +295,15 @@ public class AppManifest: ManifestTag {
 		Self().application(handler)
 	}
 	
-	func missingItems() -> [String] {
-		var missing: [ManifestTag.Type] = []
+    override func missingItems() -> [String] {
+        var missing: [DroidApp.ManifestTag.Type] = []
 		if !items.contains(DroidApp.Application.self) {
 			missing.append(DroidApp.Application.self)
 		}
-		return missing.map { $0.name }
+        var missingParams: [String] = []
+        if (params[.androidTheme] == nil) {
+            missingParams.append("theme")
+        }
+		return missing.map { $0.name } + missingParams
 	}
 }

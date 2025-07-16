@@ -7,12 +7,16 @@
 
 import DroidFoundation
 
-public class SwiftPackage: AndroidClassName {
+public class SwiftPackage: JClassName, @unchecked Sendable {
     public init () {
-        super.init("swift")
+        super.init(stringLiteral: "stream/swift/android")
+    }
+
+    required init(stringLiteral: String) {
+        super.init(stringLiteral: "stream/swift/android")
     }
 }
 
-extension AndroidClassName {
+extension JClassName {
     public static var swift: SwiftPackage { .init() }
 }

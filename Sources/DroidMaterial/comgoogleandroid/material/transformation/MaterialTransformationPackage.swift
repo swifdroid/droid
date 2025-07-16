@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class TransformationPackage: AndroidClassName {}
+    public class TransformationPackage: JClassName, @unchecked Sendable {}
     
-    public var transformation: TransformationPackage { .init(superClass: self, "transformation") }
+    public var transformation: TransformationPackage { .init(parent: self, name: "transformation") }
 }

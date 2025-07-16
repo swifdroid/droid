@@ -11,12 +11,11 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element)
 	public class PathPermission: ManifestTag {
-		static var name: String { "path-permission" }
+        class override var name: String { "path-permission" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
 		
 		// MARK: -
 		
@@ -27,7 +26,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element#path)
 		public func path(_ value: String) -> Self {
-			params.append(.init(.androidPath, value))
+			params[.androidPath] = value
 			return self
 		}
 		
@@ -49,7 +48,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element#pathPrefix)
 		public func pathPrefix(_ value: String) -> Self {
-			params.append(.init(.androidPathPrefix, value))
+			params[.androidPathPrefix] = value
 			return self
 		}
 		
@@ -68,7 +67,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element#pathPattern)
 		public func pathPattern(_ value: String) -> Self {
-			params.append(.init(.androidPathPattern, value))
+			params[.androidPathPattern] = value
 			return self
 		}
 		
@@ -87,7 +86,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element#permission)
 		public func permission(_ value: String) -> Self {
-			params.append(.init(.androidPermission, value))
+			params[.androidPermission] = value
 			return self
 		}
 		
@@ -106,7 +105,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element#readPermission)
 		public func readPermission(_ value: String) -> Self {
-			params.append(.init(.androidReadPermission, value))
+			params[.androidReadPermission] = value
 			return self
 		}
 		
@@ -123,7 +122,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element#writePermission)
 		public func writePermission(_ value: String) -> Self {
-			params.append(.init(.androidWritePermission, value))
+			params[.androidWritePermission] = value
 			return self
 		}
 		

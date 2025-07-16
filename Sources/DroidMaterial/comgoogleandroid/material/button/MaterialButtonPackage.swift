@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class ButtonPackage: AndroidClassName {}
+    public class ButtonPackage: JClassName, @unchecked Sendable {}
     
-    public var button: ButtonPackage { .init(superClass: self, "button") }
+    public var button: ButtonPackage { .init(parent: self, name: "button") }
 }

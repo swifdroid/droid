@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class CardPackage: AndroidClassName {}
+    public class CardPackage: JClassName, @unchecked Sendable {}
     
-    public var card: CardPackage { .init(superClass: self, "card") }
+    public var card: CardPackage { .init(parent: self, name: "card") }
 }

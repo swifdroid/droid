@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
-    public class MaterialButtonClass: AndroidClassName {}
+    public class MaterialButtonClass: JClassName, @unchecked Sendable {}
     
-    public var MaterialButton: MaterialButtonClass { .init(superClass: self, "MaterialButton") }
+    public var MaterialButton: MaterialButtonClass { .init(parent: self, name: "MaterialButton") }
 }
 
-class MaterialButton: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.button.MaterialButton], args: [])
-    }
+// class MaterialButton: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.button.MaterialButton], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

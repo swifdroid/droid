@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.ChipPackage {
-    public class ChipClass: AndroidClassName {}
+    public class ChipClass: JClassName, @unchecked Sendable {}
     
-    public var Chip: ChipClass { .init(superClass: self, "Chip") }
+    public var Chip: ChipClass { .init(parent: self, name: "Chip") }
 }
 
-class Chip: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.chip.Chip], args: [])
-    }
+// class Chip: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.chip.Chip], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

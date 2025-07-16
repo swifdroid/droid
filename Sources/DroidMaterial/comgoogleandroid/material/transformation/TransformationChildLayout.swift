@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.TransformationPackage {
-    public class TransformationChildLayoutClass: AndroidClassName {}
+    public class TransformationChildLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var TransformationChildLayout: TransformationChildLayoutClass { .init(superClass: self, "TransformationChildLayout") }
+    public var TransformationChildLayout: TransformationChildLayoutClass { .init(parent: self, name: "TransformationChildLayout") }
 }
 
-class TransformationChildLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.transformation.TransformationChildLayout], args: [])
-    }
+// class TransformationChildLayout: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.transformation.TransformationChildLayout], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

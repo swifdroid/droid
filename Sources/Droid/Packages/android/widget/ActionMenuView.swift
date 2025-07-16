@@ -1,26 +1,24 @@
-//
-//  ActionMenuView.swift
-//  Droid
-//
-//  Created by Mihael Isaev on 16.01.2022.
-//
+// //
+// //  ActionMenuView.swift
+// //  Droid
+// //
+// //  Created by Mihael Isaev on 16.01.2022.
+// //
 
-import DroidFoundation
-import Foundation
-import CDroidJNI
-
-extension AndroidPackage.WidgetPackage {
-    public class ActionMenuViewClass: AndroidClassName {}
+// import DroidFoundation
+// import FoundationEssentials
+// extension AndroidPackage.WidgetPackage {
+//     public class ActionMenuViewClass: JClassName, @unchecked Sendable {}
     
-    public var ActionMenuView: ActionMenuViewClass { .init(superClass: self, "ActionMenuView") }
-}
+//     public var ActionMenuView: ActionMenuViewClass { .init(parent: self, name: "ActionMenuView") }
+// }
 
-class ActionMenuView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.ActionMenuView], args: [])
-    }
+// class ActionMenuView: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.android.widget.ActionMenuView], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

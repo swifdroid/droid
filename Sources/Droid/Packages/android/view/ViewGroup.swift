@@ -6,21 +6,15 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.ViewPackage {
-    public class ViewGroupClass: AndroidClassName {}
+    public class ViewGroupClass: JClassName, @unchecked Sendable {}
     
-    public var ViewGroup: ViewGroupClass { .init(superClass: self, "ViewGroup") }
+    public var ViewGroup: ViewGroupClass { .init(parent: self, name: "ViewGroup") }
 }
 
-class ViewGroup: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.view.ViewGroup], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+open class ViewGroup: View, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.view.ViewGroup }
 }

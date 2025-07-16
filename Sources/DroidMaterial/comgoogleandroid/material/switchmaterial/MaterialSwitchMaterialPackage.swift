@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class SwitchMaterialPackage: AndroidClassName {}
+    public class SwitchMaterialPackage: JClassName, @unchecked Sendable {}
     
-    public var switchmaterial: SwitchMaterialPackage { .init(superClass: self, "switchmaterial") }
+    public var switchmaterial: SwitchMaterialPackage { .init(parent: self, name: "switchmaterial") }
 }

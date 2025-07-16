@@ -8,13 +8,13 @@
 import DroidFoundation
 
 extension AndroidPackage.ContentPackage {
-    public class ContextClass: AndroidClassName {}
+    public class ContextClass: JClassName, @unchecked Sendable {}
     
-    public var Context: ContextClass { .init(superClass: self, "Context") }
+    public var Context: ContextClass { .init(parent: self, name: "Context") }
 }
 
-class ContentContext: JClass {
-    func ppp() {
-        print(.info, "🪚context: \(self.classObject)")
-    }
-}
+// class ContentContext: @unchecked Sendable, JObjectable {
+//     func ppp() {
+//         print(.info, "🪚context: \(self.classObject)")
+//     }
+// }

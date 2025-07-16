@@ -6,21 +6,15 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.ViewPackage {
-    public class ViewStubClass: AndroidClassName {}
+    public class ViewStubClass: JClassName, @unchecked Sendable {}
     
-    public var ViewStub: ViewStubClass { .init(superClass: self, "ViewStub") }
+    public var ViewStub: ViewStubClass { .init(parent: self, name: "ViewStub") }
 }
 
-class ViewStub: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.view.ViewStub], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+public class ViewStub: View, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.view.ViewStub }
 }

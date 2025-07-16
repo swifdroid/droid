@@ -8,7 +8,7 @@
 import DroidFoundation
 
 extension AndroidPackage.WidgetPackage {
-    public class InlinePackage: AndroidClassName {}
+    public class InlinePackage: JClassName, @unchecked Sendable {}
     
-    public var inline: InlinePackage { .init(superClass: self, "inline") }
+    public var inline: InlinePackage { .init(parent: self, name: "inline") }
 }

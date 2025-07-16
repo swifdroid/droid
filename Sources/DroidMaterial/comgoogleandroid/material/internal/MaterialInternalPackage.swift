@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class InternalPackage: AndroidClassName {}
+    public class InternalPackage: JClassName, @unchecked Sendable {}
     
-    public var `internal`: InternalPackage { .init(superClass: self, "internal") }
+    public var `internal`: InternalPackage { .init(parent: self, name: "internal") }
 }

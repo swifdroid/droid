@@ -1,112 +1,122 @@
-//
-//  Droid.swift
-//  Droid
-//
-//  Created by Mihael Isaev on 23.10.2021.
-//
-
-import CDroidJNI
-import Foundation
-#if os(Android)
-import FoundationNetworking
+import JNIKit
+import Logging
+#if canImport(Android)
+import Android
+import AndroidLogging
+import AndroidLooper
 #endif
 
-class AnyActivity: JClass {
-    func setContentView(_ class: JClass) {
-        callVoidWithMethod("setContentView", [.object(.android.view.View)], [.object(`class`.reference.classes) / `class`])
+#if os(Android)
+@_cdecl("Java_com_somebody_appui_SwiftApp_activityOnCreate")
+public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    let logger = Logger(label: "🐦‍🔥 SWIFT")
+    logger.info("🚀 Hello World!")
+    let localEnv = JEnv(envPointer)
+    let globalCallerObj = localCallerObjectRef.box(localEnv)
+    if let _ = localEnv.findClass(.android.view.ViewGroup) {
+        logger.info("🚀 main: ViewGroup FOUND")
+    } else {
+        logger.info("🚀 main: ViewGroup NOT FOUND")
     }
+    if let context = globalCallerObj?.object() {
+        logger.info("context class: \(context.className.name)")
+        logger.info("activities count: \(DroidApp.shared._activities.count)")
+        if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
+            logger.info("activity found")
+            _ = activityType.init(object: context)
+        }
+        // guard let activity = AppCompatActivity(context) else {
+        //     logger.info("0.1")
+        //     return
+        // }
+        // logger.info("00")
+        // Task {
+        //     logger.info("1")
+        //     guard let context = globalCallerObj?.object() else { logger.info("1.1");return }
+        //     logger.info("2")
+        //     // await helloUI(context)
+        //     if let activity = AppCompatActivity(context) {
+        //         logger.info("3")
+        //     //     logger.info("🟢 Activity is here")
+        //     //     if let view = View(activity.object) {
+        //     //         logger.info("🟢 View is here")
+        //     //         activity.setContentView(view.object)
+        //     //         logger.info("🟢 Successfully set View into Activity")
+        //     //         view.setBackgroundColor(.aqua)
+        //     //         logger.info("🟢 Successfully set View's color")
+        //     //         if let c = localEnv.findClass(.android.view.ViewGroup) {
+        //     //             logger.info("🚀 main: ViewGroup FOUND")
+        //     //         } else {
+        //     //             logger.info("🚀 main: ViewGroup NOT FOUND")
+        //     //         }
+        //     //         if let c = localEnv.findClass(.swift.view.OnClickListener) {
+        //     //             logger.info("🚀 main: OnClickListener FOUND")
+        //     //         } else {
+        //     //             logger.info("🚀 main: OnClickListener NOT FOUND")
+        //     //         }
+        //     //         Task {
+        //     //             // guard let env = JNIKit.shared.vm.attachCurrentThread() else {
+        //     //             //     logger.info("❌ Unable to attachCurrentThread")
+        //     //             //     return
+        //     //             // }
+        //     //             // logger.info("🚀 class task: jni version: \(env.getVersionString())")                        
+        //     //             // if let c = env.findClass(.android.view.ViewGroup) {
+        //     //             //     logger.info("🚀 class task: ViewGroup FOUND")
+        //     //             // } else {
+        //     //             //     logger.info("🚀 class task: ViewGroup NOT FOUND")
+        //     //             // }
+        //     //             // if let c = env.findClass(.swift.view.OnClickListener) {
+        //     //             //     logger.info("🚀 class task: OnClickListener FOUND")
+        //     //             // } else {
+        //     //             //     logger.info("🚀 class task: OnClickListener NOT FOUND")
+        //     //             // }
+        //     //             guard let clickListener = await NativeOnClickListener(activity) else {
+        //     //                 logger.info("🟢 ClickListener2 NOT initialized")
+        //     //                 return
+        //     //             }
+        //     //             clickListener.onClick {
+        //     //                 view.setBackgroundColor(.teal)
+        //     //             }
+        //     //             view.setOnClickListener(clickListener)
+        //     //         }
+        //     //     } else {
+        //     //         logger.info("💧 Unable to init view")
+        //     //     }
+        //     } else {
+        //         logger.info("💧 Unable to init activity")
+        //     }
+        // }
+    } else {
+        logger.info("💧 Unable to init context")
+    }
+    // Task {
+    //     guard let env = JNIKit.shared.vm.attachCurrentThread() else { return }
+    //     logger.info("🚀 new env: \(env)")
+    //     logger.info("🚀 jni version: \(env.getVersionString())")
+    //     let callerDescription = callerObj?.object()?.toString()
+    //     logger.info("🚀 caller description: \(callerDescription ?? "n/a")")
+    // }
 }
 
-@_cdecl("Java_swift_App_initialize")
-public func initialize(env: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject: jobject) {
-    print(.debug, "DROID", "hello from swift13 ♥️")
-//    let context = JavaContext(env, appObject, callerObject)
-    let env = JEnvironment(env)
-    
-    let rrr = JObjectReference(callerObject)
-	
-    let ll = LinearLayout(env, rrr)
-    ll.setGravity(17)
-	ll.setBackgroundColor(GraphicsColor.magenta)
-    ll.setLayoutParams(LayoutParams(env, rrr, width: 800, height: 400))
-    
-    let ll2 = LinearLayout(env, rrr)
-//    let drw = PaintDrawable.init(env, rrr, GraphicsColor.yellow)
-//    drw.setCornerRadius(20)
-//    ll2.setBackground(drw)
-////    ll2.setBackgroundColor(GraphicsColor.yellow)
-//    ll2.setLayoutParams(LayoutParams(env, rrr, width: 100, height: 100))
-//
-    ll.addView(ll2)
-    
-//    let editText1 = EditText(env, rrr)
-//
-//    let textWatcher1 = NativeTextWatcher(env, rrr).beforeTextChanged { text, start, count, after in
-//        print(.debug, "✍️NativeTextWatcher1", "beforeTextChanged text: \(text) start: \(start) count: \(count) after: \(after)")
-//    }.onTextChanged { text, start, before, count in
-//        print(.debug, "✍️NativeTextWatcher1", "onTextChanged text: \(text) start: \(start) before: \(before) count: \(count)")
-//    }.afterTextChanged { text in
-//        print(.debug, "✍️NativeTextWatcher1", "afterTextChanged text: \(text)")
-//    }
-//    editText1.addTextChangedListener(textWatcher1)
-//
-//    ll.addView(editText1)
-//
-//    let editText2 = EditText(env, rrr)
-//
-//    let textWatcher2 = NativeTextWatcher(env, rrr).beforeTextChanged { text, start, count, after in
-//        print(.debug, "✍️NativeTextWatcher2", "beforeTextChanged text: \(text) start: \(start) count: \(count) after: \(after)")
-//    }.onTextChanged { text, start, before, count in
-//        print(.debug, "✍️NativeTextWatcher2", "onTextChanged text: \(text) start: \(start) before: \(before) count: \(count)")
-//    }.afterTextChanged { text in
-//        print(.debug, "✍️NativeTextWatcher2", "afterTextChanged text: \(text)")
-//    }
-//    editText2.addTextChangedListener(textWatcher2)
-//
-//    ll.addView(editText2)
-    
-//    let button1 = Button(env, rrr)
-//    button1.setText("swift button")
-//
-//    let listener = NativeOnClickListener(env, rrr).onClick {
-//        print(.debug, "🏂NativeOnClickListener", "onClick")
-//    }
-//
-//    button1.setOnClickListener(listener)
-//    ll.addView(button1)
-    
-    let seekbar = SeekBar(env, rrr)
-    seekbar.setLayoutParams(LayoutParams(env, rrr, width: 300, height: 50))
-    
-    let seekbar2 = SeekBar(env, rrr)
-    seekbar2.setLayoutParams(LayoutParams(env, rrr, width: 300, height: 50))
-    
-    let seekListener = NativeOnSeekBarChangeListener(env, rrr)
-    seekListener.onProgressChanged { progress, fromUser in
-        print(.debug, "🏂NativeOnSeekBarChangeListener", "onProgressChanged progress: \(progress) fromUser: \(fromUser)")
-        seekbar2.move(to: env, nil).setProgress(progress)//, animated: true)
-    }
-    seekbar.setOnSeekBarChangeListener(seekListener)
-    
-    ll.addView(seekbar)
-    ll.addView(seekbar2)
-    
-    let callerClass = env.getObjectClass(callerObject)
-    let activity = AnyActivity(env, JClassReference.init(callerClass!), callerObject)
-    activity.setContentView(ll)
-    
-//    print(.debug, "TESTING", "😎: \(ll)")
-    print(.debug, "TESTING", "🥳")
-    
-    
-    
-//    DispatchQueue.asyncAfter(deadline: .now() + 4, in: context) { datachedContext in
-//        let ll = ll.move(to: datachedContext)
-//        ll.setBackgroundColor(GraphicsColor.magenta)
-//    }
-}
-
-@_cdecl("Java_swift_App_setCallback")
-func setCallback(env: UnsafeMutablePointer<JNIEnv?>, me: jobject, classref: jobject) {
-    
-}
+// @UIThreadActor
+// func helloUI(_ context: JObject) {
+//     let logger = Logger(label: "🐦‍🔥 SWIFT")
+//     guard let activity = AppCompatActivity(context) else { return }
+//     logger.info("🟢 Activity is here")
+//     guard let view = View(activity.object) else { return }
+//     logger.info("🟢 View is here")
+//     activity.setContentView(view.object)
+//     view.setBackgroundColor(.aqua)
+//     logger.info("🟢 Successfully set View's color")
+//     Task {
+//         guard let clickListener = await NativeOnClickListener(activity) else {
+//             logger.info("🟢 ClickListener2 NOT initialized")
+//             return
+//         }
+//         clickListener.onClick {
+//             view.setBackgroundColor(.teal)
+//         }
+//         view.setOnClickListener(clickListener)
+//     }
+// }
+#endif

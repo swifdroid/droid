@@ -10,12 +10,13 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/intent-filter-element)
 	public class IntentFilter: ManifestTag {
-		static var name: String { "intent-filter" }
+        class override var name: String { "intent-filter" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		public static var mainLauncher: IntentFilter { .init().action(.MAIN).category(.LAUNCHER) }
+
+		public required override init() {
+            super.init()
+        }
 		
 		// MARK: -
 		
@@ -24,7 +25,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/intent-filter-element#icon)
 		public func icon(_ value: String) -> Self { // TODO: drawable resource
-			params.append(.init(.androidIcon, value))
+			params[.androidIcon] = value
 			return self
 		}
 		
@@ -42,7 +43,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/intent-filter-element#label)
 		public func label(_ value: String) -> Self { // TODO: string or string resource
-			params.append(.init(.androidLabel, value))
+			params[.androidLabel] = value
 			return self
 		}
 		
@@ -60,7 +61,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/intent-filter-element#priority)
 		public func priority(_ value: Int) -> Self {
-			params.append(.init(.androidPriority, value))
+			params[.androidPriority] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -81,7 +82,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/intent-filter-element#order)
 		public func order(_ value: Int) -> Self {
-			params.append(.init(.androidOrder, value))
+			params[.androidOrder] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -104,7 +105,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/training/app-links/verify-site-associations)
 		public func autoVerify(_ value: Bool) -> Self {
-			params.append(.init(.androidAutoVerify, value))
+			params[.androidAutoVerify] = ManifestTagParamValue(value).value
 			return self
 		}
 		

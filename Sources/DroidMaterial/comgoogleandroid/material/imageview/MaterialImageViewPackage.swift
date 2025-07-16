@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class ImageViewPackage: AndroidClassName {}
+    public class ImageViewPackage: JClassName, @unchecked Sendable {}
     
-    public var imageview: ImageViewPackage { .init(superClass: self, "imageview") }
+    public var imageview: ImageViewPackage { .init(parent: self, name: "imageview") }
 }

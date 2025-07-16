@@ -6,10 +6,9 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class NavigationRailPackage: AndroidClassName {}
+    public class NavigationRailPackage: JClassName, @unchecked Sendable {}
     
-    public var navigationrail: NavigationRailPackage { .init(superClass: self, "navigationrail") }
+    public var navigationrail: NavigationRailPackage { .init(parent: self, name: "navigationrail") }
 }

@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class RadioButtonPackage: AndroidClassName {}
+    public class RadioButtonPackage: JClassName, @unchecked Sendable {}
     
-    public var radiobutton: RadioButtonPackage { .init(superClass: self, "radiobutton") }
+    public var radiobutton: RadioButtonPackage { .init(parent: self, name: "radiobutton") }
 }

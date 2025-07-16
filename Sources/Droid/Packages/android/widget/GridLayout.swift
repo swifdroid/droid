@@ -6,21 +6,14 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
-
+import FoundationEssentials
 extension AndroidPackage.WidgetPackage {
-    public class GridLayoutClass: AndroidClassName {}
+    public class GridLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var GridLayout: GridLayoutClass { .init(superClass: self, "GridLayout") }
+    public var GridLayout: GridLayoutClass { .init(parent: self, name: "GridLayout") }
 }
 
-class GridLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.GridLayout], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+public class GridLayout: View, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.widget.GridLayout }
 }

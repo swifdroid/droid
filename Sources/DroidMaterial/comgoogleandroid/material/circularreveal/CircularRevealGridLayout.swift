@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage {
-    public class CircularRevealGridLayoutClass: AndroidClassName {}
+    public class CircularRevealGridLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var CircularRevealGridLayout: CircularRevealGridLayoutClass { .init(superClass: self, "CircularRevealGridLayout") }
+    public var CircularRevealGridLayout: CircularRevealGridLayoutClass { .init(parent: self, name: "CircularRevealGridLayout") }
 }
 
-class CircularRevealGridLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.CircularRevealGridLayout], args: [])
-    }
+// class CircularRevealGridLayout: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.CircularRevealGridLayout], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

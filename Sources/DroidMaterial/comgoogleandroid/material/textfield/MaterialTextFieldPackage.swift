@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class TextFieldPackage: AndroidClassName {}
+    public class TextFieldPackage: JClassName, @unchecked Sendable {}
     
-    public var textfield: TextFieldPackage { .init(superClass: self, "textfield") }
+    public var textfield: TextFieldPackage { .init(parent: self, name: "textfield") }
 }

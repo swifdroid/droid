@@ -8,7 +8,7 @@
 import DroidFoundation
 
 extension AndroidPackage {
-    public class ViewPackage: AndroidClassName {}
+    public class ViewPackage: JClassName, @unchecked Sendable {}
     
-    public var view: ViewPackage { .init(superClass: self, "view") }
+    public var view: ViewPackage { .init(parent: self, name: "view") }
 }

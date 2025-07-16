@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage {
-    public class CoordinatorLayoutPackage: AndroidClassName {}
+    public class CoordinatorLayoutPackage: JClassName, @unchecked Sendable {}
     
-    public var coordinatorlayout: CoordinatorLayoutPackage { .init(superClass: self, "coordinatorlayout") }
+    public var coordinatorlayout: CoordinatorLayoutPackage { .init(parent: self, name: "coordinatorlayout") }
 }

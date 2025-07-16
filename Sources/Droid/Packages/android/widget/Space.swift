@@ -6,21 +6,26 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.WidgetPackage {
-    public class SpaceClass: AndroidClassName {}
+    public class SpaceClass: JClassName, @unchecked Sendable {}
     
-    public var Space: SpaceClass { .init(superClass: self, "Space") }
+    public var Space: SpaceClass { .init(parent: self, name: "Space") }
 }
 
-class Space: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.Space], args: [])
+public class Space: ViewGroup, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.widget.Space }
+
+    @discardableResult
+    public override init() {
+        super.init()
+        weight(1)
     }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
+
+    init(weight: Float) {
+        super.init()
+        self.weight(weight)
     }
 }

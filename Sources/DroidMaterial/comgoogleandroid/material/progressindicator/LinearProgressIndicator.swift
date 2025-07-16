@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.ProgressIndicatorPackage {
-    public class LinearProgressIndicatorClass: AndroidClassName {}
+    public class LinearProgressIndicatorClass: JClassName, @unchecked Sendable {}
     
-    public var LinearProgressIndicator: LinearProgressIndicatorClass { .init(superClass: self, "LinearProgressIndicator") }
+    public var LinearProgressIndicator: LinearProgressIndicatorClass { .init(parent: self, name: "LinearProgressIndicator") }
 }
 
-class LinearProgressIndicator: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.LinearProgressIndicator], args: [])
-    }
+// class LinearProgressIndicator: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.LinearProgressIndicator], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

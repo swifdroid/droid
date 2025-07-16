@@ -6,21 +6,15 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.ViewPackage {
-    public class SurfaceViewClass: AndroidClassName {}
+    public class SurfaceViewClass: JClassName, @unchecked Sendable {}
     
-    public var SurfaceView: SurfaceViewClass { .init(superClass: self, "SurfaceView") }
+    public var SurfaceView: SurfaceViewClass { .init(parent: self, name: "SurfaceView") }
 }
 
-class SurfaceView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.view.SurfaceView], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+public class SurfaceView: View, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.view.SurfaceView }
 }

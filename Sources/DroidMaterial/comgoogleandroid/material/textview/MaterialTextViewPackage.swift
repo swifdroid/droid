@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class TextViewPackage: AndroidClassName {}
+    public class TextViewPackage: JClassName, @unchecked Sendable {}
     
-    public var textview: TextViewPackage { .init(superClass: self, "textview") }
+    public var textview: TextViewPackage { .init(parent: self, name: "textview") }
 }

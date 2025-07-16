@@ -6,21 +6,20 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.WidgetPackage.InlinePackage {
-    public class InlineContentViewClass: AndroidClassName {}
+    public class InlineContentViewClass: JClassName, @unchecked Sendable {}
     
-    public var InlineContentView: InlineContentViewClass { .init(superClass: self, "InlineContentView") }
+    public var InlineContentView: InlineContentViewClass { .init(parent: self, name: "InlineContentView") }
 }
 
-class InlineContentView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.inline.InlineContentView], args: [])
-    }
+// class InlineContentView: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.android.widget.inline.InlineContentView], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

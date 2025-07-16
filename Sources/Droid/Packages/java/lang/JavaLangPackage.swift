@@ -8,7 +8,7 @@
 import DroidFoundation
 
 extension JavaPackage {
-    public class LangPackage: AndroidClassName {}
+    public class LangPackage: JClassName, @unchecked Sendable {}
     
-    public var lang: LangPackage { .init(superClass: self, "lang") }
+    public var lang: LangPackage { .init(parent: self, name: "lang") }
 }

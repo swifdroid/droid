@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.SliderPackage {
-    public class SliderClass: AndroidClassName {}
+    public class SliderClass: JClassName, @unchecked Sendable {}
     
-    public var Slider: SliderClass { .init(superClass: self, "Slider") }
+    public var Slider: SliderClass { .init(parent: self, name: "Slider") }
 }
 
-class Slider: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.slider.Slider], args: [])
-    }
+// class Slider: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.slider.Slider], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

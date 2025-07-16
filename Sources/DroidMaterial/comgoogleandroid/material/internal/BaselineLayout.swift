@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.InternalPackage {
-    public class BaselineLayoutClass: AndroidClassName {}
+    public class BaselineLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var BaselineLayout: BaselineLayoutClass { .init(superClass: self, "BaselineLayout") }
+    public var BaselineLayout: BaselineLayoutClass { .init(parent: self, name: "BaselineLayout") }
 }
 
-class BaselineLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.internal.BaselineLayout], args: [])
-    }
+// class BaselineLayout: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.internal.BaselineLayout], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

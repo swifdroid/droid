@@ -7,12 +7,16 @@
 
 import Droid
 
-public class ComGoogleAndroidPackage: AndroidClassName {
+public class ComGoogleAndroidPackage: JClassName, @unchecked Sendable {
     public init () {
-        super.init("com/google/android")
+        super.init(stringLiteral: "com/google/android")
+    }
+
+    required init(stringLiteral: String) {
+        super.init(stringLiteral: "com/google/android")
     }
 }
 
-extension AndroidClassName {
+extension JClassName {
     public static var comGoogleAndroid: ComGoogleAndroidPackage { .init() }
 }

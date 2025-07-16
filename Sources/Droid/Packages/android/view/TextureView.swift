@@ -6,21 +6,15 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.ViewPackage {
-    public class TextureViewClass: AndroidClassName {}
+    public class TextureViewClass: JClassName, @unchecked Sendable {}
     
-    public var TextureView: TextureViewClass { .init(superClass: self, "TextureView") }
+    public var TextureView: TextureViewClass { .init(parent: self, name: "TextureView") }
 }
 
-class TextureView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.view.TextureView], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+public class TextureView: View, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.view.TextureView }
 }

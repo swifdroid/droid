@@ -7,12 +7,17 @@
 
 extension DroidApp {
 	public class Permission: ManifestTag {
-		static var name: String { "permission" }
+        class override var name: String { "uses-permission" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+        override var order: Int { 0 }
+        
+        required override init() {
+            super.init()
+        }
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 		
 		// MARK: -
 		
@@ -23,7 +28,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#nm)
 		public func name(_ value: PermissionName) -> Self {
-			params.append(.init(.androidName, value))
+			params[.androidName] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -45,7 +50,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#desc)
 		public func description(_ value: String) -> Self {
-			params.append(.init(.androidDescription, value))
+			params[.androidDescription] = value
 			return self
 		}
 		
@@ -64,7 +69,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#icon)
 		public func icon(_ value: String) -> Self { // TODO: drawable resource
-			params.append(.init(.androidIcon, value))
+			params[.androidIcon] = value
 			return self
 		}
 		
@@ -86,7 +91,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#label)
 		public func label(_ value: String) -> Self { // TODO: string or string resource
-			params.append(.init(.androidLabel, value))
+			params[.androidLabel] = value
 			return self
 		}
 		
@@ -113,7 +118,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#pgroup)
 		public func permissionGroup(_ value: String) -> Self {
-			params.append(.init(.androidPermissionGroup, value))
+			params[.androidPermissionGroup] = value
 			return self
 		}
 		
@@ -137,7 +142,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#plevel)
 		public func protectionLevel(_ value: ProtectionLevel) -> Self {
-			params.append(.init(.androidProtectionLevel, value))
+			params[.androidProtectionLevel] = ManifestTagParamValue(value).value
 			return self
 		}
 		

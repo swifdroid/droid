@@ -13,12 +13,11 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/training/package-visibility/declaring)
 	public class Intent: ManifestTag {
-		static var name: String { "intent" }
+        class override var name: String { "intent" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
 		
 		// MARK: -
 		
@@ -53,7 +52,7 @@ extension DroidApp {
 			Self().data(handler)
 		}
 		
-		func missingItems() -> [String] {
+        override func missingItems() -> [String] {
 			var missing: [ManifestTag.Type] = []
 			if !items.contains(Action.self) {
 				missing.append(Action.self)

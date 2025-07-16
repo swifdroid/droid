@@ -1,22 +1,20 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
     name: "droid",
     products: [
-        .library(name: "DroidX", targets: ["DroidX"]),
         .library(name: "DroidMaterial", targets: ["DroidMaterial"]),
         .library(name: "Droid", targets: ["Droid"]),
         .library(name: "DroidFoundation", targets: ["DroidFoundation"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/SwifDroid/manifest.git", from: "0.0.1"),
-        .package(url: "https://github.com/SwifDroid/jni-kit.git", from: "1.0.0"),
+        .package(path: "/Users/imike/Development/SwifDroid/manifest"),
+        .package(path: "/Users/imike/Development/SwifDroid/jni-kit")
+//        .package(url: "https://github.com/SwifDroid/manifest.git", from: "0.0.1"),
+//        .package(url: "https://github.com/SwifDroid/jni-kit.git", from: "1.0.0"),
     ],
     targets: [
-        .target(name: "DroidX", dependencies: [
-            .target(name: "Droid")
-        ]),
         .target(name: "DroidMaterial", dependencies: [
             .target(name: "Droid")
         ]),

@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class AppBarPackage: AndroidClassName {}
+    public class AppBarPackage: JClassName, @unchecked Sendable {}
     
-    public var appbar: AppBarPackage { .init(superClass: self, "appbar") }
+    public var appbar: AppBarPackage { .init(parent: self, name: "appbar") }
 }

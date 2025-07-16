@@ -8,7 +8,7 @@
 import DroidFoundation
 
 extension AndroidPackage {
-    public class GraphicsPackage: AndroidClassName {}
+    public class GraphicsPackage: JClassName, @unchecked Sendable {}
     
-    public var graphics: GraphicsPackage { .init(superClass: self, "graphics") }
+    public var graphics: GraphicsPackage { .init(parent: self, name: "graphics") }
 }

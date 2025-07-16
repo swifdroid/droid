@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage {
-    public class CardViewPackage: AndroidClassName {}
+    public class CardViewPackage: JClassName, @unchecked Sendable {}
     
-    public var cardview: CardViewPackage { .init(superClass: self, "cardview") }
+    public var cardview: CardViewPackage { .init(parent: self, name: "cardview") }
 }

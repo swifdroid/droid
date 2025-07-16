@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class NavigationPackage: AndroidClassName {}
+    public class NavigationPackage: JClassName, @unchecked Sendable {}
     
-    public var navigation: NavigationPackage { .init(superClass: self, "navigation") }
+    public var navigation: NavigationPackage { .init(parent: self, name: "navigation") }
 }

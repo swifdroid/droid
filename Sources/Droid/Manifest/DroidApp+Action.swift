@@ -10,16 +10,20 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/action-element)
 	public class Action: ManifestTag {
-		static var name: String { "action" }
+        class override var name: String { "action" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+        required override init() {
+            super.init()
+        }
 		
 		public init (_ action: IntentActionType) {
-			params.append(.init(.androidName, action.value))
+            super.init()
+			params[.androidName] = action.value
 		}
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 	}
 }
 

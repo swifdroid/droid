@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class SliderPackage: AndroidClassName {}
+    public class SliderPackage: JClassName, @unchecked Sendable {}
     
-    public var slider: SliderPackage { .init(superClass: self, "slider") }
+    public var slider: SliderPackage { .init(parent: self, name: "slider") }
 }

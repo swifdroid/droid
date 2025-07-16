@@ -8,7 +8,7 @@
 import DroidFoundation
 
 extension AndroidPackage {
-    public class WidgetPackage: AndroidClassName {}
+    public class WidgetPackage: JClassName, @unchecked Sendable {}
     
-    public var widget: WidgetPackage { .init(superClass: self, "widget") }
+    public var widget: WidgetPackage { .init(parent: self, name: "widget") }
 }

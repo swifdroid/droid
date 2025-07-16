@@ -6,21 +6,14 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
-
+import FoundationEssentials
 extension AndroidPackage.WidgetPackage {
-    public class RelativeLayoutClass: AndroidClassName {}
+    public class RelativeLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var RelativeLayout: RelativeLayoutClass { .init(superClass: self, "RelativeLayout") }
+    public var RelativeLayout: RelativeLayoutClass { .init(parent: self, name: "RelativeLayout") }
 }
 
-class RelativeLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.RelativeLayout], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+public class RelativeLayout: View, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.widget.RelativeLayout }
 }

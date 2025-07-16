@@ -2,25 +2,29 @@
 //  FrameLayout.swift
 //  Droid
 //
-//  Created by Mihael Isaev on 16.01.2022.
+//  Created by Mihael Isaev on 24.06.2025.
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.WidgetPackage {
-    public class FrameLayoutClass: AndroidClassName {}
+    public class FrameLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var FrameLayout: FrameLayoutClass { .init(superClass: self, "FrameLayout") }
+    public var FrameLayout: FrameLayoutClass { .init(parent: self, name: "FrameLayout") }
 }
 
-class FrameLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.FrameLayout], args: [])
+public final class FrameLayout: ViewGroup, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.widget.FrameLayout }
+
+    @discardableResult
+    public override init() {
+        super.init()
     }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
+
+    @discardableResult
+    public override init (@BodyBuilder content: () -> BodyBuilderItemable) {
+        super.init(content: content)
     }
 }

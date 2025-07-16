@@ -13,12 +13,15 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element)
 	public class PermissionGroup: ManifestTag {
-		static var name: String { "permission-group" }
+        class override var name: String { "permission-group" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 		
 		// MARK: -
 		
@@ -31,7 +34,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element#desc)
 		public func description(_ value: String) -> Self { // TODO: string resource
-			params.append(.init(.androidDescription, value))
+			params[.androidDescription] = value
 			return self
 		}
 		
@@ -55,7 +58,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element#icon)
 		public func icon(_ value: String) -> Self { // TODO: drawable resource
-			params.append(.init(.androidIcon, value))
+			params[.androidIcon] = value
 			return self
 		}
 		
@@ -79,7 +82,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element#label)
 		public func label(_ value: String) -> Self { // TODO: string or string resource
-			params.append(.init(.androidLabel, value))
+			params[.androidLabel] = value
 			return self
 		}
 		
@@ -103,7 +106,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element#nm)
 		public func name(_ value: String) -> Self {
-			params.append(.init(.androidName, value))
+			params[.androidName] = value
 			return self
 		}
 		

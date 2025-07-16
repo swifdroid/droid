@@ -10,16 +10,20 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/category-element)
 	public class Category: ManifestTag {
-		static var name: String { "category" }
+        class override var name: String { "category" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
 		
 		public init (_ type: IntentCategoryType) {
-			params.append(.init(.androidName, type.value))
+            super.init()
+            params[.androidName] = ManifestTagParamValue(type.value).value
 		}
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 	}
 }
 

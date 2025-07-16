@@ -12,11 +12,15 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/instrumentation-element)
 	public class Instrumentation: ManifestTag {
-		static var name: String { "instrumentation" }
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+        class override var name: String { "instrumentation" }
+        
+		required override init() {
+            super.init()
+        }
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 		
 		// MARK: -
 		
@@ -24,7 +28,7 @@ extension DroidApp {
 		///
 		/// The default value is "false".
 		public func functionalTest(_ value: Bool = true) -> Self {
-			params.append(.init(.androidFunctionalTest, value))
+			params[.androidFunctionalTest] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -44,7 +48,7 @@ extension DroidApp {
 		///
 		/// The default value is "false".
 		public func handleProfiling(_ value: Bool = true) -> Self {
-			params.append(.init(.androidHandleProfiling, value))
+			params[.androidHandleProfiling] = ManifestTagParamValue(value).value
 			return self
 		}
 		
@@ -64,7 +68,7 @@ extension DroidApp {
 		///
 		/// This attribute must be set as a reference to a drawable resource.
 		public func icon(_ value: String) -> Self { // TODO: drawable resourse
-			params.append(.init(.androidIcon, value))
+			params[.androidIcon] = value
 			return self
 		}
 		
@@ -81,7 +85,7 @@ extension DroidApp {
 		///
 		/// The label can be set as a raw string or a reference to a string resource.
 		public func label(_ value: String) -> Self { // TODO: string or string resource
-			params.append(.init(.androidLabel, value))
+			params[.androidLabel] = value
 			return self
 		}
 		
@@ -103,7 +107,7 @@ extension DroidApp {
 		///
 		/// There is no default. The name must be specified.
 		public func name(_ value: String) -> Self {
-			params.append(.init(.androidName, value))
+			params[.androidName] = value
 			return self
 		}
 		
@@ -125,7 +129,7 @@ extension DroidApp {
 		///
 		/// An application is identified by the package name assigned in its manifest file by the `<manifest>` element.
 		public func targetPackage(_ value: String) -> Self {
-			params.append(.init(.androidTargetPackage, value))
+			params[.androidTargetPackage] = value
 			return self
 		}
 		
@@ -149,7 +153,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/instrumentation-element#trgtproc)
 		public func targetProcesses(_ value: String) -> Self {
-			params.append(.init(.androidTargetProcesses, value))
+			params[.androidTargetProcesses] = value
 			return self
 		}
 		

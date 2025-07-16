@@ -14,12 +14,11 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element)
 	public class Data: ManifestTag {
-		static var name: String { "data" }
+        class override var name: String { "data" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
 		
 		// MARK: -
 		
@@ -29,7 +28,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element#mime)
 		public func mimeType(_ value: MimeType) -> Self {
-			params.append(.init(.androidMimeType, value.value))
+            params[.androidMimeType] = ManifestTagParamValue(value.value).value
 			return self
 		}
 		
@@ -48,7 +47,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element#scheme)
 		public func scheme(_ value: String) -> Self {
-			params.append(.init(.androidScheme, value))
+			params[.androidScheme] = value
 			return self
 		}
 		
@@ -65,7 +64,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element#host)
 		public func host(_ value: String) -> Self {
-			params.append(.init(.androidHost, value))
+			params[.androidHost] = value
 			return self
 		}
 		
@@ -82,7 +81,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element#port)
 		public func port(_ value: String) -> Self {
-			params.append(.init(.androidPort, value))
+			params[.androidPort] = value
 			return self
 		}
 		
@@ -99,7 +98,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element#path)
 		public func path(_ value: String) -> Self {
-			params.append(.init(.androidPath, value))
+			params[.androidPath] = value
 			return self
 		}
 		
@@ -116,7 +115,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element#path)
 		public func pathPattern(_ value: String) -> Self {
-			params.append(.init(.androidPathPattern, value))
+			params[.androidPathPattern] = value
 			return self
 		}
 		
@@ -133,7 +132,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element#path)
 		public func pathPrefix(_ value: String) -> Self {
-			params.append(.init(.androidPathPrefix, value))
+			params[.androidPathPrefix] = value
 			return self
 		}
 		

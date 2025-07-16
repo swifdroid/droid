@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.TextFieldPackage {
-    public class MaterialAutoCompleteTextViewClass: AndroidClassName {}
+    public class MaterialAutoCompleteTextViewClass: JClassName, @unchecked Sendable {}
     
-    public var MaterialAutoCompleteTextView: MaterialAutoCompleteTextViewClass { .init(superClass: self, "MaterialAutoCompleteTextView") }
+    public var MaterialAutoCompleteTextView: MaterialAutoCompleteTextViewClass { .init(parent: self, name: "MaterialAutoCompleteTextView") }
 }
 
-class MaterialAutoCompleteTextView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.MaterialAutoCompleteTextView], args: [])
-    }
+// class MaterialAutoCompleteTextView: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.MaterialAutoCompleteTextView], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

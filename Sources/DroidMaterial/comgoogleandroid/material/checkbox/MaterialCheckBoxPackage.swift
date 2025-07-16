@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class CheckBoxPackage: AndroidClassName {}
+    public class CheckBoxPackage: JClassName, @unchecked Sendable {}
     
-    public var checkbox: CheckBoxPackage { .init(superClass: self, "checkbox") }
+    public var checkbox: CheckBoxPackage { .init(parent: self, name: "checkbox") }
 }

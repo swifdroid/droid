@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class CircularRevealPackage: AndroidClassName {}
+    public class CircularRevealPackage: JClassName, @unchecked Sendable {}
     
-    public var circularreveal: CircularRevealPackage { .init(superClass: self, "circularreveal") }
+    public var circularreveal: CircularRevealPackage { .init(parent: self, name: "circularreveal") }
 }

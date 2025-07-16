@@ -10,12 +10,15 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element)
 	public class MetaData: ManifestTag {
-		static var name: String { "meta-data" }
+        class override var name: String { "meta-data" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
+        
+        override func uniqueParams() -> [ManifestTagParamName] {
+            [.androidName]
+        }
 		
 		// MARK: -
 		
@@ -24,7 +27,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element#nm)
 		public func name(_ value: String) -> Self {
-			params.append(.init(.androidName, value))
+			params[.androidName] = value
 			return self
 		}
 		
@@ -42,7 +45,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element#rsrc)
 		public func resource(_ value: String) -> Self { // TODO: resource specification
-			params.append(.init(.androidResource, value))
+			params[.androidResource] = value
 			return self
 		}
 		
@@ -59,7 +62,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element#val)
 		public func value(_ value: String) -> Self {
-			params.append(.init(.androidValue, value))
+			params[.androidValue] = value
 			return self
 		}
 		

@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class TabsPackage: AndroidClassName {}
+    public class TabsPackage: JClassName, @unchecked Sendable {}
     
-    public var tabs: TabsPackage { .init(superClass: self, "tabs") }
+    public var tabs: TabsPackage { .init(parent: self, name: "tabs") }
 }

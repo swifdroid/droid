@@ -6,28 +6,27 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension JavaPackage.LangPackage {
-    public class CharSequenceClass: AndroidClassName {}
+    public class CharSequenceClass: JClassName, @unchecked Sendable {}
     
-    public var CharSequence: CharSequenceClass { .init(superClass: self, "CharSequence") }
+    public var CharSequence: CharSequenceClass { .init(parent: self, name: "CharSequence") }
 }
 
-public protocol CharSequence: AnyJClass {
-    func toString() -> String
-}
+// public protocol CharSequence: AnyJClass {
+//     func toString() -> String
+// }
 
-extension CharSequence {
-    public func toString() -> String {
-        guard let jobj = callJObjectWithMethod("toString", returning: .object(.java.lang.String)) else { return "" }
-        let bytes = JavaLangString(self, jobj).getBytes()
-        return String(data: Data(bytes), encoding: .utf8) ?? ""
-    }
+// extension CharSequence {
+//     public func toString() -> String {
+//         guard let jobj = callJObjectWithMethod("toString", returning: .object(.java.lang.String)) else { return "" }
+//         let bytes = JavaLangString(self, jobj).getBytes()
+//         return String(data: Data(bytes), encoding: .utf8) ?? ""
+//     }
     
-    public func length() -> Int {
-        guard let jint = callIntWithMethod("length", returning: .int()) else { return 0 }
-        return Int(jint)
-    }
-}
+//     public func length() -> Int {
+//         guard let jint = callIntWithMethod("length", returning: .int()) else { return 0 }
+//         return Int(jint)
+//     }
+// }

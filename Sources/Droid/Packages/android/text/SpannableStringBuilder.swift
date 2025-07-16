@@ -6,21 +6,20 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
+import FoundationEssentials
 
 extension AndroidPackage.TextPackage {
-    public class SpannableStringBuilderClass: AndroidClassName {}
+    public class SpannableStringBuilderClass: JClassName, @unchecked Sendable {}
     
-    public var SpannableStringBuilder: SpannableStringBuilderClass { .init(superClass: self, "SpannableStringBuilder") }
+    public var SpannableStringBuilder: SpannableStringBuilderClass { .init(parent: self, name: "SpannableStringBuilder") }
 }
 
-class SpannableStringBuilder: JClass, CharSequence {
-    init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.text.SpannableStringBuilder], args: [])
-    }
+// class SpannableStringBuilder: JClass, CharSequence {
+//     init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.android.text.SpannableStringBuilder], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

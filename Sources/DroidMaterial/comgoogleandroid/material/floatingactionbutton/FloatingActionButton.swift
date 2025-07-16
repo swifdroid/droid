@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.FloatingActionButtonPackage {
-    public class FloatingActionButtonClass: AndroidClassName {}
+    public class FloatingActionButtonClass: JClassName, @unchecked Sendable {}
     
-    public var FloatingActionButton: FloatingActionButtonClass { .init(superClass: self, "FloatingActionButton") }
+    public var FloatingActionButton: FloatingActionButtonClass { .init(parent: self, name: "FloatingActionButton") }
 }
 
-class FloatingActionButton: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.floatingactionbutton.FloatingActionButton], args: [])
-    }
+// class FloatingActionButton: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.floatingactionbutton.FloatingActionButton], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

@@ -6,21 +6,14 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
-
+import FoundationEssentials
 extension AndroidPackage.WidgetPackage {
-    public class AbsoluteLayoutClass: AndroidClassName {}
+    public class AbsoluteLayoutClass: JClassName, @unchecked Sendable {}
     
-    public var AbsoluteLayout: AbsoluteLayoutClass { .init(superClass: self, "AbsoluteLayout") }
+    public var AbsoluteLayout: AbsoluteLayoutClass { .init(parent: self, name: "AbsoluteLayout") }
 }
 
-class AbsoluteLayout: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.AbsoluteLayout], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+public class AbsoluteLayout: ViewGroup, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.widget.AbsoluteLayout }
 }

@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.TextViewPackage {
-    public class MaterialTextViewClass: AndroidClassName {}
+    public class MaterialTextViewClass: JClassName, @unchecked Sendable {}
     
-    public var MaterialTextView: MaterialTextViewClass { .init(superClass: self, "MaterialTextView") }
+    public var MaterialTextView: MaterialTextViewClass { .init(parent: self, name: "MaterialTextView") }
 }
 
-class MaterialTextView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.textview.MaterialTextView], args: [])
-    }
+// class MaterialTextView: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.textview.MaterialTextView], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

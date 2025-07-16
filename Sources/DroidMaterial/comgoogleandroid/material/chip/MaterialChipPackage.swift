@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class ChipPackage: AndroidClassName {}
+    public class ChipPackage: JClassName, @unchecked Sendable {}
     
-    public var chip: ChipPackage { .init(superClass: self, "chip") }
+    public var chip: ChipPackage { .init(parent: self, name: "chip") }
 }

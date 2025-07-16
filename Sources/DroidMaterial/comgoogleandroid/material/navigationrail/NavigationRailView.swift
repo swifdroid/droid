@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.NavigationRailPackage {
-    public class NavigationRailViewClass: AndroidClassName {}
+    public class NavigationRailViewClass: JClassName, @unchecked Sendable {}
     
-    public var NavigationRailView: NavigationRailViewClass { .init(superClass: self, "NavigationRailView") }
+    public var NavigationRailView: NavigationRailViewClass { .init(parent: self, name: "NavigationRailView") }
 }
 
-class NavigationRailView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.navigationrail.NavigationRailView], args: [])
-    }
+// class NavigationRailView: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.navigationrail.NavigationRailView], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

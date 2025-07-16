@@ -5,7 +5,7 @@
 //  Created by Mihael Isaev on 27.10.2021.
 //
 
-import Foundation
+import FoundationEssentials
 
 public protocol AppBuilderContent {
     var appBuilderContent: AppBuilder.Item { get }
@@ -17,6 +17,14 @@ extension AppLifecycle: AppBuilderContent {
 
 extension AppManifest: AppBuilderContent {
 	public var appBuilderContent: AppBuilder.Item { .manifest(self) }
+}
+
+extension AppGradle.ModuleAppGradle: AppBuilderContent {
+    public var appBuilderContent: AppBuilder.Item { .moduleGradle(self) }
+}
+
+extension AppGradle.ProjectAppGradle: AppBuilderContent {
+    public var appBuilderContent: AppBuilder.Item { .projectGradle(self) }
 }
 
 struct _AppContent: AppBuilder.Content {
@@ -31,7 +39,8 @@ struct _AppContent: AppBuilder.Content {
         case none
         case lifecycle(AppLifecycle)
         case manifest(AppManifest)
-//        case activities(Activities)
+        case moduleGradle(AppGradle.ModuleAppGradle)
+        case projectGradle(AppGradle.ProjectAppGradle)
         case items([Item])
     }
 

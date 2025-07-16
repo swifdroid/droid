@@ -1,26 +1,24 @@
-//
-//  CheckedTextView.swift
-//  Droid
-//
-//  Created by Mihael Isaev on 16.01.2022.
-//
+// //
+// //  CheckedTextView.swift
+// //  Droid
+// //
+// //  Created by Mihael Isaev on 16.01.2022.
+// //
 
-import DroidFoundation
-import Foundation
-import CDroidJNI
-
-extension AndroidPackage.WidgetPackage {
-    public class CheckedTextViewClass: AndroidClassName {}
+// import DroidFoundation
+// import FoundationEssentials
+// extension AndroidPackage.WidgetPackage {
+//     public class CheckedTextViewClass: JClassName, @unchecked Sendable {}
     
-    public var CheckedTextView: CheckedTextViewClass { .init(superClass: self, "CheckedTextView") }
-}
+//     public var CheckedTextView: CheckedTextViewClass { .init(parent: self, name: "CheckedTextView") }
+// }
 
-class CheckedTextView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.CheckedTextView], args: [])
-    }
+// class CheckedTextView: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.android.widget.CheckedTextView], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }

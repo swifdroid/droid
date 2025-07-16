@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class ProgressIndicatorPackage: AndroidClassName {}
+    public class ProgressIndicatorPackage: JClassName, @unchecked Sendable {}
     
-    public var progressindicator: ProgressIndicatorPackage { .init(superClass: self, "progressindicator") }
+    public var progressindicator: ProgressIndicatorPackage { .init(parent: self, name: "progressindicator") }
 }

@@ -6,21 +6,14 @@
 //
 
 import DroidFoundation
-import Foundation
-import CDroidJNI
-
+import FoundationEssentials
 extension AndroidPackage.WidgetPackage {
-    public class StackViewClass: AndroidClassName {}
+    public class StackViewClass: JClassName, @unchecked Sendable {}
     
-    public var StackView: StackViewClass { .init(superClass: self, "StackView") }
+    public var StackView: StackViewClass { .init(parent: self, name: "StackView") }
 }
 
-class StackView: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.android.widget.StackView], args: [])
-    }
-    
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
+public class StackView: View, @unchecked Sendable {
+    /// The JNI class name
+    public class override var className: JClassName { .android.widget.StackView }
 }

@@ -8,7 +8,7 @@
 import DroidFoundation
 
 extension AndroidPackage.GraphicsPackage {
-    public class DrawablePackage: AndroidClassName {}
+    public class DrawablePackage: JClassName, @unchecked Sendable {}
     
-    public var drawable: DrawablePackage { .init(superClass: self, "drawable") }
+    public var drawable: DrawablePackage { .init(parent: self, name: "drawable") }
 }

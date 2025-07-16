@@ -10,12 +10,11 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/grant-uri-permission-element)
 	public class GrantUriPermission: ManifestTag {
-		static var name: String { "grant-uri-permission" }
+        class override var name: String { "grant-uri-permission" }
 		
-		var params: [ManifestTagParam] = []
-		var items: [ManifestTag] = []
-		
-		required init() {}
+		required override init() {
+            super.init()
+        }
 		
 		// MARK: -
 		
@@ -23,7 +22,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/grant-uri-permission-element#path)
 		public func path(_ value: String) -> Self {
-			params.append(.init(.androidPath, value))
+			params[.androidPath] = value
 			return self
 		}
 		
@@ -40,7 +39,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/grant-uri-permission-element#path)
 		public func pathPattern(_ value: String) -> Self {
-			params.append(.init(.androidPathPattern, value))
+			params[.androidPathPattern] = value
 			return self
 		}
 		
@@ -57,7 +56,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/grant-uri-permission-element#path)
 		public func pathPrefix(_ value: String) -> Self {
-			params.append(.init(.androidPathPrefix, value))
+			params[.androidPathPrefix] = value
 			return self
 		}
 		

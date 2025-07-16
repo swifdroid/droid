@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class BottomAppBarPackage: AndroidClassName {}
+    public class BottomAppBarPackage: JClassName, @unchecked Sendable {}
     
-    public var bottomappbar: BottomAppBarPackage { .init(superClass: self, "bottomappbar") }
+    public var bottomappbar: BottomAppBarPackage { .init(parent: self, name: "bottomappbar") }
 }

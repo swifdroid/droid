@@ -7,12 +7,16 @@
 
 import DroidFoundation
 
-public class AndroidPackage: AndroidClassName {
+public class AndroidPackage: JClassName, @unchecked Sendable {
     public init () {
-        super.init("android")
+        super.init(stringLiteral: "android")
+    }
+
+    required init(stringLiteral: String) {
+        super.init(stringLiteral: "android")
     }
 }
 
-extension AndroidClassName {
+extension JClassName {
     public static var android: AndroidPackage { .init() }
 }

@@ -8,7 +8,7 @@
 import Droid
 
 extension ComGoogleAndroidPackage.MaterialPackage {
-    public class FloatingActionButtonPackage: AndroidClassName {}
+    public class FloatingActionButtonPackage: JClassName, @unchecked Sendable {}
     
-    public var floatingactionbutton: FloatingActionButtonPackage { .init(superClass: self, "floatingactionbutton") }
+    public var floatingactionbutton: FloatingActionButtonPackage { .init(parent: self, name: "floatingactionbutton") }
 }

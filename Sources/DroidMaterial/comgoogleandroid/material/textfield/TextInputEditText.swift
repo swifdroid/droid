@@ -6,20 +6,19 @@
 //
 
 import Droid
-import CDroidJNI
 
 extension ComGoogleAndroidPackage.MaterialPackage.TextFieldPackage {
-    public class TextInputEditTextClass: AndroidClassName {}
+    public class TextInputEditTextClass: JClassName, @unchecked Sendable {}
     
-    public var TextInputEditText: TextInputEditTextClass { .init(superClass: self, "TextInputEditText") }
+    public var TextInputEditText: TextInputEditTextClass { .init(parent: self, name: "TextInputEditText") }
 }
 
-class TextInputEditText: View {
-    override init (_ environment: JEnvironment, _ context: JObjectReference) {
-        super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.TextInputEditText], args: [])
-    }
+// class TextInputEditText: View {
+//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
+//         super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.TextInputEditText], args: [])
+//     }
     
-    required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-        super.init(environment, ref, object)
-    }
-}
+//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
+//         super.init(environment, ref, object)
+//     }
+// }
