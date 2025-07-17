@@ -152,6 +152,17 @@ extension View {
             // else { return }
             // env.callVoidMethod(object: object, methodId: methodId, args: [`class`])
         }
+
+        public func setOnClickListener(_ listener: NativeOnClickListener) {
+            #if os(Android)
+            guard
+                let instance = listener.instance,
+                let env = JEnv.current(),
+                let methodId = clazz.methodId(env: env, name: "setOnClickListener", signature: .init(.object(.android.view.ViewOnClickListener), returning: .void))
+            else { return }
+            env.callVoidMethod(object: object, methodId: methodId, args: [instance.object])
+            #endif
+        }
     }
 }
 

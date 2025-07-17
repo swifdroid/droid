@@ -204,6 +204,10 @@ open class View: AnyView, @unchecked Sendable {
                     case .orientation(let value):
                         DroidApp.logger.debug("view(id: \(id)) didMoveToParent orientation")
                         instance.setOrientation(value)
+                    case .onClick(let listener):
+                        DroidApp.logger.debug("view(id: \(id)) didMoveToParent onClick")
+                        listener.attach(to: instance)
+                        instance.setOnClickListener(listener)
                 }
             }
             if subviews.count > 0 {
@@ -290,6 +294,7 @@ open class View: AnyView, @unchecked Sendable {
     enum PropertyToApply {
         case backgroundColor(GraphicsColor)
         case orientation(LinearLayout.Orientation)
+        case onClick(NativeOnClickListener)
     }
     
     var _propertiesToApply: [PropertyToApply] = []    
@@ -320,6 +325,16 @@ open class View: AnyView, @unchecked Sendable {
     
     // public func background(Object) -> Self {}
     
+    @discardableResult
+    public func onClick(_ handler: @escaping @Sendable () async -> Void) -> Self {
+        let listener = NativeOnClickListener(handler)
+        if let instance {
+            instance.setOnClickListener(listener)
+        } else {
+            _propertiesToApply.append(.onClick(listener))
+        }
+        return self
+    }
 
     @discardableResult
     open func body(@BodyBuilder block: BodyBuilder.SingleView) -> Self {
