@@ -66,25 +66,29 @@ public final class LayoutParams: Sendable, JObjectable {
     /// Object wrapper
     public let object: JObject
     
-    public struct LayoutSize: ExpressibleByIntegerLiteral, JValuable, Equatable {
+    public struct LayoutSize: JValuable, Equatable, Sendable {
         let value: Int32
 
         #if os(Android)
         public var jValue: jvalue { value.jValue }
         #endif
         
-        public init(integerLiteral value: Int) {
+        public init(_ value: Int) {
             self.value = Int32(value)
         }
         
-        public static var matchParent: Self { -1 }
-        public static var wrapContent: Self { -2 }
+        public static var matchParent: Self { .init(-1) }
+        public static var wrapContent: Self { .init(-2) }
 
         public static func == (lhs: LayoutSize, rhs: LayoutSize) -> Bool {
             lhs.value == rhs.value
         }
     }
     
+    init (_ object: JObject) {
+        self.object = object
+    }
+
     convenience init? (_ type: LinearLayoutType) {
         guard let env = JEnv.current() else { return nil }
         self.init(env, type)
@@ -119,13 +123,13 @@ public final class LayoutParams: Sendable, JObjectable {
         if [.matchParent, .wrapContent].contains(width) {
             correctWidth = width
         } else {
-            correctWidth = .init(integerLiteral: Int(unit.toPixels(width.value)))
+            correctWidth = .init(Int(unit.toPixels(width.value)))
         }
         let correctHeight: LayoutSize
         if [.matchParent, .wrapContent].contains(height) {
             correctHeight = height
         } else {
-            correctHeight = .init(integerLiteral: Int(unit.toPixels(height.value)))
+            correctHeight = .init(Int(unit.toPixels(height.value)))
         }
         DroidApp.logger.critical("💡 2LayoutParams trying to load class: \(type.rawValue)")
         guard
@@ -143,11 +147,28 @@ public final class LayoutParams: Sendable, JObjectable {
 
     public func setWidth(_ value: Int32) {
         #if os(Android)
+        DroidApp.logger.debug("lp.setWidth \(value) case 1")
         guard
             let env = JEnv.current(),
             let fieldId = clazz.fieldId(name: "width", signature: .int)
         else { return }
         env.setIntField(object, fieldId, value)
+        DroidApp.logger.debug("lp.setWidth \(value) case 2")
+        #endif
+    }
+
+    public func getWidth() -> Int32? {
+        #if os(Android)
+        DroidApp.logger.debug("lp.getWidth case 1")
+        guard
+            let env = JEnv.current(),
+            let fieldId = clazz.fieldId(name: "width", signature: .int)
+        else { return nil }
+        let value = env.getIntField(object, fieldId)
+        DroidApp.logger.debug("lp.getWidth case 2 value: \(value)")
+        return value
+        #else
+        return nil
         #endif
     }
 
@@ -158,6 +179,21 @@ public final class LayoutParams: Sendable, JObjectable {
             let fieldId = clazz.fieldId(name: "height", signature: .int)
         else { return }
         env.setIntField(object, fieldId, value)
+        #endif
+    }
+
+    public func getHeight() -> Int32? {
+        #if os(Android)
+        DroidApp.logger.debug("lp.getHeight case 1")
+        guard
+            let env = JEnv.current(),
+            let fieldId = clazz.fieldId(name: "height", signature: .int)
+        else { return nil }
+        let value = env.getIntField(object, fieldId)
+        DroidApp.logger.debug("lp.getHeight case 2 value: \(value)")
+        return value
+        #else
+        return nil
         #endif
     }
 
