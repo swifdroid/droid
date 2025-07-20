@@ -123,7 +123,7 @@ extension DroidApp {
 		
 		// MARK: -
 		
-		/// Lists configuration changes that the activity will handle itself.
+		/// Lists configuration changes that the activity will handle itself. For the rest activity will be simply restarted.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#config)
 		public func configChanges(_ value: [ConfigChangeType]) -> Self {
@@ -131,7 +131,7 @@ extension DroidApp {
 			return self
 		}
 		
-		/// Lists configuration changes that the activity will handle itself.
+		/// Lists configuration changes that the activity will handle itself. For the rest activity will be simply restarted.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#config)
 		public func configChanges(_ value: ConfigChangeType...) -> Self {
