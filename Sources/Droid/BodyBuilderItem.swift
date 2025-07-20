@@ -1,11 +1,18 @@
-public enum BodyBuilderItem {
+#if canImport(AndroidLooper)
+import AndroidLooper
+#endif
+
+public enum BodyBuilderItem: Sendable {
     case none
     case single(View)
     case multiple([View])
     case nested([BodyBuilderItemable])
     case forEach(AnyForEach)
 }
-public protocol BodyBuilderItemable {
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+public protocol BodyBuilderItemable: Sendable {
     var bodyBuilderItem: BodyBuilderItem { get }
 }
 public struct EmptyBodyBuilderItem: BodyBuilderItemable {

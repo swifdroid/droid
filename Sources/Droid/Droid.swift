@@ -3,7 +3,9 @@ import Logging
 #if canImport(Android)
 import Android
 import AndroidLogging
+#if canImport(AndroidLooper)
 import AndroidLooper
+#endif
 #endif
 
 #if os(Android)
@@ -23,7 +25,11 @@ public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject:
         logger.info("activities count: \(DroidApp.shared._activities.count)")
         if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
             logger.info("activity found")
-            _ = activityType.init(object: context)
+            #if canImport(AndroidLooper)
+            Task.detached { @UIThreadActor in
+                _ = activityType.init(object: context)
+            }
+            #endif
         }
         // guard let activity = AppCompatActivity(context) else {
         //     logger.info("0.1")

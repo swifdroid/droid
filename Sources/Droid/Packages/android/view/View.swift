@@ -28,6 +28,9 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnClickListener: OnClickListenerClass { .init(parent: self, name: "View$OnClickListener") }
 }
 
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 public protocol AnyView {}
 
 enum ViewStatus: Sendable {
@@ -42,7 +45,7 @@ open class View: AnyView, @unchecked Sendable {
     public class var className: JClassName { .android.view.View }
 
     /// Unique identifier
-    let id: Int32
+    nonisolated let id: Int32
     
     /// Status of the view in the app, e.g. instantiated in in JNI or not yet
     var status: ViewStatus = .new
@@ -72,8 +75,9 @@ open class View: AnyView, @unchecked Sendable {
         _setup()
     }
 
+    
     @discardableResult
-    public init (@BodyBuilder content: () -> BodyBuilderItemable) {
+    public init (@BodyBuilder content: BodyBuilder.SingleView) {
         id = DroidApp.getNextViewId()
         _setup()
         body { content() }
@@ -105,7 +109,7 @@ open class View: AnyView, @unchecked Sendable {
     @discardableResult
     public func setLayoutParams(_ params: LayoutParams) -> Self {
         if let instance {
-                instance.setLayoutParams(params)
+            instance.setLayoutParams(params)
         }
         return self
     }
@@ -326,7 +330,7 @@ open class View: AnyView, @unchecked Sendable {
     // public func background(Object) -> Self {}
     
     @discardableResult
-    public func onClick(_ handler: @escaping @Sendable () async -> Void) -> Self {
+    public func onClick(_ handler: @escaping () async -> Void) -> Self {
         let listener = NativeOnClickListener(handler)
         if let instance {
             instance.setOnClickListener(listener)
@@ -399,15 +403,18 @@ open class View: AnyView, @unchecked Sendable {
 }
 
 extension View: Equatable, Hashable {
-    public static func == (lhs: View, rhs: View) -> Bool {
+    public static nonisolated func == (lhs: View, rhs: View) -> Bool {
         lhs.id == rhs.id
     }
-
-    public func hash(into hasher: inout Hasher) {
+    
+    public nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
 
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 extension Array where Element == View {
     func removeFromSuperview(at indexes: [Int]) {
         guard indexes.count > 0 else { return }

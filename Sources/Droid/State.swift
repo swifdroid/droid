@@ -10,10 +10,8 @@ public protocol Stateable: AnyState {
     func listen(_ listener: @escaping () -> Void)
 }
 
-public typealias UState = State
-
 @propertyWrapper
-open class State<Value>: Stateable {
+open class State<Value: Sendable>: Stateable, @unchecked Sendable {
     private var _originalValue: Value
     private var _wrappedValue: Value
     public var wrappedValue: Value {
@@ -183,7 +181,7 @@ open class State<Value>: Stateable {
     }
 }
 
-public class CombinedState<A, B> {
+public class CombinedState<A: Sendable, B: Sendable>: @unchecked Sendable {
     let _left: State<A>
     let _right: State<B>
     public var left: A { _left.wrappedValue }

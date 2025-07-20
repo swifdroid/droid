@@ -1,4 +1,4 @@
-public protocol AnyForEach {
+public protocol AnyForEach: Sendable {
     var orientation: LinearLayout.Orientation? { get }
     var gravity: Gravity? { get }
     
@@ -9,10 +9,10 @@ public protocol AnyForEach {
     func gravity(_ gravity: Gravity) -> Self
 }
 
-public class ForEach<Item> where Item: Hashable {
-    public typealias BuildViewHandler = (Int, Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerValue = (Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerSimple = () -> BodyBuilder.Result
+open class ForEach<Item: Sendable>: @unchecked Sendable where Item: Hashable {
+    public typealias BuildViewHandler = @Sendable (Int, Item) -> BodyBuilder.Result
+    public typealias BuildViewHandlerValue = @Sendable (Item) -> BodyBuilder.Result
+    public typealias BuildViewHandlerSimple = @Sendable () -> BodyBuilder.Result
     
     let items: State<[Item]>
     let block: BuildViewHandler
@@ -115,10 +115,10 @@ extension ForEach where Item == Int {
     }
 }
 
-public class VForEach<Item>: ForEach<Item> where Item: Hashable {
+public class VForEach<Item>: ForEach<Item>, @unchecked Sendable where Item: Hashable {
     public override var orientation: LinearLayout.Orientation? { .vertical }
 }
 
-public class HForEach<Item>: ForEach<Item> where Item: Hashable {
+public class HForEach<Item>: ForEach<Item>, @unchecked Sendable where Item: Hashable {
     public override var orientation: LinearLayout.Orientation? { .horizontal }
 }

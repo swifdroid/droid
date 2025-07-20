@@ -15,7 +15,7 @@ public class HStack: LinearLayout, @unchecked Sendable {
     }
 
     @discardableResult
-    public override init (@BodyBuilder content: () -> BodyBuilderItemable) {
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
         super.init(content: content)
     }
 

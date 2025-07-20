@@ -4,8 +4,14 @@ import Android
 #if canImport(Logging)
 import Logging
 #endif
+#if canImport(AndroidLooper)
+import AndroidLooper
+#endif
 
 extension View {
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
     public final class ViewInstance: JObjectable, Sendable {
         /// Unique identifier
         public let id: Int32
@@ -32,7 +38,7 @@ extension View {
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.object])
             else { return nil }
-            self.id = IPC_DIPC
+            self.id = id
             self.object = global
             self.context = context
             #else
@@ -61,13 +67,16 @@ extension View {
         }
 
         public func setLayoutParams(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) {
+            #if os(Android)
             let type: LayoutParams.LinearLayoutType = .fromClassName(clazz.name)
             if let lp = LayoutParams(type, width: width, height: height, unit: unit) {
                 setLayoutParams(lp)
             }
+            #endif
         }
 
         public func requestLayout() {
+            #if os(Android)
             guard
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "requestLayout", signature: .returning(.void))
@@ -75,9 +84,37 @@ extension View {
             DroidApp.logger.debug("⚡️view(id: \(id)) viewInstance requestLayout 1")
             env.callVoidMethod(object: object, methodId: methodId)
             DroidApp.logger.debug("⚡️view(id: \(id)) viewInstance requestLayout 2")
+            #endif
+        }
+        
+        public func getLayoutParams() -> LayoutParams? {
+            #if os(Android)
+            DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1")
+            guard let env = JEnv.current() else {
+                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.1 exit")
+                return nil
+            }
+            guard let methodId = clazz.methodId(env: env, name: "getLayoutParams", signature: .returning(.object(.android.view.ViewGroup.LayoutParams))) else {
+                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
+                return nil
+            }
+            guard let lpClazz = JNICache.shared.getClass(.android.view.ViewGroup.LayoutParams) else {
+                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
+                return nil
+            }
+            guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, clazz: lpClazz) else {
+                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
+                return nil
+            }
+            DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 2")
+            return LayoutParams(globalObject)
+            #else
+            return nil
+            #endif
         }
         
         public func setLayoutParams(_ params: LayoutParams) {
+            #if os(Android)
             guard
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "setLayoutParams", signature: .init(.object(.android.view.ViewGroup.LayoutParams), returning: .void))
@@ -85,6 +122,7 @@ extension View {
             DroidApp.logger.debug("view(id: \(id)) viewInstance setLayoutParams 1")
             env.callVoidMethod(object: object, methodId: methodId, args: [params.object])
             DroidApp.logger.debug("view(id: \(id)) viewInstance setLayoutParams 2")
+            #endif
         }
 
         public func addView(_ viewInstance: ViewInstance) {
@@ -138,19 +176,23 @@ extension View {
         }
 
         public func setOrientation(_ orientation: LinearLayout.Orientation) {
+            #if os(Android)
             guard
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "setOrientation", signature: .init(.int, returning: .void))
             else { return }
             env.callVoidMethod(object: object, methodId: methodId, args: [orientation.rawValue])
+            #endif
         }
 
         public func setBackground(_ class: JClass) {
+            #if os(Android)
             // guard
             //     let env = JEnv.current(),
             //     let methodId = clazz.methodId(env: env, name: "setBackground", signature: .init(.object(.android.graphics.drawable.Drawable), returning: .void))
             // else { return }
             // env.callVoidMethod(object: object, methodId: methodId, args: [`class`])
+            #endif
         }
 
         public func setOnClickListener(_ listener: NativeOnClickListener) {
@@ -167,11 +209,11 @@ extension View {
 }
 
 extension View.ViewInstance: Equatable, Hashable {
-    public static func == (lhs: View.ViewInstance, rhs: View.ViewInstance) -> Bool {
+    public nonisolated static func == (lhs: View.ViewInstance, rhs: View.ViewInstance) -> Bool {
         lhs.id == rhs.id
     }
 
-    public func hash(into hasher: inout Hasher) {
+    public nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

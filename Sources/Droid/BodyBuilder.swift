@@ -1,6 +1,17 @@
+#if canImport(AndroidLooper)
+import AndroidLooper
+#endif
+
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 @resultBuilder public struct BodyBuilder {
     public typealias Result = BodyBuilderItemable
-    public typealias SingleView = () -> Result
+    #if canImport(AndroidLooper)
+    public typealias SingleView = @UIThreadActor @Sendable () -> Result
+    #else
+    public typealias SingleView = @Sendable () -> Result
+    #endif
     
     /// Empty block support
     public static func buildPartialBlock(first: Void) -> Result {

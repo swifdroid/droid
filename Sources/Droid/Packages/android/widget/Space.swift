@@ -6,7 +6,6 @@
 //
 
 import DroidFoundation
-import FoundationEssentials
 
 extension AndroidPackage.WidgetPackage {
     public class SpaceClass: JClassName, @unchecked Sendable {}

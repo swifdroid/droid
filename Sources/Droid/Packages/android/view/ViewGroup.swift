@@ -6,7 +6,6 @@
 //
 
 import DroidFoundation
-import FoundationEssentials
 
 extension AndroidPackage.ViewPackage {
     public class ViewGroupClass: JClassName, @unchecked Sendable {}

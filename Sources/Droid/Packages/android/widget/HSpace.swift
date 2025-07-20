@@ -6,11 +6,16 @@
 //
 
 import DroidFoundation
-import FoundationEssentials
 
 public class HSpace: Space, @unchecked Sendable {
     @discardableResult
     public init(_ width: LayoutParams.LayoutSize, _ unit: DimensionUnit = .dp, weight: Float = 0) {
+        super.init(weight: weight)
+        self.width(width, unit)
+    }
+
+    @discardableResult
+    public init(_ width: Int, _ unit: DimensionUnit = .dp, weight: Float = 0) {
         super.init(weight: weight)
         self.width(width, unit)
     }

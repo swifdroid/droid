@@ -20,6 +20,15 @@ public struct ActivityContext: JObjectable, JClassLoadable, Sendable {
     public let object: JObject
 }
 
+#if os(Android)
+extension AppCompatActivity: Sendable {}
+#else
+extension AppCompatActivity: @unchecked Sendable {}
+#endif
+
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 open class AppCompatActivity: Activity {
     public class var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
     public class var requiredImports: [String] { ["android.support.v7.app.AppCompatActivity"] }

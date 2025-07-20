@@ -9,7 +9,7 @@
 import Android
 #endif
 
-public enum DimensionUnit {
+public enum DimensionUnit: Sendable {
     case px
     case dp
     case sp

@@ -24,11 +24,11 @@ public class LinearLayout: ViewGroup, @unchecked Sendable {
     }
 
     @discardableResult
-    public override init (@BodyBuilder content: () -> BodyBuilderItemable) {
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
         super.init(content: content)
     }
 
-    public enum Orientation: Int {
+    public enum Orientation: Int, Sendable {
         case horizontal, vertical
     }
     

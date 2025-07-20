@@ -11,6 +11,9 @@ import Android
 #if canImport(Logging)
 import Logging
 #endif
+#if canImport(AndroidLooper)
+import AndroidLooper
+#endif
 
 import DroidFoundation
 import FoundationEssentials
@@ -21,6 +24,9 @@ extension AndroidPackage.ViewPackage.ViewGroupClass {
     public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
 }
 
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 public final class LayoutParams: Sendable, JObjectable {
     public enum LinearLayoutType: String {
         case viewGroup = "android/view/ViewGroup$LayoutParams"
