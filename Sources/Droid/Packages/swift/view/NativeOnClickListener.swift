@@ -11,7 +11,6 @@ import Android
 #if canImport(Logging)
 import Logging
 #endif
-import DroidFoundation
 import FoundationEssentials
 
 extension SwiftPackage.ViewPackage {

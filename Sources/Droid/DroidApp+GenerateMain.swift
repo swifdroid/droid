@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 01.03.2023.
 //
 
-import FoundationEssentials
-
 extension DroidApp {
     func generateMain(_ name: String) -> String? {
         let args = androidBuildingArguments

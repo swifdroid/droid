@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension AndroidPackage.WidgetPackage.InlinePackage {
     public class InlineContentViewClass: JClassName, @unchecked Sendable {}
     

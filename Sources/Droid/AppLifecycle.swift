@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 27.10.2021.
 //
 
-import FoundationEssentials
-
 public final class AppLifecycle {
     private init () {}
     

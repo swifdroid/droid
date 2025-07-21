@@ -12,16 +12,17 @@ import Android
 import Glibc
 #endif
 #endif
-import FoundationEssentials
-import DroidFoundation
-#if canImport(Logging)
-import Logging
-#endif
 #if canImport(AndroidLooper)
 import AndroidLooper
 #endif
 #if canImport(AndroidLogging)
 import AndroidLogging
+#endif
+#if canImport(Logging)
+import Logging
+#endif
+#if !os(Android)
+import FoundationEssentials
 #endif
 
 open class DroidApp: @unchecked Sendable {

@@ -19,9 +19,6 @@ let package = Package(
             .target(name: "Droid")
         ]),
         .target(name: "Droid", dependencies: [
-            .target(name: "DroidFoundation")
-        ]),
-        .target(name: "DroidFoundation", dependencies: [
             .product(name: "JNIKit", package: "jni-kit"),
             .product(name: "Manifest", package: "manifest")
         ]),

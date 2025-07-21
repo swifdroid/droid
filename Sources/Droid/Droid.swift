@@ -1,11 +1,14 @@
-import JNIKit
-import Logging
 #if canImport(Android)
 import Android
+#if canImport(AndroidLogging)
 import AndroidLogging
+#endif
 #if canImport(AndroidLooper)
 import AndroidLooper
 #endif
+#endif
+#if canImport(Logging)
+import Logging
 #endif
 
 #if os(Android)

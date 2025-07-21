@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 29.01.2022.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension JavaPackage.LangPackage {
     public class CharSequenceClass: JClassName, @unchecked Sendable {}
     

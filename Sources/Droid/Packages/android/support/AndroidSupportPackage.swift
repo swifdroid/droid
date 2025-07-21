@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 28.01.2022.
 //
 
-import DroidFoundation
-
 extension AndroidPackage {
     public class SupportPackage: JClassName, @unchecked Sendable {}
     

@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 15.01.2022.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension AndroidPackage.GraphicsPackage.DrawablePackage {
     public class ShapeDrawableClass: JClassName, @unchecked Sendable {}
     

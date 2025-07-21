@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 26.02.2023.
 //
 
-import FoundationEssentials
-
 #if !os(Android)
 extension DroidApp {
     func generateActivity(_ name: String) -> String? {

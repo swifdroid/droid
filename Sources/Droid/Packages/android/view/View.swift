@@ -8,13 +8,12 @@
 #if os(Android)
 import Android
 #endif
-import DroidFoundation
-import FoundationEssentials
-import JNIKit
 #if canImport(AndroidLooper)
 import AndroidLooper
 #endif
+#if canImport(Logging)
 import Logging
+#endif
 
 extension AndroidPackage.ViewPackage {
     public class ViewClass: JClassName, @unchecked Sendable {}

@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 27.01.2022.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension SwiftPackage {
     public class TextWatcherClass: JClassName, @unchecked Sendable {}
     

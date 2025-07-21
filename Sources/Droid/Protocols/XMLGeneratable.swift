@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 21.04.2022.
 //
 
-import FoundationEssentials
-
 protocol XMLGeneratable {
 	func generateXML(indentation: UInt) -> String
 }

@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import FoundationEssentials
-import DroidFoundation
-
 extension AndroidXPackage.FragmentPackage.AppPackage {
     public class FragmentContainerViewClass: JClassName, @unchecked Sendable {}
     

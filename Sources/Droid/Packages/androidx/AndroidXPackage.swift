@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 15.01.2022.
 //
 
-import DroidFoundation
-
 public class AndroidXPackage: JClassName, @unchecked Sendable {
     public init () {
         super.init(stringLiteral: "androidx")

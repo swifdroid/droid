@@ -8,7 +8,6 @@
 #if os(Android)
 import Android
 #endif
-import DroidFoundation
 
 extension AndroidPackage.GraphicsPackage {
     public class ColorClass: JClassName, @unchecked Sendable {}

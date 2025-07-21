@@ -15,9 +15,6 @@ import Logging
 import AndroidLooper
 #endif
 
-import DroidFoundation
-import FoundationEssentials
-
 extension AndroidPackage.ViewPackage.ViewGroupClass {
     public class LayoutParamsClass: JClassName, @unchecked Sendable {}
     

@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 20.04.2022.
 //
 
-import FoundationEssentials
-
 public class AppManifest: DroidApp.ManifestTag {
 	class override var name: String { "manifest" }
 	

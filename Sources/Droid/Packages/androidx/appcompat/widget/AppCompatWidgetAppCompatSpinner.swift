@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 15.01.2022.
 //
 
-import FoundationEssentials
-import DroidFoundation
-
 extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public class AppCompatSpinnerClass: JClassName, @unchecked Sendable {}
     

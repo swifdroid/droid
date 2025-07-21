@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 14.01.2022.
 //
 
-import DroidFoundation
-
 extension AndroidPackage.ViewPackage {
     public class ViewGroupClass: JClassName, @unchecked Sendable {}
     

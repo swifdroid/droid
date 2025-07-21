@@ -1,5 +1,3 @@
-import DroidFoundation
-
 extension SwiftPackage {
     public class ViewPackage: JClassName, @unchecked Sendable {}
     

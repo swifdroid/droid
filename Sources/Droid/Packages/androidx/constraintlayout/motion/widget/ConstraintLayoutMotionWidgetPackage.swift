@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import DroidFoundation
-
 extension AndroidXPackage.ConstraintLayoutPackage.MotionPackage {
     public class WidgetPackage: JClassName, @unchecked Sendable {}
     

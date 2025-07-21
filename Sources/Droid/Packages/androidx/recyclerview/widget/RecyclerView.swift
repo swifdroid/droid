@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import FoundationEssentials
-import DroidFoundation
-
 extension AndroidXPackage.RecyclerViewPackage.WidgetPackage {
     public class RecyclerViewClass: JClassName, @unchecked Sendable {}
     

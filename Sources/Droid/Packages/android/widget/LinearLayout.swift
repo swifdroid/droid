@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 13.01.2022.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension AndroidPackage.WidgetPackage {
     public class LinearLayoutClass: JClassName, @unchecked Sendable {}
     

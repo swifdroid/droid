@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 25.02.2023.
 //
 
-import DroidFoundation
-
 extension AndroidPackage.AppPackage {
     public class ActivityPackage: JClassName, @unchecked Sendable {}
     

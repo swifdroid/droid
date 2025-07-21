@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 25.02.2023.
 //
 
-import DroidFoundation
 #if canImport(AndroidLooper)
 import AndroidLooper
 #endif

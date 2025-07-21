@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 14.01.2022.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension AndroidPackage.ViewPackage {
     public class ViewParentClass: JClassName, @unchecked Sendable {}
     

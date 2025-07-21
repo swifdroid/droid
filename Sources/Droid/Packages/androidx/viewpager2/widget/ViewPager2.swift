@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import FoundationEssentials
-import DroidFoundation
-
 extension AndroidXPackage.ViewPager2Package.WidgetPackage {
     public class ViewPager2Class: JClassName, @unchecked Sendable {}
     

@@ -8,8 +8,6 @@
 // #if os(Android)
 // import Android
 // #endif
-// import DroidFoundation
-// import FoundationEssentials
 
 // extension JavaPackage.LangPackage {
 //     public class ClassLoaderClass: JClassName, @unchecked Sendable {}

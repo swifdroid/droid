@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 24.06.2025.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension AndroidPackage.WidgetPackage {
     public class FrameLayoutClass: JClassName, @unchecked Sendable {}
     

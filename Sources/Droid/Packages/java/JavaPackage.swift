@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 28.01.2022.
 //
 
-import DroidFoundation
-
 public class JavaPackage: JClassName, @unchecked Sendable {
     public init () {
         super.init(stringLiteral: "java")

@@ -5,8 +5,6 @@
 // //  Created by Mihael Isaev on 15.01.2022.
 // //
 
-// import DroidFoundation
-// import FoundationEssentials
 // extension AndroidPackage.WidgetPackage {
 //     public class TextViewClass: JClassName, @unchecked Sendable {}
     

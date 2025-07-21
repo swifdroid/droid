@@ -5,9 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import DroidFoundation
-import FoundationEssentials
-
 extension AndroidPackage.ViewPackage {
     public class SurfaceViewClass: JClassName, @unchecked Sendable {}
     

@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 25.02.2023.
 //
 
-import FoundationEssentials
-
 public class AppGradle {
     public class ProjectAppGradle: AppGradle {}
     public class ModuleAppGradle: AppGradle {}

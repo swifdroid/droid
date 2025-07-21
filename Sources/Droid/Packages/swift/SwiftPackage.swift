@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 28.01.2022.
 //
 
-import DroidFoundation
-
 public class SwiftPackage: JClassName, @unchecked Sendable {
     public init () {
         super.init(stringLiteral: "stream/swift/android")

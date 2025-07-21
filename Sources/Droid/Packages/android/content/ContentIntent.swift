@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 13.01.2022.
 //
 
-import DroidFoundation
-
 extension AndroidPackage.ContentPackage {
     public class IntentClass: JClassName, @unchecked Sendable {}
     

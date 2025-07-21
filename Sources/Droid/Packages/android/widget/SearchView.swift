@@ -5,8 +5,6 @@
 // //  Created by Mihael Isaev on 16.01.2022.
 // //
 
-// import DroidFoundation
-// import FoundationEssentials
 // extension AndroidPackage.WidgetPackage {
 //     public class SearchViewClass: JClassName, @unchecked Sendable {}
     
