@@ -116,7 +116,7 @@ open class View: AnyView, @unchecked Sendable {
     @discardableResult
     public func addSubview(_ subview: View) -> Self {
         guard subviews.firstIndex(of: subview) == nil else {
-            DroidApp.logger.debug("🟨 Attempt to add subview that already present")
+            InnerLog.d("🟨 Attempt to add subview that already present")
             return self
         }
         subviews.append(subview)
@@ -163,7 +163,7 @@ open class View: AnyView, @unchecked Sendable {
     @discardableResult
     public func removeSubview(_ subview: View) -> Self {
         guard let subviewIndex = subviews.firstIndex(of: subview) else {
-            DroidApp.logger.debug("🟨 Attempt to remove already removed view")
+            InnerLog.d("🟨 Attempt to remove already removed view")
             return self
         }
         subview.willMoveFromParent()
@@ -196,40 +196,40 @@ open class View: AnyView, @unchecked Sendable {
     open func willMoveToParent() {}
     /// Triggered after this view added into parent view
     open func didMoveToParent() {
-        DroidApp.logger.debug("view(id: \(id)) didMoveToParent 1")
+        InnerLog.d("view(id: \(id)) didMoveToParent 1")
         if let instance {
-            DroidApp.logger.debug("view(id: \(id)) didMoveToParent 2")
+            InnerLog.d("view(id: \(id)) didMoveToParent 2")
             for p in _propertiesToApply {
                 switch p {
                     case .backgroundColor(let value):
-                        DroidApp.logger.debug("view(id: \(id)) didMoveToParent backgroundColor")
+                        InnerLog.d("view(id: \(id)) didMoveToParent backgroundColor")
                         instance.setBackgroundColor(value)
                     case .orientation(let value):
-                        DroidApp.logger.debug("view(id: \(id)) didMoveToParent orientation")
+                        InnerLog.d("view(id: \(id)) didMoveToParent orientation")
                         instance.setOrientation(value)
                     case .onClick(let listener):
-                        DroidApp.logger.debug("view(id: \(id)) didMoveToParent onClick")
+                        InnerLog.d("view(id: \(id)) didMoveToParent onClick")
                         listener.attach(to: instance)
                         instance.setOnClickListener(listener)
                 }
             }
             if subviews.count > 0 {
-                DroidApp.logger.debug("view(id: \(id)) didMoveToParent iterating subviews")
+                InnerLog.d("view(id: \(id)) didMoveToParent iterating subviews")
                 for (i, subview) in subviews.filter({ v in
                     switch v.status {
                         case .new, .floating: return true
                         default: return false
                     }
                 }).enumerated() {
-                    DroidApp.logger.debug("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 1")
+                    InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 1")
                     if let subviewInstance = subview.setStatusInParent(self, instance.context) {
-                        DroidApp.logger.debug("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 2")
+                        InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 2")
                         subview.willMoveToParent()
                         instance.addView(subviewInstance)
                         subview.didMoveToParent()
                     } else {
-                        DroidApp.logger.debug("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 3")
-                        DroidApp.logger.critical("🟥 Unable to initialize ViewInstance for `addView` in `didMoveToParent`")
+                        InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 3")
+                        InnerLog.c("🟥 Unable to initialize ViewInstance for `addView` in `didMoveToParent`")
                     }
                 }
             }
@@ -245,38 +245,38 @@ open class View: AnyView, @unchecked Sendable {
     }
 
     func setStatusAsContentView(_ context: ActivityContext) -> ViewInstance? {
-        DroidApp.logger.debug("view(id: \(id)) setStatusAsContentView 1")
+        InnerLog.d("view(id: \(id)) setStatusAsContentView 1")
         switch status {
             case .new, .floating: break
             default:
-                DroidApp.logger.debug("🟨 Attempt to `setAsContentView` when view is already has parent")
+                InnerLog.d("🟨 Attempt to `setAsContentView` when view is already has parent")
                 return nil
         }
-        DroidApp.logger.debug("view(id: \(id)) setStatusAsContentView 2")
+        InnerLog.d("view(id: \(id)) setStatusAsContentView 2")
         guard let instance: ViewInstance = ViewInstance(Self.className, context, id) else {
-            DroidApp.logger.critical("🟥 Unable to initialize ViewInstance for `setAsContentView`")
+            InnerLog.c("🟥 Unable to initialize ViewInstance for `setAsContentView`")
             return nil
         }
-        DroidApp.logger.debug("view(id: \(id)) setStatusAsContentView 3")
+        InnerLog.d("view(id: \(id)) setStatusAsContentView 3")
         status = .asContentView(instance)
         return instance
     }
     
     func setStatusInParent(_ parent: View, _ context: ActivityContext) -> ViewInstance? {
-        DroidApp.logger.debug("view(id: \(id)) setStatusInParent 1")
+        InnerLog.d("view(id: \(id)) setStatusInParent 1")
         switch status {
             case .new, .floating: break
             default:
-                DroidApp.logger.debug("🟨 Attempt to `setStatusInParent` when view is already has parent")
+                InnerLog.d("🟨 Attempt to `setStatusInParent` when view is already has parent")
                 return nil
         }
-        DroidApp.logger.debug("view(id: \(id)) setStatusInParent 2")
+        InnerLog.d("view(id: \(id)) setStatusInParent 2")
         guard let instance = ViewInstance(Self.className, context, id) else {
-            DroidApp.logger.critical("🟥 Unable to initialize ViewInstance for `setStatusInParent`")
+            InnerLog.c("🟥 Unable to initialize ViewInstance for `setStatusInParent`")
             return nil
         }
         status = .inParent(parent, instance)
-        DroidApp.logger.debug("view(id: \(id)) setStatusInParent 3")
+        InnerLog.d("view(id: \(id)) setStatusInParent 3")
         return instance
     }
 
@@ -284,11 +284,11 @@ open class View: AnyView, @unchecked Sendable {
         switch status {
             case .asContentView, .inParent: break
             default:
-                DroidApp.logger.debug("🟨 Attempt to `setFloating` when view have no parent")
+                InnerLog.d("🟨 Attempt to `setFloating` when view have no parent")
                 return
         }
         guard let instance else {
-            DroidApp.logger.critical("🟥 Unable to `setFloating` when its ViewInstance is nil")
+            InnerLog.c("🟥 Unable to `setFloating` when its ViewInstance is nil")
             return
         }
         status = .floating(instance)
@@ -304,7 +304,7 @@ open class View: AnyView, @unchecked Sendable {
     var _layoutParamsToApply: [LayoutParamToApply] = []
 
     func proceedSubviewsLayoutParams() {
-        DroidApp.logger.debug("view(id: \(id)) proceedSubviewsLayoutParams")
+        InnerLog.d("view(id: \(id)) proceedSubviewsLayoutParams")
         for subview in subviews.filter({ v in
             switch v.status {
                 case .inParent: return true
@@ -350,16 +350,16 @@ open class View: AnyView, @unchecked Sendable {
     }
     
     func addItem(_ item: BodyBuilderItem, at index: Int? = nil) {
-        DroidApp.logger.debug("view(id: \(id)) addItem 1")
+        InnerLog.d("view(id: \(id)) addItem 1")
         switch item {
         case .single(let view):
-            DroidApp.logger.debug("view(id: \(id)) addItem 2 (single)")
+            InnerLog.d("view(id: \(id)) addItem 2 (single)")
             add(views: [view], at: index)
         case .multiple(let views):
-            DroidApp.logger.debug("view(id: \(id)) addItem 3 (multiple)")
+            InnerLog.d("view(id: \(id)) addItem 3 (multiple)")
             add(views: views, at: index)
         case .forEach(let fr):
-            DroidApp.logger.debug("view(id: \(id)) addItem 4 (forEach)")
+            InnerLog.d("view(id: \(id)) addItem 4 (forEach)")
             let subview: View
             if let _ = fr.orientation {
                 let ll: LinearLayout = LinearLayout()
@@ -380,11 +380,11 @@ open class View: AnyView, @unchecked Sendable {
             }) {}
             break
         case .nested(let items):
-            DroidApp.logger.debug("view(id: \(id)) addItem 5 (nested)")
+            InnerLog.d("view(id: \(id)) addItem 5 (nested)")
             items.forEach { addItem($0, at: index) }
             break
         case .none:
-            DroidApp.logger.debug("view(id: \(id)) addItem 6 (none)")
+            InnerLog.d("view(id: \(id)) addItem 6 (none)")
             break
         }
     }

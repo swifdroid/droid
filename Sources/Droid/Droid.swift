@@ -11,23 +11,205 @@ import AndroidLooper
 import Logging
 #endif
 
+public struct InnerLog {
+    static var logger: Logger { DroidApp.shared.innerLogger }
+
+    /// Critical
+    static func c(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        InnerLog.logger.critical(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Debug
+    static func d(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        InnerLog.logger.debug(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Error
+    static func e(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        InnerLog.logger.error(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Info
+    static func i(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        InnerLog.logger.info(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Notice
+    static func n(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        InnerLog.logger.notice(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Trace
+    static func t(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        InnerLog.logger.trace(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Warning
+    static func w(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        InnerLog.logger.warning(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+}
+
+public struct Log {
+    static var logger: Logger { DroidApp.shared.globalLogger }
+
+    /// Logs a critical-level message.
+    ///
+    /// Use for serious errors that require immediate attention.
+    /// This is the highest severity and typically indicates a crash or unrecoverable failure.
+    public static func c(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        Log.logger.critical(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Logs a debug-level message.
+    ///
+    /// Use for debugging information during development.
+    /// These messages are useful for developers but typically omitted from production builds.
+    public static func d(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        Log.logger.debug(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Logs an error-level message.
+    ///
+    /// Use when a recoverable but serious issue occurs.
+    /// This indicates that something went wrong, but the app can continue running.
+    public static func e(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        Log.logger.error(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Logs an info-level message.
+    ///
+    /// Use for general, expected runtime events (e.g. app state updates).
+    /// Helpful for tracking app flow in production environments.
+    public static func i(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        Log.logger.info(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Logs a notice-level message.
+    ///
+    /// Use for important runtime events that aren't errors but still worth noting.
+    /// Typically used for significant app lifecycle milestones or business logic checkpoints.
+    public static func n(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        Log.logger.notice(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Logs a trace-level message.
+    ///
+    /// Use for very detailed, fine-grained debugging information.
+    /// More verbose than `debug`, often used to trace execution flow at a granular level.
+    public static func t(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        Log.logger.trace(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+
+    /// Logs a warning-level message.
+    ///
+    /// Use when something unexpected happens, but the app can recover gracefully.
+    /// Helps identify potential issues without halting the program.
+    public static func w(
+        _ message: @autoclosure () -> Logger.Message,
+        metadata: @autoclosure () -> Logger.Metadata? = nil,
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        Log.logger.warning(message(), metadata: metadata(), file: file, function: function, line: line)
+    }
+}
+
 #if os(Android)
 @_cdecl("Java_com_somebody_appui_SwiftApp_activityOnCreate")
 public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
-    let logger = Logger(label: "🐦‍🔥 SWIFT")
-    logger.info("🚀 Hello World!")
+    InnerLog.d("activityLoaded 1")
     let localEnv = JEnv(envPointer)
     let globalCallerObj = localCallerObjectRef.box(localEnv)
     if let _ = localEnv.findClass(.android.view.ViewGroup) {
-        logger.info("🚀 main: ViewGroup FOUND")
+        InnerLog.d("🚀 main: ViewGroup FOUND")
     } else {
-        logger.info("🚀 main: ViewGroup NOT FOUND")
+        InnerLog.d("🚀 main: ViewGroup NOT FOUND")
     }
     if let context = globalCallerObj?.object() {
-        logger.info("context class: \(context.className.name)")
-        logger.info("activities count: \(DroidApp.shared._activities.count)")
+        InnerLog.d("context class: \(context.className.name)")
+        InnerLog.d("activities count: \(DroidApp.shared._activities.count)")
         if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
-            logger.info("activity found")
+            InnerLog.d("activity found")
             #if canImport(AndroidLooper)
             Task.detached { @UIThreadActor in
                 _ = activityType.init(object: context)
@@ -35,52 +217,52 @@ public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject:
             #endif
         }
         // guard let activity = AppCompatActivity(context) else {
-        //     logger.info("0.1")
+        //     InnerLog.d("0.1")
         //     return
         // }
-        // logger.info("00")
+        // InnerLog.d("00")
         // Task {
-        //     logger.info("1")
+        //     InnerLog.d("1")
         //     guard let context = globalCallerObj?.object() else { logger.info("1.1");return }
-        //     logger.info("2")
+        //     InnerLog.d("2")
         //     // await helloUI(context)
         //     if let activity = AppCompatActivity(context) {
-        //         logger.info("3")
-        //     //     logger.info("🟢 Activity is here")
+        //         InnerLog.d("3")
+        //     //     InnerLog.d("🟢 Activity is here")
         //     //     if let view = View(activity.object) {
-        //     //         logger.info("🟢 View is here")
+        //     //         InnerLog.d("🟢 View is here")
         //     //         activity.setContentView(view.object)
-        //     //         logger.info("🟢 Successfully set View into Activity")
+        //     //         InnerLog.d("🟢 Successfully set View into Activity")
         //     //         view.setBackgroundColor(.aqua)
-        //     //         logger.info("🟢 Successfully set View's color")
+        //     //         InnerLog.d("🟢 Successfully set View's color")
         //     //         if let c = localEnv.findClass(.android.view.ViewGroup) {
-        //     //             logger.info("🚀 main: ViewGroup FOUND")
+        //     //             InnerLog.d("🚀 main: ViewGroup FOUND")
         //     //         } else {
-        //     //             logger.info("🚀 main: ViewGroup NOT FOUND")
+        //     //             InnerLog.d("🚀 main: ViewGroup NOT FOUND")
         //     //         }
         //     //         if let c = localEnv.findClass(.swift.view.OnClickListener) {
-        //     //             logger.info("🚀 main: OnClickListener FOUND")
+        //     //             InnerLog.d("🚀 main: OnClickListener FOUND")
         //     //         } else {
-        //     //             logger.info("🚀 main: OnClickListener NOT FOUND")
+        //     //             InnerLog.d("🚀 main: OnClickListener NOT FOUND")
         //     //         }
         //     //         Task {
         //     //             // guard let env = JNIKit.shared.vm.attachCurrentThread() else {
-        //     //             //     logger.info("❌ Unable to attachCurrentThread")
+        //     //             //     InnerLog.d("❌ Unable to attachCurrentThread")
         //     //             //     return
         //     //             // }
-        //     //             // logger.info("🚀 class task: jni version: \(env.getVersionString())")                        
+        //     //             // InnerLog.d("🚀 class task: jni version: \(env.getVersionString())")                        
         //     //             // if let c = env.findClass(.android.view.ViewGroup) {
-        //     //             //     logger.info("🚀 class task: ViewGroup FOUND")
+        //     //             //     InnerLog.d("🚀 class task: ViewGroup FOUND")
         //     //             // } else {
-        //     //             //     logger.info("🚀 class task: ViewGroup NOT FOUND")
+        //     //             //     InnerLog.d("🚀 class task: ViewGroup NOT FOUND")
         //     //             // }
         //     //             // if let c = env.findClass(.swift.view.OnClickListener) {
-        //     //             //     logger.info("🚀 class task: OnClickListener FOUND")
+        //     //             //     InnerLog.d("🚀 class task: OnClickListener FOUND")
         //     //             // } else {
-        //     //             //     logger.info("🚀 class task: OnClickListener NOT FOUND")
+        //     //             //     InnerLog.d("🚀 class task: OnClickListener NOT FOUND")
         //     //             // }
         //     //             guard let clickListener = await NativeOnClickListener(activity) else {
-        //     //                 logger.info("🟢 ClickListener2 NOT initialized")
+        //     //                 InnerLog.d("🟢 ClickListener2 NOT initialized")
         //     //                 return
         //     //             }
         //     //             clickListener.onClick {
@@ -89,37 +271,36 @@ public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject:
         //     //             view.setOnClickListener(clickListener)
         //     //         }
         //     //     } else {
-        //     //         logger.info("💧 Unable to init view")
+        //     //         InnerLog.d("💧 Unable to init view")
         //     //     }
         //     } else {
-        //         logger.info("💧 Unable to init activity")
+        //         InnerLog.d("💧 Unable to init activity")
         //     }
         // }
     } else {
-        logger.info("💧 Unable to init context")
+        InnerLog.d("💧 Unable to init context")
     }
     // Task {
     //     guard let env = JNIKit.shared.vm.attachCurrentThread() else { return }
-    //     logger.info("🚀 new env: \(env)")
-    //     logger.info("🚀 jni version: \(env.getVersionString())")
+    //     InnerLog.d("🚀 new env: \(env)")
+    //     InnerLog.d("🚀 jni version: \(env.getVersionString())")
     //     let callerDescription = callerObj?.object()?.toString()
-    //     logger.info("🚀 caller description: \(callerDescription ?? "n/a")")
+    //     InnerLog.d("🚀 caller description: \(callerDescription ?? "n/a")")
     // }
 }
 
 // @UIThreadActor
 // func helloUI(_ context: JObject) {
-//     let logger = Logger(label: "🐦‍🔥 SWIFT")
 //     guard let activity = AppCompatActivity(context) else { return }
-//     logger.info("🟢 Activity is here")
+//     InnerLog.d("🟢 Activity is here")
 //     guard let view = View(activity.object) else { return }
-//     logger.info("🟢 View is here")
+//     InnerLog.d("🟢 View is here")
 //     activity.setContentView(view.object)
 //     view.setBackgroundColor(.aqua)
-//     logger.info("🟢 Successfully set View's color")
+//     InnerLog.d("🟢 Successfully set View's color")
 //     Task {
 //         guard let clickListener = await NativeOnClickListener(activity) else {
-//             logger.info("🟢 ClickListener2 NOT initialized")
+//             InnerLog.d("🟢 ClickListener2 NOT initialized")
 //             return
 //         }
 //         clickListener.onClick {

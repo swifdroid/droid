@@ -4,25 +4,24 @@ import Logging
 
 extension View {
     func proceedSubviewLayoutParams(_ subview: View, _ params: [LayoutParamToApply]) {
-        let logger = Logger(label: "setMargins")
-        logger.info("💧 proceedSubviewLayoutParams (id: \(subview.id))")
+        InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id))")
         guard
             let instance
         else {
-            DroidApp.logger.warning("🟨 `ViewInstance` is nil in `proceedSubviewLayoutParams`")
+            InnerLog.w("🟨 `ViewInstance` is nil in `proceedSubviewLayoutParams`")
             return
         }
         let type = LayoutParams.LinearLayoutType.fromClassName(instance.className)
         guard
             let lp = LayoutParams(type) else {
-            DroidApp.logger.critical("🟥 Unable to init `LayoutParams` in `proceedSubviewLayoutParams`")
+            InnerLog.c("🟥 Unable to init `LayoutParams` in `proceedSubviewLayoutParams`")
             return
         }
         func void() {}
         if self is ConstraintLayout {
 
         } else {
-            logger.info("💧 proceedSubviewLayoutParams (id: \(subview.id)) not constraintlayout")
+            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) not constraintlayout")
             var marginLeft: Int32 = 0
             var marginTop: Int32 = 0
             var marginRight: Int32 = 0
@@ -158,9 +157,9 @@ extension View {
                     default: void()
                 }
             } // params loop end
-            logger.info("💧 proceedSubviewLayoutParams (id: \(subview.id)) subview margins l: \(subview.marginLeft) t: \(subview.marginTop) r: \(subview.marginRight) b: \(subview.marginBottom)")
-            logger.info("💧 proceedSubviewLayoutParams (id: \(subview.id)) new margins l: \(marginLeft) t: \(marginTop) r: \(marginRight) b: \(marginBottom)")
-            logger.info("💧 proceedSubviewLayoutParams (id: \(subview.id)) margins diff l: \(subview.marginLeft != marginLeft) t: \(subview.marginTop != marginTop) r: \(subview.marginRight != marginRight) b: \(subview.marginBottom != marginBottom)")
+            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) subview margins l: \(subview.marginLeft) t: \(subview.marginTop) r: \(subview.marginRight) b: \(subview.marginBottom)")
+            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) new margins l: \(marginLeft) t: \(marginTop) r: \(marginRight) b: \(marginBottom)")
+            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) margins diff l: \(subview.marginLeft != marginLeft) t: \(subview.marginTop != marginTop) r: \(subview.marginRight != marginRight) b: \(subview.marginBottom != marginBottom)")
             if subview.marginLeft != marginLeft
                 || subview.marginTop != marginTop
                 || subview.marginRight != marginRight

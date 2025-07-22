@@ -81,32 +81,32 @@ extension View {
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "requestLayout", signature: .returning(.void))
             else { return }
-            DroidApp.logger.debug("⚡️view(id: \(id)) viewInstance requestLayout 1")
+            InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 1")
             env.callVoidMethod(object: object, methodId: methodId)
-            DroidApp.logger.debug("⚡️view(id: \(id)) viewInstance requestLayout 2")
+            InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 2")
             #endif
         }
         
         public func getLayoutParams() -> LayoutParams? {
             #if os(Android)
-            DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1")
+            InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1")
             guard let env = JEnv.current() else {
-                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.1 exit")
+                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.1 exit")
                 return nil
             }
             guard let methodId = clazz.methodId(env: env, name: "getLayoutParams", signature: .returning(.object(.android.view.ViewGroup.LayoutParams))) else {
-                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
+                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
                 return nil
             }
             guard let lpClazz = JNICache.shared.getClass(.android.view.ViewGroup.LayoutParams) else {
-                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
+                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
                 return nil
             }
             guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, clazz: lpClazz) else {
-                DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
+                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
                 return nil
             }
-            DroidApp.logger.debug("view(id: \(id)) viewInstance getLayoutParams 2")
+            InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 2")
             return LayoutParams(globalObject)
             #else
             return nil
@@ -119,24 +119,24 @@ extension View {
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "setLayoutParams", signature: .init(.object(.android.view.ViewGroup.LayoutParams), returning: .void))
             else { return }
-            DroidApp.logger.debug("view(id: \(id)) viewInstance setLayoutParams 1")
+            InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 1")
             env.callVoidMethod(object: object, methodId: methodId, args: [params.object])
-            DroidApp.logger.debug("view(id: \(id)) viewInstance setLayoutParams 2")
+            InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 2")
             #endif
         }
 
         public func addView(_ viewInstance: ViewInstance) {
-            DroidApp.logger.debug("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
-            DroidApp.logger.debug("💚 view(id: \(id)) self viewInstance: \(self)")
-            DroidApp.logger.debug("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
+            InnerLog.d("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
+            InnerLog.d("💚 view(id: \(id)) self viewInstance: \(self)")
+            InnerLog.d("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
             #if os(Android)
             guard
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "addView", signature: .init(.object(.android.view.View), returning: .void))
             else { return }
-            DroidApp.logger.debug("💚 view(id: \(id)) viewInstance addView 1")
+            InnerLog.d("💚 view(id: \(id)) viewInstance addView 1")
             env.callVoidMethod(object: object, methodId: methodId, args: [viewInstance.object])
-            DroidApp.logger.debug("💚 view(id: \(id)) viewInstance addView 2")
+            InnerLog.d("💚 view(id: \(id)) viewInstance addView 2")
             #endif
         }
 
@@ -166,7 +166,7 @@ extension View {
 
         public func setBackgroundColor(_ color: GraphicsColor) {
             #if os(Android)
-            Logger(label: "setBackgroundColor").info("color: \(color.value)")
+            InnerLog.d("setBackgroundColor color: \(color.value)")
             guard
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "setBackgroundColor", signature: .init(.int, returning: .void))

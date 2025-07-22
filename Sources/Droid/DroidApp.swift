@@ -49,31 +49,32 @@ open class DroidApp: @unchecked Sendable {
     public class var current: Self { shared as! Self }
     
     required public init () {
-        logLevelMutex.activate(recursive: true)
+        globalLogLevelMutex.activate(recursive: true)
+        innerLogLevelMutex.activate(recursive: true)
         lastViewIdMutex.activate(recursive: true)
         setLogLevel(.notice)
     }
 
     deinit {
-        logLevelMutex.destroy()
+        globalLogLevelMutex.destroy()
+        innerLogLevelMutex.destroy()
         lastViewIdMutex.destroy()
     }
 
     /// Mutex used to protect access to the logger's log level.
-    private var logLevelMutex = pthread_mutex_t()
+    private var globalLogLevelMutex = pthread_mutex_t()
+    private var innerLogLevelMutex = pthread_mutex_t()
 
     /// Mutex used to protect access to the last view id variable.
     private var lastViewIdMutex = pthread_mutex_t()
 
     // MARK: - Logging
 
-    /// The global logger instance used for all Droid operations.
+    /// The global logger instances used for all Droid operations.
     ///
     /// This logger writes to Android's logging system (e.g., `Log.i`, `Log.e`).
-    public var logger = Logger(label: "")
-
-    /// Accessor to the global logger for static contexts.
-    public static var logger: Logger { shared.logger }
+    var globalLogger = Logger(label: "")
+    var innerLogger = Logger(label: "")
 
     // MARK: - Logging Control
 
@@ -83,9 +84,15 @@ open class DroidApp: @unchecked Sendable {
     ///
     /// - Parameter level: The minimum `Logger.Level` required for messages to be emitted.
     public func setLogLevel(_ level: Logger.Level) {
-        logLevelMutex.lock()
-        defer { logLevelMutex.unlock() }
-        logger.logLevel = level
+        globalLogLevelMutex.lock()
+        defer { globalLogLevelMutex.unlock() }
+        globalLogger.logLevel = level
+    }
+
+    func setInnerLogLevel(_ level: Logger.Level) {
+        innerLogLevelMutex.lock()
+        defer { innerLogLevelMutex.unlock() }
+        innerLogger.logLevel = level
     }
 
     /// Sets the current log level for the `logger` instance.
@@ -129,7 +136,7 @@ open class DroidApp: @unchecked Sendable {
             shared = Self()
         }
         start()
-        logger.info("🚀🚀🚀 APP INITIALIZED 🚀🚀🚀")
+        InnerLog.i("🚀🚀🚀 APP INITIALIZED 🚀🚀🚀")
     }
     #endif
     
@@ -138,7 +145,6 @@ open class DroidApp: @unchecked Sendable {
         guard !shared.isStarted else { return shared }
         shared.isStarted = true
         #if ANDROIDBUILDING
-        print("start with ANDROIDBUILDING")
         shared.parseAppBuilderItem(shared.body.appBuilderContent)
         shared.parseAndroidBuildingArguments()
         #endif
@@ -157,8 +163,7 @@ open class DroidApp: @unchecked Sendable {
     public var configuration = AppConfiguration()
     func updateConfiguration(_ values: [Int32]) {
         let fields = configuration.update(values) // TODO: notify
-        let logger = Logger(label: "configuration")
-        logger.info("configuration changed for: \(fields)")
+        InnerLog.d("configuration changed for: \(fields)")
     }
     
     #if !os(Android)
@@ -260,8 +265,7 @@ open class DroidApp: @unchecked Sendable {
     #endif
     
     private func start() {
-        let logger = Logger(label: "DroidApp")
-        logger.info("start")
+        InnerLog.d("start")
         parseAppBuilderItem(body.appBuilderContent)
 //        lifecycleHandler.add(.enterForeground) { self._lifecycles.forEach { $0._willEnterForeground.forEach { $0() } } }
 //        lifecycleHandler.add(.enterBackground) { self._lifecycles.forEach { $0._didEnterBackground.forEach { $0() } } }
@@ -341,16 +345,10 @@ open class DroidApp: @unchecked Sendable {
         .custom("rootProject.name = \"__ROOT_PROJECT_NAME__\"")
 
     private func parseAppBuilderItem(_ item: AppBuilder.Item) {
-        let logger = Logger(label: "DroidApp")
-        logger.info("parseAppBuilderItem: \(item)")
-        print("parseAppBuilderItem: \(item)")
         switch item {
         case .items(let v): v.forEach { parseAppBuilderItem($0) }
         case .lifecycle(let v): _lifecycles.append(v)
-        case .manifest(let m):
-            logger.info("parseAppBuilderItem manifest")
-            print("parseAppBuilderItem manifest")
-            _manifest.merge(with: m)
+        case .manifest(let m): _manifest.merge(with: m)
         case .moduleGradle(let g): _moduleGradle.merge(with: g)
         case .projectGradle(let g): _projectGradle.merge(with: g)
         case .none: break
@@ -465,25 +463,24 @@ public func onCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobje
 @_cdecl("Java_com_somebody_appui_SwiftApp_configurationChanged")
 /// Called by the system when the device configuration changes
 public func configurationChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, newValues: jintArray) {
-    let logger = Logger(label: "config")
-    logger.info("update config 1")
+    InnerLog.d("update config 1")
     let env = JEnv(envPointer)
     let length = env.getArrayLength(newValues)
     var swiftArray = [Int32](repeating: 0, count: Int(length))
     env.getIntArrayRegion(newValues, start: 0, length: length, buffer: &swiftArray)
     if let shared = DroidApp.shared {
-        logger.info("update config 5.1")
+        InnerLog.d("update config 5.1")
         if shared.isStarted {
-            logger.info("update config 5.2")
+            InnerLog.d("update config 5.2")
         } else {
-            logger.info("update config 5.3")
+            InnerLog.d("update config 5.3")
         }
         shared.updateConfiguration(swiftArray)
-        logger.info("update config 5.4")
+        InnerLog.d("update config 5.4")
     } else {
-        logger.info("update config failed, shared app is nil")
+        InnerLog.d("update config failed, shared app is nil")
     }
-    logger.info("update config 6")
+    InnerLog.d("update config 6")
 }
 @_cdecl("Java_com_somebody_appui_SwiftApp_lowMemory")
 /// This is called when the overall system is running low on memory,

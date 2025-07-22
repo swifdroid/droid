@@ -36,19 +36,19 @@ private actor OnClickListenerStore {
     
     #if canImport(Android)
     func find(obj: JObjectBox, env: JEnv) -> NativeOnClickListener? {
-        DroidApp.logger.info("OnClickListenerStore.find 1")
+        InnerLog.i("OnClickListenerStore.find 1")
         guard let object = obj.object() else { return nil }
-        DroidApp.logger.info("OnClickListenerStore.find 2")
+        InnerLog.i("OnClickListenerStore.find 2")
         guard let listener = listeners.values.first(where: {
             if let instance = $0.instance {
                 return env.isSameObject(instance.object, object)
             }
             return false
         }) else {
-            DroidApp.logger.info("OnClickListenerStore.find NOT FOUND")
+            InnerLog.i("OnClickListenerStore.find NOT FOUND")
             return nil
         }
-        DroidApp.logger.info("OnClickListenerStore.find FOUND")
+        InnerLog.i("OnClickListenerStore.find FOUND")
         return listener
     }
     #endif
@@ -73,33 +73,32 @@ public final class NativeOnClickListener: @unchecked Sendable {
         
         public init? (_ env: JEnv, _ context: ActivityContext) {
             #if os(Android)
-            let logger = Logger(label: "nativeonclick")
-            logger.info("onclick 1")
+            InnerLog.t("onclick 1")
             guard
                 let classLoader = context.getClassLoader()
             else {
-                logger.info("onclick 1.1")
+                InnerLog.t("onclick 1.1")
                 return nil
             }
-            logger.info("onclick 2 classLoader ref: \(classLoader.ref.ref)")
+            InnerLog.t("onclick 2 classLoader ref: \(classLoader.ref.ref)")
             guard
                 let clazz = classLoader.loadClass(Self.className)
             else {
-                logger.info("onclick 2.1")
+                InnerLog.t("onclick 2.1")
                 return nil
             }
-            logger.info("onclick 3: \(env.getVersionString()) clazz ref: \(clazz.ref)")
+            InnerLog.t("onclick 3: \(env.getVersionString()) clazz ref: \(clazz.ref)")
             guard
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void))
             else {
-                logger.info("onclick 3.1")
+                InnerLog.t("onclick 3.1")
                 return nil
             }
-            logger.info("onclick 4")
+            InnerLog.t("onclick 4")
             guard
                 let global = env.newObject(clazz: clazz, constructor: methodId)
             else {
-                logger.info("onclick 4.1")
+                InnerLog.t("onclick 4.1")
                 return nil
             }
             self.object = global
@@ -107,10 +106,6 @@ public final class NativeOnClickListener: @unchecked Sendable {
             return nil
             #endif
         }
-    }
-
-    deinit {
-        Logger(label: "NativeOnClickListener").critical("🧹🧹 deinit Instance")
     }
     
     fileprivate static let listenerStore = OnClickListenerStore()
@@ -147,19 +142,19 @@ public final class NativeOnClickListener: @unchecked Sendable {
 // @_cdecl("Java_stream_swift_android_view_NativeOnClickListener_onClick")
 @_cdecl("Java_com_somebody_app_NativeOnClickListener_onClick")
 public func on_click_listener_onClick(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, view: jobject) {
-    DroidApp.logger.info("on_click_listener_onClick 1")
+    InnerLog.i("on_click_listener_onClick 1")
     let env = JEnv(env)
     guard let callerObjectBox = JObjectBox(callerClassObject, env: env) else {
         return
     }
-    DroidApp.logger.info("on_click_listener_onClick 2")
+    InnerLog.i("on_click_listener_onClick 2")
     Task {
-        DroidApp.logger.info("on_click_listener_onClick 3")
+        InnerLog.i("on_click_listener_onClick 3")
         guard
             let env = JEnv.current(),
             let listener = await NativeOnClickListener.listenerStore.find(obj: callerObjectBox, env: env)
         else { return }
-        DroidApp.logger.info("on_click_listener_onClick 4")
+        InnerLog.i("on_click_listener_onClick 4")
         await listener.handler()
     }
 }

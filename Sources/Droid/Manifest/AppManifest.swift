@@ -16,8 +16,7 @@ public class AppManifest: DroidApp.ManifestTag {
     
     func merge(with manifest: AppManifest) {
         for (key, value) in manifest.params {
-            print("manifest k: \(key) v: \(value)")
-			params[key] = value
+            params[key] = value
         }
         for tagItem in manifest.items {
             if let foundItem = items.first(where: { $0 == tagItem }) {

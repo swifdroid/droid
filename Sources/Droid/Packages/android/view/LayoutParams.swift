@@ -92,7 +92,7 @@ public final class LayoutParams: Sendable, JObjectable {
     }
     
     init? (_ env: JEnv, _ type: LinearLayoutType) {
-        DroidApp.logger.critical("💡 1LayoutParams trying to load class: \(type.rawValue)")
+        InnerLog.c("💡 1LayoutParams trying to load class: \(type.rawValue)")
         #if os(Android)
         guard
             let clazz = JClass.load(.init(stringLiteral: type.rawValue)),
@@ -128,7 +128,7 @@ public final class LayoutParams: Sendable, JObjectable {
         } else {
             correctHeight = .init(Int(unit.toPixels(height.value)))
         }
-        DroidApp.logger.critical("💡 2LayoutParams trying to load class: \(type.rawValue)")
+        InnerLog.c("💡 2LayoutParams trying to load class: \(type.rawValue)")
         guard
             let clazz = JClass.load(.init(stringLiteral: type.rawValue)),
             let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, .int, returning: .void)),
@@ -144,25 +144,25 @@ public final class LayoutParams: Sendable, JObjectable {
 
     public func setWidth(_ value: Int32) {
         #if os(Android)
-        DroidApp.logger.debug("lp.setWidth \(value) case 1")
+        InnerLog.d("lp.setWidth \(value) case 1")
         guard
             let env = JEnv.current(),
             let fieldId = clazz.fieldId(name: "width", signature: .int)
         else { return }
         env.setIntField(object, fieldId, value)
-        DroidApp.logger.debug("lp.setWidth \(value) case 2")
+        InnerLog.d("lp.setWidth \(value) case 2")
         #endif
     }
 
     public func getWidth() -> Int32? {
         #if os(Android)
-        DroidApp.logger.debug("lp.getWidth case 1")
+        InnerLog.d("lp.getWidth case 1")
         guard
             let env = JEnv.current(),
             let fieldId = clazz.fieldId(name: "width", signature: .int)
         else { return nil }
         let value = env.getIntField(object, fieldId)
-        DroidApp.logger.debug("lp.getWidth case 2 value: \(value)")
+        InnerLog.d("lp.getWidth case 2 value: \(value)")
         return value
         #else
         return nil
@@ -181,13 +181,13 @@ public final class LayoutParams: Sendable, JObjectable {
 
     public func getHeight() -> Int32? {
         #if os(Android)
-        DroidApp.logger.debug("lp.getHeight case 1")
+        InnerLog.d("lp.getHeight case 1")
         guard
             let env = JEnv.current(),
             let fieldId = clazz.fieldId(name: "height", signature: .int)
         else { return nil }
         let value = env.getIntField(object, fieldId)
-        DroidApp.logger.debug("lp.getHeight case 2 value: \(value)")
+        InnerLog.d("lp.getHeight case 2 value: \(value)")
         return value
         #else
         return nil
@@ -198,14 +198,13 @@ public final class LayoutParams: Sendable, JObjectable {
 
     public func setMargins(left: Int32, top: Int32, right: Int32, bottom: Int32) {
         #if os(Android)
-        let logger = Logger(label: "setMargins")
-        logger.info("💧 setMargins l: \(left) t: \(top) r: \(right) b: \(bottom)")
+        InnerLog.d("💧 setMargins l: \(left) t: \(top) r: \(right) b: \(bottom)")
         guard
             let env = JEnv.current(),
             let methodId = clazz.methodId(env: env, name: "setMargins", signature: .init(.int, .int, .int, .int, returning: .void))
-        else { logger.info("💧 setMargins exit early");return }
+        else { InnerLog.d("💧 setMargins exit early");return }
         env.callVoidMethod(object: object, methodId: methodId, args: [left, top, right, bottom])
-        logger.info("💧 setMargins success")
+        InnerLog.d("💧 setMargins success")
         #endif
     }
 

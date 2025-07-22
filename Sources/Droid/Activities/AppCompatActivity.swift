@@ -48,7 +48,7 @@ open class AppCompatActivity: Activity {
     public func setContentView(_ view: View) {
         view.willMoveToParent()
         guard let viewInstance = view.setStatusAsContentView(context) else {
-            DroidApp.logger.critical("🟥 Unable to initialize ViewInstance for `setContentView`")
+            InnerLog.c("🟥 Unable to initialize ViewInstance for `setContentView`")
             return
         }
         #if os(Android)
@@ -65,15 +65,15 @@ open class AppCompatActivity: Activity {
 
     @discardableResult
     open func body(@BodyBuilder block: BodyBuilder.SingleView) -> Self {
-        DroidApp.logger.debug("activity body 1")
+        InnerLog.d("activity body 1")
         if let contentView {
-            DroidApp.logger.debug("activity body 2 (existing contentView)")
+            InnerLog.d("activity body 2 (existing contentView)")
             contentView.body(block: block)
         } else {
-            DroidApp.logger.debug("activity body 3")
+            InnerLog.d("activity body 3")
             let item = block().bodyBuilderItem
             func setDefaultFrameLayout(_ item: BodyBuilderItem) {
-                DroidApp.logger.debug("activity body setDefaultFrameLayout")
+                InnerLog.d("activity body setDefaultFrameLayout")
                 let view = FrameLayout()
                 view.addItem(item)
                 setContentView(view)
@@ -82,29 +82,29 @@ open class AppCompatActivity: Activity {
             func proceedItem(_ item: BodyBuilderItem) {
                 switch item {
                 case .single(let view):
-                    DroidApp.logger.debug("activity body 4 (single)")
+                    InnerLog.d("activity body 4 (single)")
                     setContentView(view)
                 case .multiple(let views):
                     if views.count == 1, let view = views.first {
-                        DroidApp.logger.debug("activity body 5 (multiple)")
+                        InnerLog.d("activity body 5 (multiple)")
                         setContentView(view)
                     } else {
-                        DroidApp.logger.debug("activity body 6 (multiple)")
+                        InnerLog.d("activity body 6 (multiple)")
                         setDefaultFrameLayout(item)
                     }
                 case .nested(let items):
                     if items.count == 1, let item = items.first {
-                        DroidApp.logger.debug("activity body 7 (nested)")
+                        InnerLog.d("activity body 7 (nested)")
                         proceedItem(item.bodyBuilderItem)
                     } else {
-                        DroidApp.logger.debug("activity body 8 (nested)")
+                        InnerLog.d("activity body 8 (nested)")
                         setDefaultFrameLayout(item)
                     }
                 case .forEach:
-                    DroidApp.logger.debug("activity body 9 (forEach)")
+                    InnerLog.d("activity body 9 (forEach)")
                     setDefaultFrameLayout(item)
                 case .none:
-                    DroidApp.logger.debug("activity body 10 (none)")
+                    InnerLog.d("activity body 10 (none)")
                     setDefaultFrameLayout(item)
                 }
             }
