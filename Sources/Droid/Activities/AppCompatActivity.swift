@@ -39,6 +39,7 @@ open class AppCompatActivity: Activity {
     public required init(object: JObject) {
         context = ActivityContext(object: object)
         onCreate(context)
+        body { body }
         buildUI()
     }
 
