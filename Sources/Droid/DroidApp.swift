@@ -137,7 +137,6 @@ open class DroidApp: @unchecked Sendable {
             shared = Self()
         }
         start()
-        InnerLog.i("🚀🚀🚀 APP INITIALIZED 🚀🚀🚀")
     }
     #endif
     

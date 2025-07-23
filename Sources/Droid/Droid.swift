@@ -197,7 +197,7 @@ public struct Log {
 #if os(Android)
 @_cdecl("Java_com_somebody_appui_SwiftApp_activityOnCreate")
 public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
-    InnerLog.d("activityLoaded 1")
+    InnerLog.d("activityOnCreate 1")
     let localEnv = JEnv(envPointer)
     let globalCallerObj = localCallerObjectRef.box(localEnv)
     if let _ = localEnv.findClass(.android.view.ViewGroup) {

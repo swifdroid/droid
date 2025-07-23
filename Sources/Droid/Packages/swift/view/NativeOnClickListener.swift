@@ -142,19 +142,19 @@ public final class NativeOnClickListener: @unchecked Sendable {
 // @_cdecl("Java_stream_swift_android_view_NativeOnClickListener_onClick")
 @_cdecl("Java_com_somebody_app_NativeOnClickListener_onClick")
 public func on_click_listener_onClick(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, view: jobject) {
-    InnerLog.i("on_click_listener_onClick 1")
+    InnerLog.t("nativeOnClickListenerOnClick 1")
     let env = JEnv(env)
     guard let callerObjectBox = JObjectBox(callerClassObject, env: env) else {
         return
     }
-    InnerLog.i("on_click_listener_onClick 2")
+    InnerLog.t("nativeOnClickListenerOnClick 2")
     Task {
-        InnerLog.i("on_click_listener_onClick 3")
+        InnerLog.t("nativeOnClickListenerOnClick 3")
         guard
             let env = JEnv.current(),
             let listener = await NativeOnClickListener.listenerStore.find(obj: callerObjectBox, env: env)
         else { return }
-        InnerLog.i("on_click_listener_onClick 4")
+        InnerLog.t("nativeOnClickListenerOnClick 4")
         await listener.handler()
     }
 }
