@@ -1067,6 +1067,7 @@ extension DroidApp {
 		/// Declares an activity (an Activity subclass) that implements part of the application's visual user interface.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element)
+		@discardableResult
 		public func activity(_ activity: Activity.Type) -> Self {
 			DroidApp.shared._activities.append(activity)
 			let manifestTag = _ActivityTag()
