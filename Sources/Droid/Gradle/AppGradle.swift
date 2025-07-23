@@ -216,7 +216,7 @@ public class AppGradle {
     
     public func render() -> String {
         let indentation: Indentation = .init(0)
-        var lines: [String] = ["// managed by SwifDroid"]
+        var lines: [String] = ["// managed by Droid"]
         
         if imports.count > 0 {
             for `import` in imports {

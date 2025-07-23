@@ -262,7 +262,7 @@ extension DroidApp.ManifestTag {
         var lines: [String] = []
         if indentation.value == 0 {
             lines.append(##"<?xml version="1.0" encoding="utf-8"?>"##)
-            lines.append(indentation + "<!--managed by SwifDroid-->")
+            lines.append(indentation + "<!--managed by Droid-->")
         }
         lines.append(indentation + "<\(Self.name)" + (params.count == 0 ? ">" : ""))
 		if params.count > 0 {
