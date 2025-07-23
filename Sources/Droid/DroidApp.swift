@@ -53,6 +53,7 @@ open class DroidApp: @unchecked Sendable {
         innerLogLevelMutex.activate(recursive: true)
         lastViewIdMutex.activate(recursive: true)
         setLogLevel(.notice)
+        setInnerLogLevel(.notice)
     }
 
     deinit {
