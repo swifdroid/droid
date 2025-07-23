@@ -1064,6 +1064,14 @@ extension DroidApp {
 			return self
 		}
 		
+		/// Declares activities (an Activity subclass) that implement parts of the application's visual user interface.
+		///
+		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element)
+		public func activities(_ activities: Activity.Type...) -> Self {
+			activities.forEach { activity($0) }
+			return self
+		}
+
 		/// Declares an activity (an Activity subclass) that implements part of the application's visual user interface.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element)
