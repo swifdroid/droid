@@ -267,9 +267,9 @@ open class DroidApp: @unchecked Sendable {
     private func start() {
         InnerLog.d("start")
         parseAppBuilderItem(body.appBuilderContent)
+        _lifecycles.forEach { $0._didFinishLaunching.forEach { $0() } }
 //        lifecycleHandler.add(.enterForeground) { self._lifecycles.forEach { $0._willEnterForeground.forEach { $0() } } }
 //        lifecycleHandler.add(.enterBackground) { self._lifecycles.forEach { $0._didEnterBackground.forEach { $0() } } }
-//        launched(activities.current)
     }
     
     @AppBuilder open var body: AppBuilder.Content { _AppContent(appBuilderContent: .none) }
