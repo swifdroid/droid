@@ -4,3 +4,8 @@
 /*.xcodeproj
 xcuserdata/
 .swiftpm
+JNI/local.properties
+.idea
+.gradle
+JNI/*/build
+JNI/build
