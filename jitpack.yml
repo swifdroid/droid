@@ -3,7 +3,3 @@ jdk:
 android:
   build_tools_version: "34.0.0"
   compile_sdk: 35
-build:
-  gradle:
-    root: JNI
-    build-file: appkit/build.gradle.kts
