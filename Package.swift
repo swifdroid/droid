@@ -10,6 +10,8 @@ let package = Package(
     dependencies: [
         .package(path: "/Users/imike/Development/SwifDroid/jni-kit")
 //        .package(url: "https://github.com/SwifDroid/jni-kit.git", from: "1.0.0"),
+        .package(url: "https://github.com/swifdroid/AndroidLogging.git", from: "0.1.0"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.6.2"),
         .package(url: "https://github.com/PADL/AndroidLooper", from: "0.0.1")
     ],
     targets: [
@@ -19,6 +21,7 @@ let package = Package(
         .target(name: "Droid", dependencies: [
             .product(name: "JNIKit", package: "jni-kit"),
             .target(name: "Manifest"),
+            .product(name: "AndroidLogging", package: "AndroidLogging", condition: .when(platforms: [.android])),
             .product(name: "AndroidLooper", package: "AndroidLooper", condition: .when(platforms: [.android]))
         ]),
         .target(name: "Manifest"),
