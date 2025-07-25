@@ -49,7 +49,7 @@ publishing {
 
                     groupId = "com.github.swifdroid"
                     artifactId = "appkit"
-                    version = "1.0.0-beta.2"
+                    version = "1.0.0"
 
                     pom {
                         name.set("Droid App UI Library")
