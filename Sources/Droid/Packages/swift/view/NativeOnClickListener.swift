@@ -57,7 +57,7 @@ private actor OnClickListenerStore {
 public final class NativeOnClickListener: @unchecked Sendable {
     public final class Instance: JObjectable, Sendable {
         /// The JNI class name
-        static var className: JClassName { "com/somebody/app/NativeOnClickListener" }//.swift.view.OnClickListener }
+        static var className: JClassName { "stream/swift/droid/appkit/listeners/NativeOnClickListener" }
 
         /// Object wrapper
         public let object: JObject
@@ -139,9 +139,8 @@ public final class NativeOnClickListener: @unchecked Sendable {
 }
 
 #if canImport(Android)
-// @_cdecl("Java_stream_swift_android_view_NativeOnClickListener_onClick")
-@_cdecl("Java_com_somebody_app_NativeOnClickListener_onClick")
-public func on_click_listener_onClick(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, view: jobject) {
+@_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnClickListener_onClick")
+public func nativeOnClickListenerOnClick(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, view: jobject) {
     InnerLog.t("nativeOnClickListenerOnClick 1")
     let env = JEnv(env)
     guard let callerObjectBox = JObjectBox(callerClassObject, env: env) else {

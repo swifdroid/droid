@@ -455,12 +455,12 @@ var androidBuildingArguments: AndroidBuildingArguments {
 #if canImport(Android)
 import Android
 
-@_cdecl("Java_com_somebody_appui_SwiftApp_onCreate")
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_onCreate")
 /// Called when the app initalized and setup completed on the Java side
 public func onCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, app: jobject) {
     // TODO
 }
-@_cdecl("Java_com_somebody_appui_SwiftApp_configurationChanged")
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_configurationChanged")
 /// Called by the system when the device configuration changes
 public func configurationChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, newValues: jintArray) {
     InnerLog.d("update config 1")
@@ -482,13 +482,13 @@ public func configurationChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appO
     }
     InnerLog.d("update config 6")
 }
-@_cdecl("Java_com_somebody_appui_SwiftApp_lowMemory")
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_lowMemory")
 /// This is called when the overall system is running low on memory,
 /// and actively running processes should trim their memory usage.
 public func lowMemory(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject) {
     
 }
-@_cdecl("Java_com_somebody_appui_SwiftApp_trimMemory")
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_trimMemory")
 /// Called when the operating system has determined
 /// that it is a good time for a process to trim unneeded memory from its process.
 public func lowMemory(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, level: jint) {

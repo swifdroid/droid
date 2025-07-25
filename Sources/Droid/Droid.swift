@@ -195,8 +195,8 @@ public struct Log {
 }
 
 #if os(Android)
-@_cdecl("Java_com_somebody_appui_SwiftApp_activityOnCreate")
-public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnCreate")
+public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
     InnerLog.d("activityOnCreate 1")
     let localEnv = JEnv(envPointer)
     let globalCallerObj = localCallerObjectRef.box(localEnv)
@@ -287,6 +287,51 @@ public func activityLoaded(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject:
     //     let callerDescription = callerObj?.object()?.toString()
     //     InnerLog.d("🚀 caller description: \(callerDescription ?? "n/a")")
     // }
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnPause")
+public func activityOnPause(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnPause")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStateNotSaved")
+public func activityOnStateNotSaved(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnStateNotSaved")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnResume")
+public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnResume")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRestart")
+public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnRestart")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStart")
+public func activityOnStart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnStart")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStop")
+public func activityOnStop(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnStop")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnAttachedToWindow")
+public func activityOnAttachedToWindow(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnAttachedToWindow")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnBackPressed")
+public func activityOnBackPressed(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject localCallerObjectRef: jobject) {
+    InnerLog.d("🟢 activityOnBackPressed")
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult")
+public func activityOnActivityResult(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activity: jobject, requestCode: jint, resultCode: jint, data: jobject, componentCaller: jobject) {
+    InnerLog.d("🟢 activityOnActivityResult")
 }
 
 // @UIThreadActor
