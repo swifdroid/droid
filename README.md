@@ -1,6 +1,6 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/1272610/221252156-68e5b9da-bd8e-46cc-942a-f60ce65ad471.png">
+<img width="480" alt="Image" src="https://github.com/user-attachments/assets/274c8464-6a21-4ffc-8c17-d18bb7bb4305" />
 </p>
 
-# Droid
+# Droid 
 
