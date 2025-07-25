@@ -6,7 +6,6 @@ let package = Package(
     products: [
         .library(name: "DroidMaterial", targets: ["DroidMaterial"]),
         .library(name: "Droid", targets: ["Droid"]),
-        .library(name: "DroidFoundation", targets: ["DroidFoundation"]),
     ],
     dependencies: [
         .package(path: "/Users/imike/Development/SwifDroid/manifest"),
