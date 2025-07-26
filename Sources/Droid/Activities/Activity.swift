@@ -14,6 +14,7 @@ import AndroidLooper
 #endif
 public protocol Activity: AnyObject {
     static nonisolated var className: String { get }
+    static nonisolated var gradleDependencies: [String] { get }
 
 	var context: ActivityContext { get }
     

@@ -31,6 +31,7 @@ open class DroidApp: @unchecked Sendable {
     public typealias Content = AppBuilder.Content
     public typealias Lifecycle = AppLifecycle
 	public typealias Manifest = AppManifest
+    public typealias GradleDependencies = AppGradleDependencies
     public typealias ProjectGradle = AppGradle.ProjectAppGradle
     public typealias ModuleGradle = AppGradle.ModuleAppGradle
     
@@ -221,6 +222,7 @@ open class DroidApp: @unchecked Sendable {
         case settingsGradle
         case activities
         case generateActivity
+        case gradleDependencies
     }
     
     private func parseAndroidBuildingArguments() {
@@ -249,6 +251,26 @@ open class DroidApp: @unchecked Sendable {
             print(_projectGradle.render())
         case .settingsGradle:
             print(_settingsGradle.render())
+        case .gradleDependencies:
+            var dependencies: Set<String> = _gradleDependencies.dependencies
+            if let app = _manifest.items.compactMap({ $0 as? Application }).first {
+                let activityTags = app.items.compactMap { $0 as? ActivityTag }
+                for activity in activityTags.map { $0.class } {
+                    for dep in activity.gradleDependencies {
+                        dependencies.insert(dep)
+                    }
+                }
+            }
+            do {
+                let data = try JSONEncoder().encode(dependencies)
+                if let string = String(data: data, encoding: .utf8) {
+                    print(string)
+                } else {
+                    print("Unable to generate JSON string")
+                }
+            } catch {
+                print("Error has occured during JSON generation: \(error)")
+            }
         case .manifest:
             print(_manifest.generateXML())
         case .activities:
@@ -282,6 +304,7 @@ open class DroidApp: @unchecked Sendable {
             .allowBackup()
             .allowNativeHeapPointerTagging(false) // very important
         }
+    var _gradleDependencies: AppGradleDependencies = .init()
     var _moduleGradle: AppGradle.ModuleAppGradle = ModuleGradle
         .applyPlugin("com.android.application")
         .applyPlugin("kotlin-android")
@@ -349,6 +372,7 @@ open class DroidApp: @unchecked Sendable {
         case .items(let v): v.forEach { parseAppBuilderItem($0) }
         case .lifecycle(let v): _lifecycles.append(v)
         case .manifest(let m): _manifest.merge(with: m)
+        case .gradleDependencies(let d): _gradleDependencies.merge(with: d)
         case .moduleGradle(let g): _moduleGradle.merge(with: g)
         case .projectGradle(let g): _projectGradle.merge(with: g)
         case .none: break

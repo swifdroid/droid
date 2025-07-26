@@ -33,6 +33,10 @@ open class AppCompatActivity: Activity {
     public class var requiredImports: [String] { ["android.support.v7.app.AppCompatActivity"] }
     public class var parentClass: String { "AppCompatActivity()" }
 
+    public class var gradleDependencies: [String] { [
+        "implementation(libs.androidx.appcompat)",
+        "implementation(platform(libs.androidx.compose.bom))"
+    ] }
     public let context: ActivityContext
     public var contentView: View?
 

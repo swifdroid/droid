@@ -17,6 +17,10 @@ extension AppManifest: AppBuilderContent {
 	public var appBuilderContent: AppBuilder.Item { .manifest(self) }
 }
 
+extension AppGradleDependencies: AppBuilderContent {
+	public var appBuilderContent: AppBuilder.Item { .gradleDependencies(self) }
+}
+
 extension AppGradle.ModuleAppGradle: AppBuilderContent {
     public var appBuilderContent: AppBuilder.Item { .moduleGradle(self) }
 }
@@ -37,6 +41,7 @@ struct _AppContent: AppBuilder.Content {
         case none
         case lifecycle(AppLifecycle)
         case manifest(AppManifest)
+        case gradleDependencies(AppGradleDependencies)
         case moduleGradle(AppGradle.ModuleAppGradle)
         case projectGradle(AppGradle.ProjectAppGradle)
         case items([Item])
