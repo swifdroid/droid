@@ -1078,7 +1078,7 @@ extension DroidApp {
 		@discardableResult
 		public func activity(_ activity: Activity.Type) -> Self {
 			DroidApp.shared._activities.append(activity)
-			let manifestTag = _ActivityTag()
+			let manifestTag = ActivityTag(activity)
 			manifestTag.param(.androidName, activity.className)
 			if let value = activity.allowEmbedded {
 				manifestTag.param(.androidAllowEmbedded, ManifestTagParamValue(value).value)

@@ -31,7 +31,7 @@ extension DroidApp {
         /// The JNI class name
         static var className: JClassName { get }
         /// What should be imported in Java header
-        static var requiredImports: [String] { get }
+        static var javaImports: [String] { get }
         /// Parent Java class name
         static var parentClass: String { get }
         /// Swift class name
@@ -51,9 +51,9 @@ extension DroidApp.AnyActivity {
 // MARK: - Static Properties
 
 extension DroidApp.AnyActivity {
-    public static var className: JClassName { .android.app.Activity }
-    public static var requiredImports: [String] { ["android.app.Activity"] }
-    public static var parentClass: String { "Activity" }
+    public static var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
+    public static var javaImports: [String] { ["stream.swift.droid.appkit.activities.*"] }
+    public static var parentClass: String { "DroidAppCompatActivity()" }
     public static var name: String { "\(Self.self)" }
 }
 

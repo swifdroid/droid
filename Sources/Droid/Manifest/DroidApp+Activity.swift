@@ -22,7 +22,7 @@ extension DroidApp {
 	public final class ActivityTag: ManifestTag {
         class override var name: String { "activity" }
 		
-        var `class`: AnyActivity.Type
+        var `class`: Activity.Type
         
         override func uniqueParams() -> [ManifestTagParamName] {
             [.androidName]
@@ -31,7 +31,7 @@ extension DroidApp {
         /// The class that implements the activity, a subclass of AnyActivity.
         ///
         /// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#nm)
-        public required init(_ activity: AnyActivity.Type) {
+        public required init(_ activity: Activity.Type) {
             `class` = activity
             super.init()
             params[.androidName] = ".\(activity)"

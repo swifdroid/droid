@@ -30,13 +30,13 @@ extension AppCompatActivity: @unchecked Sendable {}
 #endif
 open class AppCompatActivity: Activity {
     public class var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
-    public class var requiredImports: [String] { ["android.support.v7.app.AppCompatActivity"] }
-    public class var parentClass: String { "AppCompatActivity()" }
-
     public class var gradleDependencies: [String] { [
         "implementation(libs.androidx.appcompat)",
         "implementation(platform(libs.androidx.compose.bom))"
     ] }
+    public class var javaImports: [String] { ["stream.swift.droid.appkit.activities.*"] }
+    public class var parentClass: String { "DroidAppCompatActivity()" }
+    
     public let context: ActivityContext
     public var contentView: View?
 
@@ -137,6 +137,6 @@ open class AppCompatActivity: Activity {
 //     }
 
 //     public class var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
-//     public class var requiredImports: [String] { ["android.support.v7.app.AppCompatActivity"] }
+//     public class var javaImports: [String] { ["android.support.v7.app.AppCompatActivity"] }
 //     public class var parentClass: String { "AppCompatActivity()" }
 // }
