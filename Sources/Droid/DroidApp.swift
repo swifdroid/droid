@@ -220,9 +220,9 @@ open class DroidApp: @unchecked Sendable {
         case moduleGradle
         case projectGradle
         case settingsGradle
-        case activities
-        case generateActivity
         case gradleDependencies
+        case activityNames
+        case generateAllActivities
     }
     
     private func parseAndroidBuildingArguments() {
@@ -273,13 +273,30 @@ open class DroidApp: @unchecked Sendable {
             }
         case .manifest:
             print(_manifest.generateXML())
-        case .activities:
+        case .activityNames:
             if let app = _manifest.items.compactMap({ $0 as? Application }).first {
-                print(app.items.compactMap { $0 as? ActivityTag }.map { $0.class.className.name }.joined(separator: ","))
+                let activityTags = app.items.compactMap { $0 as? ActivityTag }
+                print(activityTags.map { $0.class.className }.joined(separator: ","))
             }
-        case .generateActivity:
-            if let activityName = args.first, let activity = generateActivity(activityName) {
-                print(activity)
+        case .generateAllActivities:
+            if let app = _manifest.items.compactMap({ $0 as? Application }).first {
+                let activityTags = app.items.compactMap { $0 as? ActivityTag }
+                var activities: [String: String] = [:]
+                for activity in activityTags.map { $0.class } {
+                    if let base64 = generateActivity(activity)?.data(using: .utf8)?.base64EncodedString() {
+                        activities[activity.className] = base64
+                    }
+                }
+                do {
+                    let data = try JSONEncoder().encode(activities)
+                    if let string = String(data: data, encoding: .utf8) {
+                        print(string)
+                    } else {
+                        print("Unable to generate JSON string")
+                    }
+                } catch {
+                    print("Error has occured during JSON generation: \(error)")
+                }
             }
         }
         exit(0)
