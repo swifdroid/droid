@@ -286,46 +286,4 @@ public protocol Activity: AnyObject {
 
 extension Activity {
 	public static nonisolated var className: String { "\(Self.self)" }
-
-	public static nonisolated var allowEmbedded: Bool? { nil }
-	public static nonisolated var allowTaskReparenting: Bool? { nil }
-	public static nonisolated var alwaysRetainTaskState: Bool? { nil }
-	public static nonisolated var autoRemoveFromRecents: Bool? { nil }
-	public static nonisolated var banner: String? { nil }
-	public static nonisolated var clearTaskOnLaunch: Bool? { nil }
-	public static nonisolated var colorMode: String? { nil }
-	public static nonisolated var configChanges: [ConfigChangeType] { [] }
-	public static nonisolated var directBootAware: Bool? { nil }
-	public static nonisolated var documentLaunchMode: DocumentLaunchMode? { nil }
-	public static nonisolated var enabled: Bool? { nil }
-	public static nonisolated var excludeFromRecents: Bool? { nil }
-	public static nonisolated var exported: Bool? { nil }
-	public static nonisolated var finishOnTaskLaunch: Bool? { nil }
-	public static nonisolated var hardwareAccelerated: Bool? { nil }
-	public static nonisolated var icon: String? { nil }
-	public static nonisolated var roundIcon: String? { nil }
-	public static nonisolated var immersive: Bool? { nil }
-	public static nonisolated var label: String? { nil }
-	public static nonisolated var launchMode: LaunchMode? { nil }
-	public static nonisolated var lockTaskMode: LockTaskMode? { nil }
-	public static nonisolated var maxRecents: Int? { nil }
-	public static nonisolated var maxAspectRatio: Double? { nil }
-	public static nonisolated var multiprocess: Bool? { nil }
-	public static nonisolated var noHistory: Bool? { nil }
-	public static nonisolated var parentActivityName: String? { nil }
-	public static nonisolated var persistableMode: PersistableMode? { nil }
-	public static nonisolated var permission: String? { nil }
-	public static nonisolated var process: String? { nil }
-	public static nonisolated var relinquishTaskIdentity: Bool? { nil }
-	public static nonisolated var resizeableActivity: Bool? { nil }
-	public static nonisolated var screenOrientation: ScreenOrientation? { nil }
-	public static nonisolated var showForAllUsers: Bool? { nil }
-	public static nonisolated var stateNotNeeded: Bool? { nil }
-	public static nonisolated var supportsPictureInPicture: Bool? { nil }
-	public static nonisolated var taskAffinity: String? { nil }
-	public static nonisolated var theme: String? { nil }
-	public static nonisolated var uiOptions: ApplicationUIOptions? { nil }
-	public static nonisolated var windowSoftInputMode: [WindowSoftInputMode] { [] }
-	public static nonisolated var intentFilter: DroidApp.IntentFilter? { nil }
-	public static nonisolated var metaData: DroidApp.MetaData? { nil }
 }

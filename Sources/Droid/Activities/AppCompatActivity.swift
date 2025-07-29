@@ -36,6 +36,48 @@ open class AppCompatActivity: Activity {
     ] }
     public class var javaImports: [String] { ["stream.swift.droid.appkit.activities.*"] }
     public class var parentClass: String { "DroidAppCompatActivity()" }
+
+    open class nonisolated var allowEmbedded: Bool? { nil }
+	open class nonisolated var allowTaskReparenting: Bool? { nil }
+	open class nonisolated var alwaysRetainTaskState: Bool? { nil }
+	open class nonisolated var autoRemoveFromRecents: Bool? { nil }
+	open class nonisolated var banner: String? { nil }
+	open class nonisolated var clearTaskOnLaunch: Bool? { nil }
+	open class nonisolated var colorMode: String? { nil }
+	open class nonisolated var configChanges: [ConfigChangeType] { [] }
+	open class nonisolated var directBootAware: Bool? { nil }
+	open class nonisolated var documentLaunchMode: DocumentLaunchMode? { nil }
+	open class nonisolated var enabled: Bool? { nil }
+	open class nonisolated var excludeFromRecents: Bool? { nil }
+	open class nonisolated var exported: Bool? { nil }
+	open class nonisolated var finishOnTaskLaunch: Bool? { nil }
+	open class nonisolated var hardwareAccelerated: Bool? { nil }
+	open class nonisolated var icon: String? { nil }
+	open class nonisolated var roundIcon: String? { nil }
+	open class nonisolated var immersive: Bool? { nil }
+	open class nonisolated var label: String? { nil }
+	open class nonisolated var launchMode: LaunchMode? { nil }
+	open class nonisolated var lockTaskMode: LockTaskMode? { nil }
+	open class nonisolated var maxRecents: Int? { nil }
+	open class nonisolated var maxAspectRatio: Double? { nil }
+	open class nonisolated var multiprocess: Bool? { nil }
+	open class nonisolated var noHistory: Bool? { nil }
+	open class nonisolated var parentActivityName: String? { nil }
+	open class nonisolated var persistableMode: PersistableMode? { nil }
+	open class nonisolated var permission: String? { nil }
+	open class nonisolated var process: String? { nil }
+	open class nonisolated var relinquishTaskIdentity: Bool? { nil }
+	open class nonisolated var resizeableActivity: Bool? { nil }
+	open class nonisolated var screenOrientation: ScreenOrientation? { nil }
+	open class nonisolated var showForAllUsers: Bool? { nil }
+	open class nonisolated var stateNotNeeded: Bool? { nil }
+	open class nonisolated var supportsPictureInPicture: Bool? { nil }
+	open class nonisolated var taskAffinity: String? { nil }
+	open class nonisolated var theme: String? { nil }
+	open class nonisolated var uiOptions: ApplicationUIOptions? { nil }
+	open class nonisolated var windowSoftInputMode: [WindowSoftInputMode] { [] }
+	open class nonisolated var intentFilter: DroidApp.IntentFilter? { nil }
+	open class nonisolated var metaData: DroidApp.MetaData? { nil }
     
     public let context: ActivityContext
     public var contentView: View?

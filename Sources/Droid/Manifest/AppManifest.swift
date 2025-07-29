@@ -28,9 +28,6 @@ public class AppManifest: DroidApp.ManifestTag {
     }
     
     func placeholders() -> Self {
-        params[.package] = "__APPLICATION_ID__"
-        params[.androidVersionCode] = "__VERSION_CODE__"
-        params[.androidVersionName] = "__VERSION_NAME__"
         return self
     }
     

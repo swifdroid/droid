@@ -316,8 +316,9 @@ open class DroidApp: @unchecked Sendable {
     var _manifest: AppManifest = Manifest
         .placeholders()
         .application {
+            .name("stream.swift.droid.appkit.DroidApp")
             .allowBackup()
-            .allowNativeHeapPointerTagging(false) // very important
+            .label("__TARGET_NAME__")
         }
     var _gradleDependencies: AppGradleDependencies = .init()
     var _moduleGradle: AppGradle.ModuleAppGradle = ModuleGradle
