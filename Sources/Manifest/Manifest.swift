@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 28.07.2021.
 //
 
-import FoundationEssentials
-
 public final class Manifest {
     var targetSandboxVersion: UInt?
     var installLocation: InstallLocation?

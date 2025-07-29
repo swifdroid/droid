@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 29.07.2021.
 //
 
-import FoundationEssentials
-
 /// Declares a security permission that can be used to limit access to specific components or features of this or other applications.
 ///
 /// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element)

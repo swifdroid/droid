@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 29.07.2021.
 //
 
-import FoundationEssentials
-
 /// Declares an Instrumentation class that enables you to monitor an application's interaction with the system.
 ///
 /// The Instrumentation object is instantiated before any of the application's components.

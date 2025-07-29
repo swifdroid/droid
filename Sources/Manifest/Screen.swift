@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 29.07.2021.
 //
 
-import FoundationEssentials
-
 /// Specifies each screen configuration with which the application is compatible.
 ///
 /// [Learn more](https://developer.android.com/guide/topics/manifest/compatible-screens-element)

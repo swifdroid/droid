@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 29.07.2021.
 //
 
-import FoundationEssentials
-
 /// Declares a name for a logical grouping of related permissions.
 ///
 /// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element)

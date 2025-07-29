@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 29.07.2021.
 //
 
-import FoundationEssentials
-
 /// The declaration of the application.
 ///
 /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element)
