@@ -307,8 +307,6 @@ open class DroidApp: @unchecked Sendable {
         InnerLog.d("start")
         parseAppBuilderItem(body.appBuilderContent)
         _lifecycles.forEach { $0._didFinishLaunching.forEach { $0() } }
-//        lifecycleHandler.add(.enterForeground) { self._lifecycles.forEach { $0._willEnterForeground.forEach { $0() } } }
-//        lifecycleHandler.add(.enterBackground) { self._lifecycles.forEach { $0._didEnterBackground.forEach { $0() } } }
     }
     
     @AppBuilder open var body: AppBuilder.Content { _AppContent(appBuilderContent: .none) }
@@ -397,79 +395,6 @@ open class DroidApp: @unchecked Sendable {
     }
 }
 
-// MARK: - Core-context Functions
-
-extension DroidApp {
-    
-    
-//    public func showToast(_ text: String, _ length: ToastLength = .short) {
-//        coreContext.showToast(text, length.rawValue)
-//    }
-//
-//    func launched(_ activity: Activity) {
-//        _lifecycles.forEach { $0._didFinishLaunching.forEach { $0() } }
-//        coreContext.launched(activity)
-//    }
-}
-
-class LifecycleHandler {
-//    private let context: JSObject
-//
-//    var closures: [String: JSClosure] = [:]
-//
-//    init (_ global: JSObject) {
-//        let dict: [String: String] = [:]
-//        context = dict.jsValue().object!
-//        global.lifecycle = context.jsValue()
-//    }
-//
-//    deinit {
-//        closures.forEach { $0.value.release() }
-//    }
-//
-//    enum Event: String {
-//        case enterForeground, enterBackground
-//    }
-//
-//    func add(_ event: Event, _ action: @escaping () -> Void) {
-//        closures[event.rawValue] = JSClosure { args in
-//            return JSPromise(resolver: { handler in
-//                action()
-//                handler(.success(.undefined))
-//            }).jsValue()
-//        }
-//        context[event.rawValue] = closures[event.rawValue]?.jsValue() ?? .null
-//    }
-}
-
-public enum ToastLength: Int {
-    case short = 0, long
-}
-
-class CoreContext {
-//    private let context: JSObject
-//
-//    init (_ global: JSObject) {
-//        context = global.core.object!
-//    }
-//
-//    func launched(_ activity: Activity) {
-//        guard let json = activity.model.json() else { return }
-//        context.launched.function?.callAsFunction(this: context, json)
-//    }
-//
-//    func showToast(_ text: String, _ length: Int = 0) {
-//        if length == 0 {
-//            context.showToastShort.function?.callAsFunction(this: context, text)
-//        } else {
-//            context.showToastLong.function?.callAsFunction(this: context, text)
-//        }
-//    }
-}
-
-#if ANDROIDBUILDING
-
-#endif
 struct AndroidBuildingArguments {
     let mainTarget: String
     

@@ -42,7 +42,7 @@ enum ViewStatus: Sendable {
 open class View: AnyView, @unchecked Sendable {
     /// The JNI class name
     public class var className: JClassName { .android.view.View }
-
+    
     /// Unique identifier
     nonisolated let id: Int32
     
