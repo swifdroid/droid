@@ -277,7 +277,7 @@ open class DroidApp: @unchecked Sendable {
             if let app = _manifest.items.compactMap({ $0 as? Application }).first {
                 let activityTags = app.items.compactMap { $0 as? ActivityTag }
                 var activities: [String: String] = [:]
-                for activity in activityTags.map { $0.class } {
+                for activity in activityTags.map({ $0.class }) {
                     if let base64 = generateActivity(activity)?.data(using: .utf8)?.base64EncodedString() {
                         activities[activity.className] = base64
                     }
