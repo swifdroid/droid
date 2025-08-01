@@ -217,9 +217,6 @@ open class DroidApp: @unchecked Sendable {
     
     private enum _AndroidBuildingAction: String {
         case manifest
-        case moduleGradle
-        case projectGradle
-        case settingsGradle
         case gradleDependencies
         case activityNames
         case generateAllActivities
@@ -245,12 +242,6 @@ open class DroidApp: @unchecked Sendable {
     
     private func proceedAndroidBuildingAction(_ action: _AndroidBuildingAction, _ args: [String]) {
         switch action {
-        case .moduleGradle:
-            print(_moduleGradle.render())
-        case .projectGradle:
-            print(_projectGradle.render())
-        case .settingsGradle:
-            print(_settingsGradle.render())
         case .gradleDependencies:
             var dependencies: Set<String> = _gradleDependencies.dependencies
             if let app = _manifest.items.compactMap({ $0 as? Application }).first {
@@ -321,76 +312,13 @@ open class DroidApp: @unchecked Sendable {
             .label("__TARGET_NAME__")
         }
     var _gradleDependencies: AppGradleDependencies = .init()
-    var _moduleGradle: AppGradle.ModuleAppGradle = ModuleGradle
-        .applyPlugin("com.android.application")
-        .applyPlugin("kotlin-android")
-        .variable("kotlin_version", "__KOTLIN_VERSION__")
-        .android {
-            .defaultConfig {
-                .testInstrumentationRunner("android.support.test.runner.AndroidJUnitRunner")
-            }
-            .signingConfigPlaceholder()
-            .buildType(.release(minifyEnabled: false, signingConfig: "mySigning"))
-            .buildType(.debug(minifyEnabled: false))
-            .compileOptions {
-                .sourceCompatibility("JavaVersion.VERSION_1_8")
-                .targetCompatibility("JavaVersion.VERSION_1_8")
-            }
-            .kotlinOptions {
-                .jvmTarget("1.8")
-            }
-            .buildFeatures {
-                .viewBinding(true)
-            }
-            .split(.abi(reset: true, include: ["__ABI_ARCHS__"], universalApk: false))
-        }
-        .dependency(.implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk7", "$kotlin_version"))
-        .dependency(.implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-android", "1.6.4"))
-        .dependency(.implementation("androidx.core", "core-ktx", "1.8.0"))
-        .dependency(.implementation("androidx.appcompat", "appcompat", "1.6.1"))
-        .dependency(.implementation("com.google.android.material", "material", "1.9.0"))
-        .dependency(.implementation("androidx.constraintlayout", "constraintlayout", "2.1.4"))
-        .dependency(.implementation("androidx.lifecycle", "lifecycle-livedata-ktx", "2.6.1"))
-        .dependency(.implementation("androidx.lifecycle", "lifecycle-viewmodel-ktx", "2.6.1"))
-        .dependency(.implementation("com.android.support.constraint", "constraint-layout", "2.0.4"))
-        .dependency(.androidTestImplementation("com.android.support.test", "runner", "1.0.2"))
-        .dependency(.androidTestImplementation("com.android.support.test.espresso", "espresso-core", "3.0.2"))
-        .dependency(.testImplementation("junit", "junit", "4.13.2"))
-    var _projectGradle: AppGradle.ProjectAppGradle = ProjectGradle
-        .import("java.nio.file.Paths")
-        .plugins {
-            .plugin(id: "com.android.application", version: "8.0.1", apply: false)
-            .plugin(id: "com.android.library", version: "8.0.1", apply: false)
-            .plugin(id: "org.jetbrains.kotlin.android", version: "1.8.20", apply: false)
-        }
-        .custom("""
-        task clean(type: Delete) {
-            delete rootProject.buildDir
-            delete new File(Paths.get(rootDir.toString(), "app/src/main/jniLibs").toString())
-        }
-        """)
-    var _settingsGradle: SettingsGradle = SettingsGradle
-        .pluginManagement {
-            .repository(.google)
-            .repository(.mavenCentral)
-            .repository(.gradlePluginPortal)
-        }
-        .dependencyResolutionManagement {
-            .repositoriesMode(.FAIL_ON_PROJECT_REPOS)
-            .repository(.google)
-            .repository(.mavenCentral)
-        }
-        .includes(":app")
-        .custom("rootProject.name = \"__ROOT_PROJECT_NAME__\"")
-
+    
     private func parseAppBuilderItem(_ item: AppBuilder.Item) {
         switch item {
         case .items(let v): v.forEach { parseAppBuilderItem($0) }
         case .lifecycle(let v): _lifecycles.append(v)
         case .manifest(let m): _manifest.merge(with: m)
         case .gradleDependencies(let d): _gradleDependencies.merge(with: d)
-        case .moduleGradle(let g): _moduleGradle.merge(with: g)
-        case .projectGradle(let g): _projectGradle.merge(with: g)
         case .none: break
         }
     }
