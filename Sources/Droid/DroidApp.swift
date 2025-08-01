@@ -106,6 +106,10 @@ open class DroidApp: @unchecked Sendable {
         shared.setLogLevel(level)
     }
 
+    public static func setInnerLogLevel(_ level: Logger.Level) {
+        shared.setInnerLogLevel(level)
+    }
+
     /// Returns app-wise unique identifier for the view.
     public func getNextViewId() -> Int32 {
         lastViewIdMutex.lock()
