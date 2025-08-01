@@ -12,7 +12,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element)
 	public class ActivityAlias: ManifestTag {
-        class override var name: String { "activity-alias" }
+        override class var name: String { "activity-alias" }
 		
         required override init() {
             super.init()

@@ -7,13 +7,12 @@
 
 extension AndroidPackage.ViewPackage {
     public class ViewParentClass: JClassName, @unchecked Sendable {}
-    
     public var ViewParent: ViewGroupClass { .init(parent: self, name: "ViewParent") }
 }
 
 // public class ViewParent: View, @unchecked Sendable {
 //     /// The JNI class name
-//     public class override var className: JClassName { .android.view.ViewParent }
+//     public override class var className: JClassName { .android.view.ViewParent }
 
 //     public func removeView(_ view: View) {
 //         #if os(Android)

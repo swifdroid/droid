@@ -7,7 +7,6 @@
 
 extension AndroidPackage.WidgetPackage {
     public class AbsoluteLayoutClass: JClassName, @unchecked Sendable {}
-    
     public var AbsoluteLayout: AbsoluteLayoutClass { .init(parent: self, name: "AbsoluteLayout") }
 }
 

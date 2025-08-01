@@ -7,7 +7,6 @@
 
 extension AndroidPackage.WidgetPackage {
     public class GridLayoutClass: JClassName, @unchecked Sendable {}
-    
     public var GridLayout: GridLayoutClass { .init(parent: self, name: "GridLayout") }
 }
 

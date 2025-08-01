@@ -6,7 +6,7 @@
 //
 
 public class AppManifest: DroidApp.ManifestTag {
-	class override var name: String { "manifest" }
+	override class var name: String { "manifest" }
 	
     required override init () {
         super.init()

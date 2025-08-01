@@ -13,7 +13,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/queries-element)
 	public class Queries: ManifestTag {
-        class override var name: String { "queries" }
+        override class var name: String { "queries" }
 		
 		required override init() {
             super.init()

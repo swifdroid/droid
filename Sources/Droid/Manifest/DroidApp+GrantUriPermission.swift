@@ -10,7 +10,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/grant-uri-permission-element)
 	public class GrantUriPermission: ManifestTag {
-        class override var name: String { "grant-uri-permission" }
+        override class var name: String { "grant-uri-permission" }
 		
 		required override init() {
             super.init()

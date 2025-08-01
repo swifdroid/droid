@@ -10,7 +10,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/category-element)
 	public class Category: ManifestTag {
-        class override var name: String { "category" }
+        override class var name: String { "category" }
 		
 		required override init() {
             super.init()

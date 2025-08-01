@@ -7,7 +7,6 @@
 
 extension AndroidPackage.WidgetPackage {
     public class RelativeLayoutClass: JClassName, @unchecked Sendable {}
-    
     public var RelativeLayout: RelativeLayoutClass { .init(parent: self, name: "RelativeLayout") }
 }
 

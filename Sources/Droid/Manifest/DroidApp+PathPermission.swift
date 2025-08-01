@@ -11,7 +11,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/path-permission-element)
 	public class PathPermission: ManifestTag {
-        class override var name: String { "path-permission" }
+        override class var name: String { "path-permission" }
 		
 		required override init() {
             super.init()

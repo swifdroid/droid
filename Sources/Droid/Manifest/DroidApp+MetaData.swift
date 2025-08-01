@@ -10,7 +10,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element)
 	public class MetaData: ManifestTag {
-        class override var name: String { "meta-data" }
+        override class var name: String { "meta-data" }
 		
 		required override init() {
             super.init()

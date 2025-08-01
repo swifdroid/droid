@@ -10,7 +10,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/action-element)
 	public class Action: ManifestTag {
-        class override var name: String { "action" }
+        override class var name: String { "action" }
 		
         required override init() {
             super.init()

@@ -13,7 +13,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/queries-element#package)
 	public class Package: ManifestTag {
-        class override var name: String { "package" }
+        override class var name: String { "package" }
 		
 		required override init() {
             super.init()

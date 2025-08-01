@@ -10,7 +10,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element)
 	public class Application: ManifestTag {
-        class override var name: String { "application" }
+        override class var name: String { "application" }
         
         override var order: Int { 100 }
         

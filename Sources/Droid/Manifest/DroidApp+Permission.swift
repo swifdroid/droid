@@ -7,7 +7,7 @@
 
 extension DroidApp {
 	public class Permission: ManifestTag {
-        class override var name: String { "uses-permission" }
+        override class var name: String { "uses-permission" }
 		
         override var order: Int { 0 }
         

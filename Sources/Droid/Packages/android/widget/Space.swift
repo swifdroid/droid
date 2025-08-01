@@ -7,7 +7,6 @@
 
 extension AndroidPackage.WidgetPackage {
     public class SpaceClass: JClassName, @unchecked Sendable {}
-    
     public var Space: SpaceClass { .init(parent: self, name: "Space") }
 }
 

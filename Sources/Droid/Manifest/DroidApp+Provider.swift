@@ -10,7 +10,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element)
 	public class Provider: ManifestTag {
-        class override var name: String { "provider" }
+        override class var name: String { "provider" }
 		
 		required override init() {
             super.init()

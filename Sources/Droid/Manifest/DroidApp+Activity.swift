@@ -7,7 +7,7 @@
 
 extension DroidApp {
 	final class _ActivityTag: ManifestTag {
-        class override var name: String { "activity" }
+        override class var name: String { "activity" }
 
 		override init () {}
 	}
@@ -20,7 +20,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element)
 	public final class ActivityTag: ManifestTag {
-        class override var name: String { "activity" }
+        override class var name: String { "activity" }
 		
         var `class`: Activity.Type
         

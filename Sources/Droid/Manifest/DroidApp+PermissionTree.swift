@@ -12,7 +12,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-tree-element)
 	public class PermissionTree: ManifestTag {
-        class override var name: String { "permission-tree" }
+        override class var name: String { "permission-tree" }
 		
 		required override init() {
             super.init()

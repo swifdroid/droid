@@ -17,7 +17,6 @@ import Logging
 
 extension AndroidPackage.ViewPackage {
     public class ViewClass: JClassName, @unchecked Sendable {}
-    
     public var View: ViewClass { .init(parent: self, name: "View") }
 }
 

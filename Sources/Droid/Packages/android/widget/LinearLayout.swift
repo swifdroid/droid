@@ -7,7 +7,6 @@
 
 extension AndroidPackage.WidgetPackage {
     public class LinearLayoutClass: JClassName, @unchecked Sendable {}
-    
     public var LinearLayout: LinearLayoutClass { .init(parent: self, name: "LinearLayout") }
 }
 

@@ -10,7 +10,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/intent-filter-element)
 	public class IntentFilter: ManifestTag {
-        class override var name: String { "intent-filter" }
+        override class var name: String { "intent-filter" }
 		
 		public static var mainLauncher: IntentFilter { .init().action(.MAIN).category(.LAUNCHER) }
 

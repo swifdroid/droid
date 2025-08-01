@@ -7,7 +7,6 @@
 
 extension AndroidXPackage.CoordinatorLayoutPackage.WidgetPackage {
     public class CoordinatorLayoutClass: JClassName, @unchecked Sendable {}
-    
     public var CoordinatorLayout: CoordinatorLayoutClass { .init(parent: self, name: "CoordinatorLayout") }
 }
 

@@ -12,7 +12,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/instrumentation-element)
 	public class Instrumentation: ManifestTag {
-        class override var name: String { "instrumentation" }
+        override class var name: String { "instrumentation" }
         
 		required override init() {
             super.init()

@@ -13,7 +13,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/training/package-visibility/declaring)
 	public class Intent: ManifestTag {
-        class override var name: String { "intent" }
+        override class var name: String { "intent" }
 		
 		required override init() {
             super.init()

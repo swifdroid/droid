@@ -7,7 +7,6 @@
 
 extension AndroidPackage.WidgetPackage {
     public class FrameLayoutClass: JClassName, @unchecked Sendable {}
-    
     public var FrameLayout: FrameLayoutClass { .init(parent: self, name: "FrameLayout") }
 }
 

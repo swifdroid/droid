@@ -13,7 +13,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element)
 	public class PermissionGroup: ManifestTag {
-        class override var name: String { "permission-group" }
+        override class var name: String { "permission-group" }
 		
 		required override init() {
             super.init()

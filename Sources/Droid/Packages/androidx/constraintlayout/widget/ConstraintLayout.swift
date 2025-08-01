@@ -7,7 +7,6 @@
 
 extension AndroidXPackage.ConstraintLayoutPackage.WidgetPackage {
     public class ConstraintLayoutClass: JClassName, @unchecked Sendable {}
-    
     public var ConstraintLayout: ConstraintLayoutClass { .init(parent: self, name: "ConstraintLayout") }
 }
 

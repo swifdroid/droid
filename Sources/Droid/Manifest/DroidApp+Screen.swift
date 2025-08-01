@@ -7,7 +7,7 @@
 
 extension DroidApp {
 	public class Screen: ManifestTag {
-        class override var name: String { "screen" }
+        override class var name: String { "screen" }
 		
 		var screenSizes: [ScreenSize] = []
 		var screenDensities: [ScreenDensity] = []
@@ -19,7 +19,7 @@ extension DroidApp {
 	}
 	
 	public class CompatibleScreens: ManifestTag {
-        class override var name: String { "compatible-screens" }
+        override class var name: String { "compatible-screens" }
 		
 		public override init () {
             super.init()

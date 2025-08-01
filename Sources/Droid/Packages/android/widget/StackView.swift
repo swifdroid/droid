@@ -7,7 +7,6 @@
 
 extension AndroidPackage.WidgetPackage {
     public class StackViewClass: JClassName, @unchecked Sendable {}
-    
     public var StackView: StackViewClass { .init(parent: self, name: "StackView") }
 }
 

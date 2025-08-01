@@ -14,7 +14,7 @@ extension DroidApp {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/data-element)
 	public class Data: ManifestTag {
-        class override var name: String { "data" }
+        override class var name: String { "data" }
 		
 		required override init() {
             super.init()
