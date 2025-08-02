@@ -180,6 +180,33 @@ open class AppCompatActivity: Activity {
     }
 
     open func buildUI() {}
+
+    public func getTheme() -> Resources.Theme? {
+        #if os(Android)
+        InnerLog.t("Activity.getTheme 1")
+        guard let env = JEnv.current() else {
+            InnerLog.t("Activity.getTheme 1.1 exit")
+            return nil
+        }
+        guard let methodId = context.clazz.methodId(env: env, name: "getTheme", signature: .returning(.object(Resources.Theme.className))) else {
+            InnerLog.t("Activity.getTheme 1.2 exit")
+            return nil
+        }
+        let classLoader = context.getClassLoader()
+        guard let lpClazz = JNICache.shared.getClass(Resources.Theme.className, classLoader) else {
+            InnerLog.t("Activity.getTheme 1.3 exit")
+            return nil
+        }
+        guard let globalObject = env.callObjectMethod(object: context.object, methodId: methodId, clazz: lpClazz) else {
+            InnerLog.t("Activity.getTheme 1.4 exit")
+            return nil
+        }
+        InnerLog.t("Activity.getTheme 2")
+        return Resources.Theme(globalObject, context)
+        #else
+        return nil
+        #endif
+    }
 }
 
 // public final class AppCompatActivity: DroidApp.AnyActivity {
