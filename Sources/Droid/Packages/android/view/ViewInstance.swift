@@ -19,6 +19,9 @@ extension View {
         /// Context
         public let context: ActivityContext
 
+        /// View
+        public let view: View
+
         /// Object wrapper
         public let object: JObject
 
