@@ -17,6 +17,11 @@ extension AndroidPackage.SupportPackage.V7Package.AppPackage {
 
 public struct ActivityContext: JObjectable, JClassLoadable, Sendable {
     public let object: JObject
+
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
+    public var R: InnerR { .init(self) }
 }
 
 #if os(Android)
