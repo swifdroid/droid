@@ -1,5 +1,7 @@
 extension View {
     func filterSubviewLayoutParams(_ subview: View) -> [LayoutParamToApply] {
+        InnerLog.t("🎂 filterSubviewLayoutParams begin (\(self.id) → \(subview.id))")
+        InnerLog.t("🎂 filterSubviewLayoutParams count: \(subview._layoutParamsToApply.count)")
         var paramsToApply: [LayoutParamToApply] = []
         for param in subview._layoutParamsToApply {
             switch param {
