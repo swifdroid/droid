@@ -186,6 +186,17 @@ extension View {
             #endif
         }
 
+        public func setFitsSystemWindows(_ value: Bool) {
+            #if os(Android)
+            InnerLog.d("setFitsSystemWindows: \(value)")
+            guard
+                let env = JEnv.current(),
+                let methodId = clazz.methodId(env: env, name: "setFitsSystemWindows", signature: .init(.boolean, returning: .void))
+            else { return }
+            env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: [value])
+            #endif
+        }
+
         public func setOrientation(_ orientation: LinearLayout.Orientation) {
             #if os(Android)
             guard

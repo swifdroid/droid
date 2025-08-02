@@ -233,6 +233,9 @@ open class View: AnyView, @unchecked Sendable {
                         InnerLog.d("view(id: \(id)) didMoveToParent onClick")
                         listener.attach(to: instance)
                         instance.setOnClickListener(listener)
+                    case .fitsSystemWindows(let value):
+                        InnerLog.d("view(id: \(id)) didMoveToParent fitsSystemWindows")
+                        instance.setFitsSystemWindows(value)
                 }
             }
             if subviews.count > 0 {
@@ -320,6 +323,7 @@ open class View: AnyView, @unchecked Sendable {
         case backgroundColor(GraphicsColor)
         case orientation(LinearLayout.Orientation)
         case onClick(NativeOnClickListener)
+        case fitsSystemWindows(Bool)
     }
     
     var _propertiesToApply: [PropertyToApply] = []    
@@ -349,6 +353,16 @@ open class View: AnyView, @unchecked Sendable {
     }
     
     // public func background(Object) -> Self {}
+
+    @discardableResult
+    public func fitsSystemWindows(_ value: Bool = true) -> Self {
+        if let instance {
+            instance.setFitsSystemWindows(value)
+        } else {
+            _propertiesToApply.append(.fitsSystemWindows(value))
+        }
+        return self
+    }
     
     @discardableResult
     public func onClick(_ handler: @escaping () async -> Void) -> Self {
