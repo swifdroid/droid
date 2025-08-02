@@ -20,6 +20,9 @@ public protocol Activity: AnyObject {
 
 	var context: ActivityContext { get }
     
+	#if !os(Android)
+	init ()
+	#endif
 	init (object: JObject)
 
 	func onCreate(_ context: ActivityContext)
