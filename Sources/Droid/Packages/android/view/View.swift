@@ -108,7 +108,7 @@ open class View: AnyView, @unchecked Sendable {
 
     }
 
-    var instance: ViewInstance? {
+    public var instance: ViewInstance? {
         switch status {
             case .new:
                 return nil
