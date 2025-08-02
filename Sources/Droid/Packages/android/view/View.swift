@@ -44,6 +44,29 @@ open class View: AnyView, @unchecked Sendable {
     
     /// Unique identifier
     nonisolated let id: Int32
+
+    /// Layout Params class
+    /// 
+    /// - **Very important**:
+    /// Each view should provide its own `LayoutParams` class.
+    /// Otherwise `ViewGroup`'s one will be provided which could cause crash.
+    open class var layoutParamsClass: LayoutParams.Class { .viewGroup }
+
+    /// Layout Params for subviews, it uses `layoutParamsClass` so no need to override it in each view.
+    /// 
+    /// - **Very important**: Call it only when view already have its instance
+    open func layoutParamsForSubviews() -> LayoutParams? {
+        guard let instance else { return nil }
+        return .init(instance.context, Self.layoutParamsClass.className)
+    }
+
+    /// Layout Params for subviews, it uses `layoutParamsClass` so no need to override it in each view.
+    /// 
+    /// - **Very important**: Call it only when view already have its instance
+    open func layoutParamsForSubviews(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) -> LayoutParams? {
+        guard let instance else { return nil }
+        return .init(instance.context, Self.layoutParamsClass.className, width: width, height: height, unit: unit)
+    }
     
     /// Status of the view in the app, e.g. instantiated in in JNI or not yet
     var status: ViewStatus = .new

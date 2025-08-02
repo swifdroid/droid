@@ -6,15 +6,11 @@ extension View {
     func proceedSubviewLayoutParams(_ subview: View, _ params: [LayoutParamToApply]) {
         InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id))")
         guard
-            let instance
+            let lp = layoutParamsForSubviews()
         else {
             InnerLog.t("🟥 Unable to init `LayoutParams` in `proceedSubviewLayoutParams`")
             return
         }
-        let type = LayoutParams.LinearLayoutType.fromClassName(instance.className)
-        guard
-            let lp = LayoutParams(type) else {
-            return
         }
         InnerLog.t("🟠 LayoutParams: \(lp.className.path)")
         func void() {}
@@ -52,9 +48,9 @@ extension View {
                     lp.setMarginEnd(unit.toPixels(Int32(value)))
                 default: void()
                 }
-                switch type {
-                    case .linearLayout:
                 InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) switching type: \(lp.className.path)")
+                switch self {
+                    case is LinearLayout:
                         switch param {
                         case .weight(let value):
                             lp.setWeight(value)
@@ -68,7 +64,7 @@ extension View {
                             lp.setGravity(Int32(value.rawValue))
                         default: void()
                         }
-                    case .frameLayout:
+                    case is FrameLayout:
                         switch param {
                         case .weight(let value):
                             lp.setWeight(value)
@@ -88,7 +84,14 @@ extension View {
                             void() // TODO
                         default: void()
                         }
-                    case .absoluteLayout:
+                    case is CoordinatorLayout:
+                        switch param {
+                        case .anchorId(let value):
+                            lp.setAnchorId(value)
+                        // TODO: add the rest
+                        default: void()
+                        }
+                    case is AbsoluteLayout:
                         switch param {
                         case .x(let value, let unit):
                             lp.setX(unit.toPixels(Int32(value)))
@@ -100,7 +103,7 @@ extension View {
                             void() // TODO
                         default: void()
                         }
-                    case .relativeLayout:
+                    case is RelativeLayout:
                         switch param {
                         case .preventEdgeOffset://(let value):
                             void() // TODO

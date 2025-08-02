@@ -68,8 +68,7 @@ extension View {
 
         public func setLayoutParams(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) {
             #if os(Android)
-            let type: LayoutParams.LinearLayoutType = .fromClassName(clazz.name)
-            if let lp = LayoutParams(type, width: width, height: height, unit: unit) {
+            if let lp = view.layoutParamsForSubviews(width: width, height: height, unit: unit) {
                 setLayoutParams(lp)
             }
             #endif

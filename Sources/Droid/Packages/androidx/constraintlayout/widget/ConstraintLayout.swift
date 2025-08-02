@@ -14,6 +14,10 @@ public final class ConstraintLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     public class override var className: JClassName { .androidx.constraintlayout.widget.ConstraintLayout }
 
+    open override class var layoutParamsClass: LayoutParams.Class {
+        .constraintLayout
+    }
+
     @discardableResult
     public override init() {
         super.init()
