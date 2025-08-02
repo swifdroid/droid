@@ -154,7 +154,7 @@ extension View {
                             void() // TODO
                         case .alignBaseline://(let value):
                             void() // TODO
-                        default: break
+                        default: void()
                         }
                     default: void()
                 }
