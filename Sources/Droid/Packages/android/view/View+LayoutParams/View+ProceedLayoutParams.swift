@@ -4,24 +4,25 @@ import Logging
 
 extension View {
     func proceedSubviewLayoutParams(_ subview: View, _ params: [LayoutParamToApply]) {
-        InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id))")
+        InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id))")
         guard
             let instance
         else {
-            InnerLog.w("🟨 `ViewInstance` is nil in `proceedSubviewLayoutParams`")
+            InnerLog.t("🟥 Unable to init `LayoutParams` in `proceedSubviewLayoutParams`")
             return
         }
         let type = LayoutParams.LinearLayoutType.fromClassName(instance.className)
         guard
             let lp = LayoutParams(type) else {
-            InnerLog.c("🟥 Unable to init `LayoutParams` in `proceedSubviewLayoutParams`")
             return
         }
+        InnerLog.t("🟠 LayoutParams: \(lp.className.path)")
         func void() {}
         if self is ConstraintLayout {
 
         } else {
-            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) not constraintlayout")
+            InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) not constraintlayout type: \(lp.className.path)")
+            InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) params.count: \(params.count)")
             var marginLeft: Int32 = 0
             var marginTop: Int32 = 0
             var marginRight: Int32 = 0
@@ -53,6 +54,7 @@ extension View {
                 }
                 switch type {
                     case .linearLayout:
+                InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) switching type: \(lp.className.path)")
                         switch param {
                         case .weight(let value):
                             lp.setWeight(value)
@@ -157,9 +159,9 @@ extension View {
                     default: void()
                 }
             } // params loop end
-            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) subview margins l: \(subview.marginLeft) t: \(subview.marginTop) r: \(subview.marginRight) b: \(subview.marginBottom)")
-            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) new margins l: \(marginLeft) t: \(marginTop) r: \(marginRight) b: \(marginBottom)")
-            InnerLog.d("💧 proceedSubviewLayoutParams (id: \(subview.id)) margins diff l: \(subview.marginLeft != marginLeft) t: \(subview.marginTop != marginTop) r: \(subview.marginRight != marginRight) b: \(subview.marginBottom != marginBottom)")
+            InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) subview margins l: \(subview.marginLeft) t: \(subview.marginTop) r: \(subview.marginRight) b: \(subview.marginBottom)")
+            InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) new margins l: \(marginLeft) t: \(marginTop) r: \(marginRight) b: \(marginBottom)")
+            InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) margins diff l: \(subview.marginLeft != marginLeft) t: \(subview.marginTop != marginTop) r: \(subview.marginRight != marginRight) b: \(subview.marginBottom != marginBottom)")
             if subview.marginLeft != marginLeft
                 || subview.marginTop != marginTop
                 || subview.marginRight != marginRight
