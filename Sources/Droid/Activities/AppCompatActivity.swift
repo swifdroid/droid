@@ -15,7 +15,7 @@ extension AndroidPackage.SupportPackage.V7Package.AppPackage {
     public var AppCompatActivity: AppCompatPackage { .init(parent: self, name: "AppCompatActivity") }
 }
 
-public struct ActivityContext: JObjectable, JClassLoadable, Sendable {
+public final class ActivityContext: JObjectable, JClassLoadable, @unchecked Sendable {
     public let object: JObject
 
     public var cachedClassLoader: JClassLoader? = nil
