@@ -3,6 +3,7 @@ extension View {
         InnerLog.t("🎂 filterSubviewLayoutParams begin (\(self.id) → \(subview.id))")
         InnerLog.t("🎂 filterSubviewLayoutParams count: \(subview._layoutParamsToApply.count)")
         var paramsToApply: [LayoutParamToApply] = []
+        func void() {}
         for param in subview._layoutParamsToApply {
             switch param {
             // Margin
@@ -18,7 +19,7 @@ extension View {
                 paramsToApply.append(.startMargin(value, unit))
             case .endMargin(let value, let unit):
                 paramsToApply.append(.endMargin(value, unit))
-            default: break
+            default: void()
             }
             if self is ViewGroup {
                 switch param {
@@ -26,7 +27,7 @@ extension View {
                     paramsToApply.append(.width(value, unit))
                 case .height(let value, let unit):
                     paramsToApply.append(.height(value, unit))
-                default: break
+                default: void()
                 }
             }
             switch self {
@@ -42,7 +43,7 @@ extension View {
                         paramsToApply.append(.order(value))
                     case .gravity(let value):
                         paramsToApply.append(.gravity(value))
-                    default: break
+                    default: void()
                     }
                 case is FrameLayout:
                     switch param {
@@ -62,7 +63,7 @@ extension View {
                         paramsToApply.append(.minWidth(value, unit))
                     case .maxWidth(let value, let unit):
                         paramsToApply.append(.maxWidth(value, unit))
-                    default: break
+                    default: void()
                     }
                 case is AbsoluteLayout:
                     switch param {
@@ -74,7 +75,7 @@ extension View {
                         paramsToApply.append(.minHeight(value, unit))
                     case .maxHeight(let value, let unit):
                         paramsToApply.append(.maxHeight(value, unit))
-                    default: break
+                    default: void()
                     }
                 case is RelativeLayout:
                     switch param {
@@ -130,7 +131,7 @@ extension View {
                         paramsToApply.append(.alignEnd(value))
                     case .alignBaseline(let value):
                         paramsToApply.append(.alignBaseline(value))
-                    default: break
+                    default: void()
                     }
                 // case is ActionMenuView:
                 // case is AppBarLayout:
@@ -227,9 +228,9 @@ extension View {
                         paramsToApply.append(.goneStartMargin(value, unit))
                     case .goneEndMargin(let value, let unit):
                         paramsToApply.append(.goneEndMargin(value, unit))
-                    default: break
+                    default: void()
                     }
-                default: break
+                default: void()
             }
         }
         return paramsToApply
