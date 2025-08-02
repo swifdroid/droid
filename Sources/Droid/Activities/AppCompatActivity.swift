@@ -93,6 +93,15 @@ open class AppCompatActivity: Activity {
     public let context: ActivityContext
     public var contentView: View?
 
+    #if !os(Android)
+    public required init() {
+        context = ActivityContext(object: .init(JObjectBox(), .init("")))
+        onCreate(context)
+        body { body }
+        buildUI()
+    }
+    #endif
+    
     public required init(object: JObject) {
         context = ActivityContext(object: object)
         onCreate(context)
