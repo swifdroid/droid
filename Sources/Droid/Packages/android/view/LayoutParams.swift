@@ -15,47 +15,37 @@ import Logging
 import AndroidLooper
 #endif
 
-extension AndroidPackage.ViewPackage.ViewGroupClass {
-    public class LayoutParamsClass: JClassName, @unchecked Sendable {}
-    
-    public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
-}
-
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
 public final class LayoutParams: Sendable, JObjectable {
-    public enum LinearLayoutType: String {
-        case viewGroup = "android/view/ViewGroup$LayoutParams"
-        case windowManager = "android/view/WindowManager$LayoutParams"
-        case linearLayout = "android/widget/LinearLayout$LayoutParams"
-        case actionBar = "android/app/ActionBar$LayoutParams"
-        case toolbar = "android/widget/Toolbar$LayoutParams"
-        case tableRow = "android/widget/TableRow$LayoutParams"
-        case gridLayout = "android/widget/GridLayout$LayoutParams"
-        case radioGroup = "android/widget/RadioGroup$LayoutParams"
-        case absListView = "android/widget/AbsListView$LayoutParams"
-        case frameLayout = "android/widget/FrameLayout$LayoutParams"
-        case tableLayout = "android/widget/TableLayout$LayoutParams"
-        case actionMenuView = "android/widget/ActionMenuView$LayoutParams"
-        case relativeLayout = "android/widget/RelativeLayout$LayoutParams"
+    public struct Class: Sendable, CustomStringConvertible, ExpressibleByStringLiteral {
+        public let className: JClassName
 
-        case appCompatActionBar = "androidx/appcompat/app/ActionBar$LayoutParams"
-        case appCompatToolbar = "androidx/appcompat/widget/Toolbar$LayoutParams"
-        case viewPager = "androidx/viewpager/widget/ViewPager$LayoutParams"
-        case appCompatActionMenuView = "androidx/appcompat/widget/ActionMenuView$LayoutParams"
-        case drawerLayout = "androidx/drawerLayout/widget/DrawerLayout$LayoutParams"
-        case linearLayoutCompat = "androidx/appcompat/widget/LinearLayoutCompat$LayoutParams"
-        case constraints = "androidx/constraintlayout/widget/Constraints$LayoutParams"
-        case actionBarOverlayLayout = "androidx/appcompat/widget/ActionBarOverlayLayout$LayoutParams"
-        case constraintLayout = "androidx/constraintlayout/widget/ConstraintLayout$LayoutParams"
-
-        case gallery = "android/widget/Gallery$LayoutParams"
-        case absoluteLayout = "android/widget/AbsoluteLayout$LayoutParams"
-
-        static func fromClassName(_ className: JClassName) -> Self {
-            .init(rawValue: className.path + "$LayoutParams") ?? .viewGroup
+        public init(stringLiteral value: String) {
+            self.className = .init(stringLiteral: value)
         }
+
+        public init(_ className: JClassName) {
+            self.className = className
+        }
+
+        public var description: String { className.description }
+
+        public static let windowManager: Self = "android/view/WindowManager$LayoutParams"
+        public static let actionBar: Self = "android/app/ActionBar$LayoutParams"
+        public static let toolbar: Self = "android/widget/Toolbar$LayoutParams"
+        public static let radioGroup: Self = "android/widget/RadioGroup$LayoutParams"
+        public static let absListView: Self = "android/widget/AbsListView$LayoutParams"
+        
+        public static let appCompatActionBar: Self = "androidx/appcompat/app/ActionBar$LayoutParams"
+        public static let appCompatToolbar: Self = "androidx/appcompat/widget/Toolbar$LayoutParams"
+        public static let viewPager: Self = "androidx/viewpager/widget/ViewPager$LayoutParams"
+        public static let appCompatActionMenuView: Self = "androidx/appcompat/widget/ActionMenuView$LayoutParams"
+        public static let drawerLayout: Self = "androidx/drawerLayout/widget/DrawerLayout$LayoutParams"
+        public static let linearLayoutCompat: Self = "androidx/appcompat/widget/LinearLayoutCompat$LayoutParams"
+        public static let constraints: Self = "androidx/constraintlayout/widget/Constraints$LayoutParams"
+        public static let actionBarOverlayLayout: Self = "androidx/appcompat/widget/ActionBarOverlayLayout$LayoutParams"
     }
 
     // MARK: - Properties
