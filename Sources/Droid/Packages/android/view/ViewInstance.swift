@@ -25,16 +25,16 @@ extension View {
         /// Object wrapper
         public let object: JObject
 
-        public convenience init? (_ className: JClassName, _ context: ActivityContext, _ id: Int32) {
+        public convenience init? (_ className: JClassName, _ view: View, _ context: ActivityContext, _ id: Int32) {
             #if os(Android)
             guard let env = JEnv.current() else { return nil }
-            self.init(env, className, context, id)
+            self.init(env, className, view, context, id)
             #else
             return nil
             #endif
         }
         
-        public init? (_ env: JEnv, _ className: JClassName, _ context: ActivityContext, _ id: Int32) {
+        public init? (_ env: JEnv, _ className: JClassName, _ view: View, _ context: ActivityContext, _ id: Int32) {
             #if os(Android)
             guard
                 let clazz = JClass.load(className),
@@ -43,16 +43,18 @@ extension View {
             else { return nil }
             self.id = id
             self.object = global
+            self.view = view
             self.context = context
             #else
             return nil
             #endif
         }
         
-        public init? (_ object: JObject, _ context: ActivityContext, _ id: Int32) {
+        public init? (_ object: JObject, _ view: View, _ context: ActivityContext, _ id: Int32) {
             #if os(Android)
             self.id = id
             self.object = object
+            self.view = view
             self.context = context
             #else
             return nil
