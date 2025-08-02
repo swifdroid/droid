@@ -1,0 +1,67 @@
+{
+	"name": "swiftstream",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {}
+	},
+	"containerEnv": {
+		"S_MODE": "PURE",
+		"S_TOOLCHAIN_URL_X86": "https://download.swift.org/swift-6.1.2-release/ubuntu2404/swift-6.1.2-RELEASE/swift-6.1.2-RELEASE-ubuntu24.04.tar.gz",
+		"S_TOOLCHAIN_URL_ARM": "https://download.swift.org/swift-6.1.2-release/ubuntu2404-aarch64/swift-6.1.2-RELEASE/swift-6.1.2-RELEASE-ubuntu24.04-aarch64.tar.gz",
+		"S_VERSION_MAJOR": "6",
+		"S_VERSION_MINOR": "1",
+		"S_VERSION_PATCH": "2",
+		"S_ARTIFACT_ANDROID_URL": "https://github.com/finagolfin/swift-android-sdk/releases/download/6.1.2/swift-6.1.2-RELEASE-android-24-0.1.artifactbundle.tar.gz",
+	},
+	"appPort": [],
+	"otherPortsAttributes": {},
+	"postStartCommand": "cmd.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"swiftstream.swiftstream",
+				"swiftlang.swift-vscode",
+				"mateocerquetella.xcode-12-theme"
+			],
+			"settings": {
+				"extensions.ignoreRecommendations": true,
+				"remote.autoForwardPorts": false,
+				"swift.path": "/swift/toolchains/6.1.2-RELEASE/usr/bin",
+				"swift.swiftEnvironmentVariables": {
+					"DEVELOPER_DIR": "public"
+				},
+				"lldb.library": "/swift/toolchains/6.1.2-RELEASE/usr/lib/liblldb.so",
+				"lldb.launch.expressions": "native",
+				"swift.autoGenerateLaunchConfigurations": true,
+				"swift.backgroundCompilation": false,
+				"swift.showCreateSwiftProjectInWelcomePage": false,
+				"editor.semanticHighlighting.enabled": true,
+				"editor.fontFamily": "Verdana, Verdana, Menlo, Monaco, 'Courier New', monospace",
+				"editor.codeLensFontFamily": "Verdana, Verdana, Menlo, Monaco, 'Courier New', monospace"
+			}
+		}
+	},
+	"capAdd": [
+		"SYS_PTRACE"
+	],
+	"securityOpt": [
+		"seccomp=unconfined"
+	],
+	"mounts": [
+		{
+			"source": "${localWorkspaceFolderBasename}-swiftbuild",
+			"target": "${containerWorkspaceFolder}/.build",
+			"type": "volume"
+		},
+		{
+			"source": "swift-toolchains",
+			"target": "/swift/toolchains",
+			"type": "volume"
+		},
+		{
+			"source": "swift-sdks",
+			"target": "/swift/sdks",
+			"type": "volume"
+		}
+	]
+}
