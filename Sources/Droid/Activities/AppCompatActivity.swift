@@ -20,6 +20,10 @@ public final class ActivityContext: JObjectable, JClassLoadable, @unchecked Send
 
     public var cachedClassLoader: JClassLoader? = nil
 
+    init (object: JObject) {
+        self.object = object
+    }
+
     #if canImport(AndroidLooper)
     @UIThreadActor
     #endif
