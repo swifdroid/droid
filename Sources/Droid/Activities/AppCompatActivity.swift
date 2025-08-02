@@ -18,6 +18,8 @@ extension AndroidPackage.SupportPackage.V7Package.AppPackage {
 public struct ActivityContext: JObjectable, JClassLoadable, Sendable {
     public let object: JObject
 
+    public var cachedClassLoader: JClassLoader? = nil
+
     #if canImport(AndroidLooper)
     @UIThreadActor
     #endif
