@@ -1,0 +1,6 @@
+{
+	"swiftPM": {
+		"configuration": "debug",
+		"swiftSDK": "aarch64-unknown-linux-android35"
+	}
+}
