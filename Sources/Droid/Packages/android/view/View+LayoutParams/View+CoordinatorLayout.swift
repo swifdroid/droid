@@ -35,8 +35,11 @@ extension View {
     /// - RelativeLayout: Similar anchor concept through layout rules
     @discardableResult
     public func anchorId(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
+        if let instance {
+            if let lp = instance.getLayoutParams() {
+                lp.setAnchorId(id)
+                instance.setLayoutParams(lp)
+            }
         } else {
             _layoutParamsToApply.append(.anchorId(id))
         }

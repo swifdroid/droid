@@ -266,6 +266,20 @@ public final class LayoutParams: Sendable, JObjectable {
         #endif
     }
 
+    // MARK: CoordinatorLayout
+
+    public func setAnchorId(_ value: Int32) {
+        #if os(Android)
+        InnerLog.t("💧 setAnchorId v: \(value)")
+        guard
+            let env = JEnv.current(),
+            let methodId = clazz.methodId(env: env, name: "setAnchorId", signature: .init(.int, returning: .void))
+        else { InnerLog.t("💧 setMargins exit early");return }
+        env.callVoidMethod(object: object, methodId: methodId, args: [value])
+        InnerLog.t("💧 setAnchorId success")
+        #endif
+    }
+
     // MARK: RelativeLayout
 
     enum RelativeLayoutRule: Int32 {
