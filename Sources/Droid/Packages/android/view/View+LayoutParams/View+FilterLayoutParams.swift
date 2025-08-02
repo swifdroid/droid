@@ -135,7 +135,23 @@ extension View {
                     }
                 // case is ActionMenuView:
                 // case is AppBarLayout:
-                // case is CoordinatorLayout:
+                case is CoordinatorLayout:
+                switch param {
+                    case .behavior://(let value): // TODO
+                        // paramsToApply.append(.preventEdgeOffset(value))
+                        void()
+                    case .anchorId(let value):
+                        paramsToApply.append(.anchorId(value))
+                    case .anchorGravity(let value):
+                        paramsToApply.append(.anchorGravity(value))
+                    case .dodgeInsetEdges(let value):
+                        paramsToApply.append(.dodgeInsetEdges(value))
+                    case .insetEdge(let value):
+                        paramsToApply.append(.insetEdge(value))
+                    case .keyline(let value):
+                        paramsToApply.append(.keyline(value))
+                    default: void()
+                    }
                 // case is DrawerLayout:
                 // case is FlexboxLayout:
                 // case is GridLayout:
