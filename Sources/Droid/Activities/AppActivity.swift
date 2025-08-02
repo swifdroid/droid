@@ -21,6 +21,9 @@ public final class AppActivity: DroidApp.AnyActivity {
     /// Object wrapper
     public let object: JObject
 
+    /// Cached instance of the ClassLoader to avoid JNI round-trips.
+    public nonisolated(unsafe) var cachedClassLoader: JClassLoader? = nil
+
     public required init(ref: JObjectBox, clazz: JClass, object: JObject) {
         self.ref = ref
         self.clazz = clazz
