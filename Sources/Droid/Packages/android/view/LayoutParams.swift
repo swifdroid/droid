@@ -146,25 +146,25 @@ public final class LayoutParams: Sendable, JObjectable {
 
     public func setWidth(_ value: Int32) {
         #if os(Android)
-        InnerLog.d("lp.setWidth \(value) case 1")
+        InnerLog.t("lp.setWidth \(value) case 1")
         guard
             let env = JEnv.current(),
             let fieldId = clazz.fieldId(name: "width", signature: .int)
         else { return }
         env.setIntField(object, fieldId, value)
-        InnerLog.d("lp.setWidth \(value) case 2")
+        InnerLog.t("lp.setWidth \(value) case 2")
         #endif
     }
 
     public func getWidth() -> Int32? {
         #if os(Android)
-        InnerLog.d("lp.getWidth case 1")
+        InnerLog.t("lp.getWidth case 1")
         guard
             let env = JEnv.current(),
             let fieldId = clazz.fieldId(name: "width", signature: .int)
         else { return nil }
         let value = env.getIntField(object, fieldId)
-        InnerLog.d("lp.getWidth case 2 value: \(value)")
+        InnerLog.t("lp.getWidth case 2 value: \(value)")
         return value
         #else
         return nil
@@ -183,13 +183,13 @@ public final class LayoutParams: Sendable, JObjectable {
 
     public func getHeight() -> Int32? {
         #if os(Android)
-        InnerLog.d("lp.getHeight case 1")
+        InnerLog.t("lp.getHeight case 1")
         guard
             let env = JEnv.current(),
             let fieldId = clazz.fieldId(name: "height", signature: .int)
         else { return nil }
         let value = env.getIntField(object, fieldId)
-        InnerLog.d("lp.getHeight case 2 value: \(value)")
+        InnerLog.t("lp.getHeight case 2 value: \(value)")
         return value
         #else
         return nil
@@ -200,13 +200,13 @@ public final class LayoutParams: Sendable, JObjectable {
 
     public func setMargins(left: Int32, top: Int32, right: Int32, bottom: Int32) {
         #if os(Android)
-        InnerLog.d("💧 setMargins l: \(left) t: \(top) r: \(right) b: \(bottom)")
+        InnerLog.t("💧 setMargins l: \(left) t: \(top) r: \(right) b: \(bottom)")
         guard
             let env = JEnv.current(),
             let methodId = clazz.methodId(env: env, name: "setMargins", signature: .init(.int, .int, .int, .int, returning: .void))
-        else { InnerLog.d("💧 setMargins exit early");return }
+        else { InnerLog.t("💧 setMargins exit early");return }
         env.callVoidMethod(object: object, methodId: methodId, args: [left, top, right, bottom])
-        InnerLog.d("💧 setMargins success")
+        InnerLog.t("💧 setMargins success")
         #endif
     }
 
