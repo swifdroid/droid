@@ -38,7 +38,19 @@ enum ViewStatus: Sendable {
     case inParent(View, View.ViewInstance)
 }
 
-open class View: AnyView, @unchecked Sendable {
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+public protocol JClassNameable {
+    static var className: JClassName { get }
+    var className: JClassName { get }
+}
+
+extension JClassNameable {
+    public var className: JClassName { Self.className }
+}
+
+open class View: AnyView, JClassNameable, @unchecked Sendable {
     /// The JNI class name
     public class var className: JClassName { .android.view.View }
     
