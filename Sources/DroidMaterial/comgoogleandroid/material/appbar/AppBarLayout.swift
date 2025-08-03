@@ -12,6 +12,9 @@ extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage {
     
     public var AppBarLayout: AppBarLayoutClass { .init(parent: self, name: "AppBarLayout") }
 }
+    open override class var gradleDependencies: [String] { [
+        "implementation(\"com.google.android.material:material:1.12.0\")"
+    ] }
 
 // class AppBarLayout: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {

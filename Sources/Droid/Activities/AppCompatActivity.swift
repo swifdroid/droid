@@ -41,9 +41,9 @@ extension AppCompatActivity: @unchecked Sendable {}
 #endif
 open class AppCompatActivity: Activity {
     public class var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
-    public class var gradleDependencies: [String] { [
-        "implementation(libs.androidx.appcompat)",
-        "implementation(platform(libs.androidx.compose.bom))"
+    open class var gradleDependencies: [String] { [
+        "implementation(\"androidx.appcompat:appcompat:1.7.1\")",
+        "implementation(platform(\"androidx.compose:compose-bom:2025.07.00\"))"
     ] }
     public class var javaImports: [String] { ["stream.swift.droid.appkit.activities.*"] }
     public class var parentClass: String { "DroidAppCompatActivity()" }

@@ -15,21 +15,6 @@ public final class AppGradleDependencies {
             self.dependencies.insert(dep)
         }
     }
-    
-    /// Default Droid dependencies
-    public func `default`() -> Self {
-        append([
-            "implementation(\"com.github.swifdroid:droid:1.0.0\")",
-            "implementation(libs.androidx.appcompat)",
-            "implementation(platform(libs.androidx.compose.bom))"
-        ])
-        return self
-    }
-    
-    /// Default Droid dependencies
-    public static func `default`() -> Self {
-        Self().`default`()
-    }
 
     public func implementation(_ `package`: String) -> Self {
         append([Dependency.implementation(`package`).value])

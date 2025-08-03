@@ -247,14 +247,20 @@ open class DroidApp: @unchecked Sendable {
     private func proceedAndroidBuildingAction(_ action: _AndroidBuildingAction, _ args: [String]) {
         switch action {
         case .gradleDependencies:
-            var dependencies: Set<String> = _gradleDependencies.dependencies
+            var dependencies: Set<String> = []
             if let app = _manifest.items.compactMap({ $0 as? Application }).first {
                 let activityTags = app.items.compactMap { $0 as? ActivityTag }
-                for activity in activityTags.map { $0.class } {
+                for activity in activityTags.map({ $0.class }) {
+                    #if !os(Android)
+                    activity.init()
+                    #endif
                     for dep in activity.gradleDependencies {
                         dependencies.insert(dep)
                     }
                 }
+            }
+            for dep in _gradleDependencies.dependencies {
+                dependencies.insert(dep)
             }
             do {
                 let data = try JSONEncoder().encode(dependencies)

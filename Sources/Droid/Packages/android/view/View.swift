@@ -29,7 +29,9 @@ extension AndroidPackage.ViewPackage {
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public protocol AnyView {}
+public protocol AnyView: ViewInstanceable {
+    static var gradleDependencies: [String] { get }
+}
 
 enum ViewStatus: Sendable {
     case new
@@ -52,7 +54,9 @@ extension JClassNameable {
 
 open class View: AnyView, JClassNameable, @unchecked Sendable {
     /// The JNI class name
-    public class var className: JClassName { .android.view.View }
+    open class var className: JClassName { .android.view.View }
+
+    open class var gradleDependencies: [String] { [] }
     
     /// Unique identifier
     nonisolated let id: Int32

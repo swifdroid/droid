@@ -20,7 +20,10 @@ import AndroidLooper
     
     /// Single component support
     public static func buildPartialBlock(first: BodyBuilderItemable) -> Result {
-        first
+        #if ANDROIDBUILDING
+        parseItemForAndroidBuilding(first.bodyBuilderItem)
+        #endif
+        return first
     }
     
     /// Accumulation for multiple components
@@ -28,6 +31,10 @@ import AndroidLooper
         accumulated: Result,
         next: BodyBuilderItemable
     ) -> Result {
+        #if ANDROIDBUILDING
+        parseItemForAndroidBuilding(accumulated.bodyBuilderItem)
+        parseItemForAndroidBuilding(next.bodyBuilderItem)
+        #endif
         switch (accumulated.bodyBuilderItem, next.bodyBuilderItem) {
         case (.nested(let items), .nested(let newItems)):
             return BodyBuilderItems(items: items + newItems)
@@ -44,21 +51,35 @@ import AndroidLooper
     
     /// if/else support
     public static func buildEither(first: BodyBuilderItemable) -> Result {
-        first
+        #if ANDROIDBUILDING
+        parseItemForAndroidBuilding(first.bodyBuilderItem)
+        #endif
+        return first
     }
     
     public static func buildEither(second: BodyBuilderItemable) -> Result {
-        second
+        #if ANDROIDBUILDING
+        parseItemForAndroidBuilding(second.bodyBuilderItem)
+        #endif
+        return second
     }
     
     /// Optional view support
     public static func buildIf(_ content: BodyBuilderItemable?) -> Result {
-        content ?? EmptyBodyBuilderItem()
+        #if ANDROIDBUILDING
+        if let content {
+            parseItemForAndroidBuilding(content.bodyBuilderItem)
+        }
+        #endif
+        return content ?? EmptyBodyBuilderItem()
     }
     
     /// Optional: Support for limited availability views
     public static func buildLimitedAvailability(_ component: BodyBuilderItemable) -> Result {
-        component
+        #if ANDROIDBUILDING
+        parseItemForAndroidBuilding(component.bodyBuilderItem)
+        #endif
+        return component
     }
     
     // MARK: - Expression Handling
@@ -72,4 +93,31 @@ import AndroidLooper
     // public static func buildExpression(_ expression: String) -> Result {
     //     Text(expression) // Assuming Text conforms to BodyBuilderItemable
     // }
+
+    #if ANDROIDBUILDING
+    private static func parseItemForAndroidBuilding(_ item: BodyBuilderItem) {
+        switch item {
+            case .single(let view):
+                parseViewForAndroidBuilding(view)
+            case .multiple(let views):
+                for view in views {
+                    parseViewForAndroidBuilding(view)
+                }
+            case .forEach(let forEach):
+                for item in forEach.allItems() {
+                    parseItemForAndroidBuilding(item.bodyBuilderItem)
+                }
+            case .nested(let items):
+                for item in items {
+                    parseItemForAndroidBuilding(item.bodyBuilderItem)
+                }
+            case .none:
+                break
+        }
+    }
+
+    private static func parseViewForAndroidBuilding(_ view: View) {
+        DroidApp.shared._gradleDependencies.append(type(of: view).gradleDependencies)
+    }
+    #endif
 }
