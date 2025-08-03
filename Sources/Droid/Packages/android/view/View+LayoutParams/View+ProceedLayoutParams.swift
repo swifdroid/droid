@@ -11,6 +11,8 @@ extension View {
             InnerLog.t("🟥 Unable to init `LayoutParams` in `proceedSubviewLayoutParams`")
             return
         }
+        if self is CoordinatorLayout {
+            lp.setAnchorId(-1) // prevents Unable to resolve anchor ID #0x0
         }
         InnerLog.t("🟠 LayoutParams: \(lp.className.path)")
         func void() {}

@@ -9,13 +9,33 @@ extension AndroidXPackage.CoordinatorLayoutPackage.WidgetPackage {
     public class CoordinatorLayoutClass: JClassName, @unchecked Sendable {}
     public var CoordinatorLayout: CoordinatorLayoutClass { .init(parent: self, name: "CoordinatorLayout") }
 }
+extension AndroidXPackage.CoordinatorLayoutPackage.WidgetPackage.CoordinatorLayoutClass {
+    public class LayoutParamsClass: JClassName, @unchecked Sendable {}
+    public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
+}
+extension LayoutParams.Class {
+    static let coordinatorLayout: Self = .init(.androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams)
+}
 
-// class CoordinatorLayout: View {
-//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.androidx.coordinatorlayout.widget.CoordinatorLayout], args: [])
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+open class CoordinatorLayout: ViewGroup, @unchecked Sendable {
+    /// The JNI class name
+    open override class var className: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout }
+
+    open override class var gradleDependencies: [String] { [
+        "implementation(\"androidx.coordinatorlayout:coordinatorlayout:1.3.0\")"
+    ] }
+
+    open override class var layoutParamsClass: LayoutParams.Class {
+        .coordinatorLayout
+    }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(content: content)
+    }
+}
