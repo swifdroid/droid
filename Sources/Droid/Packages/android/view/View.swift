@@ -278,7 +278,7 @@ open class View: AnyView, @unchecked Sendable {
                 return nil
         }
         InnerLog.d("view(id: \(id)) setStatusAsContentView 2")
-        guard let instance: ViewInstance = ViewInstance(Self.className, context, id) else {
+        guard let instance: ViewInstance = ViewInstance(Self.className, self, context, id) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setAsContentView`")
             return nil
         }
@@ -296,7 +296,7 @@ open class View: AnyView, @unchecked Sendable {
                 return nil
         }
         InnerLog.d("view(id: \(id)) setStatusInParent 2")
-        guard let instance = ViewInstance(Self.className, context, id) else {
+        guard let instance = ViewInstance(Self.className, self, context, id) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setStatusInParent`")
             return nil
         }
