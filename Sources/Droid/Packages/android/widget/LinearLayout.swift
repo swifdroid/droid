@@ -9,10 +9,18 @@ extension AndroidPackage.WidgetPackage {
     public class LinearLayoutClass: JClassName, @unchecked Sendable {}
     public var LinearLayout: LinearLayoutClass { .init(parent: self, name: "LinearLayout") }
 }
+extension AndroidPackage.WidgetPackage.LinearLayoutClass {
+    public class LayoutParamsClass: JClassName, @unchecked Sendable {}
+    public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
+}
+extension LayoutParams.Class {
+    static let linearLayout: Self = .init(.android.widget.LinearLayout.LayoutParams)
+}
 
 open class LinearLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     public override class var className: JClassName { .android.widget.LinearLayout }
+    public override class var layoutParamsClass: LayoutParams.Class { .linearLayout }
 
     @discardableResult
     public override init() {
