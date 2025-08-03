@@ -10,9 +10,9 @@ extension AndroidPackage.WidgetPackage {
     public var LinearLayout: LinearLayoutClass { .init(parent: self, name: "LinearLayout") }
 }
 
-public class LinearLayout: ViewGroup, @unchecked Sendable {
+open class LinearLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
-    public class override var className: JClassName { .android.widget.LinearLayout }
+    public override class var className: JClassName { .android.widget.LinearLayout }
 
     @discardableResult
     public override init() {

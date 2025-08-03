@@ -10,9 +10,9 @@ extension AndroidPackage.WidgetPackage {
     public var FrameLayout: FrameLayoutClass { .init(parent: self, name: "FrameLayout") }
 }
 
-public final class FrameLayout: ViewGroup, @unchecked Sendable {
+open class FrameLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
-    public class override var className: JClassName { .android.widget.FrameLayout }
+    open override class var className: JClassName { .android.widget.FrameLayout }
 
     @discardableResult
     public override init() {

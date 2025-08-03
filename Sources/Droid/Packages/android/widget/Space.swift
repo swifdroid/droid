@@ -10,9 +10,9 @@ extension AndroidPackage.WidgetPackage {
     public var Space: SpaceClass { .init(parent: self, name: "Space") }
 }
 
-public class Space: ViewGroup, @unchecked Sendable {
+open class Space: ViewGroup, @unchecked Sendable {
     /// The JNI class name
-    public class override var className: JClassName { .android.widget.Space }
+    open override class var className: JClassName { .android.widget.Space }
 
     @discardableResult
     public override init() {
@@ -20,6 +20,7 @@ public class Space: ViewGroup, @unchecked Sendable {
         weight(1)
     }
 
+    @discardableResult
     init(weight: Float) {
         super.init()
         self.weight(weight)

@@ -10,17 +10,13 @@ extension AndroidXPackage.ConstraintLayoutPackage.WidgetPackage {
     public var ConstraintLayout: ConstraintLayoutClass { .init(parent: self, name: "ConstraintLayout") }
 }
 
-public final class ConstraintLayout: ViewGroup, @unchecked Sendable {
+open class ConstraintLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
-    public class override var className: JClassName { .androidx.constraintlayout.widget.ConstraintLayout }
-
+    open override class var className: JClassName { .androidx.constraintlayout.widget.ConstraintLayout }
+    open override class var layoutParamsClass: LayoutParams.Class { .constraintLayout }
     open override class var gradleDependencies: [String] { [
         "implementation(\"androidx.constraintlayout:constraintlayout:2.2.1\")"
     ] }
-
-    open override class var layoutParamsClass: LayoutParams.Class {
-        .constraintLayout
-    }
 
     @discardableResult
     public override init() {

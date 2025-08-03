@@ -10,7 +10,17 @@ extension AndroidPackage.WidgetPackage {
     public var GridLayout: GridLayoutClass { .init(parent: self, name: "GridLayout") }
 }
 
-public class GridLayout: View, @unchecked Sendable {
+open class GridLayout: View, @unchecked Sendable {
     /// The JNI class name
-    public class override var className: JClassName { .android.widget.GridLayout }
+    open override class var className: JClassName { .android.widget.GridLayout }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(content: content)
+    }
 }

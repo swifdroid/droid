@@ -10,7 +10,17 @@ extension AndroidPackage.WidgetPackage {
     public var AbsoluteLayout: AbsoluteLayoutClass { .init(parent: self, name: "AbsoluteLayout") }
 }
 
-public class AbsoluteLayout: ViewGroup, @unchecked Sendable {
+open class AbsoluteLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
-    public class override var className: JClassName { .android.widget.AbsoluteLayout }
+    open override class var className: JClassName { .android.widget.AbsoluteLayout }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(content: content)
+    }
 }

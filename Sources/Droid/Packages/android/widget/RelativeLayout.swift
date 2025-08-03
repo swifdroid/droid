@@ -10,7 +10,17 @@ extension AndroidPackage.WidgetPackage {
     public var RelativeLayout: RelativeLayoutClass { .init(parent: self, name: "RelativeLayout") }
 }
 
-public class RelativeLayout: View, @unchecked Sendable {
+open class RelativeLayout: View, @unchecked Sendable {
     /// The JNI class name
-    public class override var className: JClassName { .android.widget.RelativeLayout }
+    public override class var className: JClassName { .android.widget.RelativeLayout }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(content: content)
+    }
 }

@@ -40,13 +40,13 @@ extension AppCompatActivity: @unchecked Sendable {}
 @UIThreadActor
 #endif
 open class AppCompatActivity: Activity {
-    public class var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
+    open class var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
     open class var gradleDependencies: [String] { [
         "implementation(\"androidx.appcompat:appcompat:1.7.1\")",
         "implementation(platform(\"androidx.compose:compose-bom:2025.07.00\"))"
     ] }
-    public class var javaImports: [String] { ["stream.swift.droid.appkit.activities.*"] }
-    public class var parentClass: String { "DroidAppCompatActivity()" }
+    open class var javaImports: [String] { ["stream.swift.droid.appkit.activities.*"] }
+    open class var parentClass: String { "DroidAppCompatActivity()" }
 
     open class nonisolated var allowEmbedded: Bool? { nil }
 	open class nonisolated var allowTaskReparenting: Bool? { nil }
