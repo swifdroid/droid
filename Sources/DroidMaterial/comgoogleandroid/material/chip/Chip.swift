@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ChipPackage {
     public var Chip: ChipClass { .init(parent: self, name: "Chip") }
 }
 
-// class Chip: View {
+// class Chip: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.chip.Chip], args: [])
 //     }

@@ -11,7 +11,7 @@ extension AndroidXPackage.CorePackage.WidgetPackage {
     public var NestedScrollView: NestedScrollViewClass { .init(parent: self, name: "NestedScrollView") }
 }
 
-// class NestedScrollView: View {
+// class NestedScrollView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.core.widget.NestedScrollView], args: [])
 //     }

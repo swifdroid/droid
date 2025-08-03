@@ -11,7 +11,7 @@ extension AndroidXPackage.DrawerLayoutPackage.WidgetPackage {
     public var DrawerLayout: DrawerLayoutClass { .init(parent: self, name: "DrawerLayout") }
 }
 
-// class DrawerLayout: View {
+// class DrawerLayout: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.drawerlayout.widget.DrawerLayout], args: [])
 //     }

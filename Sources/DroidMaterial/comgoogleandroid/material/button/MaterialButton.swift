@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
     public var MaterialButton: MaterialButtonClass { .init(parent: self, name: "MaterialButton") }
 }
 
-// class MaterialButton: View {
+// class MaterialButton: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.button.MaterialButton], args: [])
 //     }

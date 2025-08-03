@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatButton: AppCompatButtonClass { .init(parent: self, name: "AppCompatButton") }
 }
 
-// class AppCompatButton: View {
+// class AppCompatButton: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatButton], args: [])
 //     }

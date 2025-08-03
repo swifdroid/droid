@@ -11,7 +11,7 @@ extension AndroidXPackage.RecyclerViewPackage.WidgetPackage {
     public var RecyclerView: RecyclerViewClass { .init(parent: self, name: "RecyclerView") }
 }
 
-// class RecyclerView: View {
+// class RecyclerView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.recyclerview.widget.RecyclerView], args: [])
 //     }

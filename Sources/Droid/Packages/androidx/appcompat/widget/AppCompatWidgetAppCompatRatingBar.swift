@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatRatingBar: AppCompatRatingBarClass { .init(parent: self, name: "AppCompatRatingBar") }
 }
 
-// class AppCompatRatingBar: View {
+// class AppCompatRatingBar: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatRatingBar], args: [])
 //     }

@@ -11,7 +11,7 @@ extension AndroidPackage.TextPackage {
     public var TextWatcher: TextWatcherClass { .init(parent: self, name: "TextWatcher") }
 }
 
-// class TextWatcher: View {
+// class TextWatcher: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.android.text.TextWatcher], args: [])
 //     }

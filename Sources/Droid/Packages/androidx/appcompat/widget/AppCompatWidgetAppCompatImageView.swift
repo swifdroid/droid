@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatImageView: AppCompatImageViewClass { .init(parent: self, name: "AppCompatImageView") }
 }
 
-// class AppCompatImageView: View {
+// class AppCompatImageView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatImageView], args: [])
 //     }

@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var ActionMenuView: ActionMenuViewClass { .init(parent: self, name: "ActionMenuView") }
 }
 
-// class ActionMenuView: View {
+// class ActionMenuView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.ActionMenuView], args: [])
 //     }

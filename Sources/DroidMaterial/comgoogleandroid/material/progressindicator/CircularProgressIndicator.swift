@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ProgressIndicatorPackage {
     public var CircularProgressIndicator: CircularProgressIndicatorClass { .init(parent: self, name: "CircularProgressIndicator") }
 }
 
-// class CircularProgressIndicator: View {
+// class CircularProgressIndicator: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.CircularProgressIndicator], args: [])
 //     }

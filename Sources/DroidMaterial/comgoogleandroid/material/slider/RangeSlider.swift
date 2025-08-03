@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.SliderPackage {
     public var RangeSlider: RangeSliderClass { .init(parent: self, name: "RangeSlider") }
 }
 
-// class RangeSlider: View {
+// class RangeSlider: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.slider.RangeSlider], args: [])
 //     }

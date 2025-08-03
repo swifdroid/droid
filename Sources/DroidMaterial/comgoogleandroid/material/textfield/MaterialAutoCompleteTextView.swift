@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TextFieldPackage {
     public var MaterialAutoCompleteTextView: MaterialAutoCompleteTextViewClass { .init(parent: self, name: "MaterialAutoCompleteTextView") }
 }
 
-// class MaterialAutoCompleteTextView: View {
+// class MaterialAutoCompleteTextView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.MaterialAutoCompleteTextView], args: [])
 //     }

@@ -11,7 +11,7 @@ extension AndroidPackage.WidgetPackage.InlinePackage {
     public var InlineContentView: InlineContentViewClass { .init(parent: self, name: "InlineContentView") }
 }
 
-// class InlineContentView: View {
+// class InlineContentView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.android.widget.inline.InlineContentView], args: [])
 //     }

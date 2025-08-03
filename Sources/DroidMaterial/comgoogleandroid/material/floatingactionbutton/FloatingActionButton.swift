@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.FloatingActionButtonPackage {
     public var FloatingActionButton: FloatingActionButtonClass { .init(parent: self, name: "FloatingActionButton") }
 }
 
-// class FloatingActionButton: View {
+// class FloatingActionButton: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.floatingactionbutton.FloatingActionButton], args: [])
 //     }

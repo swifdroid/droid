@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TabsPackage {
     public var TabItem: TabItemClass { .init(parent: self, name: "TabItem") }
 }
 
-// class TabItem: View {
+// class TabItem: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.tabs.TabItem], args: [])
 //     }

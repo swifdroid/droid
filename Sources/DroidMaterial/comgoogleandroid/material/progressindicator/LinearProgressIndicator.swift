@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ProgressIndicatorPackage {
     public var LinearProgressIndicator: LinearProgressIndicatorClass { .init(parent: self, name: "LinearProgressIndicator") }
 }
 
-// class LinearProgressIndicator: View {
+// class LinearProgressIndicator: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.progressindicator.LinearProgressIndicator], args: [])
 //     }

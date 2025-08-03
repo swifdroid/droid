@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TextViewPackage {
     public var MaterialTextView: MaterialTextViewClass { .init(parent: self, name: "MaterialTextView") }
 }
 
-// class MaterialTextView: View {
+// class MaterialTextView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.textview.MaterialTextView], args: [])
 //     }

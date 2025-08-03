@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var LinearLayoutCompat: LinearLayoutCompatClass { .init(parent: self, name: "LinearLayoutCompat") }
 }
 
-// class LinearLayoutCompat: View {
+// class LinearLayoutCompat: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.LinearLayoutCompat], args: [])
 //     }

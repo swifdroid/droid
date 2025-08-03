@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage {
     public var CircularRevealGridLayout: CircularRevealGridLayoutClass { .init(parent: self, name: "CircularRevealGridLayout") }
 }
 
-// class CircularRevealGridLayout: View {
+// class CircularRevealGridLayout: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.CircularRevealGridLayout], args: [])
 //     }

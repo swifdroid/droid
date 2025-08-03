@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TextFieldPackage {
     public var TextInputLayout: TextInputLayoutClass { .init(parent: self, name: "TextInputLayout") }
 }
 
-// class TextInputLayout: View {
+// class TextInputLayout: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.TextInputLayout], args: [])
 //     }

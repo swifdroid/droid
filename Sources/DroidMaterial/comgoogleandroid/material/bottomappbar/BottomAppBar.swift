@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.BottomAppBarPackage {
     public var BottomAppBar: BottomAppBarClass { .init(parent: self, name: "BottomAppBar") }
 }
 
-// class BottomAppBar: View {
+// class BottomAppBar: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.bottomappbar.BottomAppBar], args: [])
 //     }

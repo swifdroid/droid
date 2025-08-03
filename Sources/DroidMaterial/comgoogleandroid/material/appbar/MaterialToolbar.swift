@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage {
     public var MaterialToolbar: MaterialToolbarClass { .init(parent: self, name: "MaterialToolbar") }
 }
 
-// class MaterialToolbar: View {
+// class MaterialToolbar: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.appbar.MaterialToolbar], args: [])
 //     }

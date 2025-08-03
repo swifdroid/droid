@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatRadioButton: AppCompatRadioButtonClass { .init(parent: self, name: "AppCompatRadioButton") }
 }
 
-// class AppCompatRadioButton: View {
+// class AppCompatRadioButton: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatRadioButton], args: [])
 //     }

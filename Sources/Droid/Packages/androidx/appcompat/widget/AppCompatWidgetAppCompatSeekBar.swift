@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatSeekBar: AppCompatSeekBarClass { .init(parent: self, name: "AppCompatSeekBar") }
 }
 
-// class AppCompatSeekBar: View {
+// class AppCompatSeekBar: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatSeekBar], args: [])
 //     }

@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ImageViewPackage {
     public var ShapeableImageView: ShapeableImageViewClass { .init(parent: self, name: "ShapeableImageView") }
 }
 
-// class ShapeableImageView: View {
+// class ShapeableImageView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.imageview.ShapeableImageView], args: [])
 //     }

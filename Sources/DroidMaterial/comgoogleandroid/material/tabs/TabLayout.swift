@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TabsPackage {
     public var TabLayout: TabLayoutClass { .init(parent: self, name: "TabLayout") }
 }
 
-// class TabLayout: View {
+// class TabLayout: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.tabs.TabLayout], args: [])
 //     }

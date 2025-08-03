@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatEditText: AppCompatEditTextClass { .init(parent: self, name: "AppCompatEditText") }
 }
 
-// class AppCompatEditText: View {
+// class AppCompatEditText: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatEditText], args: [])
 //     }

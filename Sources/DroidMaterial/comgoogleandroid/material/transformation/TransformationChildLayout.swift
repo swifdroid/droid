@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TransformationPackage {
     public var TransformationChildLayout: TransformationChildLayoutClass { .init(parent: self, name: "TransformationChildLayout") }
 }
 
-// class TransformationChildLayout: View {
+// class TransformationChildLayout: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.transformation.TransformationChildLayout], args: [])
 //     }

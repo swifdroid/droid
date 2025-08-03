@@ -13,7 +13,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.NavigationPackage {
     public var NavigationView: NavigationViewClass { .init(parent: self, name: "NavigationView") }
 }
 
-// class NavigationView: View {
+// class NavigationView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.navigation.NavigationView], args: [])
 //     }

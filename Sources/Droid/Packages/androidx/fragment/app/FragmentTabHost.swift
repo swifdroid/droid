@@ -11,7 +11,7 @@ extension AndroidXPackage.FragmentPackage.AppPackage {
     public var FragmentTabHost: FragmentTabHostClass { .init(parent: self, name: "FragmentTabHost") }
 }
 
-// class FragmentTabHost: View {
+// class FragmentTabHost: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.fragment.app.FragmentTabHost], args: [])
 //     }

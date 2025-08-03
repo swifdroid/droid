@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var SearchView: SearchViewClass { .init(parent: self, name: "SearchView") }
 }
 
-// class SearchView: View {
+// class SearchView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.SearchView], args: [])
 //     }
