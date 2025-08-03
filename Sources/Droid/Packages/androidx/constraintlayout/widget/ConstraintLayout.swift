@@ -9,6 +9,13 @@ extension AndroidXPackage.ConstraintLayoutPackage.WidgetPackage {
     public class ConstraintLayoutClass: JClassName, @unchecked Sendable {}
     public var ConstraintLayout: ConstraintLayoutClass { .init(parent: self, name: "ConstraintLayout") }
 }
+extension AndroidXPackage.ConstraintLayoutPackage.WidgetPackage.ConstraintLayoutClass {
+    public class LayoutParamsClass: JClassName, @unchecked Sendable {}
+    public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
+}
+extension LayoutParams.Class {
+    static let constraintLayout: Self = .init(.androidx.constraintlayout.widget.ConstraintLayout.LayoutParams)
+}
 
 open class ConstraintLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
