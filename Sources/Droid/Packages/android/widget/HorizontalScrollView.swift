@@ -1,22 +1,18 @@
-// //
-// //  HorizontalScrollView.swift
-// //  Droid
-// //
-// //  Created by Mihael Isaev on 16.01.2022.
-// //
+//
+//  HorizontalScrollView.swift
+//  Droid
+//
+//  Created by Mihael Isaev on 16.01.2022.
+//
 
-// extension AndroidPackage.WidgetPackage {
-//     public class HorizontalScrollViewClass: JClassName, @unchecked Sendable {}
-    
-//     public var HorizontalScrollView: HorizontalScrollViewClass { .init(parent: self, name: "HorizontalScrollView") }
-// }
+extension AndroidPackage.WidgetPackage {
+    public class HorizontalScrollViewClass: JClassName, @unchecked Sendable {}
+    public var HorizontalScrollView: HorizontalScrollViewClass { .init(parent: self, name: "HorizontalScrollView") }
+}
 
-// class HorizontalScrollView: View {
-//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.android.widget.HorizontalScrollView], args: [])
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+open class HorizontalScrollView: View, @unchecked Sendable {
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+}
