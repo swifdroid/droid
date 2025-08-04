@@ -1,22 +1,18 @@
-// //
-// //  RadioGroup.swift
-// //  Droid
-// //
-// //  Created by Mihael Isaev on 16.01.2022.
-// //
+//
+//  RadioGroup.swift
+//  Droid
+//
+//  Created by Mihael Isaev on 16.01.2022.
+//
 
-// extension AndroidPackage.WidgetPackage {
-//     public class RadioGroupClass: JClassName, @unchecked Sendable {}
-    
-//     public var RadioGroup: RadioGroupClass { .init(parent: self, name: "RadioGroup") }
-// }
+extension AndroidPackage.WidgetPackage {
+    public class RadioGroupClass: JClassName, @unchecked Sendable {}
+    public var RadioGroup: RadioGroupClass { .init(parent: self, name: "RadioGroup") }
+}
 
-// class RadioGroup: View {
-//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.android.widget.RadioGroup], args: [])
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+open class RadioGroup: View, @unchecked Sendable {
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+}
