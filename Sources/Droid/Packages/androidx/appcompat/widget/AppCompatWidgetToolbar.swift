@@ -11,12 +11,17 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var Toolbar: ToolbarClass { .init(parent: self, name: "Toolbar") }
 }
 
-// class Toolbar: View {
-//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.androidx.appcompat.widget.Toolbar], args: [])
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+public final class Toolbar: ViewGroup, @unchecked Sendable {
+    /// The JNI class name
+    public override class var className: JClassName { .androidx.appcompat.widget.Toolbar }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(content: content)
+    }
+}
