@@ -1,22 +1,29 @@
-// //
-// //  TableRow.swift
-// //  Droid
-// //
-// //  Created by Mihael Isaev on 16.01.2022.
-// //
+//
+//  TableRow.swift
+//  Droid
+//
+//  Created by Mihael Isaev on 16.01.2022.
+//
 
-// extension AndroidPackage.WidgetPackage {
-//     public class TableRowClass: JClassName, @unchecked Sendable {}
-    
-//     public var TableRow: TableRowClass { .init(parent: self, name: "TableRow") }
-// }
+extension AndroidPackage.WidgetPackage {
+    public class TableRowClass: JClassName, @unchecked Sendable {}
+    public var TableRow: TableRowClass { .init(parent: self, name: "TableRow") }
+}
+extension AndroidPackage.WidgetPackage.TableRowClass {
+    public class LayoutParamsClass: JClassName, @unchecked Sendable {}
+    public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
+}
+extension LayoutParams.Class {
+    static let tableRow: Self = .init(.android.widget.TableLayout.LayoutParams)
+}
 
-// class TableRow: View {
-//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.android.widget.TableRow], args: [])
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+open class TableRow: View, @unchecked Sendable {
+    /// The JNI class name
+    open override class var className: JClassName { .android.widget.TableRow }
+    open override class var layoutParamsClass: LayoutParams.Class { .tableRow }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+}
