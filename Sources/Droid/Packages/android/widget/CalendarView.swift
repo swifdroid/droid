@@ -1,22 +1,26 @@
-// //
-// //  CalendarView.swift
-// //  Droid
-// //
-// //  Created by Mihael Isaev on 16.01.2022.
-// //
+//
+//  CalendarView.swift
+//  Droid
+//
+//  Created by Mihael Isaev on 16.01.2022.
+//
 
-// extension AndroidPackage.WidgetPackage {
-//     public class CalendarViewClass: JClassName, @unchecked Sendable {}
-    
-//     public var CalendarView: CalendarViewClass { .init(parent: self, name: "CalendarView") }
-// }
+extension AndroidPackage.WidgetPackage {
+    public class CalendarViewClass: JClassName, @unchecked Sendable {}
+    public var CalendarView: CalendarViewClass { .init(parent: self, name: "CalendarView") }
+}
 
-// class CalendarView: View {
-//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.android.widget.CalendarView], args: [])
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+open class CalendarView: FrameLayout, @unchecked Sendable {
+    /// The JNI class name
+    open override class var className: JClassName { .android.widget.CalendarView }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(content: content)
+    }
+}
