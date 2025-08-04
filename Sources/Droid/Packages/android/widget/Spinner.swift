@@ -1,22 +1,26 @@
-// //
-// //  Spinner.swift
-// //  Droid
-// //
-// //  Created by Mihael Isaev on 16.01.2022.
-// //
+//
+//  Spinner.swift
+//  Droid
+//
+//  Created by Mihael Isaev on 16.01.2022.
+//
 
-// extension AndroidPackage.WidgetPackage {
-//     public class SpinnerClass: JClassName, @unchecked Sendable {}
-    
-//     public var Spinner: SpinnerClass { .init(parent: self, name: "Spinner") }
-// }
+extension AndroidPackage.WidgetPackage {
+    public class SpinnerClass: JClassName, @unchecked Sendable {}
+    public var Spinner: SpinnerClass { .init(parent: self, name: "Spinner") }
+}
 
-// class Spinner: View {
-//     override init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.android.widget.Spinner], args: [])
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+open class Spinner: View, @unchecked Sendable {
+    /// The JNI class name
+    public override class var className: JClassName { .android.widget.Spinner }
+
+    @discardableResult
+    public override init() {
+        super.init()
+    }
+
+    @discardableResult
+    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(content: content)
+    }
+}
