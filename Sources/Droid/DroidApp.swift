@@ -252,7 +252,7 @@ open class DroidApp: @unchecked Sendable {
                 let activityTags = app.items.compactMap { $0 as? ActivityTag }
                 for activity in activityTags.map({ $0.class }) {
                     #if !os(Android)
-                    activity.init()
+                    _ = activity.init()
                     #endif
                     for dep in activity.gradleDependencies {
                         dependencies.insert(dep)
