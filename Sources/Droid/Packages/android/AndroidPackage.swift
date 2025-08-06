@@ -5,6 +5,17 @@
 //  Created by Mihael Isaev on 13.01.2022.
 //
 
+#if canImport(AndroidLooper)
+import AndroidLooper
+#endif
+
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+public struct android: ~Copyable {
+    public static let R = InnerR(JClassName.android)
+}
+
 public class AndroidPackage: JClassName, @unchecked Sendable {
     public init () {
         super.init(stringLiteral: "android")
