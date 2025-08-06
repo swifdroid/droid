@@ -7,20 +7,19 @@
 
 extension AndroidPackage.GraphicsPackage.DrawablePackage {
     public class DrawableClass: JClassName, @unchecked Sendable {}
-    
     public var Drawable: DrawableClass { .init(parent: self, name: "Drawable") }
 }
 
-// class Drawable: @unchecked Sendable, JObjectable {
-//     init (_ environment: JEnvironment, _ context: JObjectReference) {
-//         super.init(environment, context, classes: [.android.graphics.drawable.Drawable], args: [])
-//     }
+open class Drawable: @unchecked Sendable {
+    /// The JNI class name
+    open class var className: JClassName { .android.graphics.drawable.Drawable }
     
-//     override init (_ environment: JEnvironment, _ context: JObjectReference, classes: [AndroidClassName], args: [JArgument]) {
-//         super.init(environment, context, classes: classes, args: args)
-//     }
-    
-//     required init(_ environment: JEnvironment, _ ref: JClassReference, _ object: jobject) {
-//         super.init(environment, ref, object)
-//     }
-// }
+    let object: JObject
+
+    @discardableResult
+    public init(_ object: JObject) {
+        self.object = object
+    }
+
+    // TODO: implement Drawable
+}
