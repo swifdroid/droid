@@ -5,7 +5,7 @@
 //  Created by Mihael Isaev on 27.01.2022.
 //
 
-extension SwiftPackage {
+extension AppKitPackage {
     public class TextWatcherClass: JClassName, @unchecked Sendable {}
     
     public var TextWatcher: TextWatcherClass { .init(parent: self, name: "NativeTextWatcher") }
