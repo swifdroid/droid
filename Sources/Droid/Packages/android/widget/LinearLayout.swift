@@ -89,7 +89,7 @@ open class LinearLayout: ViewGroup, @unchecked Sendable {
         if let instance {
             instance.setOrientation(orientation)
         } else {
-            _propertiesToApply.append(.orientation(orientation))
+            _propertiesToApply.append(OrientationViewProperty(value: orientation))
         }
         return self
     }
