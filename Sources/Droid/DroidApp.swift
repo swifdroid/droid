@@ -45,7 +45,7 @@ open class DroidApp: @unchecked Sendable {
     var isStarted = false
 
     /// Last unique id for the view which increases via mutex
-    private var lastViewId: Int32 = 0
+    private var lastViewId: Int32 = 0x7F000000
     
     public class var current: Self { shared as! Self }
     
@@ -114,6 +114,9 @@ open class DroidApp: @unchecked Sendable {
     public func getNextViewId() -> Int32 {
         lastViewIdMutex.lock()
         defer { lastViewIdMutex.unlock() }
+        if (lastViewId >= 0x00FFFFFF) {
+            lastViewId = 0x7F000000
+        }
         lastViewId += 1
         return lastViewId
     }
