@@ -25,3 +25,8 @@ extension AppKitPackage {
 extension JClassName {
     static var appKit: AppKitPackage { .init() }
 }
+
+extension AppKitPackage {
+    public class DroidAppClass: JClassName, @unchecked Sendable {}
+    public var DroidApp: DroidAppClass { .init(parent: self, name: "DroidApp") }
+}
