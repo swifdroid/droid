@@ -16,7 +16,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignParentTop)
+            _layoutParamsToApply.append(AlignParentTopLayoutParam())
         }
         return self
     }
@@ -35,7 +35,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignParentBottom)
+            _layoutParamsToApply.append(AlignParentBottomLayoutParam())
         }
         return self
     }
@@ -54,7 +54,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignParentLeft)
+            _layoutParamsToApply.append(AlignParentLeftLayoutParam())
         }
         return self
     }
@@ -73,7 +73,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignParentRight)
+            _layoutParamsToApply.append(AlignParentRightLayoutParam())
         }
         return self
     }
@@ -92,7 +92,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignParentStart)
+            _layoutParamsToApply.append(AlignParentStartLayoutParam())
         }
         return self
     }
@@ -111,7 +111,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignParentEnd)
+            _layoutParamsToApply.append(AlignParentEndLayoutParam())
         }
         return self
     }
@@ -130,7 +130,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.centerInParent)
+            _layoutParamsToApply.append(CenterInParentLayoutParam())
         }
         return self
     }
@@ -149,7 +149,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.centerHorizontal)
+            _layoutParamsToApply.append(CenterHorizontalLayoutParam())
         }
         return self
     }
@@ -168,7 +168,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.centerVertical)
+            _layoutParamsToApply.append(CenterVerticalLayoutParam())
         }
         return self
     }
@@ -190,7 +190,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.above(id))
+            _layoutParamsToApply.append(AboveLayoutParam(value: id))
         }
         return self
     }
@@ -210,7 +210,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.below(id))
+            _layoutParamsToApply.append(BelowLayoutParam(value: id))
         }
         return self
     }
@@ -230,7 +230,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.toLeftOf(id))
+            _layoutParamsToApply.append(ToLeftOfLayoutParam(value: id))
         }
         return self
     }
@@ -250,7 +250,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.toRightOf(id))
+            _layoutParamsToApply.append(ToRightOfLayoutParam(value: id))
         }
         return self
     }
@@ -270,7 +270,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.toStartOf(id))
+            _layoutParamsToApply.append(ToStartOfLayoutParam(value: id))
         }
         return self
     }
@@ -290,7 +290,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.toEndOf(id))
+            _layoutParamsToApply.append(ToEndOfLayoutParam(value: id))
         }
         return self
     }
@@ -308,7 +308,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignTop(id))
+            _layoutParamsToApply.append(AlignTopLayoutParam(value: id))
         }
         return self
     }
@@ -326,7 +326,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignBottom(id))
+            _layoutParamsToApply.append(AlignBottomLayoutParam(value: id))
         }
         return self
     }
@@ -344,7 +344,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignLeft(id))
+            _layoutParamsToApply.append(AlignLeftLayoutParam(value: id))
         }
         return self
     }
@@ -362,7 +362,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignRight(id))
+            _layoutParamsToApply.append(AlignRightLayoutParam(value: id))
         }
         return self
     }
@@ -380,7 +380,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignStart(id))
+            _layoutParamsToApply.append(AlignStartLayoutParam(value: id))
         }
         return self
     }
@@ -398,7 +398,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignEnd(id))
+            _layoutParamsToApply.append(AlignEndLayoutParam(value: id))
         }
         return self
     }
@@ -419,7 +419,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignBaseline(id))
+            _layoutParamsToApply.append(AlignBaselineLayoutParam(value: id))
         }
         return self
     }

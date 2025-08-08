@@ -42,8 +42,6 @@ public final class LayoutParams: Sendable, JObjectable {
         public static let appCompatToolbar: Self = "androidx/appcompat/widget/Toolbar$LayoutParams"
         public static let viewPager: Self = "androidx/viewpager/widget/ViewPager$LayoutParams"
         public static let appCompatActionMenuView: Self = "androidx/appcompat/widget/ActionMenuView$LayoutParams"
-        public static let drawerLayout: Self = "androidx/drawerLayout/widget/DrawerLayout$LayoutParams"
-        public static let linearLayoutCompat: Self = "androidx/appcompat/widget/LinearLayoutCompat$LayoutParams"
         public static let constraints: Self = "androidx/constraintlayout/widget/Constraints$LayoutParams"
         public static let actionBarOverlayLayout: Self = "androidx/appcompat/widget/ActionBarOverlayLayout$LayoutParams"
     }

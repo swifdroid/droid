@@ -14,7 +14,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.isOverflow(value))
+            _layoutParamsToApply.append(IsOverflowLayoutParam(value: value))
         }
         return self
     }
@@ -35,7 +35,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.cellsUsed(value))
+            _layoutParamsToApply.append(CellsUsedLayoutParam(value: value))
         }
         return self
     }
@@ -56,7 +56,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.expandable(value))
+            _layoutParamsToApply.append(ExpandableLayoutParam(value: value))
         }
         return self
     }
@@ -78,7 +78,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.preventEdgeOffset(value))
+            _layoutParamsToApply.append(PreventEdgeOffsetLayoutParam(value: value))
         }
         return self
     }

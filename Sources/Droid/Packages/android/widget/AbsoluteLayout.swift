@@ -31,4 +31,39 @@ open class AbsoluteLayout: ViewGroup, @unchecked Sendable {
     public override init (@BodyBuilder content: BodyBuilder.SingleView) {
         super.init(content: content)
     }
+
+    open override func applicableLayoutParams() -> [LayoutParamKey] {
+        super.applicableLayoutParams() + [
+            .x,
+            .y,
+            .minHeight,
+            .maxHeight
+        ]
+    }
+
+    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
+        super.processLayoutParams(lp, for: subview)
+        let params = filteredLayoutParams()
+        for param in params {
+            switch param.key {
+                case .x:
+                    if let value = param.value as? XLayoutParam.Value {
+                        lp.setX(value.1.toPixels(Int32(value.0)))
+                    }
+                case .y:
+                    if let value = param.value as? YLayoutParam.Value {
+                        lp.setY(value.1.toPixels(Int32(value.0)))
+                    }
+                case .minHeight:
+                    if let value = param.value as? MinHeightLayoutParam.Value {
+                        // TODO: apply
+                    }
+                case .maxHeight:
+                    if let value = param.value as? MaxHeightLayoutParam.Value {
+                        // TODO: apply
+                    }
+                default: continue
+            }
+        }
+    }
 }

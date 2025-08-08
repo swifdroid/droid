@@ -15,7 +15,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.isPeeking(value))
+            _layoutParamsToApply.append(IsPeekingLayoutParam(value: value))
         }
         return self
     }
@@ -36,7 +36,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.onScreen(value))
+            _layoutParamsToApply.append(OnScreenLayoutParam(value: value))
         }
         return self
     }

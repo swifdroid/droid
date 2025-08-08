@@ -20,7 +20,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.weight(value))
+            _layoutParamsToApply.append(WeightLayoutParam(value: value))
         }
         return self
     }

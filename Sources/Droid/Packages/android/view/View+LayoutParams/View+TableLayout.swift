@@ -18,7 +18,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.span(value))
+            _layoutParamsToApply.append(SpanLayoutParam(value: value))
         }
         return self
     }

@@ -17,7 +17,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.columnSpec)//(value)) // TODO: Spec
+            _layoutParamsToApply.append(ColumnSpecLayoutParam())//(value)) // TODO: Spec
         }
         return self
     }
@@ -37,7 +37,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.rowSpec)//(value)) // TODO: Spec
+            _layoutParamsToApply.append(RowSpecLayoutParam())//value)) // TODO: Spec
         }
         return self
     }
@@ -59,7 +59,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.column(value))
+            _layoutParamsToApply.append(ColumnLayoutParam(value: value))
         }
         return self
     }
@@ -79,7 +79,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.row(value))
+            _layoutParamsToApply.append(RowLayoutParam(value: value))
         }
         return self
     }
@@ -100,7 +100,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.columnSpan(value))
+            _layoutParamsToApply.append(ColumnSpanLayoutParam(value: value))
         }
         return self
     }
@@ -121,7 +121,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.rowSpan(value))
+            _layoutParamsToApply.append(RowSpanLayoutParam(value: value))
         }
         return self
     }

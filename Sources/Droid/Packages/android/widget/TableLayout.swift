@@ -26,4 +26,44 @@ open class TableLayout: View, @unchecked Sendable {
     public override init() {
         super.init()
     }
+
+    open override func applicableLayoutParams() -> [LayoutParamKey] {
+        super.applicableLayoutParams() + [
+            .column,
+            .span
+        ]
+    }
+
+    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
+        super.processLayoutParams(lp, for: subview)
+        let params = filteredLayoutParams()
+        for param in params {
+            switch param.key {
+                case .column:
+                    if let value = param.value as? ColumnLayoutParam.Value {
+                        // TODO: apply
+                    }
+                case .span:
+                    if let value = param.value as? SpanLayoutParam.Value {
+                        // TODO: apply
+                    }
+                default: continue
+            }
+        }
+    }
+}
+
+extension LayoutParamKey {
+    // static let column: LayoutParamKey = "column"
+    static let span: LayoutParamKey = "span"
+}
+
+// struct ColumnLayoutParam: LayoutParamToApply {
+//     let key: LayoutParamKey = .column
+//     let value: Int
+// }
+
+struct SpanLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .span
+    let value: Int
 }

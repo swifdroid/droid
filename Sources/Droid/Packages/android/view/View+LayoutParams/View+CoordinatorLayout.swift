@@ -16,7 +16,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.behavior) // TODO: CoordinatorLayout.Behavior
+            _layoutParamsToApply.append(BehaviorLayoutParam()) // TODO: CoordinatorLayout.Behavior
         }
         return self
     }
@@ -41,7 +41,7 @@ extension View {
                 instance.setLayoutParams(lp)
             }
         } else {
-            _layoutParamsToApply.append(.anchorId(id))
+            _layoutParamsToApply.append(AnchorIdLayoutParam(value: id))
         }
         return self
     }
@@ -62,7 +62,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.anchorGravity(value))
+            _layoutParamsToApply.append(AnchorGravityLayoutParam(value: value))
         }
         return self
     }
@@ -84,7 +84,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.dodgeInsetEdges(value)) // TODO: Edge flags type
+            _layoutParamsToApply.append(DodgeInsetEdgesLayoutParam(value: value)) // TODO: Edge flags type
         }
         return self
     }
@@ -105,7 +105,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.insetEdge(value)) // TODO: Edge flags type
+            _layoutParamsToApply.append(InsetEdgeLayoutParam(value: value)) // TODO: Edge flags type
         }
         return self
     }
@@ -127,7 +127,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.keyline(value)) // TODO: position type
+            _layoutParamsToApply.append(KeylineLayoutParam(value: value)) // TODO: position type
         }
         return self
     }

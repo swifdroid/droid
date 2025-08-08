@@ -16,7 +16,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.slideable(value))
+            _layoutParamsToApply.append(SlideableLayoutParam(value: value))
         }
         return self
     }

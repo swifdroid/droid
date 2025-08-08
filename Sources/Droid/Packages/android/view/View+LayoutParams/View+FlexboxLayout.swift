@@ -18,7 +18,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.order(value))
+            _layoutParamsToApply.append(OrderLayoutParam(value: value))
         }
         return self
     }
@@ -39,7 +39,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.flexGrow(value))
+            _layoutParamsToApply.append(FlexGrowLayoutParam(value: value))
         }
         return self
     }
@@ -59,7 +59,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.flexShrink(value))
+            _layoutParamsToApply.append(FlexShrinkLayoutParam(value: value))
         }
         return self
     }
@@ -80,7 +80,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.flexBasisPercent(value))
+            _layoutParamsToApply.append(FlexBasisPercentLayoutParam(value: value))
         }
         return self
     }
@@ -100,7 +100,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.alignSelf(value)) // TODO: AlignmentConstant type
+            _layoutParamsToApply.append(AlignSelfLayoutParam(value: value)) // TODO: AlignmentConstant type
         }
         return self
     }
@@ -122,7 +122,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.wrapBefore(value))
+            _layoutParamsToApply.append(WrapBeforeLayoutParam(value: value))
         }
         return self
     }
@@ -146,7 +146,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.minWidth(value, unit))
+            _layoutParamsToApply.append(MinWidthLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -170,7 +170,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.maxWidth(value, unit))
+            _layoutParamsToApply.append(MaxWidthLayoutParam(value: (value, unit)))
         }
         return self
     }

@@ -83,6 +83,96 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         guard let instance else { return nil }
         return .init(instance.context, Self.layoutParamsClass.className, width: width, height: height, unit: unit)
     }
+
+    open func applicableLayoutParams() -> [LayoutParamKey] {
+        [
+            .width,
+            .height,
+            .leftMargin,
+            .rightMargin,
+            .topMargin,
+            .bottomMargin,
+            .startMargin,
+            .endMargin
+        ]
+    }
+
+    public func filteredLayoutParams() -> [any LayoutParamToApply] {
+        var applicableKeys = applicableLayoutParams()
+        return _layoutParamsToApply.filter {
+            if let index = applicableKeys.firstIndex(of: $0.key) {
+                applicableKeys.remove(at: index)
+                return true
+            }
+            return false
+        }
+    }
+    
+    open func processLayoutParams(_ lp: LayoutParams, for subview: View) {
+        let params = filteredLayoutParams()
+        var marginLeft: Int32 = 0
+        var marginTop: Int32 = 0
+        var marginRight: Int32 = 0
+        var marginBottom: Int32 = 0
+        var marginStart: Int32 = 0
+        var marginEnd: Int32 = 0
+        for param in params {
+            switch param.key {
+                case .width:
+                    if let value = param.value as? WidthLayoutParam.Value {
+                        lp.setWidth(value.0.value < 0 ? value.0.value : value.1.toPixels(value.0.value))
+                    }
+                case .height:
+                    if let value = param.value as? HeightLayoutParam.Value {
+                        lp.setHeight(value.0.value < 0 ? value.0.value : value.1.toPixels(value.0.value))
+                    }
+                case .leftMargin:
+                    if let value = param.value as? LeftMarginLayoutParam.Value {
+                        marginLeft = value.1.toPixels(Int32(value.0))
+                    }
+                case .rightMargin:
+                    if let value = param.value as? RightMarginLayoutParam.Value {
+                        marginRight = value.1.toPixels(Int32(value.0))
+                    }
+                case .topMargin:
+                    if let value = param.value as? TopMarginLayoutParam.Value {
+                        marginTop = value.1.toPixels(Int32(value.0))
+                    }
+                case .bottomMargin:
+                    if let value = param.value as? BottomMarginLayoutParam.Value {
+                        marginBottom = value.1.toPixels(Int32(value.0))
+                    }
+                case .startMargin:
+                    if let value = param.value as? StartMarginLayoutParam.Value {
+                        marginStart = value.1.toPixels(Int32(value.0))
+                    }
+                case .endMargin:
+                    if let value = param.value as? EndMarginLayoutParam.Value {
+                        marginEnd = value.1.toPixels(Int32(value.0))
+                    }
+                default: continue
+            }
+        }
+        if marginStart > 0 {
+            lp.setMarginStart(marginStart)
+        }
+        if marginEnd > 0 {
+            lp.setMarginEnd(marginEnd)
+        }
+        InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) subview margins l: \(subview.marginLeft) t: \(subview.marginTop) r: \(subview.marginRight) b: \(subview.marginBottom)")
+        InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) new margins l: \(marginLeft) t: \(marginTop) r: \(marginRight) b: \(marginBottom)")
+        InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) margins diff l: \(subview.marginLeft != marginLeft) t: \(subview.marginTop != marginTop) r: \(subview.marginRight != marginRight) b: \(subview.marginBottom != marginBottom)")
+        if subview.marginLeft != marginLeft
+            || subview.marginTop != marginTop
+            || subview.marginRight != marginRight
+            || subview.marginBottom != marginBottom {
+            subview.marginLeft = marginLeft
+            subview.marginTop = marginTop
+            subview.marginRight = marginRight
+            subview.marginBottom = marginBottom
+            lp.setMargins(left: marginLeft, top: marginTop, right: marginRight, bottom: marginBottom)
+        }
+    }
     
     /// Status of the view in the app, e.g. instantiated in in JNI or not yet
     var status: ViewStatus = .new
@@ -342,8 +432,8 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         case fitsSystemWindows(Bool)
     }
     
-    var _propertiesToApply: [PropertyToApply] = []    
-    var _layoutParamsToApply: [LayoutParamToApply] = []
+    var _propertiesToApply: [PropertyToApply] = []
+    var _layoutParamsToApply: [any LayoutParamToApply] = []
 
     func proceedSubviewsLayoutParams() {
         InnerLog.d("view(id: \(id)) proceedSubviewsLayoutParams")
@@ -353,8 +443,10 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
                 default: return false
             }
         }) {
-            let paramsToApply = filterSubviewLayoutParams(subview)
-            proceedSubviewLayoutParams(subview, paramsToApply)
+            if let lp = layoutParamsForSubviews() {
+                processLayoutParams(lp, for: subview)
+                subview.setLayoutParams(lp)
+            }
         }
     }
 

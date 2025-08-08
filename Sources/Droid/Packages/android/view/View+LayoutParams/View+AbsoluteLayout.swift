@@ -19,7 +19,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.x(value, unit))
+            _layoutParamsToApply.append(XLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -43,7 +43,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.y(value, unit))
+            _layoutParamsToApply.append(YLayoutParam(value: (value, unit)))
         }
         return self
     }

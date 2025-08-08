@@ -16,7 +16,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.motionDebug(value))
+            _layoutParamsToApply.append(MotionDebugLayoutParam(value: value))
         }
         return self
     }
@@ -36,7 +36,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.progress(value))
+            _layoutParamsToApply.append(ProgressLayoutParam(value: value))
         }
         return self
     }
@@ -56,7 +56,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.currentState(value))
+            _layoutParamsToApply.append(CurrentStateLayoutParam(value: value))
         }
         return self
     }
@@ -75,7 +75,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.motionTarget(value))
+            _layoutParamsToApply.append(MotionTargetLayoutParam(value: value))
         }
         return self
     }
@@ -96,7 +96,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.pathMotionArc(value)) // TODO: Arc type constant
+            _layoutParamsToApply.append(PathMotionArcLayoutParam(value: value)) // TODO: Arc type constant
         }
         return self
     }
@@ -116,7 +116,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.motionStagger(value))
+            _layoutParamsToApply.append(MotionStaggerLayoutParam(value: value))
         }
         return self
     }
@@ -137,7 +137,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.transitionEasing(value)) // TODO: easing function enum
+            _layoutParamsToApply.append(TransitionEasingLayoutParam(value: value)) // TODO: easing function enum
         }
         return self
     }
@@ -159,7 +159,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.applyMotionScene(value))
+            _layoutParamsToApply.append(ApplyMotionSceneLayoutParam(value: value))
         }
         return self
     }
@@ -179,7 +179,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.constraintTag(value))
+            _layoutParamsToApply.append(ConstraintTagLayoutParam(value: value))
         }
         return self
     }
@@ -202,7 +202,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.widthDefault(value)) // TODO: width mode enum, do the research
+            _layoutParamsToApply.append(WidthDefaultLayoutParam(value: value)) // TODO: width mode enum, do the research
         }
         return self
     }
@@ -223,7 +223,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.heightDefault(value))
+            _layoutParamsToApply.append(HeightDefaultLayoutParam(value: value))
         }
         return self
     }
@@ -245,7 +245,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.mCustom(value))
+            _layoutParamsToApply.append(MCustomLayoutParam(value: value))
         }
         return self
     }

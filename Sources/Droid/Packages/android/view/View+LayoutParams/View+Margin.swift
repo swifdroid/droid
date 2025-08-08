@@ -22,7 +22,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.leftMargin(value, unit))
+            _layoutParamsToApply.append(LeftMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -49,7 +49,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.topMargin(value, unit))
+            _layoutParamsToApply.append(TopMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -76,7 +76,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.rightMargin(value, unit))
+            _layoutParamsToApply.append(RightMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -103,7 +103,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.bottomMargin(value, unit))
+            _layoutParamsToApply.append(BottomMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -128,7 +128,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.startMargin(value, unit))
+            _layoutParamsToApply.append(StartMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -153,7 +153,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.endMargin(value, unit))
+            _layoutParamsToApply.append(EndMarginLayoutParam(value: (value, unit)))
         }
         return self
     }

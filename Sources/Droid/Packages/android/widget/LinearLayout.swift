@@ -32,6 +32,46 @@ open class LinearLayout: ViewGroup, @unchecked Sendable {
         super.init(content: content)
     }
 
+    open override func applicableLayoutParams() -> [LayoutParamKey] {
+        super.applicableLayoutParams() + [
+            .order,
+            .gravity,
+            .weight,
+            .minHeight,
+            .maxHeight
+        ]
+    }
+
+    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
+        super.processLayoutParams(lp, for: subview)
+        let params = filteredLayoutParams()
+        for param in params {
+            switch param.key {
+                case .order:
+                    if let value = param.value as? OrderLayoutParam.Value {
+                        // TODO: apply
+                    }
+                case .gravity:
+                    if let value = param.value as? GravityLayoutParam.Value {
+                        lp.setGravity(Int32(value.rawValue))
+                    }
+                case .weight:
+                    if let value = param.value as? WeightLayoutParam.Value {
+                        lp.setWeight(value)
+                    }
+                case .minHeight:
+                    if let value = param.value as? MinHeightLayoutParam.Value {
+                        // TODO: apply
+                    }
+                case .maxHeight:
+                    if let value = param.value as? MaxHeightLayoutParam.Value {
+                        // TODO: apply
+                    }
+                default: continue
+            }
+        }
+    }
+
     public enum Orientation: Int, Sendable {
         case horizontal, vertical
     }
@@ -129,4 +169,37 @@ public struct Gravity: OptionSet, Sendable {
     // MARK: - Display Clip
     public static let displayClipVertical = Gravity(rawValue: 0x10000000)
     public static let displayClipHorizontal = Gravity(rawValue: 0x01000000)
+}
+
+extension LayoutParamKey {
+    static let order: LayoutParamKey = "order"
+    static let gravity: LayoutParamKey = "gravity"
+    static let weight: LayoutParamKey = "weight"
+    static let minHeight: LayoutParamKey = "minHeight"
+    static let maxHeight: LayoutParamKey = "maxHeight"
+}
+
+struct OrderLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .order
+    let value: Int
+}
+
+struct GravityLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .gravity
+    let value: Gravity
+}
+
+struct WeightLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .weight
+    let value: Float
+}
+
+struct MinHeightLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .minHeight
+    let value: (LayoutParams.LayoutSize, DimensionUnit)
+}
+
+struct MaxHeightLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .maxHeight
+    let value: (LayoutParams.LayoutSize, DimensionUnit)
 }

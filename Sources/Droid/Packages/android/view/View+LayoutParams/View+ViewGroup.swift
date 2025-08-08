@@ -36,7 +36,7 @@ extension View {
                 instance.setLayoutParams(lp)
             }
         } else {
-            _layoutParamsToApply.append(.width(value, unit))
+            _layoutParamsToApply.append(WidthLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -114,7 +114,7 @@ extension View {
                 instance.setLayoutParams(lp)
             }
         } else {
-            _layoutParamsToApply.append(.height(value, unit))
+            _layoutParamsToApply.append(HeightLayoutParam(value: (value, unit)))
         }
         return self
     }

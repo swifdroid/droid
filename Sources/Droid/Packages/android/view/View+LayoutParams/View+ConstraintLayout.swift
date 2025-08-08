@@ -17,7 +17,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.leftToLeft(id))
+            _layoutParamsToApply.append(LeftToLeftLayoutParam(value: id))
         }
         return self
     }
@@ -37,7 +37,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.leftToRight(id))
+            _layoutParamsToApply.append(LeftToRightLayoutParam(value: id))
         }
         return self
     }
@@ -57,7 +57,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.rightToLeft(id))
+            _layoutParamsToApply.append(RightToLeftLayoutParam(value: id))
         }
         return self
     }
@@ -77,7 +77,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.rightToRight(id))
+            _layoutParamsToApply.append(RightToRightLayoutParam(value: id))
         }
         return self
     }
@@ -97,7 +97,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.topToTop(id))
+            _layoutParamsToApply.append(TopToTopLayoutParam(value: id))
         }
         return self
     }
@@ -118,7 +118,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.topToBottom(id))
+            _layoutParamsToApply.append(TopToBottomLayoutParam(value: id))
         }
         return self
     }
@@ -139,7 +139,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.bottomToTop(id))
+            _layoutParamsToApply.append(BottomToTopLayoutParam(value: id))
         }
         return self
     }
@@ -160,7 +160,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.bottomToBottom(id))
+            _layoutParamsToApply.append(BottomToBottomLayoutParam(value: id))
         }
         return self
     }
@@ -181,7 +181,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.startToStart(id))
+            _layoutParamsToApply.append(StartToStartLayoutParam(value: id))
         }
         return self
     }
@@ -202,7 +202,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.startToEnd(id))
+            _layoutParamsToApply.append(StartToEndLayoutParam(value: id))
         }
         return self
     }
@@ -223,7 +223,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.endToStart(id))
+            _layoutParamsToApply.append(EndToStartLayoutParam(value: id))
         }
         return self
     }
@@ -244,7 +244,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.endToEnd(id))
+            _layoutParamsToApply.append(EndToEndLayoutParam(value: id))
         }
         return self
     }
@@ -265,7 +265,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.baselineToBaseline(id))
+            _layoutParamsToApply.append(BaselineToBaselineLayoutParam(value: id))
         }
         return self
     }
@@ -287,7 +287,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintDefaultWidth(id))
+            _layoutParamsToApply.append(MatchConstraintDefaultWidthLayoutParam(value: id))
         }
         return self
     }
@@ -307,7 +307,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintDefaultHeight(id))
+            _layoutParamsToApply.append(MatchConstraintDefaultHeightLayoutParam(value: id))
         }
         return self
     }
@@ -327,7 +327,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintMinWidth(id))
+            _layoutParamsToApply.append(MatchConstraintMinWidthLayoutParam(value: id))
         }
         return self
     }
@@ -347,7 +347,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintMinHeight(id))
+            _layoutParamsToApply.append(MatchConstraintMinHeightLayoutParam(value: id))
         }
         return self
     }
@@ -367,7 +367,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintMaxWidth(id))
+            _layoutParamsToApply.append(MatchConstraintMaxWidthLayoutParam(value: id))
         }
         return self
     }
@@ -387,7 +387,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintMaxHeight(id))
+            _layoutParamsToApply.append(MatchConstraintMaxHeightLayoutParam(value: id))
         }
         return self
     }
@@ -408,7 +408,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintPercentWidth(value))
+            _layoutParamsToApply.append(MatchConstraintPercentWidthLayoutParam(value: value))
         }
         return self
     }
@@ -429,7 +429,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.matchConstraintPercentHeight(value))
+            _layoutParamsToApply.append(MatchConstraintPercentHeightLayoutParam(value: value))
         }
         return self
     }
@@ -451,7 +451,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.horizontalBias(value))
+            _layoutParamsToApply.append(HorizontalBiasLayoutParam(value: value))
         }
         return self
     }
@@ -471,7 +471,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.verticalBias(value))
+            _layoutParamsToApply.append(VerticalBiasLayoutParam(value: value))
         }
         return self
     }
@@ -492,7 +492,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.horizontalChainStyle(value))
+            _layoutParamsToApply.append(HorizontalChainStyleLayoutParam(value: value))
         }
         return self
     }
@@ -511,7 +511,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.verticalChainStyle(value))
+            _layoutParamsToApply.append(VerticalChainStyleLayoutParam(value: value))
         }
         return self
     }
@@ -531,7 +531,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.chainUseRtl(value))
+            _layoutParamsToApply.append(ChainUseRtlLayoutParam(value: value))
         }
         return self
     }
@@ -553,7 +553,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.circleConstraint(id))
+            _layoutParamsToApply.append(CircleConstraintLayoutParam(value: id))
         }
         return self
     }
@@ -573,7 +573,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.circleRadius(value))
+            _layoutParamsToApply.append(CircleRadiusLayoutParam(value: value))
         }
         return self
     }
@@ -593,7 +593,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.circleAngle(value))
+            _layoutParamsToApply.append(CircleAngleLayoutParam(value: value))
         }
         return self
     }
@@ -615,7 +615,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.dimensionRatio(value))
+            _layoutParamsToApply.append(DimensionRatioLayoutParam(value: value))
         }
         return self
     }
@@ -638,7 +638,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.goneTopMargin(value, unit))
+            _layoutParamsToApply.append(GoneTopMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -659,7 +659,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.goneBottomMargin(value, unit))
+            _layoutParamsToApply.append(GoneBottomMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -680,7 +680,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.goneLeftMargin(value, unit))
+            _layoutParamsToApply.append(GoneLeftMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -701,7 +701,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.goneRightMargin(value, unit))
+            _layoutParamsToApply.append(GoneRightMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -722,7 +722,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.goneStartMargin(value, unit))
+            _layoutParamsToApply.append(GoneStartMarginLayoutParam(value: (value, unit)))
         }
         return self
     }
@@ -743,7 +743,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.goneEndMargin(value, unit))
+            _layoutParamsToApply.append(GoneEndMarginLayoutParam(value: (value, unit)))
         }
         return self
     }

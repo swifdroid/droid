@@ -23,7 +23,7 @@ extension View {
         if let _ = instance {
             // TODO:
         } else {
-            _layoutParamsToApply.append(.gravity(value))
+            _layoutParamsToApply.append(GravityLayoutParam(value: value))
         }
         return self
     }
