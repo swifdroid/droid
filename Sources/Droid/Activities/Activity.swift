@@ -27,9 +27,7 @@ public protocol Activity: AnyObject {
 
 	func onCreate(_ context: ActivityContext)
 
-    // static func create(object: JObject)
-
-    // MARK: Manifest Properties
+	// MARK: Manifest Properties
 
     /// Indicate that the activity can be launched as the embedded child of another activity.
     ///

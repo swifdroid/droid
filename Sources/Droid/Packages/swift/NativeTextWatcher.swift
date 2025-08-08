@@ -7,7 +7,6 @@
 
 extension AppKitPackage {
     public class TextWatcherClass: JClassName, @unchecked Sendable {}
-    
     public var TextWatcher: TextWatcherClass { .init(parent: self, name: "NativeTextWatcher") }
 }
 

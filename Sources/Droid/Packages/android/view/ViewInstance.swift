@@ -38,7 +38,6 @@ extension View {
             #if os(Android)
             guard
                 let classLoader = context.getClassLoader(),
-                let viewClazz = classLoader.loadClass(.android.view.View),
                 let clazz = classLoader.loadClass(className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.object])
@@ -53,11 +52,6 @@ extension View {
         }
         
         public init? (_ object: JObject, _ view: View, _ context: ActivityContext, _ id: Int32) {
-            guard
-                let env = JEnv.current(),
-                let classLoader = context.getClassLoader(),
-                let viewClazz = classLoader.loadClass(.android.view.View),
-            else { return nil }
             #if os(Android)
             self.id = id
             self.object = object
