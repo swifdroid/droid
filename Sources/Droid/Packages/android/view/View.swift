@@ -173,6 +173,36 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
             lp.setMargins(left: marginLeft, top: marginTop, right: marginRight, bottom: marginBottom)
         }
     }
+
+    open func processProperties(_ propertiesToSkip: [ViewPropertyKey], _ instance: View.ViewInstance) {
+        for property in _propertiesToApply {
+            if propertiesToSkip.contains(property.key) { continue }
+            switch property.key {
+                case .backgroundColor:
+                    if let value = property.value as? BackgroundColorViewProperty.Value {
+                        InnerLog.t("view(id: \(id)) processProperties backgroundColor")
+                        instance.setBackgroundColor(value)
+                    }
+                case .orientation:
+                    if let value = property.value as? OrientationViewProperty.Value {
+                        InnerLog.t("view(id: \(id)) processProperties orientation")
+                        instance.setOrientation(value)
+                    }
+                case .onClick:
+                    if let listener = property.value as? OnClickViewProperty.Value {
+                        InnerLog.t("view(id: \(id)) processProperties onClick")
+                        listener.attach(to: instance)
+                        instance.setOnClickListener(listener)
+                    }
+                case .fitsSystemWindows:
+                    if let value = property.value as? FitsSystemWindowsViewProperty.Value {
+                        InnerLog.t("view(id: \(id)) processProperties fitsSystemWindows")
+                        instance.setFitsSystemWindows(value)
+                    }
+                default: continue
+            }
+        }
+    }
     
     /// Status of the view in the app, e.g. instantiated in in JNI or not yet
     var status: ViewStatus = .new
@@ -327,23 +357,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         InnerLog.d("view(id: \(id)) didMoveToParent 1")
         if let instance {
             InnerLog.d("view(id: \(id)) didMoveToParent 2")
-            for p in _propertiesToApply {
-                switch p {
-                    case .backgroundColor(let value):
-                        InnerLog.d("view(id: \(id)) didMoveToParent backgroundColor")
-                        instance.setBackgroundColor(value)
-                    case .orientation(let value):
-                        InnerLog.d("view(id: \(id)) didMoveToParent orientation")
-                        instance.setOrientation(value)
-                    case .onClick(let listener):
-                        InnerLog.d("view(id: \(id)) didMoveToParent onClick")
-                        listener.attach(to: instance)
-                        instance.setOnClickListener(listener)
-                    case .fitsSystemWindows(let value):
-                        InnerLog.d("view(id: \(id)) didMoveToParent fitsSystemWindows")
-                        instance.setFitsSystemWindows(value)
-                }
-            }
+            processProperties([], instance)
             if subviews.count > 0 {
                 InnerLog.d("view(id: \(id)) didMoveToParent iterating subviews")
                 for (i, subview) in subviews.filter({ v in
@@ -424,15 +438,8 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         }
         status = .floating(instance)
     }
-
-    enum PropertyToApply {
-        case backgroundColor(GraphicsColor)
-        case orientation(LinearLayout.Orientation)
-        case onClick(NativeOnClickListener)
-        case fitsSystemWindows(Bool)
-    }
     
-    var _propertiesToApply: [PropertyToApply] = []
+    var _propertiesToApply: [any ViewPropertyToApply] = []
     var _layoutParamsToApply: [any LayoutParamToApply] = []
 
     func proceedSubviewsLayoutParams() {
@@ -455,7 +462,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         if let instance {
             instance.setBackgroundColor(color)
         } else {
-            _propertiesToApply.append(.backgroundColor(color))
+            _propertiesToApply.append(BackgroundColorViewProperty(value: color))
         }
         return self
     }
@@ -467,7 +474,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         if let instance {
             instance.setFitsSystemWindows(value)
         } else {
-            _propertiesToApply.append(.fitsSystemWindows(value))
+            _propertiesToApply.append(FitsSystemWindowsViewProperty(value: value))
         }
         return self
     }
@@ -478,7 +485,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         if let instance {
             instance.setOnClickListener(listener)
         } else {
-            _propertiesToApply.append(.onClick(listener))
+            _propertiesToApply.append(OnClickViewProperty(value: listener))
         }
         return self
     }
