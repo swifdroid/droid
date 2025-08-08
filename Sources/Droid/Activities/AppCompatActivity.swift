@@ -94,6 +94,7 @@ open class AppCompatActivity: Activity {
     public var contentView: View?
 
     #if !os(Android)
+    @discardableResult
     public required init() {
         context = ActivityContext(object: .init(JObjectBox(), .init("")))
         onCreate(context)
@@ -102,6 +103,7 @@ open class AppCompatActivity: Activity {
     }
     #endif
     
+    @discardableResult
     public required init(object: JObject) {
         context = ActivityContext(object: object)
         onCreate(context)
