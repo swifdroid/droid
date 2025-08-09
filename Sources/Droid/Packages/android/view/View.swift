@@ -109,7 +109,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
     }
     
     open func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        let params = filteredLayoutParams()
+        let params = subview.filteredLayoutParams()
         var marginLeft: Int32 = 0
         var marginTop: Int32 = 0
         var marginRight: Int32 = 0
