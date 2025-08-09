@@ -114,7 +114,7 @@ open class DroidApp: @unchecked Sendable {
     public func getNextViewId() -> Int32 {
         lastViewIdMutex.lock()
         defer { lastViewIdMutex.unlock() }
-        if (lastViewId >= 0x00FFFFFF) {
+        if (lastViewId >= 0x7FFFFFFF) {
             lastViewId = 0x7F000000
         }
         lastViewId += 1
