@@ -11,12 +11,7 @@ extension View {
     /// - ActionMenuView: Exclusive to `ActionMenuView` for overflow menu handling.
     @discardableResult
     public func isOverflow(_ value: Bool) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(IsOverflowLayoutParam(value: value))
-        }
-        return self
+        IsOverflowButtonLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the number of cells used by the view in an `ActionMenuView`.
@@ -32,12 +27,13 @@ extension View {
     /// - TableLayout: Affects cell allocation in table rows.
     @discardableResult
     public func cellsUsed(_ value: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(CellsUsedLayoutParam(value: value))
-        }
-        return self
+        CellsUsedLayoutParam(value: value).applyOrAppend(self)
+    }
+
+    /// Enables or disables extra pixels behavior for the view in an `ActionMenuView`.
+    @discardableResult
+    public func extraPixels(_ value: Bool) -> Self {
+        ExtraPixelsLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Enables or disables expandable behavior for the view in an `ActionMenuView`.
@@ -53,33 +49,6 @@ extension View {
     /// - DrawerLayout: Supports expandable/collapsible drawer views.
     @discardableResult
     public func expandable(_ value: Bool) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(ExpandableLayoutParam(value: value))
-        }
-        return self
-    }
-
-    /// Prevents edge offset adjustments for the view in an `ActionMenuView`.
-    ///
-    /// When `true`, the view will not be adjusted for edge alignment or padding.
-    ///
-    /// - Parameters:
-    ///   - value: Boolean to prevent edge offset adjustments.
-    ///
-    /// Supported layouts:
-    /// - ActionMenuView: Disables edge offset for precise positioning.
-    /// - CoordinatorLayout: Overrides edge insets for child views.
-    /// - FrameLayout: Skips edge padding adjustments.
-    /// - RelativeLayout: Prevents automatic edge snapping.
-    @discardableResult
-    public func preventEdgeOffset(_ value: Bool) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(PreventEdgeOffsetLayoutParam(value: value))
-        }
-        return self
+        ExpandableLayoutParam(value: value).applyOrAppend(self)
     }
 }

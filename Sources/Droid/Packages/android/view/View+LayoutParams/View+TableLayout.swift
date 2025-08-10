@@ -15,11 +15,6 @@ extension View {
     /// - FlexboxLayout: Similar concept with flex items spanning multiple lines
     @discardableResult
     public func span(_ value: Int) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(SpanLayoutParam(value: value))
-        }
-        return self
+        SpanLayoutParam(value: value).applyOrAppend(self)
     }
 }

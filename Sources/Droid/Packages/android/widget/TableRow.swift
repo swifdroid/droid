@@ -26,4 +26,32 @@ open class TableRow: View, @unchecked Sendable {
     public override init() {
         super.init()
     }
+
+    open override func applicableLayoutParams() -> [LayoutParamKey] {
+        super.applicableLayoutParams() + [
+            .column,
+            .span
+        ]
+    }
+}
+
+extension LayoutParamKey {
+    static let span: Self = "span"
+    static let column: Self = "column"
+}
+
+struct SpanLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .span
+    let value: Int
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: Int32(value))
+    }
+}
+
+struct ColumnLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .column
+    let value: Int
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: Int32(value))
+    }
 }

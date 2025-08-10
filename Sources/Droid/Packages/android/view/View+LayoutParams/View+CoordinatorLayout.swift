@@ -12,13 +12,8 @@ extension View {
     /// Supported layouts:
     /// - CoordinatorLayout: Exclusive behavior control for coordinated views
     @discardableResult
-    public func behavior(_ value: String) -> Self { // TODO: CoordinatorLayout.Behavior
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(BehaviorLayoutParam()) // TODO: CoordinatorLayout.Behavior
-        }
-        return self
+    public func behavior(_ value: Behavior) -> Self {
+        BehaviorLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: Anchoring
@@ -35,15 +30,7 @@ extension View {
     /// - RelativeLayout: Similar anchor concept through layout rules
     @discardableResult
     public func anchorId(_ id: Int32) -> Self {
-        if let instance {
-            if let lp = instance.getLayoutParams() {
-                lp.setAnchorId(id)
-                instance.setLayoutParams(lp)
-            }
-        } else {
-            _layoutParamsToApply.append(AnchorIdLayoutParam(value: id))
-        }
-        return self
+        AnchorIdLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Sets the gravity for the view relative to its anchor.
@@ -59,12 +46,7 @@ extension View {
     /// - RelativeLayout: Uses gravity for view alignment
     @discardableResult
     public func anchorGravity(_ value: Gravity) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AnchorGravityLayoutParam(value: value))
-        }
-        return self
+        AnchorGravityLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: Insets
@@ -80,13 +62,8 @@ extension View {
     /// - CoordinatorLayout: Manages view overlap avoidance
     /// - DrawerLayout: Similar edge avoidance behavior
     @discardableResult
-    public func dodgeInsetEdges(_ value: Int32) -> Self { // TODO: Edge flags type
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(DodgeInsetEdgesLayoutParam(value: value)) // TODO: Edge flags type
-        }
-        return self
+    public func dodgeInsetEdges(_ value: Gravity) -> Self { // TODO: Edge flags type
+        DodgeInsetEdgesLayoutParam(value: value).applyOrAppend(self) // TODO: Edge flags type
     }
 
     /// Sets the edges that should be inset for this view.
@@ -101,13 +78,8 @@ extension View {
     /// - DrawerLayout: Similar edge insetting concept
     /// - WindowManager: Used for window insets in system UI
     @discardableResult
-    public func insetEdge(_ value: Int32) -> Self { // TODO: Edge flags type
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(InsetEdgeLayoutParam(value: value)) // TODO: Edge flags type
-        }
-        return self
+    public func insetEdge(_ value: Gravity) -> Self { // TODO: Edge flags type
+        InsetEdgeLayoutParam(value: value).applyOrAppend(self) // TODO: Edge flags type
     }
 
     // MARK: Keyline
@@ -124,11 +96,6 @@ extension View {
     /// - MotionLayout: Similar concept for motion keyframes
     @discardableResult
     public func keyline(_ value: Int32) -> Self { // TODO: position type
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(KeylineLayoutParam(value: value)) // TODO: position type
-        }
-        return self
+        KeylineLayoutParam(value: value).applyOrAppend(self) // TODO: position type
     }
 }

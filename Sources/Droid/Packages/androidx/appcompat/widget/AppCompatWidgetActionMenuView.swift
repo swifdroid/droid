@@ -34,63 +34,59 @@ open class ActionMenuViewCompat: LinearLayoutCompat, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .isOverflow,
+            .isOverflowButton,
             .cellsUsed,
+            .extraPixels,
             .expandable,
             .preventEdgeOffset
         ]
     }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .isOverflow:
-                    if let value = param.value as? IsOverflowLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .cellsUsed:
-                    if let value = param.value as? CellsUsedLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .expandable:
-                    if let value = param.value as? ExpandableLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .preventEdgeOffset:
-                    if let value = param.value as? PreventEdgeOffsetLayoutParam.Value {
-                        // TODO: apply
-                    }
-                default: continue
-            }
-        }
-    }
 }
 
 extension LayoutParamKey {
-    static let isOverflow: LayoutParamKey = "isOverflow"
-    static let cellsUsed: LayoutParamKey = "cellsUsed"
-    static let expandable: LayoutParamKey = "expandable"
-    // static let preventEdgeOffset: LayoutParamKey = "preventEdgeOffset"
+    static let isOverflowButton: Self = "isOverflowButton"
+    static let cellsUsed: Self = "cellsUsed"
+    static let extraPixels: Self = "extraPixels"
+    static let expandable: Self = "expandable"
+    static let preventEdgeOffset: Self = "preventEdgeOffset"
 }
 
-struct IsOverflowLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .isOverflow
+struct IsOverflowButtonLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .isOverflowButton
     let value: Bool
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct CellsUsedLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .cellsUsed
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
+}
+
+struct ExtraPixelsLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .extraPixels
+    let value: Bool
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct ExpandableLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .expandable
     let value: Bool
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
-// struct PreventEdgeOffsetLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .preventEdgeOffset
-//     let value: Bool
-// }
+struct PreventEdgeOffsetLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .preventEdgeOffset
+    let value: Bool
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
+}

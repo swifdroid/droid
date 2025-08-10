@@ -34,90 +34,136 @@ open class LinearLayout: ViewGroup, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .order,
+            .setOrder,
             .gravity,
             .weight,
-            .minHeight,
-            .maxHeight
+            .setMinHeight,
+            .setMaxHeight
         ]
-    }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .order:
-                    if let value = param.value as? OrderLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .gravity:
-                    if let value = param.value as? GravityLayoutParam.Value {
-                        lp.setGravity(Int32(value.rawValue))
-                    }
-                case .weight:
-                    if let value = param.value as? WeightLayoutParam.Value {
-                        lp.setWeight(value)
-                    }
-                case .minHeight:
-                    if let value = param.value as? MinHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .maxHeight:
-                    if let value = param.value as? MaxHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                default: continue
-            }
-        }
     }
 
     public enum Orientation: Int, Sendable {
         case horizontal, vertical
     }
-    
-    // func setDividerPadding(_ padding: Int) {
-    //     guard
-    //         let env = JEnv.current(),
-    //         let methodId = clazz.methodId(env: env, name: "setDividerPadding", signature: .init(.int, returning: .void))
-    //     else { return }
-    //     return env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: [padding])
-    // }
-    
-    @discardableResult
-    public func orientation(_ orientation: Orientation) -> Self {
-        if let instance {
-            instance.setOrientation(orientation)
-        } else {
-            _propertiesToApply.append(OrientationViewProperty(value: orientation))
-        }
-        return self
-    }
-    
-    // public func setGravity(_ gravity: Gravity) {
-    //     guard
-    //         let env = JEnv.current(),
-    //         let methodId = clazz.methodId(env: env, name: "setGravity", signature: .init(.int, returning: .void))
-    //     else { return }
-    //     return env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: [gravity.rawValue])
-    // }
-    
-    // public func setHorizontalGravity(_ gravity: Gravity) {
-    //     guard
-    //         let env = JEnv.current(),
-    //         let methodId = clazz.methodId(env: env, name: "setHorizontalGravity", signature: .init(.int, returning: .void))
-    //     else { return }
-    //     return env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: [gravity.rawValue])
-    // }
-    
-    // public func setVerticalGravity(_ gravity: Gravity) {
-    //     guard
-    //         let env = JEnv.current(),
-    //         let methodId = clazz.methodId(env: env, name: "setVerticalGravity", signature: .init(.int, returning: .void))
-    //     else { return }
-    //     return env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: [gravity.rawValue])
-    // }
 }
+
+// MARK: - LayoutParams
+
+// MARK: Keys
+
+extension LayoutParamKey {
+    static let setOrder: Self = "setOrder"
+    static let gravity: Self = "gravity"
+    static let weight: Self = "weight"
+}
+
+// MARK: Order
+
+struct OrderLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .setOrder
+    let value: Int
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: key.rawValue, args: Int32(value))
+    }
+}
+
+// MARK: Gravity
+
+struct GravityLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .gravity
+    let value: Gravity
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: Int32(value.rawValue))
+    }
+}
+
+// MARK: Weight
+
+struct WeightLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .weight
+    let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
+}
+
+// MARK: - Properties
+
+extension ViewPropertyKey {
+    static let setBaselineAligned: ViewPropertyKey = "setBaselineAligned"
+    static let setBaselineAlignedChildIndex: ViewPropertyKey = "setBaselineAlignedChildIndex"
+    static let setDividerDrawable: ViewPropertyKey = "setDividerDrawable"
+    static let setDividerPadding: ViewPropertyKey = "setDividerPadding"
+    static let setGravity: ViewPropertyKey = "setGravity"
+    static let setHorizontalGravity: ViewPropertyKey = "setHorizontalGravity"
+    static let setMeasureWithLargestChildEnabled: ViewPropertyKey = "setMeasureWithLargestChildEnabled"
+    static let setOrientation: ViewPropertyKey = "setOrientation"
+    static let setShowDividers: ViewPropertyKey = "setShowDividers"
+    static let setVerticalGravity: ViewPropertyKey = "setVerticalGravity"
+    static let setWeightSum: ViewPropertyKey = "setWeightSum"
+}
+
+// MARK: BaselineAligned
+
+struct BaselineAlignedViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setBaselineAligned
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension LinearLayout {
+    public func baselineAligned(_ value: Bool = true) -> Self {
+        BaselineAlignedViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: BaselineAlignedChildIndex
+
+struct BaselineAlignedChildIndexViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setBaselineAlignedChildIndex
+    let value: Int
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value))
+    }
+}
+extension LinearLayout {
+    public func baselineAlignedChildIndex(_ index: Int) -> Self {
+        BaselineAlignedChildIndexViewProperty(value: index).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: DividerDrawable
+
+struct DividerDrawableViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setDividerDrawable
+    let value: Drawable
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.object.signed(as: Drawable.className))
+    }
+}
+extension LinearLayout {
+    public func dividerDrawable(_ value: Drawable) -> Self {
+        DividerDrawableViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: DividerPadding
+
+struct DividerPaddingViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setDividerPadding
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension LinearLayout {
+    public func dividerPadding(_ padding: Int, _ unit: DimensionUnit = .dp) -> Self {
+        DividerPaddingViewProperty(value: (padding, unit)).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Gravity
 
 public struct Gravity: OptionSet, Sendable {
     public let rawValue: Int
@@ -170,36 +216,113 @@ public struct Gravity: OptionSet, Sendable {
     public static let displayClipVertical = Gravity(rawValue: 0x10000000)
     public static let displayClipHorizontal = Gravity(rawValue: 0x01000000)
 }
-
-extension LayoutParamKey {
-    static let order: LayoutParamKey = "order"
-    static let gravity: LayoutParamKey = "gravity"
-    static let weight: LayoutParamKey = "weight"
-    static let minHeight: LayoutParamKey = "minHeight"
-    static let maxHeight: LayoutParamKey = "maxHeight"
-}
-
-struct OrderLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .order
-    let value: Int
-}
-
-struct GravityLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .gravity
+struct GravityViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setGravity
     let value: Gravity
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value.rawValue))
+    }
+}
+extension LinearLayout {
+    public func gravityForSubviews(_ value: Gravity) -> Self {
+        GravityViewProperty(value: value).applyOrAppend(nil, self)
+    }
 }
 
-struct WeightLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .weight
+// MARK: HorizontalGravity
+
+struct HorizontalGravityViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHorizontalGravity
+    let value: Gravity
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value.rawValue))
+    }
+}
+extension LinearLayout {
+    public func horizontalGravityForSubviews(_ value: Gravity) -> Self {
+        HorizontalGravityViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: MeasureWithLargestChildEnabled
+
+struct MeasureWithLargestChildEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setMeasureWithLargestChildEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension LinearLayout {
+    public func measureWithLargestChildEnabled(_ value: Bool = true) -> Self {
+        MeasureWithLargestChildEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Orientation
+
+struct OrientationViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOrientation
+    let value: LinearLayout.Orientation
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value.rawValue))
+    }
+}
+extension LinearLayout {
+    @discardableResult
+    public func orientation(_ orientation: Orientation) -> Self {
+        OrientationViewProperty(value: orientation).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: ShowDividers
+
+public enum ShowDividerMode: Int32 {
+    case none = 0x00000000
+    case beginning = 0x00000001
+    case middle = 0x00000002
+    case end = 0x00000004
+}
+struct ShowDividersViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setShowDividers
+    let value: ShowDividerMode
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension LinearLayout {
+    @discardableResult
+    public func showDividers(_ mode: ShowDividerMode) -> Self {
+        ShowDividersViewProperty(value: mode).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: VerticalGravity
+
+struct VerticalGravityViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setVerticalGravity
+    let value: Gravity
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value.rawValue))
+    }
+}
+extension LinearLayout {
+    public func verticalGravityForSubviews(_ value: Gravity) -> Self {
+        VerticalGravityViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: WeightSum
+
+struct WeightSumViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setWeightSum
     let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
 }
-
-struct MinHeightLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .minHeight
-    let value: (LayoutParams.LayoutSize, DimensionUnit)
-}
-
-struct MaxHeightLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .maxHeight
-    let value: (LayoutParams.LayoutSize, DimensionUnit)
+extension LinearLayout {
+    public func weightSum(_ value: Float) -> Self {
+        WeightSumViewProperty(value: value).applyOrAppend(nil, self)
+    }
 }

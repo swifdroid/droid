@@ -16,12 +16,7 @@ extension View {
     /// - WindowManager: Controls window placement in screen coordinates
     @discardableResult
     public func x(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(XLayoutParam(value: (value, unit)))
-        }
-        return self
+        XLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the absolute Y coordinate position of the view.
@@ -40,11 +35,6 @@ extension View {
     /// - WindowManager: Controls window placement in screen coordinates
     @discardableResult
     public func y(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(YLayoutParam(value: (value, unit)))
-        }
-        return self
+        YLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 }

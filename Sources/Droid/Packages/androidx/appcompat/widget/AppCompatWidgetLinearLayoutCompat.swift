@@ -38,22 +38,4 @@ open class LinearLayoutCompat: ViewGroup, @unchecked Sendable {
             .weight
         ]
     }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .gravity:
-                    if let value = param.value as? GravityLayoutParam.Value {
-                        lp.setGravity(Int32(value.rawValue))
-                    }
-                case .weight:
-                    if let value = param.value as? WeightLayoutParam.Value {
-                        lp.setWeight(value)
-                    }
-                default: continue
-            }
-        }
-    }
 }

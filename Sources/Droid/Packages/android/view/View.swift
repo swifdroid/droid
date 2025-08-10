@@ -88,10 +88,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         [
             .width,
             .height,
-            .leftMargin,
-            .rightMargin,
-            .topMargin,
-            .bottomMargin,
+            .setMargins,
             .startMargin,
             .endMargin
         ]
@@ -108,70 +105,10 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         }
     }
     
-    open func processLayoutParams(_ lp: LayoutParams, for subview: View) {
+    open func processLayoutParams(_ context: ViewInstance, _ lp: LayoutParams, for subview: View) {
         let params = subview.filteredLayoutParams()
-        var marginLeft: Int32 = 0
-        var marginTop: Int32 = 0
-        var marginRight: Int32 = 0
-        var marginBottom: Int32 = 0
-        var marginStart: Int32 = 0
-        var marginEnd: Int32 = 0
-        for param in params {
-            switch param.key {
-                case .width:
-                    if let value = param.value as? WidthLayoutParam.Value {
-                        lp.setWidth(value.0.value < 0 ? value.0.value : value.1.toPixels(value.0.value))
-                    }
-                case .height:
-                    if let value = param.value as? HeightLayoutParam.Value {
-                        lp.setHeight(value.0.value < 0 ? value.0.value : value.1.toPixels(value.0.value))
-                    }
-                case .leftMargin:
-                    if let value = param.value as? LeftMarginLayoutParam.Value {
-                        marginLeft = value.1.toPixels(Int32(value.0))
-                    }
-                case .rightMargin:
-                    if let value = param.value as? RightMarginLayoutParam.Value {
-                        marginRight = value.1.toPixels(Int32(value.0))
-                    }
-                case .topMargin:
-                    if let value = param.value as? TopMarginLayoutParam.Value {
-                        marginTop = value.1.toPixels(Int32(value.0))
-                    }
-                case .bottomMargin:
-                    if let value = param.value as? BottomMarginLayoutParam.Value {
-                        marginBottom = value.1.toPixels(Int32(value.0))
-                    }
-                case .startMargin:
-                    if let value = param.value as? StartMarginLayoutParam.Value {
-                        marginStart = value.1.toPixels(Int32(value.0))
-                    }
-                case .endMargin:
-                    if let value = param.value as? EndMarginLayoutParam.Value {
-                        marginEnd = value.1.toPixels(Int32(value.0))
-                    }
-                default: continue
-            }
-        }
-        if marginStart > 0 {
-            lp.setMarginStart(marginStart)
-        }
-        if marginEnd > 0 {
-            lp.setMarginEnd(marginEnd)
-        }
-        InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) subview margins l: \(subview.marginLeft) t: \(subview.marginTop) r: \(subview.marginRight) b: \(subview.marginBottom)")
-        InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) new margins l: \(marginLeft) t: \(marginTop) r: \(marginRight) b: \(marginBottom)")
-        InnerLog.t("💧 proceedSubviewLayoutParams (id: \(subview.id)) margins diff l: \(subview.marginLeft != marginLeft) t: \(subview.marginTop != marginTop) r: \(subview.marginRight != marginRight) b: \(subview.marginBottom != marginBottom)")
-        if subview.marginLeft != marginLeft
-            || subview.marginTop != marginTop
-            || subview.marginRight != marginRight
-            || subview.marginBottom != marginBottom {
-            subview.marginLeft = marginLeft
-            subview.marginTop = marginTop
-            subview.marginRight = marginRight
-            subview.marginBottom = marginBottom
-            lp.setMargins(left: marginLeft, top: marginTop, right: marginRight, bottom: marginBottom)
-        }
+        let env = JEnv.current()
+        params.forEach { $0.apply(env, context, lp) }
     }
 
     open func processProperties(_ propertiesToSkip: [ViewPropertyKey], _ instance: View.ViewInstance) {
@@ -378,7 +315,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
                     }
                 }
             }
-            proceedSubviewsLayoutParams()
+            proceedSubviewsLayoutParams(instance)
         }
     }
 
@@ -442,7 +379,7 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
     var _propertiesToApply: [any ViewPropertyToApply] = []
     var _layoutParamsToApply: [any LayoutParamToApply] = []
 
-    func proceedSubviewsLayoutParams() {
+    func proceedSubviewsLayoutParams(_ context: ViewInstance) {
         InnerLog.d("view(id: \(id)) proceedSubviewsLayoutParams")
         for subview in subviews.filter({ v in
             switch v.status {
@@ -451,44 +388,13 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
             }
         }) {
             if let lp = layoutParamsForSubviews() {
-                processLayoutParams(lp, for: subview)
+                processLayoutParams(context, lp, for: subview)
                 subview.setLayoutParams(lp)
             }
         }
     }
-
-    @discardableResult
-    public func backgroundColor(_ color: GraphicsColor) -> Self {
-        if let instance {
-            instance.setBackgroundColor(color)
-        } else {
-            _propertiesToApply.append(BackgroundColorViewProperty(value: color))
-        }
-        return self
-    }
     
     // public func background(Object) -> Self {}
-
-    @discardableResult
-    public func fitsSystemWindows(_ value: Bool = true) -> Self {
-        if let instance {
-            instance.setFitsSystemWindows(value)
-        } else {
-            _propertiesToApply.append(FitsSystemWindowsViewProperty(value: value))
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func onClick(_ handler: @escaping () async -> Void) -> Self {
-        let listener = NativeOnClickListener(handler)
-        if let instance {
-            instance.setOnClickListener(listener)
-        } else {
-            _propertiesToApply.append(OnClickViewProperty(value: listener))
-        }
-        return self
-    }
 
     @discardableResult
     open func body(@BodyBuilder block: BodyBuilder.SingleView) -> Self {

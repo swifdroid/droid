@@ -11,16 +11,9 @@ extension View {
     ///
     /// Supported layouts:
     /// - FlexboxLayout: Primary ordering mechanism
-    /// - GridLayout: Similar ordering in grid cells
-    /// - LinearLayout: Affects drawing order
     @discardableResult
     public func order(_ value: Int) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(OrderLayoutParam(value: value))
-        }
-        return self
+        OrderLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the flex grow factor for the view.
@@ -36,12 +29,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior with chains
     @discardableResult
     public func flexGrow(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(FlexGrowLayoutParam(value: value))
-        }
-        return self
+        FlexGrowLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the flex shrink factor for the view.
@@ -56,12 +44,7 @@ extension View {
     /// - LinearLayout: Similar behavior with weighted views
     @discardableResult
     public func flexShrink(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(FlexShrinkLayoutParam(value: value))
-        }
-        return self
+        FlexShrinkLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the initial main size of the view as a percentage.
@@ -77,12 +60,7 @@ extension View {
     /// - PercentRelativeLayout: Percentage-based dimensions
     @discardableResult
     public func flexBasisPercent(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(FlexBasisPercentLayoutParam(value: value))
-        }
-        return self
+        FlexBasisPercentLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the alignment for this view within its container.
@@ -97,12 +75,7 @@ extension View {
     /// - GridLayout: Similar cell-specific alignment
     @discardableResult
     public func alignSelf(_ value: Int32) -> Self { // TODO: AlignmentConstant type
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignSelfLayoutParam(value: value)) // TODO: AlignmentConstant type
-        }
-        return self
+        AlignSelfLayoutParam(value: value).applyOrAppend(self) // TODO: AlignmentConstant type
     }
 
     // MARK: Wrapping Control
@@ -119,12 +92,7 @@ extension View {
     /// - GridLayout: Similar row-breaking behavior
     @discardableResult
     public func wrapBefore(_ value: Bool) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(WrapBeforeLayoutParam(value: value))
-        }
-        return self
+        WrapBeforeLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: Minimum/Maximum Dimensions
@@ -143,15 +111,25 @@ extension View {
     /// - FrameLayout: Enforces minimum width
     @discardableResult
     public func minWidth(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MinWidthLayoutParam(value: (value, unit)))
-        }
-        return self
+        MinWidthLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
-    // minHeight
+    /// Sets the minimum height constraint for the view.
+    ///
+    /// The view will never be narrower than this height value.
+    ///
+    /// - Parameters:
+    ///    - value: Height in density-independent pixels
+    ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
+    ///
+    /// Supported layouts:
+    /// - FlexboxLayout: Minimum main size constraint
+    /// - ConstraintLayout: Works with constraint-based system
+    /// - FrameLayout: Enforces minimum width
+    @discardableResult
+    public func minHeight(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        MinHeightLayoutParam(value: (value, unit)).applyOrAppend(self)
+    }
 
     /// Sets the maximum width constraint for the view.
     ///
@@ -167,13 +145,23 @@ extension View {
     /// - FrameLayout: Enforces maximum width
     @discardableResult
     public func maxWidth(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MaxWidthLayoutParam(value: (value, unit)))
-        }
-        return self
+        MaxWidthLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
-    // maxHeight
+    /// Sets the maximum height constraint for the view.
+    ///
+    /// The view will never be wider than this height value.
+    ///
+    /// - Parameters:
+    ///    - value: Height in density-independent pixels
+    ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
+    ///
+    /// Supported layouts:
+    /// - FlexboxLayout: Maximum main size constraint
+    /// - ConstraintLayout: Works with constraint-based system
+    /// - FrameLayout: Enforces maximum width
+    @discardableResult
+    public func maxHeight(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        MaxHeightLayoutParam(value: (value, unit)).applyOrAppend(self)
+    }
 }

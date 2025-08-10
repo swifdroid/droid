@@ -82,167 +82,6 @@ open class ConstraintLayout: ViewGroup, @unchecked Sendable {
             .goneEndMargin
         ]
     }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                // - Directional Constraints
-                case .leftToLeft:
-                    if let value = param.value as? LeftToLeftLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .leftToRight:
-                    if let value = param.value as? LeftToRightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .rightToLeft:
-                    if let value = param.value as? RightToLeftLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .rightToRight:
-                    if let value = param.value as? RightToRightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .topToTop:
-                    if let value = param.value as? TopToTopLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .topToBottom:
-                    if let value = param.value as? TopToBottomLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .bottomToTop:
-                    if let value = param.value as? BottomToTopLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .bottomToBottom:
-                    if let value = param.value as? BottomToBottomLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .startToStart:
-                    if let value = param.value as? StartToStartLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .startToEnd:
-                    if let value = param.value as? StartToEndLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .endToStart:
-                    if let value = param.value as? EndToStartLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .endToEnd:
-                    if let value = param.value as? EndToEndLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .baselineToBaseline:
-                    if let value = param.value as? BaselineToBaselineLayoutParam.Value {
-                        // TODO: apply
-                    }
-                // - Dimensions
-                case .matchConstraintDefaultWidth:
-                    if let value = param.value as? MatchConstraintDefaultWidthLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .matchConstraintDefaultHeight:
-                    if let value = param.value as? MatchConstraintDefaultHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .matchConstraintMinWidth:
-                    if let value = param.value as? MatchConstraintMinWidthLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .matchConstraintMinHeight:
-                    if let value = param.value as? MatchConstraintMinHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .matchConstraintMaxWidth:
-                    if let value = param.value as? MatchConstraintMaxWidthLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .matchConstraintMaxHeight:
-                    if let value = param.value as? MatchConstraintMaxHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .matchConstraintPercentWidth:
-                    if let value = param.value as? MatchConstraintPercentWidthLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .matchConstraintPercentHeight:
-                    if let value = param.value as? MatchConstraintPercentHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                // - Bias (Alignment)
-                case .horizontalBias:
-                    if let value = param.value as? HorizontalBiasLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .verticalBias:
-                    if let value = param.value as? VerticalBiasLayoutParam.Value {
-                        // TODO: apply
-                    }
-                // - Chains & Barriers
-                case .horizontalChainStyle:
-                    if let value = param.value as? HorizontalChainStyleLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .verticalChainStyle:
-                    if let value = param.value as? VerticalChainStyleLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .chainUseRtl:
-                    if let value = param.value as? ChainUseRtlLayoutParam.Value {
-                        // TODO: apply
-                    }
-                // - Circular Positioning
-                case .circleConstraint:
-                    if let value = param.value as? CircleConstraintLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .circleRadius:
-                    if let value = param.value as? CircleRadiusLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .circleAngle:
-                    if let value = param.value as? CircleAngleLayoutParam.Value {
-                        // TODO: apply
-                    }
-                // - Aspect Ratio
-                case .dimensionRatio:
-                    if let value = param.value as? DimensionRatioLayoutParam.Value {
-                        // TODO: apply
-                    }
-                // - View Visibility Behavior
-                case .goneTopMargin:
-                    if let value = param.value as? GoneTopMarginLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .goneBottomMargin:
-                    if let value = param.value as? GoneBottomMarginLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .goneLeftMargin:
-                    if let value = param.value as? GoneLeftMarginLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .goneRightMargin:
-                    if let value = param.value as? GoneRightMarginLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .goneStartMargin:
-                    if let value = param.value as? GoneStartMarginLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .goneEndMargin:
-                    if let value = param.value as? GoneEndMarginLayoutParam.Value {
-                        // TODO: apply
-                    }
-                default: continue
-            }
-        }
-    }
 }
 
 extension LayoutParamKey {
@@ -296,66 +135,105 @@ extension LayoutParamKey {
 struct LeftToLeftLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .leftToLeft
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct LeftToRightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .leftToRight
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct RightToLeftLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .rightToLeft
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct RightToRightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .rightToRight
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct TopToTopLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .topToTop
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct TopToBottomLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .topToBottom
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct BottomToTopLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .bottomToTop
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct BottomToBottomLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .bottomToBottom
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct StartToStartLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .startToStart
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct StartToEndLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .startToEnd
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct EndToStartLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .endToStart
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct EndToEndLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .endToEnd
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct BaselineToBaselineLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .baselineToBaseline
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 // MARK: - Dimensions
@@ -363,41 +241,65 @@ struct BaselineToBaselineLayoutParam: LayoutParamToApply {
 struct MatchConstraintDefaultWidthLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintDefaultWidth
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct MatchConstraintDefaultHeightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintDefaultHeight
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct MatchConstraintMinWidthLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintMinWidth
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct MatchConstraintMinHeightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintMinHeight
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct MatchConstraintMaxWidthLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintMaxWidth
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct MatchConstraintMaxHeightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintMaxHeight
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct MatchConstraintPercentWidthLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintPercentWidth
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct MatchConstraintPercentHeightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .matchConstraintPercentHeight
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 // MARK: - Bias (Alignment)
@@ -405,11 +307,17 @@ struct MatchConstraintPercentHeightLayoutParam: LayoutParamToApply {
 struct HorizontalBiasLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .horizontalBias
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct VerticalBiasLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .verticalBias
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 // MARK: - Chains & Barriers
@@ -417,16 +325,25 @@ struct VerticalBiasLayoutParam: LayoutParamToApply {
 struct HorizontalChainStyleLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .horizontalChainStyle
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct VerticalChainStyleLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .verticalChainStyle
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct ChainUseRtlLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .chainUseRtl
     let value: Bool
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 // MARK: - Circular Positioning
@@ -434,16 +351,25 @@ struct ChainUseRtlLayoutParam: LayoutParamToApply {
 struct CircleConstraintLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .circleConstraint
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct CircleRadiusLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .circleRadius
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 struct CircleAngleLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .circleAngle
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
 }
 
 // MARK: - Aspect Ratio
@@ -451,6 +377,16 @@ struct CircleAngleLayoutParam: LayoutParamToApply {
 struct DimensionRatioLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .dimensionRatio
     let value: String
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        #if os(Android)
+        guard
+            let env = env ?? JEnv.current(),
+            let str = env.newStringUTF(value),
+            let string = str.box(env)?.object()
+        else { return }
+        lp.setField(env, name: key.rawValue, arg: string.object.signed(as: .java.lang.String))
+        #endif
+    }
 }
 
 // MARK: - View Visibility Behavior
@@ -458,29 +394,47 @@ struct DimensionRatioLayoutParam: LayoutParamToApply {
 struct GoneTopMarginLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .goneTopMargin
     let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value.1.toPixels(Int32(value.0)))
+    }
 }
 
 struct GoneBottomMarginLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .goneBottomMargin
     let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value.1.toPixels(Int32(value.0)))
+    }
 }
 
 struct GoneLeftMarginLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .goneLeftMargin
     let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value.1.toPixels(Int32(value.0)))
+    }
 }
 
 struct GoneRightMarginLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .goneRightMargin
     let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value.1.toPixels(Int32(value.0)))
+    }
 }
 
 struct GoneStartMarginLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .goneStartMargin
     let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value.1.toPixels(Int32(value.0)))
+    }
 }
 
 struct GoneEndMarginLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .goneEndMargin
     let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value.1.toPixels(Int32(value.0)))
+    }
 }

@@ -37,129 +37,118 @@ open class FlexboxLayout: ViewGroup, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .order,
-            .flexGrow,
-            .flexShrink,
-            .flexBasisPercent,
-            .alignSelf,
-            .wrapBefore,
-            .minWidth,
-            .minHeight,
-            .maxWidth,
-            .maxHeight
+            .setOrder,
+            .setFlexGrow,
+            .setFlexShrink,
+            .setFlexBasisPercent,
+            .setAlignSelf,
+            .setWrapBefore,
+            .setMinWidth,
+            .setMaxWidth,
+            .setMinHeight,
+            .setMaxHeight
         ]
-    }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .order:
-                    if let value = param.value as? OrderLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .flexGrow:
-                    if let value = param.value as? FlexGrowLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .flexShrink:
-                    if let value = param.value as? FlexShrinkLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .flexBasisPercent:
-                    if let value = param.value as? FlexBasisPercentLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignSelf:
-                    if let value = param.value as? AlignSelfLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .wrapBefore:
-                    if let value = param.value as? WrapBeforeLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .minWidth:
-                    if let value = param.value as? MinWidthLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .minHeight:
-                    if let value = param.value as? MinHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .maxWidth:
-                    if let value = param.value as? MaxWidthLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .maxHeight:
-                    if let value = param.value as? MaxHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                default: continue
-            }
-        }
     }
 }
 
 extension LayoutParamKey {
-    // static let order: LayoutParamKey = "order"
-    static let flexGrow: LayoutParamKey = "flexGrow"
-    static let flexShrink: LayoutParamKey = "flexShrink"
-    static let flexBasisPercent: LayoutParamKey = "flexBasisPercent"
-    static let alignSelf: LayoutParamKey = "alignSelf"
-    static let wrapBefore: LayoutParamKey = "wrapBefore"
-    // static let minWidth: LayoutParamKey = "minWidth"
-    // static let minHeight: LayoutParamKey = "minHeight"
-    // static let maxWidth: LayoutParamKey = "maxWidth"
-    // static let maxHeight: LayoutParamKey = "maxHeigh"
+    static let setFlexGrow: Self = "setFlexGrow"
+    static let setFlexShrink: Self = "setFlexShrink"
+    static let setFlexBasisPercent: Self = "setFlexBasisPercent"
+    static let setAlignSelf: Self = "setAlignSelf"
+    static let setWrapBefore: Self = "setWrapBefore"
+    static let setMinWidth: Self = "minWidth"
+    static let setMaxWidth: Self = "maxWidth"
+    static let setMinHeight: Self = "minHeight"
+    static let setMaxHeight: Self = "maxHeigh"
 }
 
-// struct OrderLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .order
-//     let value: Int
-// }
+// MARK: FlexGrow
 
 struct FlexGrowLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .flexGrow
+    let key: LayoutParamKey = .setFlexGrow
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: key.rawValue, args: value)
+    }
 }
+
+// MARK: FlexShrink
 
 struct FlexShrinkLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .flexShrink
+    let key: LayoutParamKey = .setFlexShrink
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: key.rawValue, args: value)
+    }
 }
+
+// MARK: FlexBasisPercent
 
 struct FlexBasisPercentLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .flexBasisPercent
+    let key: LayoutParamKey = .setFlexBasisPercent
     let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: key.rawValue, args: value)
+    }
 }
+
+// MARK: AlignSelf
 
 struct AlignSelfLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .alignSelf
+    let key: LayoutParamKey = .setAlignSelf
     let value: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: key.rawValue, args: value)
+    }
 }
+
+// MARK: WrapBefore
 
 struct WrapBeforeLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .wrapBefore
+    let key: LayoutParamKey = .setWrapBefore
     let value: Bool
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: key.rawValue, args: value)
+    }
 }
 
-// struct MinWidthLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .minWidth
-//     let value: (Int, DimensionUnit)
-// }
+// MARK: MinHeight
 
-// struct MinHeightLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .minHeight
-//     let value: (Int, DimensionUnit)
-// }
+struct MinHeightLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .setMinHeight
+    let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(nil, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
 
-// struct MaxWidthLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .maxWidth
-//     let value: (Int, DimensionUnit)
-// }
+// MARK: MaxHeight
 
-// struct MaxHeightLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .maxHeight
-//     let value: (Int, DimensionUnit)
-// }
+struct MaxHeightLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .setMaxHeight
+    let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(nil, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+
+// MARK: MinWidth
+
+struct MinWidthLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .setMinWidth
+    let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(nil, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+
+// MARK: MaxWidth
+
+struct MaxWidthLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .setMaxWidth
+    let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(nil, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}

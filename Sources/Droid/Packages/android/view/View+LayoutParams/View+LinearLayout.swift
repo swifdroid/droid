@@ -17,11 +17,6 @@ extension View {
     /// - FrameLayout: Can influence weighted view positioning
     @discardableResult
     public func weight(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(WeightLayoutParam(value: value))
-        }
-        return self
+        WeightLayoutParam(value: value).applyOrAppend(self)
     }
 }

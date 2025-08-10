@@ -14,12 +14,7 @@ extension View {
     /// - RelativeLayout: Similar behavior using layout rules
     @discardableResult
     public func leftToLeft(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(LeftToLeftLayoutParam(value: id))
-        }
-        return self
+        LeftToLeftLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's left edge to another view's right edge.
@@ -34,12 +29,7 @@ extension View {
     /// - RelativeLayout: Similar behavior using layout rules
     @discardableResult
     public func leftToRight(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(LeftToRightLayoutParam(value: id))
-        }
-        return self
+        LeftToRightLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's right edge to another view's left edge.
@@ -54,12 +44,7 @@ extension View {
     /// - RelativeLayout: Similar behavior using layout rules
     @discardableResult
     public func rightToLeft(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(RightToLeftLayoutParam(value: id))
-        }
-        return self
+        RightToLeftLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's right edge to another view's right edge.
@@ -74,12 +59,7 @@ extension View {
     /// - RelativeLayout: Similar behavior using layout rules
     @discardableResult
     public func rightToRight(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(RightToRightLayoutParam(value: id))
-        }
-        return self
+        RightToRightLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's top edge to another view's top edge.
@@ -94,12 +74,7 @@ extension View {
     /// - RelativeLayout: Similar behavior using layout rules
     @discardableResult
     public func topToTop(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(TopToTopLayoutParam(value: id))
-        }
-        return self
+        TopToTopLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's top edge to another view's bottom edge.
@@ -115,12 +90,7 @@ extension View {
     /// - LinearLayout: Implicitly creates this relationship in vertical orientation
     @discardableResult
     public func topToBottom(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(TopToBottomLayoutParam(value: id))
-        }
-        return self
+        TopToBottomLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's bottom edge to another view's top edge.
@@ -136,12 +106,7 @@ extension View {
     /// - LinearLayout: Naturally occurs in vertical orientation
     @discardableResult
     public func bottomToTop(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(BottomToTopLayoutParam(value: id))
-        }
-        return self
+        BottomToTopLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's bottom edge to another view's bottom edge.
@@ -157,12 +122,7 @@ extension View {
     /// - FrameLayout: Can be achieved with gravity settings
     @discardableResult
     public func bottomToBottom(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(BottomToBottomLayoutParam(value: id))
-        }
-        return self
+        BottomToBottomLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's start edge to another view's start edge.
@@ -178,12 +138,7 @@ extension View {
     /// - FlexboxLayout: Controls item alignment in container
     @discardableResult
     public func startToStart(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(StartToStartLayoutParam(value: id))
-        }
-        return self
+        StartToStartLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's start edge to another view's end edge.
@@ -199,12 +154,7 @@ extension View {
     /// - FlexboxLayout: Affects item ordering in RTL
     @discardableResult
     public func startToEnd(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(StartToEndLayoutParam(value: id))
-        }
-        return self
+        StartToEndLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's end edge to another view's start edge.
@@ -220,12 +170,7 @@ extension View {
     /// - FlexboxLayout: Affects item ordering in RTL
     @discardableResult
     public func endToStart(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(EndToStartLayoutParam(value: id))
-        }
-        return self
+        EndToStartLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's end edge to another view's end edge.
@@ -241,12 +186,7 @@ extension View {
     /// - FlexboxLayout: Controls item alignment in container
     @discardableResult
     public func endToEnd(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(EndToEndLayoutParam(value: id))
-        }
-        return self
+        EndToEndLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Constrains the view's baseline to another view's baseline.
@@ -262,12 +202,7 @@ extension View {
     /// - LinearLayout: Supports baseline alignment in vertical orientation
     @discardableResult
     public func baselineToBaseline(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(BaselineToBaselineLayoutParam(value: id))
-        }
-        return self
+        BaselineToBaselineLayoutParam(value: id).applyOrAppend(self)
     }
 
     // MARK: Dimensions
@@ -284,12 +219,7 @@ extension View {
     /// - RelativeLayout: Similar behavior using layout rules
     @discardableResult
     public func matchConstraintDefaultWidth(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintDefaultWidthLayoutParam(value: id))
-        }
-        return self
+        MatchConstraintDefaultWidthLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Matches the view's default height to another view's height.
@@ -304,12 +234,7 @@ extension View {
     /// - RelativeLayout: Similar behavior using layout rules
     @discardableResult
     public func matchConstraintDefaultHeight(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintDefaultHeightLayoutParam(value: id))
-        }
-        return self
+        MatchConstraintDefaultHeightLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Sets the minimum width constraint by matching another view's width.
@@ -324,12 +249,7 @@ extension View {
     /// - FlexboxLayout: Controls minimum main size in flex container
     @discardableResult
     public func matchConstraintMinWidth(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintMinWidthLayoutParam(value: id))
-        }
-        return self
+        MatchConstraintMinWidthLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Sets the minimum height constraint by matching another view's height.
@@ -344,12 +264,7 @@ extension View {
     /// - FlexboxLayout: Controls minimum cross size in flex container
     @discardableResult
     public func matchConstraintMinHeight(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintMinHeightLayoutParam(value: id))
-        }
-        return self
+        MatchConstraintMinHeightLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Sets the maximum width constraint by matching another view's width.
@@ -364,12 +279,7 @@ extension View {
     /// - FlexboxLayout: Controls maximum main size in flex container
     @discardableResult
     public func matchConstraintMaxWidth(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintMaxWidthLayoutParam(value: id))
-        }
-        return self
+        MatchConstraintMaxWidthLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Sets the maximum height constraint by matching another view's height.
@@ -384,12 +294,7 @@ extension View {
     /// - FlexboxLayout: Controls maximum cross size in flex container
     @discardableResult
     public func matchConstraintMaxHeight(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintMaxHeightLayoutParam(value: id))
-        }
-        return self
+        MatchConstraintMaxHeightLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Sets the view's width as a percentage of available space.
@@ -405,12 +310,7 @@ extension View {
     /// - PercentRelativeLayout: Percentage-based sizing
     @discardableResult
     public func matchConstraintPercentWidth(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintPercentWidthLayoutParam(value: value))
-        }
-        return self
+        MatchConstraintPercentWidthLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the view's height as a percentage of available space.
@@ -426,12 +326,7 @@ extension View {
     /// - PercentRelativeLayout: Percentage-based sizing
     @discardableResult
     public func matchConstraintPercentHeight(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(MatchConstraintPercentHeightLayoutParam(value: value))
-        }
-        return self
+        MatchConstraintPercentHeightLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: Bias (Alignment)
@@ -448,12 +343,7 @@ extension View {
     /// - RelativeLayout: Similar effect using gravity or margins
     @discardableResult
     public func horizontalBias(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(HorizontalBiasLayoutParam(value: value))
-        }
-        return self
+        HorizontalBiasLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the vertical bias for constrained views.
@@ -468,12 +358,7 @@ extension View {
     /// - RelativeLayout: Similar effect using gravity or margins
     @discardableResult
     public func verticalBias(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(VerticalBiasLayoutParam(value: value))
-        }
-        return self
+        VerticalBiasLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: Chains & Barriers
@@ -489,12 +374,7 @@ extension View {
     /// - ConstraintLayout: Exclusive chain layout feature
     @discardableResult
     public func horizontalChainStyle(_ value: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(HorizontalChainStyleLayoutParam(value: value))
-        }
-        return self
+        HorizontalChainStyleLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the vertical chain style for constrained views.
@@ -508,12 +388,7 @@ extension View {
     /// - ConstraintLayout: Exclusive chain layout feature
     @discardableResult
     public func verticalChainStyle(_ value: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(VerticalChainStyleLayoutParam(value: value))
-        }
-        return self
+        VerticalChainStyleLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Enables RTL (right-to-left) support for chain layouts.
@@ -528,12 +403,7 @@ extension View {
     /// - FlexboxLayout: Similar RTL support for flex directions
     @discardableResult
     public func chainUseRtl(_ value: Bool = true) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(ChainUseRtlLayoutParam(value: value))
-        }
-        return self
+        ChainUseRtlLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: Circular Positioning
@@ -550,12 +420,7 @@ extension View {
     /// - MotionLayout: Similar path-based motion constraints
     @discardableResult
     public func circleConstraint(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(CircleConstraintLayoutParam(value: id))
-        }
-        return self
+        CircleConstraintLayoutParam(value: id).applyOrAppend(self)
     }
 
     /// Sets the radius for circular constraint positioning.
@@ -570,12 +435,7 @@ extension View {
     /// - MotionLayout: Similar path motion attributes
     @discardableResult
     public func circleRadius(_ value: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(CircleRadiusLayoutParam(value: value))
-        }
-        return self
+        CircleRadiusLayoutParam(value: value).applyOrAppend(self)
     }
 
     /// Sets the angle for circular constraint positioning.
@@ -590,12 +450,7 @@ extension View {
     /// - MotionLayout: Similar path motion attributes
     @discardableResult
     public func circleAngle(_ value: Float) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(CircleAngleLayoutParam(value: value))
-        }
-        return self
+        CircleAngleLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: Aspect Ratio
@@ -612,12 +467,7 @@ extension View {
     /// - FlexboxLayout: Similar aspect ratio control for flex items
     @discardableResult
     public func dimensionRatio(_ value: String) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(DimensionRatioLayoutParam(value: value))
-        }
-        return self
+        DimensionRatioLayoutParam(value: value).applyOrAppend(self)
     }
 
     // MARK: View Visibility Behavior
@@ -635,12 +485,7 @@ extension View {
     /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneTopMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(GoneTopMarginLayoutParam(value: (value, unit)))
-        }
-        return self
+        GoneTopMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the bottom margin used when the view is marked as GONE.
@@ -656,12 +501,7 @@ extension View {
     /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneBottomMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(GoneBottomMarginLayoutParam(value: (value, unit)))
-        }
-        return self
+        GoneBottomMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the left margin used when the view is marked as GONE.
@@ -677,12 +517,7 @@ extension View {
     /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneLeftMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(GoneLeftMarginLayoutParam(value: (value, unit)))
-        }
-        return self
+        GoneLeftMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the right margin used when the view is marked as GONE.
@@ -698,12 +533,7 @@ extension View {
     /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneRightMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(GoneRightMarginLayoutParam(value: (value, unit)))
-        }
-        return self
+        GoneRightMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the start margin used when the view is marked as GONE.
@@ -719,12 +549,7 @@ extension View {
     /// - RelativeLayout: Similar RTL-aware gone margin behavior
     @discardableResult
     public func goneStartMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(GoneStartMarginLayoutParam(value: (value, unit)))
-        }
-        return self
+        GoneStartMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the end margin used when the view is marked as GONE.
@@ -740,11 +565,6 @@ extension View {
     /// - RelativeLayout: Similar RTL-aware gone margin behavior
     @discardableResult
     public func goneEndMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(GoneEndMarginLayoutParam(value: (value, unit)))
-        }
-        return self
+        GoneEndMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 }

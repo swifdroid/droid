@@ -58,104 +58,6 @@ open class RelativeLayout: View, @unchecked Sendable {
             .alignBaseline
         ]
     }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .alignParentTop:
-                    if let value = param.value as? AlignParentTopLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignParentBottom:
-                    if let value = param.value as? AlignParentBottomLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignParentLeft:
-                    if let value = param.value as? AlignParentLeftLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignParentRight:
-                    if let value = param.value as? AlignParentRightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignParentStart:
-                    if let value = param.value as? AlignParentStartLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignParentEnd:
-                    if let value = param.value as? AlignParentEndLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .centerInParent:
-                    if let value = param.value as? CenterInParentLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .centerHorizontal:
-                    if let value = param.value as? CenterHorizontalLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .centerVertical:
-                    if let value = param.value as? CenterVerticalLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .above:
-                    if let value = param.value as? AboveLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .below:
-                    if let value = param.value as? BelowLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .toLeftOf:
-                    if let value = param.value as? ToLeftOfLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .toRightOf:
-                    if let value = param.value as? ToRightOfLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .toStartOf:
-                    if let value = param.value as? ToStartOfLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .toEndOf:
-                    if let value = param.value as? ToEndOfLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignTop:
-                    if let value = param.value as? AlignTopLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignBottom:
-                    if let value = param.value as? AlignBottomLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignLeft:
-                    if let value = param.value as? AlignLeftLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignRight:
-                    if let value = param.value as? AlignRightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignStart:
-                    if let value = param.value as? AlignStartLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignEnd:
-                    if let value = param.value as? AlignEndLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .alignBaseline:
-                    if let value = param.value as? AlignBaselineLayoutParam.Value {
-                        // TODO: apply
-                    }
-                default: continue
-            }
-        }
-    }
 }
 
 extension LayoutParamKey {
@@ -186,89 +88,168 @@ extension LayoutParamKey {
 }
 struct AlignParentTopLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentTop
-    let value: Void = ()
+    let verb: Int32 = 10
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct AlignParentBottomLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentBottom
-    let value: Void = ()
+    let verb: Int32 = 12
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct AlignParentLeftLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentLeft
-    let value: Void = ()
+    let verb: Int32 = 9
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct AlignParentRightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentRight
-    let value: Void = ()
+    let verb: Int32 = 11
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct AlignParentStartLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentStart
-    let value: Void = ()
+    let verb: Int32 = 20
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct AlignParentEndLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentEnd
-    let value: Void = ()
+    let verb: Int32 = 21
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct CenterInParentLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .centerInParent
-    let value: Void = ()
+    let verb: Int32 = 13
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct CenterHorizontalLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .centerHorizontal
-    let value: Void = ()
+    let verb: Int32 = 14
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct CenterVerticalLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .centerVertical
-    let value: Void = ()
+    let verb: Int32 = 15
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+    }
 }
 struct AboveLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .above
-    let value: Int32
+    let verb: Int32 = 2
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct BelowLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .below
-    let value: Int32
+    let verb: Int32 = 3
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct ToLeftOfLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .toLeftOf
-    let value: Int32
+    let verb: Int32 = 0
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct ToRightOfLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .toRightOf
-    let value: Int32
+    let verb: Int32 = 1
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct ToStartOfLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .toStartOf
-    let value: Int32
+    let verb: Int32 = 16
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct ToEndOfLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .toEndOf
-    let value: Int32
+    let verb: Int32 = 17
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct AlignTopLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignTop
-    let value: Int32
+    let verb: Int32 = 6
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct AlignBottomLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignBottom
-    let value: Int32
+    let verb: Int32 = 8
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct AlignLeftLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignLeft
-    let value: Int32
+    let verb: Int32 = 5
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct AlignRightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignRight
-    let value: Int32
+    let verb: Int32 = 7
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct AlignStartLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignStart
-    let value: Int32
+    let verb: Int32 = 18
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct AlignEndLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignEnd
-    let value: Int32
+    let verb: Int32 = 19
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }
 struct AlignBaselineLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignBaseline
-    let value: Int32
+    let verb: Int32 = 4
+    let id: Int32
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.callVoidMethod(env, name: "addRule", args: verb, id)
+    }
 }

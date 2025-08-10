@@ -19,12 +19,7 @@ extension View {
     /// - DrawerLayout: Controls drawer view alignment
     /// - WindowManager: Used for window positioning in screen space
     @discardableResult
-    public func gravity(_ value: Gravity) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(GravityLayoutParam(value: value))
-        }
-        return self
+    public func gravityInParent(_ value: Gravity) -> Self {
+        GravityLayoutParam(value: value).applyOrAppend(self)
     }
 }

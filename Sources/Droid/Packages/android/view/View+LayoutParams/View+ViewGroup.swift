@@ -30,15 +30,7 @@ extension View {
     #endif
     @discardableResult
     public func width(_ value: LayoutParams.LayoutSize, _ unit: DimensionUnit = .dp) -> Self {
-        if let instance {
-            if let lp = instance.getLayoutParams() {
-                lp.setWidth(unit.toPixels(value.value))
-                instance.setLayoutParams(lp)
-            }
-        } else {
-            _layoutParamsToApply.append(WidthLayoutParam(value: (value, unit)))
-        }
-        return self
+        WidthLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the width of the view with flexible sizing options.
@@ -108,15 +100,7 @@ extension View {
     #endif
     @discardableResult
     public func height(_ value: LayoutParams.LayoutSize, _ unit: DimensionUnit = .dp) -> Self {
-        if let instance {
-            if let lp = instance.getLayoutParams() {
-                lp.setHeight(unit.toPixels(value.value))
-                instance.setLayoutParams(lp)
-            }
-        } else {
-            _layoutParamsToApply.append(HeightLayoutParam(value: (value, unit)))
-        }
-        return self
+        HeightLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the height of the view with flexible sizing options.

@@ -13,12 +13,7 @@ extension View {
     /// - ConstraintLayout: Similar top alignment constraints
     @discardableResult
     public func alignParentTop() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignParentTopLayoutParam())
-        }
-        return self
+        AlignParentTopLayoutParam().applyOrAppend(self)
     }
 
     /// Aligns the view to the bottom edge of its parent container.
@@ -32,12 +27,7 @@ extension View {
     /// - ConstraintLayout: Similar bottom alignment constraints
     @discardableResult
     public func alignParentBottom() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignParentBottomLayoutParam())
-        }
-        return self
+        AlignParentBottomLayoutParam().applyOrAppend(self)
     }
 
     /// Aligns the view to the left edge of its parent container.
@@ -51,12 +41,7 @@ extension View {
     /// - ConstraintLayout: Similar left alignment constraints
     @discardableResult
     public func alignParentLeft() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignParentLeftLayoutParam())
-        }
-        return self
+        AlignParentLeftLayoutParam().applyOrAppend(self)
     }
 
     /// Aligns the view to the right edge of its parent container.
@@ -70,12 +55,7 @@ extension View {
     /// - ConstraintLayout: Similar right alignment constraints
     @discardableResult
     public func alignParentRight() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignParentRightLayoutParam())
-        }
-        return self
+        AlignParentRightLayoutParam().applyOrAppend(self)
     }
 
     /// Aligns the view to the start edge of its parent container (LTR/RTL-aware).
@@ -89,12 +69,7 @@ extension View {
     /// - ConstraintLayout: Similar start alignment constraints
     @discardableResult
     public func alignParentStart() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignParentStartLayoutParam())
-        }
-        return self
+        AlignParentStartLayoutParam().applyOrAppend(self)
     }
 
     /// Aligns the view to the end edge of its parent container (LTR/RTL-aware).
@@ -108,12 +83,7 @@ extension View {
     /// - ConstraintLayout: Similar end alignment constraints
     @discardableResult
     public func alignParentEnd() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignParentEndLayoutParam())
-        }
-        return self
+        AlignParentEndLayoutParam().applyOrAppend(self)
     }
 
     /// Centers the view both horizontally and vertically within its parent.
@@ -127,12 +97,7 @@ extension View {
     /// - ConstraintLayout: Similar center constraints
     @discardableResult
     public func centerInParent() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(CenterInParentLayoutParam())
-        }
-        return self
+        CenterInParentLayoutParam().applyOrAppend(self)
     }
 
     /// Centers the view horizontally within its parent.
@@ -146,12 +111,7 @@ extension View {
     /// - ConstraintLayout: Similar horizontal center constraints
     @discardableResult
     public func centerHorizontal() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(CenterHorizontalLayoutParam())
-        }
-        return self
+        CenterHorizontalLayoutParam().applyOrAppend(self)
     }
 
     /// Centers the view vertically within its parent.
@@ -165,12 +125,7 @@ extension View {
     /// - ConstraintLayout: Similar vertical center constraints
     @discardableResult
     public func centerVertical() -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(CenterVerticalLayoutParam())
-        }
-        return self
+        CenterVerticalLayoutParam().applyOrAppend(self)
     }
 
     // MARK: Relative to Other Views
@@ -187,12 +142,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using topToBottom constraint
     @discardableResult
     public func above(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AboveLayoutParam(value: id))
-        }
-        return self
+        AboveLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Positions the view below the specified view.
@@ -207,12 +157,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using bottomToTop constraint
     @discardableResult
     public func below(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(BelowLayoutParam(value: id))
-        }
-        return self
+        BelowLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Positions the view to the left of the specified view.
@@ -227,12 +172,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using leftToRight constraint
     @discardableResult
     public func toLeftOf(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(ToLeftOfLayoutParam(value: id))
-        }
-        return self
+        ToLeftOfLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Positions the view to the right of the specified view.
@@ -247,12 +187,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using rightToLeft constraint
     @discardableResult
     public func toRightOf(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(ToRightOfLayoutParam(value: id))
-        }
-        return self
+        ToRightOfLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Positions the view to the start of the specified view (LTR/RTL-aware).
@@ -267,12 +202,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using startToEnd constraint
     @discardableResult
     public func toStartOf(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(ToStartOfLayoutParam(value: id))
-        }
-        return self
+        ToStartOfLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Positions the view to the end of the specified view (LTR/RTL-aware).
@@ -287,12 +217,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using endToStart constraint
     @discardableResult
     public func toEndOf(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(ToEndOfLayoutParam(value: id))
-        }
-        return self
+        ToEndOfLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Aligns the view's top edge with another view's top edge.
@@ -305,12 +230,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using topToTop constraint
     @discardableResult
     public func alignTop(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignTopLayoutParam(value: id))
-        }
-        return self
+        AlignTopLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Aligns the view's bottom edge with another view's bottom edge.
@@ -323,12 +243,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using bottomToBottom constraint
     @discardableResult
     public func alignBottom(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignBottomLayoutParam(value: id))
-        }
-        return self
+        AlignBottomLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Aligns the view's left edge with another view's left edge.
@@ -341,12 +256,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using leftToLeft constraint
     @discardableResult
     public func alignLeft(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignLeftLayoutParam(value: id))
-        }
-        return self
+        AlignLeftLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Aligns the view's right edge with another view's right edge.
@@ -359,12 +269,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using rightToRight constraint
     @discardableResult
     public func alignRight(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignRightLayoutParam(value: id))
-        }
-        return self
+        AlignRightLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Aligns the view's start edge with another view's start edge (LTR/RTL-aware).
@@ -377,12 +282,7 @@ extension View {
     /// - ConstraintLayout: Similar behavior using startToStart constraint
     @discardableResult
     public func alignStart(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignStartLayoutParam(value: id))
-        }
-        return self
+        AlignStartLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Aligns the view's end edge with another view's end edge (LTR/RTL-aware).
@@ -395,32 +295,22 @@ extension View {
     /// - ConstraintLayout: Similar behavior using endToEnd constraint
     @discardableResult
     public func alignEnd(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignEndLayoutParam(value: id))
-        }
-        return self
+        AlignEndLayoutParam(id: id).applyOrAppend(self)
     }
 
     /// Aligns the view's baseline with another view's baseline.
-///
-/// Typically used for text alignment between views.
-///
-/// - Parameters:
-///   - id: The view ID to align with
-///
-/// Supported layouts:
-/// - RelativeLayout: Primary baseline alignment
-/// - ConstraintLayout: Similar behavior using baselineToBaseline constraint
-/// - LinearLayout: Supports baseline alignment in vertical orientation
+    ///
+    /// Typically used for text alignment between views.
+    ///
+    /// - Parameters:
+    ///   - id: The view ID to align with
+    ///
+    /// Supported layouts:
+    /// - RelativeLayout: Primary baseline alignment
+    /// - ConstraintLayout: Similar behavior using baselineToBaseline constraint
+    /// - LinearLayout: Supports baseline alignment in vertical orientation
     @discardableResult
     public func alignBaseline(_ id: Int32) -> Self {
-        if let _ = instance {
-            // TODO:
-        } else {
-            _layoutParamsToApply.append(AlignBaselineLayoutParam(value: id))
-        }
-        return self
+        AlignBaselineLayoutParam(id: id).applyOrAppend(self)
     }
 }

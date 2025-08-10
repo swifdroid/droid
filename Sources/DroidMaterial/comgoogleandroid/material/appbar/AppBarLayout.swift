@@ -13,7 +13,9 @@ extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage {
 }
 extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage.AppBarLayoutClass {
     public class LayoutParamsClass: JClassName, @unchecked Sendable {}
+    public class ScrollingViewBehaviorClass: JClassName, @unchecked Sendable {}
     public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
+    public var ScrollingViewBehavior: ScrollingViewBehaviorClass { .init(parent: self, name: "ScrollingViewBehavior", isInnerClass: true) }
 }
 extension LayoutParams.Class {
     static let materialAppBarLayout: Self = .init(.comGoogleAndroid.material.appbar.AppBarLayout.LayoutParams)
@@ -42,67 +44,102 @@ open class AppBarLayout: ViewGroup, @unchecked Sendable {
             .weight
         ]
     }
+}
 
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .scrollFlags:
-                    if let value = param.value as? ScrollFlagsLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .scrollEffect:
-                    if let value = param.value as? ScrollEffectLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .liftOnScroll:
-                    if let value = param.value as? LiftOnScrollLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .minHeight:
-                    if let value = param.value as? MinHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .maxHeight:
-                    if let value = param.value as? MaxHeightLayoutParam.Value {
-                        // TODO: apply
-                    }
-                default: continue
-            }
+extension LayoutParamKey {
+    static let weight: Self = "weight"
+}
+
+// MARK: Weight
+
+struct WeightLayoutParam: LayoutParamToApply {
+    let key: LayoutParamKey = .weight
+    let value: Float
+    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
+        lp.setField(env, name: key.rawValue, arg: value)
+    }
+}
+
+extension AppBarLayout {
+    public final class ScrollingViewBehavior: Behavior, @unchecked Sendable {
+        public override class var className: JClassName { .comGoogleAndroid.material.appbar.AppBarLayout.ScrollingViewBehavior }
+
+        public func overlayTop(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+            OverlayTopBehaviorParam(value: (value, unit)).applyOrAppend(self)
+        }
+
+        public func leftAndRightOffset(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+            LeftAndRightOffsetBehaviorParam(value: (value, unit)).applyOrAppend(self)
+        }
+
+        public func topAndBottomOffset(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+            TopAndBottomOffsetBehaviorParam(value: (value, unit)).applyOrAppend(self)
+        }
+
+        public func verticalOffsetEnabled(_ value: Bool = true) -> Self {
+            VerticalOffsetEnabledBehaviorParam(value: value).applyOrAppend(self)
+        }
+
+        public func horizontalOffsetEnabled(_ value: Bool = true) -> Self {
+            HorizontalOffsetEnabledBehaviorParam(value: value).applyOrAppend(self)
         }
     }
 }
 
-extension LayoutParamKey {
-    static let scrollFlags: LayoutParamKey = "scrollFlags"
-    static let scrollEffect: LayoutParamKey = "scrollEffect"
-    static let liftOnScroll: LayoutParamKey = "liftOnScroll"
-    static let minHeight: LayoutParamKey = "minHeight"
-    static let maxHeight: LayoutParamKey = "maxHeight"
+extension Behavior.ParamKey {
+    static let setOverlayTop: Self = "setOverlayTop"
+    static let setLeftAndRightOffset: Self = "setLeftAndRightOffset"
+    static let setTopAndBottomOffset: Self = "setTopAndBottomOffset"
+    static let setVerticalOffsetEnabled: Self = "setVerticalOffsetEnabled"
+    static let setHorizontalOffsetEnabled: Self = "setHorizontalOffsetEnabled"
 }
 
-struct ScrollFlagsLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .scrollFlags
-    let value: Void = () // TODO: bitmask
+// MARK: OverlayTop
+
+struct OverlayTopBehaviorParam: Behavior.ParamToApply {
+    let key: Behavior.ParamKey = .setOverlayTop
+    let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
+        behavior.callVoidMethod(name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
 }
 
-struct ScrollEffectLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .scrollEffect
-    let value: Void = () // TODO: AppBarLayout.ChildScrollEffect
+// MARK: LeftAndRightOffset
+
+struct LeftAndRightOffsetBehaviorParam: Behavior.ParamToApply {
+    let key: Behavior.ParamKey = .setLeftAndRightOffset
+    let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
+        behavior.callVoidMethod(name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
 }
 
-struct LiftOnScrollLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .liftOnScroll
+// MARK: TopAndBottomOffset
+
+struct TopAndBottomOffsetBehaviorParam: Behavior.ParamToApply {
+    let key: Behavior.ParamKey = .setTopAndBottomOffset
+    let value: (Int, DimensionUnit)
+    func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
+        behavior.callVoidMethod(name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+
+// MARK: VerticalOffsetEnabled
+
+struct VerticalOffsetEnabledBehaviorParam: Behavior.ParamToApply {
+    let key: Behavior.ParamKey = .setVerticalOffsetEnabled
     let value: Bool
+    func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
+        behavior.callVoidMethod(name: key.rawValue, args: value)
+    }
 }
 
-struct MinHeightLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .minHeight
-    let value: (LayoutParams.LayoutSize, DimensionUnit)
-}
+// MARK: HorizontalOffsetEnabled
 
-struct MaxHeightLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .maxHeight
-    let value: (LayoutParams.LayoutSize, DimensionUnit)
+struct HorizontalOffsetEnabledBehaviorParam: Behavior.ParamToApply {
+    let key: Behavior.ParamKey = .setHorizontalOffsetEnabled
+    let value: Bool
+    func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
+        behavior.callVoidMethod(name: key.rawValue, args: value)
+    }
 }

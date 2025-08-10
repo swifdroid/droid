@@ -130,19 +130,52 @@ public final class LayoutParams: Sendable, JObjectable {
         #endif
     }
 
-    // MARK: - Standard
-
-    public func setWidth(_ value: Int32) {
+    /// Calls void method
+    /// `args` if it is simple value like Bool, Int, Float, etc. the pass it as-is
+    /// if it is object e.g. `View` then pass it as `args: myView.signed(as: .android.view.View)`
+    public func callVoidMethod(_ env: JEnv?, name: String, args: JSignatureItemable...) {
         #if os(Android)
-        InnerLog.t("lp.setWidth \(value) case 1")
         guard
-            let env = JEnv.current(),
-            let fieldId = clazz.fieldId(name: "width", signature: .int)
+            let env = env ?? JEnv.current(),
+            let methodId = clazz.methodId(env: env, name: name, signature: .init(args.map { $0.signatureItemWithValue.signatureItem }, returning: .void))
         else { return }
-        env.setIntField(object, fieldId, value)
-        InnerLog.t("lp.setWidth \(value) case 2")
+        env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
         #endif
     }
+
+    /// Sets value to the field
+    /// `arg` if it is simple value like Bool, Int, Float, etc. the pass it as-is
+    /// if it is object e.g. `View` then pass it as `arg: myView.signed(as: .android.view.View)`
+    public func setField(_ env: JEnv?, name: String, arg: JSignatureItemable) {
+        #if os(Android)
+        guard
+            let env = env ?? JEnv.current(),
+            let fieldId = clazz.fieldId(name: name, signature: arg.signatureItemWithValue.signatureItem)
+        else { return }
+        switch arg.signatureItemWithValue {
+            case .boolean(let value):
+                env.setBooleanField(object, fieldId, value ? 1 : 0)
+            case .byte(let value):
+                env.setByteField(object, fieldId, value)
+            case .char(let value):
+                env.setCharField(object, fieldId, value)
+            case .short(let value):
+                env.setShortField(object, fieldId, value)
+            case .int(let value):
+                env.setIntField(object, fieldId, value)
+            case .long(let value):
+                env.setLongField(object, fieldId, value)
+            case .float(let value):
+                env.setFloatField(object, fieldId, value)
+            case .double(let value):
+                env.setDoubleField(object, fieldId, value)
+            case .object(let value, _):
+                env.setObjectField(object, fieldId, value)
+        }
+        #endif
+    }
+
+    // MARK: - Standard
 
     public func getWidth() -> Int32? {
         #if os(Android)
@@ -160,13 +193,7 @@ public final class LayoutParams: Sendable, JObjectable {
     }
 
     public func setHeight(_ value: Int32) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let fieldId = clazz.fieldId(name: "height", signature: .int)
-        else { return }
-        env.setIntField(object, fieldId, value)
-        #endif
+        setField(nil, name: "height", arg: value)
     }
 
     public func getHeight() -> Int32? {
@@ -184,98 +211,10 @@ public final class LayoutParams: Sendable, JObjectable {
         #endif
     }
 
-    // MARK: - Margins
-
-    public func setMargins(left: Int32, top: Int32, right: Int32, bottom: Int32) {
-        #if os(Android)
-        InnerLog.t("💧 setMargins l: \(left) t: \(top) r: \(right) b: \(bottom)")
-        guard
-            let env = JEnv.current(),
-            let methodId = clazz.methodId(env: env, name: "setMargins", signature: .init(.int, .int, .int, .int, returning: .void))
-        else { InnerLog.t("💧 setMargins exit early");return }
-        env.callVoidMethod(object: object, methodId: methodId, args: [left, top, right, bottom])
-        InnerLog.t("💧 setMargins success")
-        #endif
-    }
-
-    public func setMarginStart(_ value: Int32) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let methodId = clazz.methodId(env: env, name: "setMarginStart", signature: .init(.int, returning: .void))
-        else { return }
-        env.callVoidMethod(object: object, methodId: methodId, args: [value])
-        #endif
-    }
-
-    public func setMarginEnd(_ value: Int32) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let methodId = clazz.methodId(env: env, name: "setMarginEnd", signature: .init(.int, returning: .void))
-        else { return }
-        env.callVoidMethod(object: object, methodId: methodId, args: [value])
-        #endif
-    }
-
-    // MARK: FrameLayout
-
-    public func setGravity(_ value: Int32) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let fieldId = clazz.fieldId(name: "gravity", signature: .int)
-        else { return }
-        env.setIntField(object, fieldId, value)
-        #endif
-    }
-
-    // MARK: LinearLayout
-
-    public func setWeight(_ value: Float) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let fieldId = clazz.fieldId(name: "weight", signature: .float)
-        else { return }
-        env.setFloatField(object, fieldId, value)
-        #endif
-    }
-
-    // MARK: AbsoluteLayout
-
-    public func setX(_ value: Int32) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let fieldId = clazz.fieldId(name: "x", signature: .int)
-        else { return }
-        env.setIntField(object, fieldId, value)
-        #endif
-    }
-
-    public func setY(_ value: Int32) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let fieldId = clazz.fieldId(name: "y", signature: .int)
-        else { return }
-        env.setIntField(object, fieldId, value)
-        #endif
-    }
-
     // MARK: CoordinatorLayout
 
-    public func setAnchorId(_ value: Int32) {
-        #if os(Android)
-        InnerLog.t("💧 setAnchorId v: \(value)")
-        guard
-            let env = JEnv.current(),
-            let methodId = clazz.methodId(env: env, name: "setAnchorId", signature: .init(.int, returning: .void))
-        else { InnerLog.t("💧 setMargins exit early");return }
-        env.callVoidMethod(object: object, methodId: methodId, args: [value])
-        InnerLog.t("💧 setAnchorId success")
-        #endif
+    func setAnchorId(_ value: Int32) {
+        callVoidMethod(nil, name: "setAnchorId", args: value)
     }
 
     // MARK: RelativeLayout
@@ -306,13 +245,7 @@ public final class LayoutParams: Sendable, JObjectable {
     }
 
     public func addRule(_ verb: Int32, _ subject: Int32 = -1) {
-        #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let methodId = clazz.methodId(env: env, name: "addRule", signature: .init(.int, .int, returning: .void))
-        else { return }
-        env.callVoidMethod(object: object, methodId: methodId, args: [verb, subject])
-        #endif
+        callVoidMethod(nil, name: "addRule", args: verb, subject)
     }
 
     public func removeRule(_ verb: Int32) {
