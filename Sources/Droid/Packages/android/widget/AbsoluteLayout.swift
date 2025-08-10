@@ -35,9 +35,7 @@ open class AbsoluteLayout: ViewGroup, @unchecked Sendable {
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
             .x,
-            .y,
-            .minHeight,
-            .maxHeight
+            .y
         ]
     }
 

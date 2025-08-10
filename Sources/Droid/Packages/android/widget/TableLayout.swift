@@ -29,8 +29,6 @@ open class TableLayout: View, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .column,
-            .span
         ]
     }
 
@@ -52,18 +50,4 @@ open class TableLayout: View, @unchecked Sendable {
         }
     }
 }
-
-extension LayoutParamKey {
-    // static let column: LayoutParamKey = "column"
-    static let span: LayoutParamKey = "span"
-}
-
-// struct ColumnLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .column
-//     let value: Int
-// }
-
-struct SpanLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .span
-    let value: Int
 }

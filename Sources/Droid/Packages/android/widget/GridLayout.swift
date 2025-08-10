@@ -35,11 +35,7 @@ open class GridLayout: View, @unchecked Sendable {
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
             .columnSpec,
-            .rowSpec,
-            .column,
-            .row,
-            .columnSpan,
-            .rowSpan
+            .rowSpec
         ]
     }
 
@@ -79,12 +75,8 @@ open class GridLayout: View, @unchecked Sendable {
 }
 
 extension LayoutParamKey {
-    static let columnSpec: LayoutParamKey = "columnSpec"
-    static let rowSpec: LayoutParamKey = "rowSpec"
-    static let column: LayoutParamKey = "column"
-    static let row: LayoutParamKey = "row"
-    static let columnSpan: LayoutParamKey = "columnSpan"
-    static let rowSpan: LayoutParamKey = "rowSpan"
+    static let columnSpec: Self = "columnSpec"
+    static let rowSpec: Self = "rowSpec"
 }
 
 // MARK: - Cell Position & Span

@@ -34,41 +34,7 @@ open class SlidingPaneLayout: ViewGroup, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .slideable,
             .weight
         ]
     }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .slideable:
-                    if let value = param.value as? SlideableLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .weight:
-                    if let value = param.value as? WeightLayoutParam.Value {
-                        lp.setWeight(value)
-                    }
-                default: continue
-            }
-        }
-    }
 }
-
-extension LayoutParamKey {
-    static let slideable: LayoutParamKey = "slideable"
-    // static let weight: LayoutParamKey = "weight"
-}
-
-struct SlideableLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .slideable
-    let value: Bool
-}
-
-// struct WeightLayoutParam: LayoutParamToApply {
-//     let key: LayoutParamKey = .weight
-//     let value: Float
-// }

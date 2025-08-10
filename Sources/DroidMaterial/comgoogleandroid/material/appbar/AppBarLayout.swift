@@ -39,11 +39,7 @@ open class AppBarLayout: ViewGroup, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .scrollFlags,
-            .scrollEffect,
-            .liftOnScroll,
-            .minHeight,
-            .maxHeight
+            .weight
         ]
     }
 

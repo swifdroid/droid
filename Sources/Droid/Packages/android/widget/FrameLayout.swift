@@ -34,14 +34,9 @@ open class FrameLayout: ViewGroup, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .weight,
-            .x,
-            .y,
-            .preventEdgeOffset,
-            .minHeight,
-            .maxHeight,
-            .minWidth,
-            .maxWidth
+            .width,
+            .height,
+            .gravity
         ]
     }
 
@@ -89,11 +84,8 @@ open class FrameLayout: ViewGroup, @unchecked Sendable {
 }
 
 extension LayoutParamKey {
-    static let x: LayoutParamKey = "x"
-    static let y: LayoutParamKey = "y"
-    static let preventEdgeOffset: LayoutParamKey = "preventEdgeOffset"
-    static let minWidth: LayoutParamKey = "minWidth"
-    static let maxWidth: LayoutParamKey = "maxWidth"
+    static let x: Self = "x"
+    static let y: Self = "y"
 }
 
 struct XLayoutParam: LayoutParamToApply {
@@ -103,20 +95,5 @@ struct XLayoutParam: LayoutParamToApply {
 
 struct YLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .y
-    let value: (Int, DimensionUnit)
-}
-
-struct PreventEdgeOffsetLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .preventEdgeOffset
-    let value: Bool
-}
-
-struct MinWidthLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .minWidth
-    let value: (Int, DimensionUnit)
-}
-
-struct MaxWidthLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .maxWidth
     let value: (Int, DimensionUnit)
 }

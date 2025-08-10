@@ -34,41 +34,7 @@ open class DrawerLayout: ViewGroup, @unchecked Sendable {
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
-            .isPeeking,
-            .onScreen
+            
         ]
     }
-
-    open override func processLayoutParams(_ lp: LayoutParams, for subview: View) {
-        super.processLayoutParams(lp, for: subview)
-        let params = filteredLayoutParams()
-        for param in params {
-            switch param.key {
-                case .isPeeking:
-                    if let value = param.value as? IsPeekingLayoutParam.Value {
-                        // TODO: apply
-                    }
-                case .onScreen:
-                    if let value = param.value as? OnScreenLayoutParam.Value {
-                        // TODO: apply
-                    }
-                default: continue
-            }
-        }
-    }
-}
-
-extension LayoutParamKey {
-    static let isPeeking: LayoutParamKey = "isPeeking"
-    static let onScreen: LayoutParamKey = "onScreen"
-}
-
-struct IsPeekingLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .isPeeking
-    let value: Bool
-}
-
-struct OnScreenLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .onScreen
-    let value: Float
 }
