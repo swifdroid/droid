@@ -112,32 +112,10 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
     }
 
     open func processProperties(_ propertiesToSkip: [ViewPropertyKey], _ instance: View.ViewInstance) {
+        guard let env = JEnv.current() else { return }
         for property in _propertiesToApply {
             if propertiesToSkip.contains(property.key) { continue }
-            switch property.key {
-                case .backgroundColor:
-                    if let value = property.value as? BackgroundColorViewProperty.Value {
-                        InnerLog.t("view(id: \(id)) processProperties backgroundColor")
-                        instance.setBackgroundColor(value)
-                    }
-                case .orientation:
-                    if let value = property.value as? OrientationViewProperty.Value {
-                        InnerLog.t("view(id: \(id)) processProperties orientation")
-                        instance.setOrientation(value)
-                    }
-                case .onClick:
-                    if let listener = property.value as? OnClickViewProperty.Value {
-                        InnerLog.t("view(id: \(id)) processProperties onClick")
-                        listener.attach(to: instance)
-                        instance.setOnClickListener(listener)
-                    }
-                case .fitsSystemWindows:
-                    if let value = property.value as? FitsSystemWindowsViewProperty.Value {
-                        InnerLog.t("view(id: \(id)) processProperties fitsSystemWindows")
-                        instance.setFitsSystemWindows(value)
-                    }
-                default: continue
-            }
+            property.applyToInstance(env, instance)
         }
     }
     
@@ -482,3 +460,988 @@ extension Array where Element == View {
         filtered.forEach { $0.removeFromParent() }
     }
 }
+
+// MARK: - Properties
+
+// Details are here https://developer.android.com/reference/android/view/View
+
+// MARK: AccessibilityDataSensitive
+
+public enum AccessibilityDataSensitiveMode: Int32 {
+    case auto = 0x00000000
+    case no = 0x00000002
+    case yes = 0x00000001
+}
+struct AccessibilityDataSensitiveViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAccessibilityDataSensitive
+    let value: AccessibilityDataSensitiveMode
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    @discardableResult
+    public func accessibilityDataSensitive(_ value: AccessibilityDataSensitiveMode) -> Self {
+        AccessibilityDataSensitiveViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: AccessibilityDelegate
+
+// TODO: https://developer.android.com/reference/android/view/View#setAccessibilityDelegate(android.view.View.AccessibilityDelegate)
+
+// MARK: AccessibilityHeading
+
+struct AccessibilityHeadingViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAccessibilityHeading
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func accessibilityHeading(_ value: Bool = true) -> Self {
+        AccessibilityHeadingViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: AccessibilityLiveRegion
+
+// MARK: AccessibilityPaneTitle
+
+// MARK: AccessibilityTraversalAfter
+
+// MARK: AccessibilityTraversalBefore
+
+// MARK: Activated
+
+struct ActivatedViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setActivated
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func Activated(_ value: Bool = true) -> Self {
+        ActivatedViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: AllowClickWhenDisabled
+
+struct AllowClickWhenDisabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAllowClickWhenDisabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func allowClickWhenDisabled(_ value: Bool = true) -> Self {
+        AllowClickWhenDisabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: AllowedHandwritingDelegatePackage
+
+// MARK: AllowedHandwritingDelegatorPackage
+
+// MARK: Alpha
+
+// MARK: Animation
+
+// MARK: AnimationMatrix
+
+// MARK: AutoHandwritingEnabled
+
+struct AutoHandwritingEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAutoHandwritingEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func autoHandwritingEnabled(_ value: Bool = true) -> Self {
+        AutoHandwritingEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: AutofillHints
+
+// MARK: AutofillId
+
+// MARK: Background
+
+// MARK: BackgroundColor
+
+struct BackgroundColorViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setBackgroundColor
+    let value: GraphicsColor
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, signatureItems: .int, args: value.value)
+    }
+}
+extension View {
+    @discardableResult
+    public func backgroundColor(_ color: GraphicsColor) -> Self {
+        BackgroundColorViewProperty(value: color).applyOrAppend(nil, self)
+        return self
+    }
+}
+
+// MARK: BackgroundResource
+
+// MARK: BackgroundTintBlendMode
+
+// MARK: BackgroundTintList
+
+// MARK: BackgroundTintMode
+
+// MARK: Bottom
+
+// MARK: CameraDistance
+
+// MARK: Clickable
+
+struct ClickableViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setClickable
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func clickable(_ value: Bool = true) -> Self {
+        ClickableViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: ClipBounds
+
+// MARK: ClipToOutline
+
+struct ClipToOutlineViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setClipToOutline
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func clipToOutline(_ value: Bool = true) -> Self {
+        ClipToOutlineViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: ContentCaptureSession
+
+// MARK: ContentDescription
+
+// MARK: ContentSensitivity
+
+// MARK: ContextClickable
+
+struct ContextClickableViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setContextClickable
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func contextClickable(_ value: Bool = true) -> Self {
+        ContextClickableViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: DefaultFocusHighlightEnabled
+
+struct DefaultFocusHighlightEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setDefaultFocusHighlightEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func defaultFocusHighlightEnabled(_ value: Bool = true) -> Self {
+        DefaultFocusHighlightEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: DrawingCacheBackgroundColor
+
+// MARK: DrawingCacheEnabled
+
+struct DrawingCacheEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setDrawingCacheEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func drawingCacheEnabled(_ value: Bool = true) -> Self {
+        DrawingCacheEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: DrawingCacheQuality
+
+// MARK: DuplicateParentStateEnabled
+
+struct DuplicateParentStateEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setDuplicateParentStateEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func duplicateParentStateEnabled(_ value: Bool = true) -> Self {
+        DuplicateParentStateEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Elevation
+
+// MARK: Enabled
+
+struct EnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func Enabled(_ value: Bool = true) -> Self {
+        EnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: FadingEdgeLength
+
+// MARK: FilterTouchesWhenObscured
+
+struct FilterTouchesWhenObscuredViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setFilterTouchesWhenObscured
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func filterTouchesWhenObscured(_ value: Bool = true) -> Self {
+        FilterTouchesWhenObscuredViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: FitsSystemWindows
+
+struct SetFitsSystemWindowsViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setFitsSystemWindows
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func fitsSystemWindows(_ value: Bool = true) -> Self {
+        SetFitsSystemWindowsViewProperty(value: value).applyOrAppend(nil, self)
+        return self
+    }
+}
+
+// MARK: Focusable
+
+struct FocusableViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setFocusable
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func focusable(_ value: Bool = true) -> Self {
+        FocusableViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: FocusableInTouchMode
+
+struct FocusableInTouchModeViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setFocusableInTouchMode
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func focusableInTouchMode(_ value: Bool = true) -> Self {
+        FocusableInTouchModeViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: FocusedByDefault
+
+struct FocusedByDefaultViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setFocusedByDefault
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func focusedByDefault(_ value: Bool = true) -> Self {
+        FocusedByDefaultViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: ForceDarkAllowed
+
+struct ForceDarkAllowedViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setForceDarkAllowed
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func forceDarkAllowed(_ value: Bool = true) -> Self {
+        ForceDarkAllowedViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Foreground
+
+// MARK: ForegroundGravity
+
+// MARK: ForegroundTintBlendMode
+
+// MARK: ForegroundTintList
+
+// MARK: ForegroundTintMode
+
+// MARK: FrameContentVelocity
+
+// MARK: HandwritingBoundsOffsets
+
+// MARK: HandwritingDelegateFlags
+
+// MARK: HandwritingDelegatorCallback
+
+// MARK: HapticFeedbackEnabled
+
+struct HapticFeedbackEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHapticFeedbackEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func hapticFeedbackEnabled(_ value: Bool = true) -> Self {
+        HapticFeedbackEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: HasTransientState
+
+struct HasTransientStateViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHasTransientState
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func hasTransientState(_ value: Bool = true) -> Self {
+        HasTransientStateViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: HorizontalFadingEdgeEnabled
+
+struct HorizontalFadingEdgeEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHorizontalFadingEdgeEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func horizontalFadingEdgeEnabled(_ value: Bool = true) -> Self {
+        HorizontalFadingEdgeEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: HorizontalScrollBarEnabled
+
+struct HorizontalScrollBarEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHorizontalScrollBarEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func horizontalScrollBarEnabled(_ value: Bool = true) -> Self {
+        HorizontalScrollBarEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: HorizontalScrollbarThumbDrawable
+
+// MARK: HorizontalScrollbarTrackDrawable
+
+// MARK: Hovered
+
+struct HoveredViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHovered
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func hovered(_ value: Bool = true) -> Self {
+        HoveredViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Id
+
+// MARK: ImportantForAccessibility
+
+// MARK: ImportantForAutofill
+
+// MARK: ImportantForContentCapture
+
+// MARK: IsCredential
+
+struct IsCredentialViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setIsCredential
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func isCredential(_ value: Bool = true) -> Self {
+        IsCredentialViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: IsHandwritingDelegate
+
+struct IsHandwritingDelegateViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setIsHandwritingDelegate
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func isHandwritingDelegate(_ value: Bool = true) -> Self {
+        IsHandwritingDelegateViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: KeepScreenOn
+
+struct KeepScreenOnViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setKeepScreenOn
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func keepScreenOn(_ value: Bool = true) -> Self {
+        KeepScreenOnViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: KeyboardNavigationCluster
+
+struct KeyboardNavigationClusterViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setKeyboardNavigationCluster
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func keyboardNavigationCluster(_ value: Bool = true) -> Self {
+        KeyboardNavigationClusterViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: LabelFor
+
+// MARK: LayerPaint
+
+// MARK: LayerType
+
+// MARK: LayoutDirection
+
+// MARK: LayoutParams
+
+// MARK: Left
+
+// MARK: LeftTopRightBottom
+
+// MARK: LongClickable
+
+struct LongClickableViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setLongClickable
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func longClickable(_ value: Bool = true) -> Self {
+        LongClickableViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: MinimumWidth
+
+// MARK: MinimumHeight
+
+// MARK: NestedScrollingEnabled
+
+struct NestedScrollingEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setNestedScrollingEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func nestedScrollingEnabled(_ value: Bool = true) -> Self {
+        NestedScrollingEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: NextClusterForwardId
+
+// MARK: NextFocusDownId
+
+// MARK: NextFocusForwardId
+
+// MARK: NextFocusLeftId
+
+// MARK: NextFocusRightId
+
+// MARK: NextFocusUpId
+
+// MARK: OnApplyWindowInsetsListener
+
+// MARK: OnCapturedPointerListener
+
+// MARK: OnClickListener
+
+struct OnClickListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnClickListener
+    let value: NativeOnClickListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnClickListener))
+        value.attach(to: instance)
+    }
+}
+extension View {
+    @discardableResult
+    public func onClick(_ handler: @escaping () async -> Void) -> Self {
+        OnClickListenerViewProperty(value: .init(handler)).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: OnContextClickListener
+
+// MARK: OnCreateContextMenuListener
+
+// MARK: OnDragListener
+
+// MARK: OnFocusChangeListener
+
+// MARK: OnGenericMotionListener
+
+// MARK: OnHoverListener
+
+// MARK: OnKeyListener
+
+// MARK: OnLongClickListener
+
+// MARK: OnReceiveContentListener
+
+// MARK: OnScrollChangeListener
+
+// MARK: OnSystemUiVisibilityChangeListener
+
+// MARK: OnTouchListener
+
+// MARK: OutlineAmbientShadowColor
+
+// MARK: OutlineProvider
+
+// MARK: OutlineSpotShadowColor
+
+// MARK: OverScrollMode
+
+// MARK: Padding
+
+// MARK: PaddingRelative
+
+// MARK: PendingCredentialRequest
+
+// MARK: PivotX
+
+// MARK: PivotY
+
+// MARK: PointerIcon
+
+// MARK: PreferKeepClear
+
+struct PreferKeepClearViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setPreferKeepClear
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func preferKeepClear(_ value: Bool = true) -> Self {
+        PreferKeepClearViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: PreferKeepClearRects
+
+// MARK: Pressed
+
+struct PressedViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setPressed
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func pressed(_ value: Bool = true) -> Self {
+        PressedViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: RenderEffect
+
+// MARK: RequestedFrameRate
+
+// MARK: RevealOnFocusHint
+
+struct RevealOnFocusHintViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setRevealOnFocusHint
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func revealOnFocusHint(_ value: Bool = true) -> Self {
+        RevealOnFocusHintViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Right
+
+// MARK: Rotation
+
+// MARK: RotationX
+
+// MARK: RotationY
+
+// MARK: SaveEnabled
+
+struct SaveEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setSaveEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func saveEnabled(_ value: Bool = true) -> Self {
+        SaveEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: SaveFromParentEnabled
+
+struct SaveFromParentEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setSaveFromParentEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func saveFromParentEnabled(_ value: Bool = true) -> Self {
+        SaveFromParentEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: ScaleX
+
+// MARK: ScaleY
+
+// MARK: ScreenReaderFocusable
+
+struct ScreenReaderFocusableViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScreenReaderFocusable
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func screenReaderFocusable(_ value: Bool = true) -> Self {
+        ScreenReaderFocusableViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: ScrollBarDefaultDelayBeforeFade
+
+// MARK: ScrollBarFadeDuration
+
+// MARK: ScrollBarSize
+
+// MARK: ScrollBarStyle
+
+// MARK: ScrollCaptureCallback
+
+// MARK: ScrollCaptureHint
+
+// MARK: ScrollContainer
+
+struct ScrollContainerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollContainer
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func scrollContainer(_ value: Bool = true) -> Self {
+        ScrollContainerViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: ScrollIndicators
+
+// MARK: ScrollX
+
+// MARK: ScrollY
+
+// MARK: ScrollbarFadingEnabled
+
+struct ScrollbarFadingEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollbarFadingEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func scrollbarFadingEnabled(_ value: Bool = true) -> Self {
+        ScrollbarFadingEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Selected
+
+struct SelectedViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setSelected
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func selected(_ value: Bool = true) -> Self {
+        SelectedViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: SoundEffectsEnabled
+
+struct SoundEffectsEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setSoundEffectsEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func soundEffectsEnabled(_ value: Bool = true) -> Self {
+        SoundEffectsEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: StateDescription
+
+// MARK: StateListAnimator
+
+// MARK: SupplementalDescription
+
+// MARK: SystemGestureExclusionRects
+
+// MARK: SystemUiVisibility
+
+// MARK: Tag
+
+// MARK: TextAlignment
+
+// MARK: TextDirection
+
+// MARK: TooltipText
+
+// MARK: Top
+
+// MARK: TouchDelegate
+
+// MARK: TransitionAlpha
+
+// MARK: TransitionName
+
+// MARK: TransitionVisibility
+
+// MARK: TranslationX
+
+// MARK: TranslationY
+
+// MARK: TranslationZ
+
+// MARK: VerticalFadingEdgeEnabled
+
+struct VerticalFadingEdgeEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setVerticalFadingEdgeEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func verticalFadingEdgeEnabled(_ value: Bool = true) -> Self {
+        VerticalFadingEdgeEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: VerticalScrollBarEnabled
+
+struct VerticalScrollBarEnabledViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setVerticalScrollBarEnabled
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func verticalScrollBarEnabled(_ value: Bool = true) -> Self {
+        VerticalScrollBarEnabledViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: VerticalScrollbarPosition
+
+// MARK: VerticalScrollbarThumbDrawable
+
+// MARK: VerticalScrollbarTrackDrawable
+
+// MARK: ViewTranslationCallback
+
+// MARK: Visibility
+
+// MARK: WillNotCacheDrawing
+
+struct WillNotCacheDrawingViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setWillNotCacheDrawing
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func willNotCacheDrawing(_ value: Bool = true) -> Self {
+        WillNotCacheDrawingViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: WillNotDraw
+
+struct WillNotDrawViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setWillNotDraw
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    @discardableResult
+    public func willNotDraw(_ value: Bool = true) -> Self {
+        WillNotDrawViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: WindowInsetsAnimationCallback
+
+// MARK: X
+
+// MARK: Y
+
+// MARK: Z

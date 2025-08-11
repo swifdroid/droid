@@ -1,7 +1,34 @@
+#if canImport(AndroidLooper)
+import AndroidLooper
+#endif
+
 public protocol ViewPropertyToApply {
     associatedtype Value
     var key: ViewPropertyKey { get }
     var value: Value { get }
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance)
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
+    func applyOrAppend<T: View>(_ env: JEnv?, _ view: T) -> T
+}
+
+extension ViewPropertyToApply {
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
+    @discardableResult
+    public func applyOrAppend<T: View>(_ env: JEnv?, _ view: T) -> T {
+        if let instance = view.instance {
+            applyToInstance(env, instance)
+        } else {
+            view._propertiesToApply.append(self)
+        }
+        return view
+    }
 }
 
 // MARK: - Key Definition
@@ -15,30 +42,179 @@ public struct ViewPropertyKey: ExpressibleByStringLiteral, Hashable, RawRepresen
     public init(stringLiteral value: String) {
         rawValue = value
     }
-    
-    // Built-in keys
-    static let backgroundColor: ViewPropertyKey = "backgroundColor"
-    static let orientation: ViewPropertyKey = "orientation"
-    static let onClick: ViewPropertyKey = "onClick"
-    static let fitsSystemWindows: ViewPropertyKey = "fitsSystemWindows"
 }
 
-struct BackgroundColorViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = .backgroundColor
-    let value: GraphicsColor
-}
+/// the list of methods has been taken from there https://developer.android.com/reference/android/view/View#public-methods_1
 
-struct OrientationViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = .orientation
-    let value: LinearLayout.Orientation
-}
-
-struct OnClickViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = .onClick
-    let value: NativeOnClickListener
-}
-
-struct FitsSystemWindowsViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = .fitsSystemWindows
-    let value: Bool
+extension ViewPropertyKey {
+    static let setAccessibilityDataSensitive: ViewPropertyKey = "setAccessibilityDataSensitive"
+    static let setAccessibilityDelegate: ViewPropertyKey = "setAccessibilityDelegate"
+    static let setAccessibilityHeading: ViewPropertyKey = "setAccessibilityHeading"
+    static let setAccessibilityLiveRegion: ViewPropertyKey = "setAccessibilityLiveRegion"
+    static let setAccessibilityPaneTitle: ViewPropertyKey = "setAccessibilityPaneTitle"
+    static let setAccessibilityTraversalAfter: ViewPropertyKey = "setAccessibilityTraversalAfter"
+    static let setAccessibilityTraversalBefore: ViewPropertyKey = "setAccessibilityTraversalBefore"
+    static let setActivated: ViewPropertyKey = "setActivated"
+    static let setAllowClickWhenDisabled: ViewPropertyKey = "setAllowClickWhenDisabled"
+    static let setAllowedHandwritingDelegatePackage: ViewPropertyKey = "setAllowedHandwritingDelegatePackage"
+    static let setAllowedHandwritingDelegatorPackage: ViewPropertyKey = "setAllowedHandwritingDelegatorPackage"
+    static let setAlpha: ViewPropertyKey = "setAlpha"
+    static let setAnimation: ViewPropertyKey = "setAnimation"
+    static let setAnimationMatrix: ViewPropertyKey = "setAnimationMatrix"
+    static let setAutoHandwritingEnabled: ViewPropertyKey = "setAutoHandwritingEnabled"
+    static let setAutofillHints: ViewPropertyKey = "setAutofillHints"
+    static let setAutofillId: ViewPropertyKey = "setAutofillId"
+    static let setBackground: ViewPropertyKey = "setBackground"
+    static let setBackgroundColor: ViewPropertyKey = "setBackgroundColor"
+    static let setBackgroundResource: ViewPropertyKey = "setBackgroundResource"
+    static let setBackgroundTintBlendMode: ViewPropertyKey = "setBackgroundTintBlendMode"
+    static let setBackgroundTintList: ViewPropertyKey = "setBackgroundTintList"
+    static let setBackgroundTintMode: ViewPropertyKey = "setBackgroundTintMode"
+    static let setBottom: ViewPropertyKey = "setBottom"
+    static let setCameraDistance: ViewPropertyKey = "setCameraDistance"
+    static let setClickable: ViewPropertyKey = "setClickable"
+    static let setClipBounds: ViewPropertyKey = "setClipBounds"
+    static let setClipToOutline: ViewPropertyKey = "setClipToOutline"
+    static let setContentCaptureSession: ViewPropertyKey = "setContentCaptureSession"
+    static let setContentDescription: ViewPropertyKey = "setContentDescription"
+    static let setContentSensitivity: ViewPropertyKey = "setContentSensitivity"
+    static let setContextClickable: ViewPropertyKey = "setContextClickable"
+    static let setDefaultFocusHighlightEnabled: ViewPropertyKey = "setDefaultFocusHighlightEnabled"
+    static let setDrawingCacheBackgroundColor: ViewPropertyKey = "setDrawingCacheBackgroundColor"
+    static let setDrawingCacheEnabled: ViewPropertyKey = "setDrawingCacheEnabled"
+    static let setDrawingCacheQuality: ViewPropertyKey = "setDrawingCacheQuality"
+    static let setDuplicateParentStateEnabled: ViewPropertyKey = "setDuplicateParentStateEnabled"
+    static let setElevation: ViewPropertyKey = "setElevation"
+    static let setEnabled: ViewPropertyKey = "setEnabled"
+    static let setFadingEdgeLength: ViewPropertyKey = "setFadingEdgeLength"
+    static let setFilterTouchesWhenObscured: ViewPropertyKey = "setFilterTouchesWhenObscured"
+    static let setFitsSystemWindows: ViewPropertyKey = "setFitsSystemWindows"
+    static let setFocusable: ViewPropertyKey = "setFocusable"
+    static let setFocusableInTouchMode: ViewPropertyKey = "setFocusableInTouchMode"
+    static let setFocusedByDefault: ViewPropertyKey = "setFocusedByDefault"
+    static let setForceDarkAllowed: ViewPropertyKey = "setForceDarkAllowed"
+    static let setForeground: ViewPropertyKey = "setForeground"
+    static let setForegroundGravity: ViewPropertyKey = "setForegroundGravity"
+    static let setForegroundTintBlendMode: ViewPropertyKey = "setForegroundTintBlendMode"
+    static let setForegroundTintList: ViewPropertyKey = "setForegroundTintList"
+    static let setForegroundTintMode: ViewPropertyKey = "setForegroundTintMode"
+    static let setFrameContentVelocity: ViewPropertyKey = "setFrameContentVelocity"
+    static let setHandwritingBoundsOffsets: ViewPropertyKey = "setHandwritingBoundsOffsets"
+    static let setHandwritingDelegateFlags: ViewPropertyKey = "setHandwritingDelegateFlags"
+    static let setHandwritingDelegatorCallback: ViewPropertyKey = "setHandwritingDelegatorCallback"
+    static let setHapticFeedbackEnabled: ViewPropertyKey = "setHapticFeedbackEnabled"
+    static let setHasTransientState: ViewPropertyKey = "setHasTransientState"
+    static let setHorizontalFadingEdgeEnabled: ViewPropertyKey = "setHorizontalFadingEdgeEnabled"
+    static let setHorizontalScrollBarEnabled: ViewPropertyKey = "setHorizontalScrollBarEnabled"
+    static let setHorizontalScrollbarThumbDrawable: ViewPropertyKey = "setHorizontalScrollbarThumbDrawable"
+    static let setHorizontalScrollbarTrackDrawable: ViewPropertyKey = "setHorizontalScrollbarTrackDrawable"
+    static let setHovered: ViewPropertyKey = "setHovered"
+    static let setId: ViewPropertyKey = "setId"
+    static let setImportantForAccessibility: ViewPropertyKey = "setImportantForAccessibility"
+    static let setImportantForAutofill: ViewPropertyKey = "setImportantForAutofill"
+    static let setImportantForContentCapture: ViewPropertyKey = "setImportantForContentCapture"
+    static let setIsCredential: ViewPropertyKey = "setIsCredential"
+    static let setIsHandwritingDelegate: ViewPropertyKey = "setIsHandwritingDelegate"
+    static let setKeepScreenOn: ViewPropertyKey = "setKeepScreenOn"
+    static let setKeyboardNavigationCluster: ViewPropertyKey = "setKeyboardNavigationCluster"
+    static let setLabelFor: ViewPropertyKey = "setLabelFor"
+    static let setLayerPaint: ViewPropertyKey = "setLayerPaint"
+    static let setLayerType: ViewPropertyKey = "setLayerType"
+    static let setLayoutDirection: ViewPropertyKey = "setLayoutDirection"
+    static let setLayoutParams: ViewPropertyKey = "setLayoutParams"
+    static let setLeft: ViewPropertyKey = "setLeft"
+    static let setLeftTopRightBottom: ViewPropertyKey = "setLeftTopRightBottom"
+    static let setLongClickable: ViewPropertyKey = "setLongClickable"
+    static let setMinimumHeight: ViewPropertyKey = "setMinimumHeight"
+    static let setMinimumWidth: ViewPropertyKey = "setMinimumWidth"
+    static let setNestedScrollingEnabled: ViewPropertyKey = "setNestedScrollingEnabled"
+    static let setNextClusterForwardId: ViewPropertyKey = "setNextClusterForwardId"
+    static let setNextFocusDownId: ViewPropertyKey = "setNextFocusDownId"
+    static let setNextFocusForwardId: ViewPropertyKey = "setNextFocusForwardId"
+    static let setNextFocusLeftId: ViewPropertyKey = "setNextFocusLeftId"
+    static let setNextFocusRightId: ViewPropertyKey = "setNextFocusRightId"
+    static let setNextFocusUpId: ViewPropertyKey = "setNextFocusUpId"
+    static let setOnApplyWindowInsetsListener: ViewPropertyKey = "setOnApplyWindowInsetsListener"
+    static let setOnCapturedPointerListener: ViewPropertyKey = "setOnCapturedPointerListener"
+    static let setOnClickListener: ViewPropertyKey = "setOnClickListener"
+    static let setOnContextClickListener: ViewPropertyKey = "setOnContextClickListener"
+    static let setOnCreateContextMenuListener: ViewPropertyKey = "setOnCreateContextMenuListener"
+    static let setOnDragListener: ViewPropertyKey = "setOnDragListener"
+    static let setOnFocusChangeListener: ViewPropertyKey = "setOnFocusChangeListener"
+    static let setOnGenericMotionListener: ViewPropertyKey = "setOnGenericMotionListener"
+    static let setOnHoverListener: ViewPropertyKey = "setOnHoverListener"
+    static let setOnKeyListener: ViewPropertyKey = "setOnKeyListener"
+    static let setOnLongClickListener: ViewPropertyKey = "setOnLongClickListener"
+    static let setOnReceiveContentListener: ViewPropertyKey = "setOnReceiveContentListener"
+    static let setOnScrollChangeListener: ViewPropertyKey = "setOnScrollChangeListener"
+    static let setOnSystemUiVisibilityChangeListener: ViewPropertyKey = "setOnSystemUiVisibilityChangeListener"
+    static let setOnTouchListener: ViewPropertyKey = "setOnTouchListener"
+    static let setOutlineAmbientShadowColor: ViewPropertyKey = "setOutlineAmbientShadowColor"
+    static let setOutlineProvider: ViewPropertyKey = "setOutlineProvider"
+    static let setOutlineSpotShadowColor: ViewPropertyKey = "setOutlineSpotShadowColor"
+    static let setOverScrollMode: ViewPropertyKey = "setOverScrollMode"
+    static let setPadding: ViewPropertyKey = "setPadding"
+    static let setPaddingRelative: ViewPropertyKey = "setPaddingRelative"
+    static let setPendingCredentialRequest: ViewPropertyKey = "setPendingCredentialRequest"
+    static let setPivotX: ViewPropertyKey = "setPivotX"
+    static let setPivotY: ViewPropertyKey = "setPivotY"
+    static let setPointerIcon: ViewPropertyKey = "setPointerIcon"
+    static let setPreferKeepClear: ViewPropertyKey = "setPreferKeepClear"
+    static let setPreferKeepClearRects: ViewPropertyKey = "setPreferKeepClearRects"
+    static let setPressed: ViewPropertyKey = "setPressed"
+    static let setRenderEffect: ViewPropertyKey = "setRenderEffect"
+    static let setRequestedFrameRate: ViewPropertyKey = "setRequestedFrameRate"
+    static let setRevealOnFocusHint: ViewPropertyKey = "setRevealOnFocusHint"
+    static let setRight: ViewPropertyKey = "setRight"
+    static let setRotation: ViewPropertyKey = "setRotation"
+    static let setRotationX: ViewPropertyKey = "setRotationX"
+    static let setRotationY: ViewPropertyKey = "setRotationY"
+    static let setSaveEnabled: ViewPropertyKey = "setSaveEnabled"
+    static let setSaveFromParentEnabled: ViewPropertyKey = "setSaveFromParentEnabled"
+    static let setScaleX: ViewPropertyKey = "setScaleX"
+    static let setScaleY: ViewPropertyKey = "setScaleY"
+    static let setScreenReaderFocusable: ViewPropertyKey = "setScreenReaderFocusable"
+    static let setScrollBarDefaultDelayBeforeFade: ViewPropertyKey = "setScrollBarDefaultDelayBeforeFade"
+    static let setScrollBarFadeDuration: ViewPropertyKey = "setScrollBarFadeDuration"
+    static let setScrollBarSize: ViewPropertyKey = "setScrollBarSize"
+    static let setScrollBarStyle: ViewPropertyKey = "setScrollBarStyle"
+    static let setScrollCaptureCallback: ViewPropertyKey = "setScrollCaptureCallback"
+    static let setScrollCaptureHint: ViewPropertyKey = "setScrollCaptureHint"
+    static let setScrollContainer: ViewPropertyKey = "setScrollContainer"
+    static let setScrollIndicators: ViewPropertyKey = "setScrollIndicators"
+    static let setScrollX: ViewPropertyKey = "setScrollX"
+    static let setScrollY: ViewPropertyKey = "setScrollY"
+    static let setScrollbarFadingEnabled: ViewPropertyKey = "setScrollbarFadingEnabled"
+    static let setSelected: ViewPropertyKey = "setSelected"
+    static let setSoundEffectsEnabled: ViewPropertyKey = "setSoundEffectsEnabled"
+    static let setStateDescription: ViewPropertyKey = "setStateDescription"
+    static let setStateListAnimator: ViewPropertyKey = "setStateListAnimator"
+    static let setSupplementalDescription: ViewPropertyKey = "setSupplementalDescription"
+    static let setSystemGestureExclusionRects: ViewPropertyKey = "setSystemGestureExclusionRects"
+    static let setSystemUiVisibility: ViewPropertyKey = "setSystemUiVisibility"
+    static let setTag: ViewPropertyKey = "setTag"
+    static let setTextAlignment: ViewPropertyKey = "setTextAlignment"
+    static let setTextDirection: ViewPropertyKey = "setTextDirection"
+    static let setTooltipText: ViewPropertyKey = "setTooltipText"
+    static let setTop: ViewPropertyKey = "setTop"
+    static let setTouchDelegate: ViewPropertyKey = "setTouchDelegate"
+    static let setTransitionAlpha: ViewPropertyKey = "setTransitionAlpha"
+    static let setTransitionName: ViewPropertyKey = "setTransitionName"
+    static let setTransitionVisibility: ViewPropertyKey = "setTransitionVisibility"
+    static let setTranslationX: ViewPropertyKey = "setTranslationX"
+    static let setTranslationY: ViewPropertyKey = "setTranslationY"
+    static let setTranslationZ: ViewPropertyKey = "setTranslationZ"
+    static let setVerticalFadingEdgeEnabled: ViewPropertyKey = "setVerticalFadingEdgeEnabled"
+    static let setVerticalScrollBarEnabled: ViewPropertyKey = "setVerticalScrollBarEnabled"
+    static let setVerticalScrollbarPosition: ViewPropertyKey = "setVerticalScrollbarPosition"
+    static let setVerticalScrollbarThumbDrawable: ViewPropertyKey = "setVerticalScrollbarThumbDrawable"
+    static let setVerticalScrollbarTrackDrawable: ViewPropertyKey = "setVerticalScrollbarTrackDrawable"
+    static let setViewTranslationCallback: ViewPropertyKey = "setViewTranslationCallback"
+    static let setVisibility: ViewPropertyKey = "setVisibility"
+    static let setWillNotCacheDrawing: ViewPropertyKey = "setWillNotCacheDrawing"
+    static let setWillNotDraw: ViewPropertyKey = "setWillNotDraw"
+    static let setWindowInsetsAnimationCallback: ViewPropertyKey = "setWindowInsetsAnimationCallback"
+    static let setX: ViewPropertyKey = "setX"
+    static let setY: ViewPropertyKey = "setY"
+    static let setZ: ViewPropertyKey = "setZ"
 }

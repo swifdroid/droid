@@ -169,38 +169,6 @@ extension View {
         //     #endif
         // }
 
-        public func setBackgroundColor(_ color: GraphicsColor) {
-            #if os(Android)
-            InnerLog.d("setBackgroundColor color: \(color.value)")
-            guard
-                let env = JEnv.current(),
-                let methodId = clazz.methodId(env: env, name: "setBackgroundColor", signature: .init(.int, returning: .void))
-            else { return }
-            env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: [color])
-            #endif
-        }
-
-        public func setFitsSystemWindows(_ value: Bool) {
-            #if os(Android)
-            InnerLog.d("setFitsSystemWindows: \(value)")
-            guard
-                let env = JEnv.current(),
-                let methodId = clazz.methodId(env: env, name: "setFitsSystemWindows", signature: .init(.boolean, returning: .void))
-            else { return }
-            env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: [value])
-            #endif
-        }
-
-        public func setOrientation(_ orientation: LinearLayout.Orientation) {
-            #if os(Android)
-            guard
-                let env = JEnv.current(),
-                let methodId = clazz.methodId(env: env, name: "setOrientation", signature: .init(.int, returning: .void))
-            else { return }
-            env.callVoidMethod(object: object, methodId: methodId, args: [orientation.rawValue])
-            #endif
-        }
-
         public func setBackground(_ class: JClass) {
             #if os(Android)
             // guard
@@ -211,14 +179,23 @@ extension View {
             #endif
         }
 
-        public func setOnClickListener(_ listener: NativeOnClickListener) {
+        public func callVoidMethod(_ env: JEnv?, name: String, signatureItems: JSignatureItem..., args: JSignatureItemable...) {
             #if os(Android)
             guard
-                let instance = listener.instance,
-                let env = JEnv.current(),
-                let methodId = clazz.methodId(env: env, name: "setOnClickListener", signature: .init(.object(.android.view.ViewOnClickListener), returning: .void))
+                let env = env ?? JEnv.current(),
+                let methodId = clazz.methodId(env: env, name: name, signature: .init(signatureItems, returning: .void))
             else { return }
-            env.callVoidMethod(object: object, methodId: methodId, args: [instance.object])
+            env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
+            #endif
+        }
+
+        public func callVoidMethod(_ env: JEnv?, name: String, args: JSignatureItemable...) {
+            #if os(Android)
+            guard
+                let env = env ?? JEnv.current(),
+                let methodId = clazz.methodId(env: env, name: name, signature: .init(args.map { $0.signatureItemWithValue.signatureItem }, returning: .void))
+            else { return }
+            env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
             #endif
         }
     }
