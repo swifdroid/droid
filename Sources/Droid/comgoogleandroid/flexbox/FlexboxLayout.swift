@@ -183,4 +183,17 @@ extension FlexboxLayout {
         /// Cross start to cross end -> Left to right (In LTR languages)
         case columnReverse
     }
+
+    public enum FlexWrap: Int32 {
+        /// The flex container is single-line.
+        case noWrap
+
+        /// The flex container is multi-line.
+        case wrap
+
+        /// The flex container is multi-line.
+        ///
+        /// The direction of the cross axis is opposed to the direction as the `wrap`.
+        case wrapReverse
+    }
 }
