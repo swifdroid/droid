@@ -14,8 +14,67 @@ open class TextView: View, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.TextView }
 
+    var textState: State<String>?
+
     @discardableResult
     public override init() {
         super.init()
+    }
+
+    @discardableResult
+    public init(_ text: String) {
+        textState = State(wrappedValue: text)
+        super.init()
+        applyTextState()
+    }
+
+    @discardableResult
+    public init(_ state: State<String>) {
+        textState = state
+        super.init()
+        applyTextState()
+    }
+
+    func applyTextState() {
+        guard let textState else { return }
+        text(textState.wrappedValue)
+        textState.listen { [weak self] old, new in
+            guard old != new else { return }
+            self?.text(new)
+        }
+    }
+}
+
+// MARK: SetText
+
+extension ViewPropertyKey {
+    static let setText: Self = "setText"
+}
+struct SetTextViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setText
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: string.object.signed(as: .java.lang.CharSequence))
+        #endif
+    }
+}
+extension TextView {
+    @discardableResult
+    func text(_ value: String) -> Self {
+        SetTextViewProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
+// MARK: Gravity
+
+extension TextView {
+    @discardableResult
+    public func gravity(_ value: Gravity) -> Self {
+        GravityViewProperty(value: value).applyOrAppend(nil, self)
     }
 }
