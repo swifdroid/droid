@@ -17,7 +17,7 @@ extension AndroidPackage.GraphicsPackage {
 
 /// A structure representing an ARGB color, supporting multiple hex color formats.
 /// Compatible with Android-style `0xAARRGGBB` encoding.
-public struct GraphicsColor: ExpressibleByIntegerLiteral, JValuable, Sendable {
+public struct GraphicsColor: ExpressibleByIntegerLiteral, Hashable, JValuable, Sendable {
     /// The final 32-bit ARGB color value.
     public let value: Int64
 
