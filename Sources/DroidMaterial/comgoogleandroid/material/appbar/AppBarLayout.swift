@@ -100,7 +100,7 @@ struct OverlayTopBehaviorParam: Behavior.ParamToApply {
     let key: Behavior.ParamKey = .setOverlayTop
     let value: (Int, DimensionUnit)
     func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
-        behavior.callVoidMethod(name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+        behavior.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 
@@ -110,7 +110,7 @@ struct LeftAndRightOffsetBehaviorParam: Behavior.ParamToApply {
     let key: Behavior.ParamKey = .setLeftAndRightOffset
     let value: (Int, DimensionUnit)
     func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
-        behavior.callVoidMethod(name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+        behavior.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 
@@ -120,7 +120,7 @@ struct TopAndBottomOffsetBehaviorParam: Behavior.ParamToApply {
     let key: Behavior.ParamKey = .setTopAndBottomOffset
     let value: (Int, DimensionUnit)
     func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
-        behavior.callVoidMethod(name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+        behavior.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 
@@ -130,7 +130,7 @@ struct VerticalOffsetEnabledBehaviorParam: Behavior.ParamToApply {
     let key: Behavior.ParamKey = .setVerticalOffsetEnabled
     let value: Bool
     func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
-        behavior.callVoidMethod(name: key.rawValue, args: value)
+        behavior.callVoidMethod(env, name: key.rawValue, args: value)
     }
 }
 
@@ -140,6 +140,6 @@ struct HorizontalOffsetEnabledBehaviorParam: Behavior.ParamToApply {
     let key: Behavior.ParamKey = .setHorizontalOffsetEnabled
     let value: Bool
     func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance) {
-        behavior.callVoidMethod(name: key.rawValue, args: value)
+        behavior.callVoidMethod(env, name: key.rawValue, args: value)
     }
 }
