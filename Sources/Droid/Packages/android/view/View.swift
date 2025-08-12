@@ -1088,15 +1088,29 @@ struct OnClickListenerViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setOnClickListener
     let value: NativeOnClickListener
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
         guard let listener = value.instance else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnClickListener))
-        value.attach(to: instance)
     }
 }
 extension View {
     @discardableResult
     public func onClick(_ handler: @escaping () async -> Void) -> Self {
         OnClickListenerViewProperty(value: .init(handler)).applyOrAppend(nil, self)
+    }
+
+    @discardableResult
+    public func onClick(_ handler: @escaping (Self) async -> Void) -> Self {
+        #if canImport(AndroidLooper)
+        return OnClickListenerViewProperty(value: .init({ @UIThreadActor [weak self] in
+            guard let self else { return }
+            await handler(self)
+        })).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
     }
 }
 
