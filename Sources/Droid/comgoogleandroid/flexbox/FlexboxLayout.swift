@@ -196,4 +196,21 @@ extension FlexboxLayout {
         /// The direction of the cross axis is opposed to the direction as the `wrap`.
         case wrapReverse
     }
+
+    public enum AlignItems: Int32 {
+        /// Flex item's edge is placed on the cross start line.
+        case flexStart = 0
+
+        /// Flex item's edge is placed on the cross end line.
+        case flexEnd = 1
+
+        /// Flex item's edge is centered along the cross axis.
+        case center = 2
+
+        /// Flex items are aligned based on their text's baselines.
+        case baseline = 3
+
+        /// Flex items are stretched to fill the flex line's cross size.
+        case stretch = 4
+    }
 }
