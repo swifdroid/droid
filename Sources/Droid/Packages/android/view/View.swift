@@ -396,23 +396,33 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
         case .forEach(let fr):
             InnerLog.d("view(id: \(id)) addItem 4 (forEach)")
             let subview: View
-            if let _ = fr.orientation {
-                let ll: LinearLayout = LinearLayout()
-                // ll.setLayoutParams() // TODO: implement delayed LP
-                subview = ll
-            } else {
-                subview = FrameLayout()
-            }
-            fr.allItems().forEach {
-                subview.addItem($0)
-            }
-            add(views: [subview], at: index)
-            fr.subscribeToChanges({}, { deletions, insertions, _ in
-                subview.subviews.removeFromSuperview(at: deletions)
-                insertions.forEach {
-                    subview.addItem(fr.items(at: $0), at: $0)
+            if let orientation = fr.orientation {
+                subview = LinearLayout()
+                    .orientation(orientation)
+                    .width(.matchParent)
+                    .height(.matchParent)
+                fr.allItems().forEach {
+                    subview.addItem($0)
                 }
-            }) {}
+                add(views: [subview], at: index)
+                fr.subscribeToChanges({}, { deletions, insertions, _ in
+                    subview.subviews.removeFromSuperview(at: deletions)
+                    insertions.forEach {
+                        subview.addItem(fr.items(at: $0), at: $0)
+                    }
+                }) {}
+            } else {
+                fr.allItems().forEach {
+                    addItem($0)
+                }
+                // add(views: [subview], at: index)
+                //     fr.subscribeToChanges({}, { deletions, insertions, _ in
+                //     subviews.removeFromSuperview(at: deletions)
+                //     insertions.forEach {
+                //         self.addItem(fr.items(at: $0), at: $0)
+                //     }
+                // }) {}
+            }
             break
         case .nested(let items):
             InnerLog.d("view(id: \(id)) addItem 5 (nested)")
