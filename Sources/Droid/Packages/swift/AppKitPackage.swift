@@ -20,6 +20,8 @@ extension AppKitPackage {
     public var callbacks: CallbacksPackage { .init(parent: self, name: "callbacks") }
     public class ListenersPackage: JClassName, @unchecked Sendable {}
     public var listeners: ListenersPackage { .init(parent: self, name: "listeners") }
+    public class AdaptersPackage: JClassName, @unchecked Sendable {}
+    public var adapters: AdaptersPackage { .init(parent: self, name: "adapters") }
 }
 
 extension JClassName {
