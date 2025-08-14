@@ -15,43 +15,51 @@ extension Array {
             self.modified = modified
         }
     }
-    public func difference<T1: Hashable, T2: Hashable>(_ first: [T1], _ second: [T2], with compare: (Int,Int) -> Bool) -> DiffResult<T1, T2> {
-        let combinations = first.compactMap { a in (a, second.first { b in compare(a.hashValue, b.hashValue) }) }
-        let common = combinations.filter { $0.1 != nil }.compactMap { ($0.0, $0.1!) }
-        var removed: [DiffItem<T1>] = combinations.filter { $0.1 == nil }.compactMap { a,_ in
-            guard let index = first.firstIndex(where: { $0.hashValue == a.hashValue }) else { return nil }
-            return DiffItem(index: index, value: a)
+    /// Simple version which can't detect modified items
+    public func difference<T1: Hashable, T2: Hashable>(
+        _ first: [T1],
+        _ second: [T2],
+        with compare: (Int, Int) -> Bool
+    ) -> DiffResult<T1, T2> {
+        // Pair up each element in `first` with a matching element in `second`
+        // if `compare` determines they are equal. If no match is found, pair with `nil`.
+        let combinations = first.compactMap { a in
+            (a, second.first { b in compare(a.hashValue, b.hashValue) })
         }
-        var inserted: [DiffItem<T2>] = second.filter { b in
-            !common.contains { compare($0.0.hashValue, b.hashValue) }
-        }.compactMap { b in
-            guard let index = second.firstIndex(where: { $0.hashValue == b.hashValue }) else { return nil }
-            return DiffItem(index: index, value: b)
-        }
-        var modified: [DiffItem<T2>] = []
-//        print("1 removed: \(removed.map { $0.value.hashValue }), inserted: \(inserted.map { $0.value.hashValue }), modified: \(modified)   a.count: \(first.count)  b.count: \(second.count)")
-        inserted.enumerated().forEach { ins in
-            guard let _ins = ins.element as? AnyIdentable else { return }
-            for rem in removed.enumerated() {
-                if let _rem = rem.element as? AnyIdentable {
-                    if _rem.identHash() == _ins.identHash() {
-                        removed.remove(at: rem.offset)
-                        inserted.remove(at: ins.offset)
-                        modified.append(ins.element)
-                        break
-                    }
-                }
+        
+        // Extract all pairs where a match exists (i.e., common elements).
+        // Force unwrap is safe here because we already filtered out nils.
+        let common = combinations
+            .filter { $0.1 != nil }
+            .compactMap { ($0.0, $0.1!) }
+        
+        // Elements in `first` that had no match in `second` → considered "removed".
+        var removed: [DiffItem<T1>] = combinations
+            .filter { $0.1 == nil }
+            .compactMap { a, _ in
+                guard let index = first.firstIndex(where: { $0.hashValue == a.hashValue }) else { return nil }
+                return DiffItem(index: index, value: a)
             }
-        }
-//        print("2 modified: \(modified)")//removed: \(removed), inserted: \(inserted), modified: \(modified)")
-//        print("1 removed: \(removed), inserted: \(inserted), modified: \(modified)   a.count: \(first.count)  b.count: \(second.count)")
-//        if inserted.count > 0, first.count - removed.count == second.count {
-//            modified = inserted
-//            inserted = []
-//        }
-//        print("2 removed: \(removed), inserted: \(inserted), modified: \(modified)")
-        return DiffResult(common: common, removed: removed, inserted: inserted, modified: modified)
+        
+        // Elements in `second` that are not part of `common` → considered "inserted".
+        var inserted: [DiffItem<T2>] = second
+            .filter { b in
+                !common.contains { compare($0.0.hashValue, b.hashValue) }
+            }
+            .compactMap { b in
+                guard let index = second.firstIndex(where: { $0.hashValue == b.hashValue }) else { return nil }
+                return DiffItem(index: index, value: b)
+            }
+        
+        // Return a structured diff result containing all categories.
+        return DiffResult(
+            common: common,
+            removed: removed,
+            inserted: inserted,
+            modified: []
+        )
     }
+    /// Extended version which can detect modified items
     public func difference<T1: AnyIdentable & Hashable, T2: AnyIdentable & Hashable>(_ first: [T1], _ second: [T2]) -> DiffResult<T1, T2> {
         // Create dictionaries mapping an item's unique identity hash to its index and value.
         // This allows for efficient O(1) lookups instead of repeated searches.
