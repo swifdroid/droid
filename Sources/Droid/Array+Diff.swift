@@ -52,9 +52,61 @@ extension Array {
 //        print("2 removed: \(removed), inserted: \(inserted), modified: \(modified)")
         return DiffResult(common: common, removed: removed, inserted: inserted, modified: modified)
     }
+    public func difference<T1: AnyIdentable & Hashable, T2: AnyIdentable & Hashable>(_ first: [T1], _ second: [T2]) -> DiffResult<T1, T2> {
+        // Create dictionaries mapping an item's unique identity hash to its index and value.
+        // This allows for efficient O(1) lookups instead of repeated searches.
+        let oldMap = Dictionary(uniqueKeysWithValues: first.enumerated().map { ($0.element.identHash(), (index: $0.offset, value: $0.element)) })
+        let newMap = Dictionary(uniqueKeysWithValues: second.enumerated().map { ($0.element.identHash(), (index: $0.offset, value: $0.element)) })
+
+        var common: [(old: T1, new: T2)] = []
+        var removed: [DiffItem<T1>] = []
+        var inserted: [DiffItem<T2>] = []
+        var modified: [DiffItem<T2>] = []
+
+        // 1. Check for removed, modified, and common items by iterating through the old collection.
+        for (idHash, oldData) in oldMap {
+            if let newData = newMap[idHash] {
+                // The item exists in both lists. Now, check if it was modified.
+                // An item is modified if its content (checked by full hashValue) OR its position has changed.
+                let hasContentChanged = oldData.value.hashValue != newData.value.hashValue
+                let hasPositionChanged = oldData.index != newData.index
+
+                if hasContentChanged || hasPositionChanged {
+                    modified.append(DiffItem(index: newData.index, value: newData.value))
+                } else {
+                    // Content and position are identical. This is a truly common item.
+                    common.append((old: oldData.value, new: newData.value))
+                }
+            } else {
+                // The item from the old list is not in the new list. It was removed.
+                removed.append(DiffItem(index: oldData.index, value: oldData.value))
+            }
+        }
+
+        // 2. Check for newly inserted items by iterating through the new collection.
+        for (idHash, newData) in newMap {
+            if oldMap[idHash] == nil {
+                // The item from the new list did not exist in the old list. It was inserted.
+                inserted.append(DiffItem(index: newData.index, value: newData.value))
+            }
+        }
+        
+        // Sorting the results makes the output more predictable and easier to work with.
+        return DiffResult(
+            common: common,
+            removed: removed.sorted { $0.index < $1.index },
+            inserted: inserted.sorted { $0.index < $1.index },
+            modified: modified.sorted { $0.index < $1.index }
+        )
+    }
 }
 extension Array where Element: Hashable {
     public func difference<T2: Hashable>(_ new: [T2]) -> DiffResult<Element, T2> {
         difference(self, new, with: ==)
+    }
+}
+extension Array where Element: AnyIdentable & Hashable {
+    public func difference<T2: AnyIdentable & Hashable>(_ new: [T2]) -> DiffResult<Element, T2> {
+        difference(self, new)
     }
 }
