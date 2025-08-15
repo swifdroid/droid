@@ -97,9 +97,9 @@ public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchec
 
     public init (
         count: @escaping (() -> Int),
-        createView: @escaping (Int) -> V,
-        bindView: @escaping (V, Int) -> Void,
-        viewType: @escaping ((Int) -> Int) = { _ in return 0 }
+        createView: @escaping (_ index: Int) -> V,
+        bindView: @escaping (_ view: V, _ index: Int) -> Void,
+        viewType: @escaping ((_ index: Int) -> Int) = { _ in return 0 }
     ) {
         self.itemsCountHandler = count
         self.onCreateViewHolderHandler = createView
