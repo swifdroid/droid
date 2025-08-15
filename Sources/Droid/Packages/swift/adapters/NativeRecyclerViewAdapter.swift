@@ -123,6 +123,13 @@ public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchec
     func bindViewHolder(_ holder: AnyNativeRecyclerViewHolder, _ position: Int) {
         guard let holder = holder as? NativeRecyclerViewHolder<V> else { return }
         if !holder.viewMovedToParent {
+            if let instance = holder.view.instance {
+                instance.lpClassName = .androidx.recyclerview.widget.RecyclerView.LayoutParams
+                if let lp = instance.getLayoutParams() {
+                    holder.view.processLayoutParams(instance, lp, for: holder.view)
+                    holder.view.setLayoutParams(lp)
+                }
+            }
             holder.view.didMoveToParent()
             holder.viewMovedToParent = true
         }
