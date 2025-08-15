@@ -43,6 +43,8 @@ public final class RecyclerView: ViewGroup, @unchecked Sendable {
         #"implementation "androidx.recyclerview:recyclerview:1.3.2""#
     ] }
 
+    var adapterInstance: RecyclerViewAdapterInstance?
+
     @discardableResult
     public override init() {
         super.init()
