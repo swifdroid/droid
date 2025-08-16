@@ -22,8 +22,10 @@ open class TextView: View, @unchecked Sendable {
     }
 
     @discardableResult
-    public init(_ text: String) {
-        textState = State(wrappedValue: text)
+    public init(_ text: String? = nil) {
+        if let text {
+            textState = State(wrappedValue: text)
+        }
         super.init()
         applyTextState()
     }
@@ -52,21 +54,39 @@ extension ViewPropertyKey {
 }
 struct SetTextViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setText
-    let value: String
+    let value: TextView
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
         #if os(Android)
         guard
-            let env = env ?? JEnv.current(),
-            let string = JString(from: value)
+            let textState = value.textState
         else { return }
-        instance.callVoidMethod(env, name: key.rawValue, args: string.object.signed(as: .java.lang.CharSequence))
+        instance.setText(env, textState.wrappedValue)
         #endif
     }
 }
 extension TextView {
     @discardableResult
-    func text(_ value: String) -> Self {
-        SetTextViewProperty(value: value).applyOrAppend(nil, self)
+    public func text(_ value: String) -> Self {
+        textState?.removeAllListeners()
+        textState = .init(wrappedValue: value)
+        return SetTextViewProperty(value: self).applyOrAppend(nil, self)
+    }
+    @discardableResult
+    public func text(_ value: State<String>) -> Self {
+        textState?.removeAllListeners()
+        textState = value
+        return SetTextViewProperty(value: self).applyOrAppend(nil, self)
+    }
+}
+extension TextView.ViewInstance {
+    fileprivate func setText(_ env: JEnv?, _ text: String) {
+        #if os(Android)
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: text)
+        else { return }
+        callVoidMethod(env, name: "setText", args: string.object.signed(as: .java.lang.CharSequence))
+        #endif
     }
 }
 
