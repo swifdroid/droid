@@ -101,6 +101,51 @@ extension RecyclerView {
     @discardableResult
     public func adapter<V: View>(_ adapter: RecyclerViewAdapter<V>) -> Self {
         SetAdapterViewProperty(value: adapter).applyOrAppend(nil, self)
+
+// MARK: DataSetChanges
+
+extension RecyclerView {
+    // MARK: Notify
+
+    /// Refreshes all views, similar to `tableView.reloadData()` on iOS
+    public func notifyDataSetChanged() {
+        adapterInstance?.callVoidMethod(nil, name: "notifyDataSetChanged")
+    }
+
+    // MARK: Insertion
+
+    public func notifyItemInserted(at position: Int) {
+        adapterInstance?.callVoidMethod(nil, name: "notifyItemInserted", args: Int32(position))
+    }
+
+    public func notifyItemRangeInserted(startAt: Int, count: Int) {
+        adapterInstance?.callVoidMethod(nil, name: "notifyItemRangeInserted", args: Int32(startAt), Int32(count))
+    }
+
+    // MARK: Removal
+
+    public func notifyItemRemoved(at position: Int) {
+        adapterInstance?.callVoidMethod(nil, name: "notifyItemRemoved", args: Int32(position))
+    }
+
+    public func notifyItemRangeRemoved(startAt: Int, count: Int) {
+        adapterInstance?.callVoidMethod(nil, name: "notifyItemRangeRemoved", args: Int32(startAt), Int32(count))
+    }
+
+    // MARK: Update
+
+    public func notifyItemChanged(at position: Int) {
+        adapterInstance?.callVoidMethod(nil, name: "notifyItemChanged", args: Int32(position))
+    }
+
+    public func notifyItemRangeChanged(startAt: Int, count: Int) {
+        adapterInstance?.callVoidMethod(nil, name: "notifyItemRangeChanged", args: Int32(startAt), Int32(count))
+    }
+
+    // MARK: Move
+
+    public func notifyItemMoved(fromPosition: Int, toPosition: Int) {
+        adapterInstance?.callVoidMethod(nil, name: "notifyItemMoved", args: Int32(fromPosition), Int32(toPosition))
     }
 }
 
