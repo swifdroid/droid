@@ -88,11 +88,12 @@ extension ViewPropertyKey {
 }
 struct SetAdapterViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setAdapter
-    let value: AnyRecyclerViewAdapter
+    let value: (RecyclerView, AnyRecyclerViewAdapter)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
         guard
-            let adapterInstance = value.instantiate(instance)
+            let adapterInstance = value.1.instantiate(instance)
         else { return }
+        value.0.adapterInstance = adapterInstance
         instance.callVoidMethod(env, name: key.rawValue, args: adapterInstance.object.signed(as: .androidx.recyclerview.widget.RecyclerView.Adapter))
     }
 }
@@ -100,7 +101,136 @@ extension RecyclerView {
     /// Set a new adapter to provide child views on demand.
     @discardableResult
     public func adapter<V: View>(_ adapter: RecyclerViewAdapter<V>) -> Self {
-        SetAdapterViewProperty(value: adapter).applyOrAppend(nil, self)
+        SetAdapterViewProperty(value: (self, adapter)).applyOrAppend(nil, self)
+    }
+
+    /// Set a new adapter to provide child views on demand.
+    @discardableResult
+    public func adapter<V: View>(
+        count: @escaping (() -> Int),
+        createView: @escaping (_ index: Int) -> V,
+        bindView: @escaping (_ view: V, _ index: Int) -> Void,
+        viewType: @escaping ((_ index: Int) -> Int) = { _ in return 0 }
+    ) -> Self {
+        SetAdapterViewProperty(value: (self, RecyclerViewAdapter(
+            count: count,
+            createView: createView,
+            bindView: bindView,
+            viewType: viewType
+        ))).applyOrAppend(nil, self)
+    }
+
+    /// Set a new adapter to provide child views on demand.
+    @discardableResult
+    public func adapter<V: View, I>(
+        items: @autoclosure @escaping () -> [I],
+        createView: @escaping (_ item: I, _ index: Int) -> V,
+        bindView: @escaping (_ view: V, _ item: I, _ index: Int) -> Void,
+        viewType: @escaping ((_ item: I, _ index: Int) -> Int) = { _, _ in return 0 }
+    ) -> Self {
+        SetAdapterViewProperty(value: (self, RecyclerViewAdapter(
+            count: { items().count },
+            createView: { i in
+                createView(items()[i], i)
+            },
+            bindView: { v, i in
+                bindView(v, items()[i], i)
+            },
+            viewType: { i in
+                viewType(items()[i], i)
+            }
+        ))).applyOrAppend(nil, self)
+    }
+
+    /// Set a new adapter to provide child views on demand.
+    @discardableResult
+    public func adapter<V: View, I: AnyIdentable & Hashable>(
+        items: @autoclosure @escaping () -> State<[I]>,
+        createView: @escaping (_ item: I, _ index: Int) -> V,
+        bindView: @escaping (_ view: V, _ item: I, _ index: Int) -> Void,
+        viewType: @escaping ((_ item: I, _ index: Int) -> Int) = { _, _ in return 0 }
+    ) -> Self {
+        let adapter = RecyclerViewAdapter(
+            count: { items().wrappedValue.count },
+            createView: { i in
+                createView(items().wrappedValue[i], i)
+            },
+            bindView: { v, i in
+                bindView(v, items().wrappedValue[i], i)
+            },
+            viewType: { i in
+                viewType(items().wrappedValue[i], i)
+            }
+        )
+        items().listen { [weak self] (old: [I], new: [I]) in
+            let diff = old.difference(new)
+
+            // 1. Process removals in batches (reverse order)
+            var currentRemovalRange: (start: Int, count: Int)? = nil
+            for removal in diff.removed.sorted(by: { $0.index > $1.index }) {
+                if let range = currentRemovalRange {
+                    if removal.index == range.start - 1 {
+                        // Extend current range
+                        currentRemovalRange = (removal.index, range.count + 1)
+                    } else {
+                        // Notify current range and start new one
+                        self?.notifyItemRangeRemoved(startAt: range.start, count: range.count)
+                        currentRemovalRange = (removal.index, 1)
+                    }
+                } else {
+                    currentRemovalRange = (removal.index, 1)
+                }
+            }
+            // Notify any remaining range
+            if let range = currentRemovalRange {
+                self?.notifyItemRangeRemoved(startAt: range.start, count: range.count)
+            }
+
+            // 2. Process insertions in batches (normal order)
+            var currentInsertionRange: (start: Int, count: Int)? = nil
+            for insertion in diff.inserted.sorted(by: { $0.index < $1.index }) {
+                if let range = currentInsertionRange {
+                    if insertion.index == range.start + range.count {
+                        // Extend current range
+                        currentInsertionRange = (range.start, range.count + 1)
+                    } else {
+                        // Notify current range and start new one
+                        self?.notifyItemRangeInserted(startAt: range.start, count: range.count)
+                        currentInsertionRange = (insertion.index, 1)
+                    }
+                } else {
+                    currentInsertionRange = (insertion.index, 1)
+                }
+            }
+            // Notify any remaining range
+            if let range = currentInsertionRange {
+                self?.notifyItemRangeInserted(startAt: range.start, count: range.count)
+            }
+
+            // 3. Process modifications in batches
+            var currentModificationRange: (start: Int, count: Int)? = nil
+            for modification in diff.modified.sorted(by: { $0.index < $1.index }) {
+                if let range = currentModificationRange {
+                    if modification.index == range.start + range.count {
+                        // Extend current range
+                        currentModificationRange = (range.start, range.count + 1)
+                    } else {
+                        // Notify current range and start new one
+                        self?.notifyItemRangeChanged(startAt: range.start, count: range.count)
+                        currentModificationRange = (modification.index, 1)
+                    }
+                } else {
+                    currentModificationRange = (modification.index, 1)
+                }
+            }
+            // Notify any remaining range
+            if let range = currentModificationRange {
+                self?.notifyItemRangeChanged(startAt: range.start, count: range.count)
+            }
+        }
+        return SetAdapterViewProperty(value: (self, adapter)).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: DataSetChanges
 
