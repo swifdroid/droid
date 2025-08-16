@@ -1148,6 +1148,30 @@ extension View {
 
 // MARK: Padding
 
+struct PaddingViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setPadding
+    let value: (Int, Int, Int, Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.4.toPixels(Int32(value.0)), value.4.toPixels(Int32(value.1)), value.4.toPixels(Int32(value.2)), value.4.toPixels(Int32(value.3)))
+    }
+}
+extension View {
+    @discardableResult
+    public func padding(left: Int, top: Int, right: Int, bottom: Int, _ unit: DimensionUnit = .dp) -> Self {
+        PaddingViewProperty(value: (left, top, right, bottom, unit)).applyOrAppend(nil, self)
+    }
+
+    @discardableResult
+    public func padding(h: Int, v: Int, _ unit: DimensionUnit = .dp) -> Self {
+        padding(left: h, top: v, right: h, bottom: v, unit)
+    }
+
+    @discardableResult
+    public func padding(_ value: Int = 16, _ unit: DimensionUnit = .dp) -> Self {
+        padding(left: value, top: value, right: value, bottom: value, unit)
+    }
+}
+
 // MARK: PaddingRelative
 
 // MARK: PendingCredentialRequest
