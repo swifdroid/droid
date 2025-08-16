@@ -62,16 +62,6 @@ extension View {
             #endif
         }
 
-        public func setPadding(left: Int, top: Int, right: Int, bottom: Int) {
-            #if os(Android)
-            guard
-                let env = JEnv.current(),
-                let methodId = clazz.methodId(env: env, name: "setPadding", signature: .init(.int, .int, .int, .int, returning: .void))
-            else { return }
-            env.callVoidMethod(object: object, methodId: methodId, args: [left, top, right, bottom])
-            #endif
-        }
-
         public func setLayoutParams(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) {
             #if os(Android)
             if let lp = view.layoutParamsForSubviews(width: width, height: height, unit: unit) {
