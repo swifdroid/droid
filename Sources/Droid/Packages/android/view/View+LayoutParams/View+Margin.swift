@@ -2,27 +2,26 @@
 extension View {
     /// Sets the margins for the view.
     ///
-    /// Defines the space between the view's top edge and adjacent elements or parent container.
-    ///
-    /// - Parameters:
-    ///    - left: The left margin size in density-independent pixels
-    ///    - top: The top margin size in density-independent pixels
-    ///    - right: The right margin size in density-independent pixels
-    ///    - bottom: The bottom margin size in density-independent pixels
-    ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects constraint-based spacing
-    /// - FrameLayout: Creates space around child views
-    /// - LinearLayout: Controls spacing between linear items
-    /// - RelativeLayout: Adjusts view positioning relative to others
-    /// - CoordinatorLayout: Manages view offsets in coordination
-    /// - FlexboxLayout: Controls spacing in flex container
-    /// - GridLayout: Affects cell spacing
-    /// - TableLayout: Manages cell margins
+    /// Defines the space between the view's edges and adjacent elements or parent container.
     @discardableResult
-    public func margins(_ left: Int, _ top: Int, _ right: Int, _ bottom: Int, _ unit: DimensionUnit = .dp) -> Self {
+    public func margin(left: Int, top: Int, right: Int, bottom: Int, _ unit: DimensionUnit = .dp) -> Self {
         SetMarginsLayoutParam(value: (left, top, right, bottom, unit)).applyOrAppend(self)
+    }
+
+    /// Sets the margins for the view.
+    ///
+    /// Defines the space between the view's edges and adjacent elements or parent container.
+    @discardableResult
+    public func margin(h: Int, v: Int, _ unit: DimensionUnit = .dp) -> Self {
+        margin(left: h, top: v, right: h, bottom: h, unit)
+    }
+
+    /// Sets the margins for the view.
+    ///
+    /// Defines the space between the view's edges and adjacent elements or parent container.
+    @discardableResult
+    public func margin(_ value: Int = 16, _ unit: DimensionUnit = .dp) -> Self {
+        margin(left: value, top: value, right: value, bottom: value, unit)
     }
 
     /// Sets the start margin for the view.
