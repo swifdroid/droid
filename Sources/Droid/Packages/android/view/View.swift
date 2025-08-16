@@ -169,14 +169,6 @@ open class View: AnyView, JClassNameable, @unchecked Sendable {
     }
 
     // MARK: - Properties
-
-    @discardableResult
-    public func setPadding(left: Int, top: Int, right: Int, bottom: Int) -> Self {
-        if let instance {
-            instance.setPadding(left: left, top:top, right: right, bottom: bottom)
-        }
-        return self
-    }
     
     @discardableResult
     public func setLayoutParams(_ params: LayoutParams) -> Self {
