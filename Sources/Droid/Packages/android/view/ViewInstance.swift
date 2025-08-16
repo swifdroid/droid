@@ -12,7 +12,7 @@ extension View {
     #if canImport(AndroidLooper)
     @UIThreadActor
     #endif
-    public final class ViewInstance: JObjectable, Sendable {
+    public final class ViewInstance: JObjectable, @unchecked Sendable {
         /// Unique identifier
         public let id: Int32
 
@@ -24,6 +24,9 @@ extension View {
 
         /// Object wrapper
         public let object: JObject
+
+        /// Layout Params Class name
+        var lpClassName: JClassName?
 
         public convenience init? (_ className: JClassName, _ view: View, _ context: ActivityContext, _ id: Int32) {
             #if os(Android)
@@ -93,7 +96,7 @@ extension View {
                 InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
                 return nil
             }
-            guard let lpClazz = context.getClassLoader()?.loadClass(.init(stringLiteral: "\(className.path)$LayoutParams")) else {
+            guard let lpClazz = context.getClassLoader()?.loadClass(lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
                 InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
                 return nil
             }
