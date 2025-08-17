@@ -222,6 +222,29 @@ open class AppCompatActivity: Activity {
         return nil
         #endif
     }
+
+    public func startActivity(_ activity: Activity.Type) {
+        #if os(Android)
+        guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
+            InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
+            return
+        }
+        guard
+            let env = JEnv.current(),
+            let intent = Intent(env, context, .init(stringLiteral: context.activityClass(activity)))
+        else {
+            InnerLog.c("Unable to create `Intent` for \(activity).")
+            return
+        }
+        guard
+            let methodId = context.clazz.methodId(env: env, name: "startActivity", signature: .init(.object(.android.content.Intent), returning: .void))
+        else {
+            InnerLog.c("Current context object doesn't have `startActivity` method.")
+            return
+        }
+        env.callVoidMethod(object: context.object, methodId: methodId, args: [intent.object])
+        #endif
+    }
 }
 
 public final class Intent: JObjectable, @unchecked Sendable {
