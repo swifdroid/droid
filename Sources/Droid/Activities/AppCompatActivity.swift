@@ -224,6 +224,30 @@ open class AppCompatActivity: Activity {
     }
 }
 
+public final class Intent: JObjectable, @unchecked Sendable {
+    /// JNI Object
+    public let object: JObject
+    
+    public init (_ object: JObject) {
+        self.object = object
+    }
+
+    public init? (_ env: JEnv, _ context: ActivityContext, _ className: JClassName) {
+        #if os(Android)
+        guard
+            let classLoader = context.getClassLoader(),
+            let intentClazz = classLoader.loadClass(.android.content.Intent),
+            let activityClazz = classLoader.loadClass(className),
+            let methodId = intentClazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), .object(.java.lang.Class), returning: .void)),
+            let global = env.newObject(clazz: intentClazz, constructor: methodId, args: [context.object, activityClazz])
+        else { return nil }
+        self.object = global
+        #else
+        return nil
+        #endif
+    }
+}
+
 // public final class AppCompatActivity: DroidApp.AnyActivity {
 //     /// The globally retained JNI reference to the Java object.
 //     public let ref: JObjectBox
