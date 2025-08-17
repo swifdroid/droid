@@ -40,6 +40,7 @@ extension AppCompatActivity: @unchecked Sendable {}
 @UIThreadActor
 #endif
 open class AppCompatActivity: Activity {
+    open class var packageName: String? { nil }
     open class var className: JClassName { .init(stringLiteral: "androidx/appcompat/app/AppCompatActivity") }
     open class var gradleDependencies: [String] { [
         #"implementation("androidx.appcompat:appcompat:1.7.1")"#,

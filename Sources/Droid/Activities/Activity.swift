@@ -13,7 +13,8 @@ import AndroidLooper
 @UIThreadActor
 #endif
 public protocol Activity: AnyObject {
-    static nonisolated var className: String { get }
+    static nonisolated var packageName: String? { get }
+	static nonisolated var className: String { get }
     static nonisolated var gradleDependencies: [String] { get }
 	static nonisolated var javaImports: [String] { get }
     static nonisolated var parentClass: String { get }
@@ -286,5 +287,6 @@ public protocol Activity: AnyObject {
 }
 
 extension Activity {
+	public static nonisolated var packageName: String? { nil }
 	public static nonisolated var className: String { "\(Self.self)" }
 }
