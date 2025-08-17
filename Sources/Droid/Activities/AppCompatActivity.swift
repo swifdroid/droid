@@ -250,6 +250,11 @@ open class AppCompatActivity: Activity {
         env.callVoidMethod(object: context.object, methodId: methodId, args: [intent.object])
         #endif
     }
+
+    public func startActivity<T: Activity>(_ activity: T) {
+        DroidApp.shared._activityPendingToStart = activity
+        startActivity(T.self)
+    }
 }
 
 public final class Intent: JObjectable, @unchecked Sendable {

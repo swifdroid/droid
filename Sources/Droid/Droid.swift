@@ -208,8 +208,16 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
     if let context = globalCallerObj?.object() {
         InnerLog.d("context class: \(context.className.name)")
         InnerLog.d("activities count: \(DroidApp.shared._activities.count)")
-        if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
-            InnerLog.d("activity found")
+        if let pendingActivity = DroidApp.shared._activityPendingToStart {
+            defer { DroidApp.shared._activityPendingToStart = nil }
+            #if canImport(AndroidLooper)
+            Task.detached { @UIThreadActor in
+                #if os(Android)
+                pendingActivity.attach(to: context)
+                #endif
+            }
+            #endif
+        } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
             #if canImport(AndroidLooper)
             Task.detached { @UIThreadActor in
                 activityType.init().attach(to: context)
