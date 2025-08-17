@@ -216,77 +216,9 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
             }
             #endif
         }
-        // guard let activity = AppCompatActivity(context) else {
-        //     InnerLog.d("0.1")
-        //     return
-        // }
-        // InnerLog.d("00")
-        // Task {
-        //     InnerLog.d("1")
-        //     guard let context = globalCallerObj?.object() else { logger.info("1.1");return }
-        //     InnerLog.d("2")
-        //     // await helloUI(context)
-        //     if let activity = AppCompatActivity(context) {
-        //         InnerLog.d("3")
-        //     //     InnerLog.d("🟢 Activity is here")
-        //     //     if let view = View(activity.object) {
-        //     //         InnerLog.d("🟢 View is here")
-        //     //         activity.setContentView(view.object)
-        //     //         InnerLog.d("🟢 Successfully set View into Activity")
-        //     //         view.setBackgroundColor(.aqua)
-        //     //         InnerLog.d("🟢 Successfully set View's color")
-        //     //         if let c = localEnv.findClass(.android.view.ViewGroup) {
-        //     //             InnerLog.d("🚀 main: ViewGroup FOUND")
-        //     //         } else {
-        //     //             InnerLog.d("🚀 main: ViewGroup NOT FOUND")
-        //     //         }
-        //     //         if let c = localEnv.findClass(.swift.view.OnClickListener) {
-        //     //             InnerLog.d("🚀 main: OnClickListener FOUND")
-        //     //         } else {
-        //     //             InnerLog.d("🚀 main: OnClickListener NOT FOUND")
-        //     //         }
-        //     //         Task {
-        //     //             // guard let env = JNIKit.shared.vm.attachCurrentThread() else {
-        //     //             //     InnerLog.d("❌ Unable to attachCurrentThread")
-        //     //             //     return
-        //     //             // }
-        //     //             // InnerLog.d("🚀 class task: jni version: \(env.getVersionString())")                        
-        //     //             // if let c = env.findClass(.android.view.ViewGroup) {
-        //     //             //     InnerLog.d("🚀 class task: ViewGroup FOUND")
-        //     //             // } else {
-        //     //             //     InnerLog.d("🚀 class task: ViewGroup NOT FOUND")
-        //     //             // }
-        //     //             // if let c = env.findClass(.swift.view.OnClickListener) {
-        //     //             //     InnerLog.d("🚀 class task: OnClickListener FOUND")
-        //     //             // } else {
-        //     //             //     InnerLog.d("🚀 class task: OnClickListener NOT FOUND")
-        //     //             // }
-        //     //             guard let clickListener = await NativeOnClickListener(activity) else {
-        //     //                 InnerLog.d("🟢 ClickListener2 NOT initialized")
-        //     //                 return
-        //     //             }
-        //     //             clickListener.onClick {
-        //     //                 view.setBackgroundColor(.teal)
-        //     //             }
-        //     //             view.setOnClickListener(clickListener)
-        //     //         }
-        //     //     } else {
-        //     //         InnerLog.d("💧 Unable to init view")
-        //     //     }
-        //     } else {
-        //         InnerLog.d("💧 Unable to init activity")
-        //     }
-        // }
     } else {
         InnerLog.d("💧 Unable to init context")
     }
-    // Task {
-    //     guard let env = JNIKit.shared.vm.attachCurrentThread() else { return }
-    //     InnerLog.d("🚀 new env: \(env)")
-    //     InnerLog.d("🚀 jni version: \(env.getVersionString())")
-    //     let callerDescription = callerObj?.object()?.toString()
-    //     InnerLog.d("🚀 caller description: \(callerDescription ?? "n/a")")
-    // }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnPause")
