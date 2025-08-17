@@ -212,7 +212,7 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
             InnerLog.d("activity found")
             #if canImport(AndroidLooper)
             Task.detached { @UIThreadActor in
-                _ = activityType.init(object: context)
+                activityType.init().attach(to: context)
             }
             #endif
         }

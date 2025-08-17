@@ -103,23 +103,28 @@ open class AppCompatActivity: Activity {
 	open class nonisolated var intentFilter: DroidApp.IntentFilter? { nil }
 	open class nonisolated var metaData: DroidApp.MetaData? { nil }
     
-    public let context: ActivityContext
+    var _context: ActivityContext!
+    public var context: ActivityContext {
+        if _context == nil {
+            InnerLog.c("Attempt to reach nil context at \(Self.className). Seems you haven't started this activity yet.")
+        }
+        return _context
+    }
     public var contentView: View?
 
-    #if !os(Android)
     @discardableResult
     public required init() {
-        context = ActivityContext(object: .init(JObjectBox(), .init("")))
+        #if !os(Android)
+        _context = ActivityContext(object: .init(JObjectBox(), .init("")))
         onCreate(context)
         body { body }
         buildUI()
+        #endif
     }
-    #endif
-    
-    @discardableResult
-    public required init(object: JObject) {
-        context = ActivityContext(object: object)
-        onCreate(context)
+
+    public func attach(to context: JObject) {
+        _context = ActivityContext(object: context)
+        onCreate(self.context)
         body { body }
         buildUI()
     }
