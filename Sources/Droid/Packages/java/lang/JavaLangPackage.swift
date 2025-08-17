@@ -10,3 +10,10 @@ extension JavaPackage {
     
     public var lang: LangPackage { .init(parent: self, name: "lang") }
 }
+
+// MARK: Classes
+
+extension JavaPackage.LangPackage {
+    public class ClassClass: JClassName, @unchecked Sendable {}
+    public var Class: ClassClass { .init(parent: self, name: "Class") }
+}
