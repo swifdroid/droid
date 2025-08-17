@@ -228,6 +228,7 @@ open class AppCompatActivity: Activity {
         #endif
     }
 
+    /// Starts activity the classic way
     public func startActivity(_ activity: Activity.Type) {
         #if os(Android)
         guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
@@ -251,6 +252,7 @@ open class AppCompatActivity: Activity {
         #endif
     }
 
+    /// Starts pre-initialized activity
     public func startActivity<T: Activity>(_ activity: T) {
         DroidApp.shared._activityPendingToStart = activity
         startActivity(T.self)

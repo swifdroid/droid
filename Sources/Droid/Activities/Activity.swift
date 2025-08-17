@@ -283,6 +283,11 @@ public protocol Activity: AnyObject {
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element)
 	static nonisolated var metaData: DroidApp.MetaData? { get }
+
+	/// Starts activity the classic way
+	func startActivity(_ activity: Activity.Type)
+	/// Starts pre-initialized activity
+	func startActivity<T: Activity>(_ activity: T)
 }
 
 extension Activity {
