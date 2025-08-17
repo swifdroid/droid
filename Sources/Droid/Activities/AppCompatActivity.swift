@@ -28,6 +28,18 @@ public final class ActivityContext: JObjectable, JClassLoadable, @unchecked Send
     @UIThreadActor
     #endif
     public var R: InnerR { .init(self) }
+
+    /// Helper method that returns the full path to an activity class.
+    ///
+    /// It uses `activity.packageName` if available.
+    ///
+    /// Otherwise, it falls back to the package name of the current context's class.
+    func activityClass(_ activity: Activity.Type) -> String {
+        let packageName =
+            activity.packageName ??
+            self.object.clazz.name.path.components(separatedBy: "/").dropLast().joined(separator: "/")
+        return [packageName, activity.className].joined(separator: "/")
+    }
 }
 
 #if os(Android)
