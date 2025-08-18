@@ -10,16 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Button: ButtonClass { .init(parent: self, name: "Button") }
 }
 
-open class Button: View, @unchecked Sendable {
-    @discardableResult
-    public override init() {
-        super.init()
-    }
-    
-    public func setText(_ text: String) {
-        // text.withCString { cstr in
-        //     let jsss = environment.pointer.pointee?.pointee.NewStringUTF(environment.pointer, cstr)
-        //     callVoidWithMethod("setText", .object(.java.lang.CharSequence) / JStringWrapper.init(v: jsss!))
-        // }
-    }
+open class Button: TextView, @unchecked Sendable {
+    /// The JNI class name
+    open override class var className: JClassName { .android.widget.Button }
 }
