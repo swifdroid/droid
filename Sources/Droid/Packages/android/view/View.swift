@@ -1080,6 +1080,7 @@ extension View {
 
 // MARK: OnClickListener
 
+#if os(Android)
 struct OnClickListenerViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setOnClickListener
     let value: NativeOnClickListener
@@ -1091,19 +1092,24 @@ struct OnClickListenerViewProperty: ViewPropertyToApply {
         instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnClickListener))
     }
 }
+#endif
 extension View {
     @discardableResult
     public func onClick(_ handler: @escaping () async -> Void) -> Self {
-        OnClickListenerViewProperty(value: .init(handler)).applyOrAppend(nil, self)
+        #if os(Android)
+        return OnClickListenerViewProperty(value: .init(id).setHandler(handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
     }
 
     @discardableResult
     public func onClick(_ handler: @escaping (Self) async -> Void) -> Self {
-        #if canImport(AndroidLooper)
-        return OnClickListenerViewProperty(value: .init({ @UIThreadActor [weak self] in
+        #if os(Android)
+        return OnClickListenerViewProperty(value: .init(id).setHandler { @UIThreadActor [weak self] in
             guard let self else { return }
             await handler(self)
-        })).applyOrAppend(nil, self)
+        }).applyOrAppend(nil, self)
         #else
         return self
         #endif
