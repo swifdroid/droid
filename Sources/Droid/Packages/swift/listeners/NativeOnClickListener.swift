@@ -5,8 +5,10 @@
 //  Created by Mihael Isaev on 29.01.2022.
 //
 
-#if canImport(Android)
+#if os(Android)
 import Android
+#if canImport(AndroidLooper)
+import AndroidLooper
 #endif
 #if canImport(Logging)
 import Logging
@@ -18,42 +20,70 @@ extension AppKitPackage.ListenersPackage {
     public var OnClickListener: OnClickListenerClass { .init(parent: self, name: "NativeOnClickListener") }
 }
 
-private actor OnClickListenerStore {
-    private var listeners: [UUID: NativeOnClickListener] = [:]
+protocol AnyNativeListener {
+    var id: Int32 { get }
+}
+
+protocol AnyListenerStore: AnyObject {
+    associatedtype Listener: AnyNativeListener
     
-    func add(_ listener: NativeOnClickListener) {
+    var listeners: [Int32: Listener] { get set }
+    var mutex: pthread_mutex_t { get set }
+
+    func add(_ listener: Listener)
+    func remove(id: Int32)
+    func get(id: Int32) -> Listener?
+    func find(id: Int32) -> Listener?
+}
+
+extension AnyListenerStore {
+    func add(_ listener: Listener) {
+        mutex.lock()
+        defer { mutex.unlock() }
         listeners[listener.id] = listener
     }
     
-    func remove(id: UUID) {
+    func remove(id: Int32) {
+        mutex.lock()
+        defer { mutex.unlock() }
         listeners[id] = nil
     }
     
-    func get(id: UUID) -> NativeOnClickListener? {
-        listeners[id]
+    func get(id: Int32) -> Listener? {
+        mutex.lock()
+        defer { mutex.unlock() }
+        return listeners[id]
     }
     
-    #if canImport(Android)
-    func find(obj: JObjectBox, env: JEnv) -> NativeOnClickListener? {
-        InnerLog.i("OnClickListenerStore.find 1")
-        guard let object = obj.object() else { return nil }
-        InnerLog.i("OnClickListenerStore.find 2")
-        guard let listener = listeners.values.first(where: {
-            if let instance = $0.instance {
-                return env.isSameObject(instance.object, object)
-            }
-            return false
-        }) else {
-            InnerLog.i("OnClickListenerStore.find NOT FOUND")
-            return nil
-        }
-        InnerLog.i("OnClickListenerStore.find FOUND")
+    func find(id: Int32) -> Listener? {
+        mutex.lock()
+        defer { mutex.unlock() }
+        guard
+            let listener = listeners[id]
+        else { return nil }
         return listener
     }
-    #endif
 }
 
-public final class NativeOnClickListener: @unchecked Sendable {
+private final class OnClickListenerStore: AnyListenerStore, @unchecked Sendable {
+    typealias Listener = NativeOnClickListener
+
+    static let shared = OnClickListenerStore()
+
+    var listeners: [Int32: Listener] = [:]
+
+    var mutex = pthread_mutex_t()
+
+    init () {
+        mutex.activate(recursive: true)
+    }
+
+    deinit {
+        mutex.destroy()
+    }
+}
+
+public final class NativeOnClickListener: AnyNativeListener, @unchecked Sendable {
     public final class Instance: JObjectable, Sendable {
         /// The JNI class name
         static var className: JClassName { "stream/swift/droid/appkit/listeners/NativeOnClickListener" }
@@ -61,16 +91,16 @@ public final class NativeOnClickListener: @unchecked Sendable {
         /// Object wrapper
         public let object: JObject
 
-        public convenience init? (_ context: ActivityContext) {
+        public convenience init? (_ id: Int32, _ context: ActivityContext) {
             #if os(Android)
             guard let env = JEnv.current() else { return nil }
-            self.init(env, context)
+            self.init(env, id, context)
             #else
             return nil
             #endif
         }
         
-        public init? (_ env: JEnv, _ context: ActivityContext) {
+        public init? (_ env: JEnv, _ id: Int32, _ context: ActivityContext) {
             #if os(Android)
             InnerLog.t("onclick 1")
             guard
@@ -88,14 +118,14 @@ public final class NativeOnClickListener: @unchecked Sendable {
             }
             InnerLog.t("onclick 3: \(env.getVersionString()) clazz ref: \(clazz.ref)")
             guard
-                let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void))
+                let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, returning: .void))
             else {
                 InnerLog.t("onclick 3.1")
                 return nil
             }
             InnerLog.t("onclick 4")
             guard
-                let global = env.newObject(clazz: clazz, constructor: methodId)
+                let global = env.newObject(clazz: clazz, constructor: methodId, args: [id])
             else {
                 InnerLog.t("onclick 4.1")
                 return nil
@@ -107,10 +137,8 @@ public final class NativeOnClickListener: @unchecked Sendable {
         }
     }
     
-    fileprivate static let store = OnClickListenerStore()
-
     /// Unique identifier
-    let id = UUID()
+    let id: Int32
 
     /// Action handler
     let handler: (() async -> Void)
@@ -118,41 +146,27 @@ public final class NativeOnClickListener: @unchecked Sendable {
     /// JNI Instance
     var instance: Instance?
 
-    public init (_ handler: @escaping () async -> Void) {
+    public init (_ id: Int32, _ handler: @escaping () async -> Void) {
+        self.id = id
         self.handler = handler
-        Task {
-            await NativeOnClickListener.store.add(self)
-        }
+        OnClickListenerStore.shared.add(self)
     }
     
     // deinit {
-    //     let id = self.id
-    //     Task {
-    //         await NativeOnClickListener.listenerStore.remove(id: id)
-    //     }
+    //     OnClickListenerStore.shared.remove(id: id)
     // }
 
     func attach(to view: View.ViewInstance) {
-        instance = Instance(view.context)
+        instance = Instance(view.id, view.context)
     }
 }
 
-#if canImport(Android)
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnClickListener_onClick")
-public func nativeOnClickListenerOnClick(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, view: jobject) {
-    InnerLog.t("nativeOnClickListenerOnClick 1")
-    let env = JEnv(env)
-    guard let callerObjectBox = JObjectBox(callerClassObject, env: env) else {
-        return
-    }
-    InnerLog.t("nativeOnClickListenerOnClick 2")
-    Task {
-        InnerLog.t("nativeOnClickListenerOnClick 3")
-        guard
-            let env = JEnv.current(),
-            let listener = await NativeOnClickListener.store.find(obj: callerObjectBox, env: env)
-        else { return }
-        InnerLog.t("nativeOnClickListenerOnClick 4")
+public func nativeOnClickListenerOnClick(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    guard
+        let listener = OnClickListenerStore.shared.find(id: uniqueId)
+    else { return }
+    Task { @UIThreadActor in
         await listener.handler()
     }
 }
