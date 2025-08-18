@@ -22,8 +22,9 @@ extension AndroidPackage.ViewPackage {
 
 extension AndroidPackage.ViewPackage {
     public class OnClickListenerClass: JClassName, @unchecked Sendable {}
-    
     public var ViewOnClickListener: OnClickListenerClass { .init(parent: self, name: "View$OnClickListener") }
+    public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
 
 #if canImport(AndroidLooper)
