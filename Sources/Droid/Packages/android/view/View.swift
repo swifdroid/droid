@@ -1125,6 +1125,58 @@ extension View {
 
 // MARK: OnLongClickListener
 
+#if os(Android)
+struct OnLongClickListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnLongClickListener
+    let value: NativeOnLongClickListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnLongClickListener))
+    }
+}
+#endif
+extension View {
+    @discardableResult
+    public func onLongClick(_ handler: @escaping () -> Bool) -> Self {
+        #if os(Android)
+        return OnLongClickListenerViewProperty(value: .init(id).setHandler(handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+
+    @discardableResult
+    public func onLongClick(_ handler: @escaping () -> Void) -> Self {
+        onLongClick {
+            handler()
+            return true
+        }
+    }
+
+    @discardableResult
+    public func onLongClick(_ handler: @escaping (Self) -> Bool) -> Self {
+        #if os(Android)
+        return OnLongClickListenerViewProperty(value: .init(id).setHandler { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler(self)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+
+    @discardableResult
+    public func onLongClick(_ handler: @escaping (Self) -> Void) -> Self {
+        onLongClick { v in
+            handler(v)
+            return true
+        }
+    }
+}
+
 // MARK: OnReceiveContentListener
 
 // MARK: OnScrollChangeListener
