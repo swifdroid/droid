@@ -91,21 +91,22 @@ class DroidApp : Application() {
     }
     private external fun configurationChanged(newConfig: IntArray)
 
-    external fun activityOnCreate(activity: Any)
-    external fun activityOnPause(activity: Any)
-    external fun activityOnStateNotSaved(activity: Any)
-    external fun activityOnResume(activity: Any)
-    external fun activityOnRestart(activity: Any)
-    external fun activityOnStart(activity: Any)
-    external fun activityOnStop(activity: Any)
-    external fun activityOnAttachedToWindow(activity: Any)
-    external fun activityOnBackPressed(activity: Any)
+    external fun activityOnCreate(activity: Any, uniqueId: Int)
+    external fun activityOnPause(activityId: Int)
+    external fun activityOnStateNotSaved(activityId: Int)
+    external fun activityOnResume(activityId: Int)
+    external fun activityOnRestart(activityId: Int)
+    external fun activityOnStart(activityId: Int)
+    external fun activityOnStop(activityId: Int)
+    external fun activityOnDestroy(activityId: Int)
+    external fun activityOnAttachedToWindow(activityId: Int)
+    external fun activityOnBackPressed(activityId: Int)
     external fun activityOnActivityResult(
-        activity: Any,
+        activityId: Int,
         requestCode: Int,
         resultCode: Int,
         data: Intent?,
         caller: ComponentCaller
     )
-    external fun activityOnActivityResult(activity: Any, requestCode: Int, resultCode: Int, data: Intent?)
+    external fun activityOnActivityResult(activityId: Int, requestCode: Int, resultCode: Int, data: Intent?)
 }

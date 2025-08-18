@@ -288,6 +288,80 @@ public protocol Activity: AnyObject {
 	func startActivity(_ activity: Activity.Type)
 	/// Starts pre-initialized activity
 	func startActivity<T: Activity>(_ activity: T)
+
+	// MARK: Lifecycle
+
+	/// Called when the activity is about to enter a paused state.
+    /// 
+    /// This means another activity is coming into the foreground, 
+    /// but this one is still partially visible. 
+    /// Use this to pause animations, video playback, or other ongoing tasks.
+	func onPause()
+	
+	/// Called when the system is about to save the activity's state,
+    /// but before that state has actually been committed.
+    ///
+    /// Typically invoked before `onStop()`. 
+    /// Override this to do lightweight cleanup tasks that should 
+    /// not be persisted in the saved instance state.
+	func onStateNotSaved()
+
+	/// Called when the activity is about to resume interaction with the user.
+    ///
+    /// At this point, the activity is in the foreground and ready for user input.
+    /// Resume any tasks that were paused (e.g. restarting animations or refreshing data).
+	func onResume()
+
+	/// Called after the activity has been stopped, just before it starts again.
+    ///
+    /// This is typically followed by a call to `onStart()` and then `onResume()`.
+    /// Override this if you need to re-initialize resources that were released in `onStop()`.
+	func onRestart()
+
+	/// Called when the activity is becoming visible to the user.
+    ///
+    /// Happens after `onCreate()` (for a new instance) or `onRestart()` (for a restarted one).
+    /// Use this for UI setup, registering receivers, or refreshing views.
+	func onStart()
+
+	/// Called when the activity is no longer visible to the user.
+    ///
+    /// This happens when a new activity covers it or the app goes to the background.
+    /// Use this to release resources that don’t need to be kept while the activity is not visible.
+	func onStop()
+
+	/// Called before the activity is completely destroyed.
+    ///
+    /// This may occur when:
+    /// - The activity is finishing (`finish()` was called), or
+    /// - The system needs to reclaim memory.
+    ///
+    /// Use this to perform final cleanup, like releasing resources or saving persistent data.
+	func onDestroy()
+
+	/// Called when the activity's window has been attached to the window manager.
+    ///
+    /// This is the point where your activity can safely interact with the actual window.
+    /// Useful for performing final UI setup that depends on the window being ready.
+	func onAttachedToWindow()
+
+	/// Called when the user presses the **Back** button.
+    ///
+    /// By default, this finishes the current activity.
+    /// Override this to implement custom back navigation logic 
+    /// (e.g., showing a confirmation dialog before exit).
+	func onBackPressed()
+
+	/// Called when an activity you launched with `startActivityForResult()` finishes.
+    ///
+    /// - Parameters:
+    ///   - requestCode: The integer request code originally supplied.
+    ///   - resultCode: The integer result code returned by the child activity.
+    ///   - intent: Optional data returned from the child activity.
+    ///   - componentCaller: The caller component that initiated the request.
+    ///
+    /// Override this to handle results from sub-activities (e.g., picking an image or capturing video).
+	func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?)
 }
 
 extension Activity {

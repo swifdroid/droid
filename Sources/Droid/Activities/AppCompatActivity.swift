@@ -201,6 +201,21 @@ open class AppCompatActivity: Activity {
 
     open func buildUI() {}
 
+    // MARK: Lifecycle
+
+    open func onPause() {}
+	open func onStateNotSaved() {}
+	open func onResume() {}
+	open func onRestart() {}
+	open func onStart() {}
+	open func onStop() {}
+	open func onDestroy() {}
+	open func onAttachedToWindow() {}
+	open func onBackPressed() {}
+	open func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?) {}
+
+    // MARK: Methods
+
     public func getTheme() -> Resources.Theme? {
         #if os(Android)
         InnerLog.t("Activity.getTheme 1")
@@ -280,6 +295,17 @@ public final class Intent: JObjectable, @unchecked Sendable {
         #else
         return nil
         #endif
+    }
+}
+
+public final class ComponentCaller: JObjectable, @unchecked Sendable {
+    static let className: JClassName = "android/app/ComponentCaller"
+
+    /// JNI Object
+    public let object: JObject
+    
+    public init (_ object: JObject) {
+        self.object = object
     }
 }
 
