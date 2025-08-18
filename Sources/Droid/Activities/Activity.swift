@@ -9,18 +9,23 @@
 import AndroidLooper
 #endif
 
+public protocol Contextable {
+	#if canImport(AndroidLooper)
+	@UIThreadActor
+	#endif
+	var context: ActivityContext { get }
+}
+
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public protocol Activity: AnyObject {
+public protocol Activity: AnyObject, Contextable {
     static nonisolated var packageName: String? { get }
 	static nonisolated var className: String { get }
     static nonisolated var gradleDependencies: [String] { get }
 	static nonisolated var javaImports: [String] { get }
     static nonisolated var parentClass: String { get }
 
-	var context: ActivityContext { get }
-    
 	init ()
 
 	func attach(to context: JObject)
