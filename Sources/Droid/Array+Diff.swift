@@ -34,7 +34,7 @@ extension Array {
             .compactMap { ($0.0, $0.1!) }
         
         // Elements in `first` that had no match in `second` → considered "removed".
-        var removed: [DiffItem<T1>] = combinations
+        let removed: [DiffItem<T1>] = combinations
             .filter { $0.1 == nil }
             .compactMap { a, _ in
                 guard let index = first.firstIndex(where: { $0.hashValue == a.hashValue }) else { return nil }
@@ -42,7 +42,7 @@ extension Array {
             }
         
         // Elements in `second` that are not part of `common` → considered "inserted".
-        var inserted: [DiffItem<T2>] = second
+        let inserted: [DiffItem<T2>] = second
             .filter { b in
                 !common.contains { compare($0.0.hashValue, b.hashValue) }
             }
