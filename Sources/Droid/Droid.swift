@@ -323,25 +323,4 @@ public func activityOnActivityResult(envPointer: UnsafeMutablePointer<JNIEnv?>, 
     }
     #endif
 }
-
-// @UIThreadActor
-// func helloUI(_ context: JObject) {
-//     guard let activity = AppCompatActivity(context) else { return }
-//     InnerLog.d("🟢 Activity is here")
-//     guard let view = View(activity.object) else { return }
-//     InnerLog.d("🟢 View is here")
-//     activity.setContentView(view.object)
-//     view.setBackgroundColor(.aqua)
-//     InnerLog.d("🟢 Successfully set View's color")
-//     Task {
-//         guard let clickListener = await NativeOnClickListener(activity) else {
-//             InnerLog.d("🟢 ClickListener2 NOT initialized")
-//             return
-//         }
-//         clickListener.onClick {
-//             view.setBackgroundColor(.teal)
-//         }
-//         view.setOnClickListener(clickListener)
-//     }
-// }
 #endif
