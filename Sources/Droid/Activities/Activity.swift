@@ -425,6 +425,12 @@ extension Activity {
         #endif
     }
 
+    /// Starts pre-initialized activity
+    public func startActivity<T: Activity>(_ activity: T) {
+        DroidApp.shared._pendingActivities = [activity]
+        startActivity(T.self)
+    }
+
 	/// Starts activity the classic way
     public func startActivityForResult(_ activity: Activity.Type, requestCode: Int) {
         #if os(Android)
@@ -441,6 +447,12 @@ extension Activity {
         }
 		context.callVoidMethod(nil, name: "startActivityForResult", args: intent.object.signed(as: .android.content.Intent), Int32(requestCode))
         #endif
+    }
+
+    /// Starts pre-initialized activity
+    public func startActivityForResult<T: Activity>(_ activity: T, requestCode: Int) {
+        DroidApp.shared._pendingActivities = [activity]
+        startActivityForResult(T.self, requestCode: requestCode)
     }
 
 	/// Starts multiple activities the classic way
@@ -478,6 +490,16 @@ extension Activity {
         #endif
     }
 
+	/// Starts multiple pre-initialized activities
+	public func startActivities(_ activities: any Activity...) {
+		startActivities(activities)
+	}
+
+	/// Starts multiple pre-initialized activities
+	public func startActivities(_ activities: [any Activity]) {
+		DroidApp.shared._pendingActivities = activities
+		startActivities(activities.map { $0.type })
+	}
 }
 
 extension Activity {

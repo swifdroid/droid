@@ -315,7 +315,7 @@ open class DroidApp: @unchecked Sendable {
     
     @AppBuilder open var body: AppBuilder.Content { _AppContent(appBuilderContent: .none) }
     
-    var _activityPendingToStart: Activity?
+    var _pendingActivities: [Activity] = []
     var _activeActivities: [Int: any Activity] = [:]
     var _activities: [Activity.Type] = []
     var _lifecycles: [AppLifecycle] = []

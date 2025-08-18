@@ -200,7 +200,17 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
     let localEnv = JEnv(envPointer)
     let globalCallerObj = activityRef.box(localEnv)
     if let context = globalCallerObj?.object() {
-        if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
+        if let pendingActivity = DroidApp.shared._pendingActivities.last {
+            DroidApp.shared._pendingActivities.remove(at: DroidApp.shared._pendingActivities.count - 1)
+            #if canImport(AndroidLooper)
+            Task { @UIThreadActor in
+                #if os(Android)
+                pendingActivity.attach(to: context)
+                DroidApp.shared._activeActivities[Int(activityId)] = pendingActivity
+                #endif
+            }
+            #endif
+        } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
             #if canImport(AndroidLooper)
             Task { @UIThreadActor in
                 let activity = activityType.init()
