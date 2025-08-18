@@ -284,10 +284,48 @@ public protocol Activity: AnyObject {
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element)
 	static nonisolated var metaData: DroidApp.MetaData? { get }
 
+	// MARK: Start Activity
+
 	/// Starts activity the classic way
 	func startActivity(_ activity: Activity.Type)
 	/// Starts pre-initialized activity
 	func startActivity<T: Activity>(_ activity: T)
+
+	// MARK: Finish Activity
+
+	/// Call this when your activity is done and should be closed.
+	///
+	/// The ActivityResult is propagated back to whoever launched you via onActivityResult().
+	func finish()
+
+	/// Finish this activity as well as all activities immediately below
+	/// it in the current task that have the same affinity.
+	///
+	/// This is typically used when an application can be launched on
+	/// to another task (such as from an ACTION_VIEW of a content type it understands)
+	/// and the user has used the up navigation to switch out of the current task and in to its own task.
+	/// In this case, if the user has navigated down into any other activities of the second application,
+	/// all of those should be removed from the original task as part of the task switch.
+	/// 
+	/// Note: this finish does not allow you to deliver results to the previous activity,
+	/// and an exception will be thrown if you are trying to do so.
+	func finishAffinity()
+
+	/// Reverses the Activity Scene entry Transition
+	/// and triggers the calling Activity to reverse its exit Transition.
+	///
+	/// When the exit Transition completes, `finish()` is called.
+	///
+	/// If no entry Transition was used, `finish()` is called immediately
+	/// and the Activity exit Transition is run.
+	func finishAfterTransition()
+
+	/// Force finish another activity that you had previously started with startActivityForResult.
+	/// 
+	/// Params:
+	///   - requestCode: The request code of the activity that you had given
+	/// to `startActivityForResult()`. If there are multiple activities started with this request code, they will all be finished.
+	func finishActivity(requiestCode: Int)
 
 	// MARK: Lifecycle
 
@@ -362,6 +400,102 @@ public protocol Activity: AnyObject {
     ///
     /// Override this to handle results from sub-activities (e.g., picking an image or capturing video).
 	func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?)
+}
+
+extension Activity {
+	var type: Self.Type { Self.self }
+}
+
+extension Activity {
+	/// Starts activity the classic way
+    public func startActivity(_ activity: Activity.Type) {
+        #if os(Android)
+        guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
+            InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
+            return
+        }
+        guard
+            let env = JEnv.current(),
+            let intent = Intent(env, context, .init(stringLiteral: context.activityClass(activity)))
+        else {
+            InnerLog.c("Unable to create `Intent` for \(activity).")
+            return
+        }
+		context.callVoidMethod(nil, name: "startActivity", args: intent.object.signed(as: .android.content.Intent))
+        #endif
+    }
+
+	/// Starts activity the classic way
+    public func startActivityForResult(_ activity: Activity.Type, requestCode: Int) {
+        #if os(Android)
+        guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
+            InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
+            return
+        }
+        guard
+            let env = JEnv.current(),
+            let intent = Intent(env, context, .init(stringLiteral: context.activityClass(activity)))
+        else {
+            InnerLog.c("Unable to create `Intent` for \(activity).")
+            return
+        }
+		context.callVoidMethod(nil, name: "startActivityForResult", args: intent.object.signed(as: .android.content.Intent), Int32(requestCode))
+        #endif
+    }
+
+	/// Starts multiple activities the classic way
+    public func startActivities(_ activities: [Activity.Type]) {
+        #if os(Android)
+        for activity in activities {
+			guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
+				InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
+				return
+			}
+		}
+		guard
+            let env = JEnv.current()
+		else { return }
+		let intents: [Intent] = activities.compactMap({
+			Intent(env, context, .init(stringLiteral: context.activityClass($0)))
+		})
+        guard
+            intents.count == activities.count,
+			let firstIntent = intents.first
+        else {
+            InnerLog.c("Unable to instantiate some Intents.")
+            return
+        }
+		guard
+			let objectArray = env.newObjectArray(length: Int32(activities.count), clazz: firstIntent.clazz)
+		else {
+			InnerLog.c("Unable to instantiate JObjectArray for the Intents.")
+			return
+		}
+		for (index, intent) in intents.enumerated() {
+			env.setObjectArrayElement(objectArray, index: Int32(index), value: intent.object)
+		}
+		context.callVoidMethod(nil, name: "startActivities", args: [(objectArray.object, .object(array: true, .android.content.Intent))])
+        #endif
+    }
+
+}
+
+extension Activity {
+	public func finish() {
+		context.callVoidMethod(nil, name: "finish")
+	}
+
+	public func finishAffinity() {
+		context.callVoidMethod(nil, name: "finishAffinity")
+	}
+
+	public func finishAfterTransition() {
+		context.callVoidMethod(nil, name: "finishAfterTransition")
+	}
+
+	public func finishActivity(requiestCode: Int) {
+		context.callVoidMethod(nil, name: "finishActivity", args: Int32(requiestCode))
+	}
 }
 
 extension Activity {
