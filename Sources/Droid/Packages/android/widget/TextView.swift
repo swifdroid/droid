@@ -22,73 +22,19 @@ open class TextView: View, @unchecked Sendable {
     }
 
     @discardableResult
-    public init(_ text: String? = nil) {
-        if let text {
-            textState = State(wrappedValue: text)
-        }
+    public init(_ text: String) {
         super.init()
-        applyTextState()
+        self.text(text)
     }
 
     @discardableResult
     public init(_ state: State<String>) {
-        textState = state
         super.init()
-        applyTextState()
-    }
-
-    func applyTextState() {
-        guard let textState else { return }
-        text(textState.wrappedValue)
-        textState.listen { [weak self] old, new in
-            guard old != new else { return }
-            self?.text(new)
-        }
+        self.text(state)
     }
 }
 
-// MARK: SetText
-
-extension ViewPropertyKey {
-    static let setText: Self = "setText"
-}
-struct SetTextViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = .setText
-    let value: TextView
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        #if os(Android)
-        guard
-            let textState = value.textState
-        else { return }
-        instance.setText(env, textState.wrappedValue)
-        #endif
-    }
-}
-extension TextView {
-    @discardableResult
-    public func text(_ value: String) -> Self {
-        textState?.removeAllListeners()
-        textState = .init(wrappedValue: value)
-        return SetTextViewProperty(value: self).applyOrAppend(nil, self)
-    }
-    @discardableResult
-    public func text(_ value: State<String>) -> Self {
-        textState?.removeAllListeners()
-        textState = value
-        return SetTextViewProperty(value: self).applyOrAppend(nil, self)
-    }
-}
-extension TextView.ViewInstance {
-    fileprivate func setText(_ env: JEnv?, _ text: String) {
-        #if os(Android)
-        guard
-            let env = env ?? JEnv.current(),
-            let string = JString(from: text)
-        else { return }
-        callVoidMethod(env, name: "setText", args: string.object.signed(as: .java.lang.CharSequence))
-        #endif
-    }
-}
+extension TextView: _SetTextable {}
 
 // MARK: Gravity
 
