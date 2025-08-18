@@ -21,11 +21,12 @@ extension ViewPropertyToApply {
     @UIThreadActor
     #endif
     @discardableResult
-    public func applyOrAppend<T: View>(_ env: JEnv?, _ view: T) -> T {
-        if let instance = view.instance {
+    public func applyOrAppend<T: AnyView>(_ env: JEnv?, _ view: T) -> T {
+        guard let v = view as? _AnyView else { return view }
+        if let instance = v.instance {
             applyToInstance(env, instance)
         } else {
-            view._propertiesToApply.append(self)
+            v._propertiesToApply.append(self)
         }
         return view
     }
