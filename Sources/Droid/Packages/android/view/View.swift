@@ -540,6 +540,25 @@ extension View {
 
 // MARK: AccessibilityPaneTitle
 
+struct AccessibilityPaneTitleProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAccessibilityPaneTitle
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+    }
+}
+extension View {
+    /// Visually distinct portion of a window with window-like semantics are considered panes for accessibility purposes.
+    @discardableResult
+    public func accessibilityPaneTitle(_ value: String) -> Self {
+        AccessibilityPaneTitleProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: AccessibilityTraversalAfter
 
 struct AccessibilityTraversalAfterProperty: ViewPropertyToApply {
@@ -610,7 +629,45 @@ extension View {
 
 // MARK: AllowedHandwritingDelegatePackage
 
+struct AllowedHandwritingDelegatePackageProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAllowedHandwritingDelegatePackage
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(JString.className))])
+    }
+}
+extension View {
+    /// Specifies that this view may act as a handwriting initiation delegator for a delegate editor view from the specified package.
+    @discardableResult
+    public func allowedHandwritingDelegatePackage(_ value: String) -> Self {
+        AllowedHandwritingDelegatePackageProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: AllowedHandwritingDelegatorPackage
+
+struct AllowedHandwritingDelegatorPackageProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAllowedHandwritingDelegatorPackage
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(JString.className))])
+    }
+}
+extension View {
+    /// Specifies that a view from the specified package may act as a handwriting delegator for this delegate editor view.
+    @discardableResult
+    public func allowedHandwritingDelegatorPackage(_ value: String) -> Self {
+        AllowedHandwritingDelegatorPackageProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: Alpha
 
@@ -772,6 +829,25 @@ extension View {
 // MARK: ContentCaptureSession
 
 // MARK: ContentDescription
+
+struct ContentDescriptionProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setContentDescription
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+    }
+}
+extension View {
+    /// Sets the View's content description.
+    @discardableResult
+    public func contentDescription(_ value: String) -> Self {
+        ContentDescriptionProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: ContentSensitivity
 
@@ -2402,9 +2478,47 @@ extension View {
 
 // MARK: StateDescription
 
+struct StateDescriptionProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setStateDescription
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+    }
+}
+extension View {
+    /// Sets the View's state description.
+    @discardableResult
+    public func stateDescription(_ value: String) -> Self {
+        StateDescriptionProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: StateListAnimator
 
 // MARK: SupplementalDescription
+
+// struct SupplementalDescriptionProperty: ViewPropertyToApply {
+//     let key: ViewPropertyKey = .setSupplementalDescription
+//     let value: String
+//     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+//         guard
+//             let env = env ?? JEnv.current(),
+//             let string = JString(from: value)
+//         else { return }
+//         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+//     }
+// }
+// extension View {
+//     /// Sets the View's supplemental description.
+//     @discardableResult
+//     public func supplementalDescription(_ value: String) -> Self {
+//         SupplementalDescriptionProperty(value: value).applyOrAppend(nil, self)
+//     }
+// }
 
 // MARK: SystemGestureExclusionRects
 
@@ -2522,6 +2636,25 @@ extension View {
 
 // MARK: TooltipText
 
+struct TooltipTextProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTooltipText
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+    }
+}
+extension View {
+    /// Sets the top position of this view relative to its parent.
+    @discardableResult
+    public func tooltipText(_ value: String) -> Self {
+        TooltipTextProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: Top
 
 struct TopProperty: ViewPropertyToApply {
@@ -2561,6 +2694,25 @@ extension View {
 }
 
 // MARK: TransitionName
+
+struct TransitionNameProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTransitionName
+    let value: String
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        guard
+            let env = env ?? JEnv.current(),
+            let string = JString(from: value)
+        else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(JString.className))])
+    }
+}
+extension View {
+    /// Sets the name of the View to be used to identify Views in Transitions.
+    @discardableResult
+    public func transitionName(_ value: String) -> Self {
+        TransitionNameProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: TransitionVisibility
 
