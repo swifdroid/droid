@@ -515,12 +515,64 @@ extension View {
 }
 
 // MARK: AccessibilityLiveRegion
+public enum AccessibilityLiveRegionMode: Int32 {
+    /// Accessibility services should not announce changes to this view.
+    case none = 0
+    /// Accessibility services should announce changes to this view.
+    case polite = 1
+    /// Accessibility services should interrupt ongoing speech to immediately announce changes to this view.
+    case assertive = 2
+}
+struct AccessibilityLiveRegionProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAccessibilityLiveRegion
+    let value: AccessibilityLiveRegionMode
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Sets the live region mode for this view.
+    @discardableResult
+    public func accessibilityLiveRegion(_ value: AccessibilityLiveRegionMode) -> Self {
+        AccessibilityLiveRegionProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: AccessibilityPaneTitle
 
 // MARK: AccessibilityTraversalAfter
 
+struct AccessibilityTraversalAfterProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAccessibilityTraversalAfter
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of a view that screen readers are requested to visit before this view.
+    @discardableResult
+    public func accessibilityTraversalAfter(_ value: Int32) -> Self {
+        AccessibilityTraversalAfterProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: AccessibilityTraversalBefore
+
+struct AccessibilityTraversalBeforeProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAccessibilityTraversalBefore
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of a view that screen readers are requested to visit after this view.
+    @discardableResult
+    public func accessibilityTraversalBefore(_ value: Int32) -> Self {
+        AccessibilityTraversalBeforeProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: Activated
 
@@ -561,6 +613,23 @@ extension View {
 // MARK: AllowedHandwritingDelegatorPackage
 
 // MARK: Alpha
+
+struct AlphaProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setAlpha
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the opacity of the view to a value from 0 to 1,
+    /// where 0 means the view is completely transparent
+    /// and 1 means the view is completely opaque.
+    @discardableResult
+    public func alpha(_ value: Float) -> Self {
+        AlphaProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: Animation
 
@@ -609,6 +678,21 @@ extension View {
 
 // MARK: BackgroundResource
 
+struct BackgroundResourceProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setBackgroundResource
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Set the background to a given resource.
+    @discardableResult
+    public func backgroundResource(_ value: Int32) -> Self {
+        BackgroundResourceProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: BackgroundTintBlendMode
 
 // MARK: BackgroundTintList
@@ -617,7 +701,37 @@ extension View {
 
 // MARK: Bottom
 
+struct BottomProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setBottom
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Sets the bottom position of this view relative to its parent.
+    @discardableResult
+    public func bottom(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        BottomProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: CameraDistance
+
+struct CameraDistanceProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setCameraDistance
+    let value: (Float, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(value.0))
+    }
+}
+extension View {
+    /// Sets the distance along the Z axis (orthogonal to the X/Y plane on which views are drawn) from the camera to this view.
+    @discardableResult
+    public func cameraDistance(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        CameraDistanceProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: Clickable
 
@@ -661,6 +775,31 @@ extension View {
 
 // MARK: ContentSensitivity
 
+public enum ContentSensitivity: Int32 {
+    /// Content sensitivity is determined by the framework.
+    ///
+    /// The framework uses a heuristic to determine if this view displays sensitive content.
+    case auto = 0
+    /// The view doesn't display sensitive content.
+    case notSensitive = 2
+    /// The view displays sensitive content.
+    case sensitive = 1
+}
+struct ContentSensitivityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setContentSensitivity
+    let value: ContentSensitivity
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Sets content sensitivity mode to determine whether this view displays sensitive content (e.g. username, password etc.).
+    @discardableResult
+    public func contentSensitivity(_ value: ContentSensitivity) -> Self {
+        ContentSensitivityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ContextClickable
 
 struct ContextClickableViewProperty: ViewPropertyToApply {
@@ -698,6 +837,27 @@ extension View {
 
 // MARK: DrawingCacheBackgroundColor
 
+struct DrawingCacheBackgroundColorProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setDrawingCacheBackgroundColor
+    let value: GraphicsColor
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.value)
+    }
+}
+extension View {
+    /// This method was deprecated in API level 28.
+    ///
+    /// The view drawing cache was largely made obsolete
+    /// with the introduction of hardware-accelerated rendering in API 11.
+    ///
+    /// With hardware-acceleration, intermediate cache layers are largely unnecessary
+    /// and can easily result in a net loss in performance due to the cost of creating and updating the layer. 
+    @discardableResult
+    public func drawingCacheBackgroundColor(_ value: GraphicsColor) -> Self {
+        DrawingCacheBackgroundColorProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: DrawingCacheEnabled
 
 struct DrawingCacheEnabledViewProperty: ViewPropertyToApply {
@@ -723,6 +883,32 @@ extension View {
 
 // MARK: DrawingCacheQuality
 
+public enum DrawingCacheQuality: Int32 {
+    case auto = 0
+    case high = 0x00100000
+    case low = 0x00080000
+}
+struct DrawingCacheQualityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setDrawingCacheQuality
+    let value: DrawingCacheQuality
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// This method was deprecated in API level 28.
+    ///
+    /// The view drawing cache was largely made obsolete
+    /// with the introduction of hardware-accelerated rendering in API 11.
+    ///
+    /// With hardware-acceleration, intermediate cache layers are largely unnecessary
+    /// and can easily result in a net loss in performance due to the cost of creating and updating the layer. 
+    @discardableResult
+    public func drawingCacheQuality(_ value: DrawingCacheQuality) -> Self {
+        DrawingCacheQualityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: DuplicateParentStateEnabled
 
 struct DuplicateParentStateEnabledViewProperty: ViewPropertyToApply {
@@ -742,6 +928,21 @@ extension View {
 
 // MARK: Elevation
 
+struct ElevationProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setElevation
+    let value: (Float, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(value.0))
+    }
+}
+extension View {
+    /// Sets the base elevation of this view.
+    @discardableResult
+    public func elevation(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        ElevationProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: Enabled
 
 struct EnabledViewProperty: ViewPropertyToApply {
@@ -760,6 +961,21 @@ extension View {
 }
 
 // MARK: FadingEdgeLength
+
+struct FadingEdgeLengthProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setFadingEdgeLength
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Set the size of the faded edge used to indicate that more content in this view is available.
+    @discardableResult
+    public func fadingEdgeLength(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        FadingEdgeLengthProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: FilterTouchesWhenObscured
 
@@ -870,6 +1086,21 @@ extension View {
 
 // MARK: ForegroundGravity
 
+struct ForegroundGravityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setForegroundGravity
+    let value: Gravity
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value.rawValue))
+    }
+}
+extension View {
+    /// Describes how the foreground is positioned.
+    @discardableResult
+    public func foregroundGravity(_ value: Gravity) -> Self {
+        ForegroundGravityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ForegroundTintBlendMode
 
 // MARK: ForegroundTintList
@@ -878,9 +1109,59 @@ extension View {
 
 // MARK: FrameContentVelocity
 
+struct FrameContentVelocityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setFrameContentVelocity
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Set the current velocity of the View, we only track positive value.
+    @discardableResult
+    public func frameContentVelocity(_ value: Float) -> Self {
+        FrameContentVelocityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: HandwritingBoundsOffsets
 
+struct HandwritingBoundsOffsetsProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHandwritingBoundsOffsets
+    let value: (Float, Float, Float, Float, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.4.toPixels(value.0), value.4.toPixels(value.1), value.4.toPixels(value.2), value.4.toPixels(value.3))
+    }
+}
+extension View {
+    /// Set the amount of offset applied to this view's stylus handwriting bounds.
+    @discardableResult
+    public func handwritingBoundsOffsets(_ left: Float, _ top: Float, _ right: Float, _ bottom: Float, _ unit: DimensionUnit = .dp) -> Self {
+        HandwritingBoundsOffsetsProperty(value: (left, top, right, bottom, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: HandwritingDelegateFlags
+
+public enum HandwritingDelegateFlag: Int32 {
+    case `default` = 0
+    /// Flag indicating that views from the default home screen (`Intent.CATEGORY_HOME`) may act as a handwriting delegator for the delegate editor view. If set, views from the home screen package will be trusted for handwriting delegation.
+    case homeDelegatorAllowed = 1
+}
+struct HandwritingDelegateFlagsProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setHandwritingDelegateFlags
+    let value: HandwritingDelegateFlag
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Sets flags configuring the handwriting delegation behavior for this delegate editor view.
+    @discardableResult
+    public func handwritingDelegateFlags(_ value: HandwritingDelegateFlag) -> Self {
+        HandwritingDelegateFlagsProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: HandwritingDelegatorCallback
 
@@ -979,9 +1260,74 @@ extension View {
 
 // MARK: ImportantForAccessibility
 
+public enum ImportantForAccessibilityMode: Int32 {
+    case auto = 0
+    case yes = 1
+    case no = 2
+    case noHideDescendants = 4
+}
+struct ImportantForAccessibilityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setImportantForAccessibility
+    let value: ImportantForAccessibilityMode
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Sets how to determine whether this view is important for accessibility which is if it fires accessibility events and if it is reported to accessibility services that query the screen.
+    @discardableResult
+    public func importantForAccessibility(_ value: ImportantForAccessibilityMode) -> Self {
+        ImportantForAccessibilityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ImportantForAutofill
 
+public enum ImportantForAutofillMode: Int32 {
+    case auto = 0
+    case captureNo = 2
+    case captureNoExcludeDescendants = 8
+    case captureYes = 1
+    case captureYesExcludeDescendants = 4
+}
+struct ImportantForAutofillProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setImportantForAutofill
+    let value: ImportantForAutofillMode
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Sets the mode for determining whether this view is considered important for autofill.
+    @discardableResult
+    public func importantForAutofill(_ value: ImportantForAutofillMode) -> Self {
+        ImportantForAutofillProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ImportantForContentCapture
+
+public enum ImportantForContentCaptureMode: Int32 {
+    case auto = 0
+    case captureNo = 2
+    case captureNoExcludeDescendants = 8
+    case captureYes = 1
+    case captureYesExcludeDescendants = 4
+}
+struct ImportantForContentCaptureProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setImportantForContentCapture
+    let value: ImportantForContentCaptureMode
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Sets the mode for determining whether this view is considered important for content capture.
+    @discardableResult
+    public func importantForContentCapture(_ value: ImportantForContentCaptureMode) -> Self {
+        ImportantForContentCaptureProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: IsCredential
 
@@ -1053,11 +1399,51 @@ extension View {
 
 // MARK: LabelFor
 
+struct LabelForProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setLabelFor
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of a view for which this view serves as a label for accessibility purposes.
+    @discardableResult
+    public func labelFor(_ value: Int32) -> Self {
+        LabelForProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: LayerPaint
 
 // MARK: LayerType
 
 // MARK: LayoutDirection
+
+public enum LayoutDirection: Int32 {
+    /// Horizontal layout direction of this view is from Left to Right.
+    case ltr = 0
+    /// Horizontal layout direction of this view is from Right to Left.
+    case rtl = 1
+    /// Horizontal layout direction of this view is inherited from its parent.
+    case inherit = 2
+    /// Horizontal layout direction of this view is from deduced from the default language script for the locale.
+    case locale = 3
+}
+struct LayoutDirectionProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setLayoutDirection
+    let value: LayoutDirection
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Set the layout direction for this view.
+    @discardableResult
+    public func layoutDirection(_ value: LayoutDirection) -> Self {
+        LayoutDirectionProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: LayoutParams
 
@@ -1065,7 +1451,39 @@ extension View {
 
 // MARK: Left
 
+struct LeftProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setLeft
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Sets the left position of this view relative to its parent.
+    @discardableResult
+    public func left(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        LeftProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: LeftTopRightBottom
+
+struct LeftTopRightBottomProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setLeftTopRightBottom
+    let value: (Int, Int, Int, Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.4.toPixels(Int32(value.0)), value.4.toPixels(Int32(value.1)), value.4.toPixels(Int32(value.2)), value.4.toPixels(Int32(value.3)))
+    }
+}
+extension View {
+    /// Assign a size and position to this view.
+    ///
+    /// Low-level layout method that directly sets the view's bounding box coordinates. Use with caution.
+    @discardableResult
+    public func leftTopRightBottom(_ left: Int, _ top: Int, _ right: Int, _ bottom: Int, _ unit: DimensionUnit = .dp) -> Self {
+        LeftTopRightBottomProperty(value: (left, top, right, bottom, unit)).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: LongClickable
 
@@ -1084,9 +1502,39 @@ extension View {
     }
 }
 
+// MARK: MinimumHeight
+
+struct MinimumHeightProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setMinimumHeight
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Sets the minimum height of the view.
+    @discardableResult
+    public func minimumHeight(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        MinimumHeightProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: MinimumWidth
 
-// MARK: MinimumHeight
+struct MinimumWidthProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setMinimumWidth
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Sets the minimum width of the view.
+    @discardableResult
+    public func minimumWidth(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        MinimumWidthProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: NestedScrollingEnabled
 
@@ -1107,15 +1555,105 @@ extension View {
 
 // MARK: NextClusterForwardId
 
+struct NextClusterForwardIdProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setNextClusterForwardId
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of the view to use as the root of the next keyboard navigation cluster.
+    @discardableResult
+    public func nextClusterForwardId(_ value: Int32) -> Self {
+        NextClusterForwardIdProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: NextFocusDownId
+
+struct NextFocusDownIdProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setNextFocusDownId
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of the view to use when the next focus is `FOCUS_DOWN`.
+    @discardableResult
+    public func nextFocusDownId(_ value: Int32) -> Self {
+        NextFocusDownIdProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: NextFocusForwardId
 
+struct NextFocusForwardIdProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setNextFocusForwardId
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of the view to use when the next focus is `FOCUS_FORWARD`.
+    @discardableResult
+    public func nextFocusForwardId(_ value: Int32) -> Self {
+        NextFocusForwardIdProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: NextFocusLeftId
+
+struct NextFocusLeftIdProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setNextFocusLeftId
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of the view to use when the next focus is `FOCUS_LEFT`.
+    @discardableResult
+    public func nextFocusLeftId(_ value: Int32) -> Self {
+        NextFocusLeftIdProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: NextFocusRightId
 
+struct NextFocusRightIdProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setNextFocusRightId
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of the view to use when the next focus is `FOCUS_RIGHT`.
+    @discardableResult
+    public func nextFocusRightId(_ value: Int32) -> Self {
+        NextFocusRightIdProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: NextFocusUpId
+
+struct NextFocusUpIdProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setNextFocusUpId
+    let value: Int32
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the id of the view to use when the next focus is `FOCUS_UP`.
+    @discardableResult
+    public func nextFocusUpId(_ value: Int32) -> Self {
+        NextFocusUpIdProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: OnApplyWindowInsetsListener
 
@@ -1239,11 +1777,64 @@ extension View {
 
 // MARK: OutlineAmbientShadowColor
 
+struct OutlineAmbientShadowColorProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOutlineAmbientShadowColor
+    let value: GraphicsColor
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.value)
+    }
+}
+extension View {
+    /// Sets the color of the ambient shadow that is drawn when the view has a positive Z or elevation value.
+    @discardableResult
+    public func outlineAmbientShadowColor(_ value: GraphicsColor) -> Self {
+        OutlineAmbientShadowColorProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: OutlineProvider
 
 // MARK: OutlineSpotShadowColor
 
+struct OutlineSpotShadowColorProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOutlineSpotShadowColor
+    let value: GraphicsColor
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.value)
+    }
+}
+extension View {
+    /// Sets the color of the spot shadow that is drawn when the view has a positive Z or elevation value.
+    @discardableResult
+    public func outlineSpotShadowColor(_ value: GraphicsColor) -> Self {
+        OutlineSpotShadowColorProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: OverScrollMode
+
+public enum OverScrollMode: Int32 {
+    /// Always allow a user to over-scroll this view, provided it is a view that can scroll.
+    case always = 0
+    /// Allow a user to over-scroll this view only if the content is large enough to meaningfully scroll, provided it is a view that can scroll.
+    case ifContentScrolls = 1
+    /// Never allow a user to over-scroll this view.
+    case never = 2
+}
+struct OverScrollModeProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOverScrollMode
+    let value: OverScrollMode
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Set the over-scroll mode for this view.
+    @discardableResult
+    public func overScrollMode(_ value: OverScrollMode) -> Self {
+        OverScrollModeProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: Padding
 
@@ -1274,11 +1865,66 @@ extension View {
 
 // MARK: PaddingRelative
 
+struct PaddingRelativeViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setPaddingRelative
+    let value: (Int, Int, Int, Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.4.toPixels(Int32(value.0)), value.4.toPixels(Int32(value.1)), value.4.toPixels(Int32(value.2)), value.4.toPixels(Int32(value.3)))
+    }
+}
+extension View {
+    /// Sets the relative padding.
+    @discardableResult
+    public func paddingRelative(left: Int, top: Int, right: Int, bottom: Int, _ unit: DimensionUnit = .dp) -> Self {
+        PaddingRelativeViewProperty(value: (left, top, right, bottom, unit)).applyOrAppend(nil, self)
+    }
+    /// Sets the relative padding.
+    @discardableResult
+    public func paddingRelative(h: Int, v: Int, _ unit: DimensionUnit = .dp) -> Self {
+        paddingRelative(left: h, top: v, right: h, bottom: v, unit)
+    }
+    /// Sets the relative padding.
+    @discardableResult
+    public func paddingRelative(_ value: Int = 16, _ unit: DimensionUnit = .dp) -> Self {
+        paddingRelative(left: value, top: value, right: value, bottom: value, unit)
+    }
+}
+
 // MARK: PendingCredentialRequest
 
 // MARK: PivotX
 
+struct PivotXProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setPivotX
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the `x` location of the point around which the view is rotated and scaled.
+    @discardableResult
+    public func pivotX(_ value: Float) -> Self {
+        PivotXProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: PivotY
+
+struct PivotYProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setPivotY
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the `y` location of the point around which the view is rotated and scaled.
+    @discardableResult
+    public func pivotY(_ value: Float) -> Self {
+        PivotYProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: PointerIcon
 
@@ -1322,6 +1968,38 @@ extension View {
 
 // MARK: RequestedFrameRate
 
+public enum RequestedFrameRate {
+    case high
+    case low
+    case normal
+    case noPreference
+    case custom(Float)
+
+    var rawValue: Float {
+        switch self {
+            case .high: return -4
+            case .low: return -2
+            case .normal: return -3
+            case .noPreference: return -1
+            case .custom(let value): return value
+        }
+    }
+}
+struct RequestedFrameRateProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setRequestedFrameRate
+    let value: RequestedFrameRate
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// You can set the preferred frame rate for a View using a positive number or by specifying the preferred frame rate category using constants.
+    @discardableResult
+    public func requestedFrameRate(_ value: RequestedFrameRate) -> Self {
+        RequestedFrameRateProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: RevealOnFocusHint
 
 struct RevealOnFocusHintViewProperty: ViewPropertyToApply {
@@ -1341,11 +2019,71 @@ extension View {
 
 // MARK: Right
 
+struct RightProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setRight
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Sets the right position of this view relative to its parent.
+    @discardableResult
+    public func right(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        RightProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: Rotation
+
+struct RotationProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setRotation
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the degrees that the view is rotated around the pivot point.
+    @discardableResult
+    public func rotation(_ value: Float) -> Self {
+        RotationProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: RotationX
 
+struct RotationXProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setRotationX
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the degrees that the view is rotated around the horizontal axis through the pivot point.
+    @discardableResult
+    public func rotationX(_ value: Float) -> Self {
+        RotationXProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: RotationY
+
+struct RotationYProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setRotationY
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the degrees that the view is rotated around the vertical axis through the pivot point.
+    @discardableResult
+    public func rotationY(_ value: Float) -> Self {
+        RotationYProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: SaveEnabled
 
@@ -1383,7 +2121,37 @@ extension View {
 
 // MARK: ScaleX
 
+struct ScaleXProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScaleX
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the amount that the view is scaled in x around the pivot point, as a proportion of the view's unscaled width.
+    @discardableResult
+    public func scaleX(_ value: Float) -> Self {
+        ScaleXProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ScaleY
+
+struct ScaleYProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScaleY
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the amount that the view is scaled in Y around the pivot point, as a proportion of the view's unscaled width.
+    @discardableResult
+    public func scaleY(_ value: Float) -> Self {
+        ScaleYProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: ScreenReaderFocusable
 
@@ -1404,15 +2172,102 @@ extension View {
 
 // MARK: ScrollBarDefaultDelayBeforeFade
 
+struct ScrollBarDefaultDelayBeforeFadeProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollBarDefaultDelayBeforeFade
+    let value: Int
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value))
+    }
+}
+extension View {
+    /// Define the delay before scrollbars fade.
+    @discardableResult
+    public func scrollBarDefaultDelayBeforeFade(_ value: Int) -> Self {
+        ScrollBarDefaultDelayBeforeFadeProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ScrollBarFadeDuration
+
+struct ScrollBarFadeDurationProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollBarFadeDuration
+    let value: Int
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value))
+    }
+}
+extension View {
+    /// Define the scrollbar fade duration.
+    @discardableResult
+    public func scrollBarFadeDuration(_ value: Int) -> Self {
+        ScrollBarFadeDurationProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: ScrollBarSize
 
+struct ScrollBarSizeProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollBarSize
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Define the scrollbar size.
+    @discardableResult
+    public func scrollBarSize(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        ScrollBarSizeProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ScrollBarStyle
+
+public enum ScrollBarStyle: Int32 {
+    case insideInset = 0x01000000
+    case insideOverlay = 0x00000000
+    case outsideInset = 0x03000000
+    case outsideOverlay = 0x02000000
+}
+struct ScrollBarStyleProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollBarStyle
+    let value: ScrollBarStyle
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Specify the style of the scrollbars.
+    @discardableResult
+    public func scrollBarStyle(_ value: ScrollBarStyle) -> Self {
+        ScrollBarStyleProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: ScrollCaptureCallback
 
 // MARK: ScrollCaptureHint
+
+public enum ScrollCaptureHint: Int32 {
+    case auto = 0
+    case exclude = 1
+    case excludeDescendants = 4
+    case include = 2
+}
+struct ScrollCaptureHintProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollCaptureHint
+    let value: ScrollCaptureHint
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Sets the scroll capture hint for this View.
+    @discardableResult
+    public func scrollCaptureHint(_ value: ScrollCaptureHint) -> Self {
+        ScrollCaptureHintProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: ScrollContainer
 
@@ -1433,9 +2288,66 @@ extension View {
 
 // MARK: ScrollIndicators
 
+public enum ScrollIndicator: Int32 {
+    case top = 1
+    case bottom = 2
+    case left = 4
+    case right = 8
+    case start = 16
+    case end = 32
+}
+struct ScrollIndicatorsProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollIndicators
+    let value: (ScrollIndicator, ScrollIndicator?)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if let mask = value.1 {
+            instance.callVoidMethod(env, name: key.rawValue, args: value.0.rawValue, mask.rawValue)
+        } else {
+            instance.callVoidMethod(env, name: key.rawValue, args: value.0.rawValue)
+        }
+    }
+}
+extension View {
+    /// Sets the state of all scroll indicators.
+    @discardableResult
+    public func scrollIndicators(_ indicators: ScrollIndicator, _ mask: ScrollIndicator? = nil) -> Self {
+        ScrollIndicatorsProperty(value: (indicators, mask)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ScrollX
 
+struct ScrollXProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollX
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Set the horizontal scrolled position of your view.
+    @discardableResult
+    public func scrollX(_ value: Int, _ unit: DimensionUnit = .px) -> Self {
+        ScrollXProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: ScrollY
+
+struct ScrollYProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setScrollY
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Set the vertical scrolled position of your view.
+    @discardableResult
+    public func scrollY(_ value: Int, _ unit: DimensionUnit = .px) -> Self {
+        ScrollYProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: ScrollbarFadingEnabled
 
@@ -1498,29 +2410,225 @@ extension View {
 
 // MARK: SystemUiVisibility
 
+public enum SystemUIFlag: Int32 {
+    case fullscreen = 4
+    case hideNavigation = 2
+    case immersive = 2048
+    case immersiveSticky = 4096
+    case layoutFullscreen = 1024
+    case layoutHideNavigation = 512
+    case layoutStable = 256
+    case lightNavigationBar = 16
+    case lightStatusBar = 8192
+    case lowProfile = 1
+    case visible = 0
+    case layoutFlags = 1536
+}
+struct SystemUiVisibilityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setSystemUiVisibility
+    let value: SystemUIFlag
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// **This method was deprecated in API level 30.**
+    /// SystemUiVisibility flags are deprecated.
+    /// Use `WindowInsetsController` instead.
+    @discardableResult
+    public func systemUiVisibility(_ value: SystemUIFlag) -> Self {
+        SystemUiVisibilityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: Tag
 
 // MARK: TextAlignment
 
+public enum TextAlignment: Int32 {
+    /// Default text alignment. The text alignment of this View is inherited from its parent. 
+    case inherit = 0
+    /// Default for the root view. The gravity determines the text alignment, `ALIGN_NORMAL`, `ALIGN_CENTER`, or `ALIGN_OPPOSITE`, which are relative to each paragraph's text direction.
+    case gravity = 1
+    /// Align to the start of the paragraph, e.g. `ALIGN_NORMAL`.
+    case textStart = 2
+    /// Align to the end of the paragraph, e.g. `ALIGN_OPPOSITE`.
+    case textEnd = 3
+    /// Center the paragraph, e.g. ALIGN_CENTER.
+    case center = 4
+    /// Align to the start of the view, which is `ALIGN_LEFT` if the view's resolved layoutDirection is LTR, and `ALIGN_RIGHT` otherwise.
+    case viewStart = 5
+    /// Align to the end of the view, which is `ALIGN_RIGHT` if the view's resolved layoutDirection is LTR, and `ALIGN_LEFT` otherwise.
+    case viewEnd = 6
+}
+struct TextAlignmentProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTextAlignment
+    let value: TextAlignment
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Set the text alignment.
+    @discardableResult
+    public func textAlignment(_ value: TextAlignment) -> Self {
+        TextAlignmentProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: TextDirection
+
+public enum TextDirection: Int32 {
+    /// Text direction is inherited through ViewGroup
+    case inherit = 0
+    /// Text direction is using "first strong algorithm".
+    /// The first strong directional character determines the paragraph direction.
+    /// If there is no strong directional character, the paragraph direction is the view's resolved layout direction.
+    case firstStrong = 1
+    /// Text direction is using "any-RTL" algorithm.
+    /// The paragraph direction is RTL if it contains any strong RTL character,
+    /// otherwise it is LTR if it contains any strong LTR characters.
+    /// If there are neither, the paragraph direction is the view's resolved layout direction.
+    case anyRTL = 2
+    /// Text direction is forced to LTR.
+    case ltr = 3
+    /// Text direction is forced to RTL.
+    case rtl = 4
+    /// Text direction is coming from the system Locale.
+    case locale = 5
+    /// Text direction is using "first strong algorithm".
+    /// The first strong directional character determines the paragraph direction.
+    /// If there is no strong directional character, the paragraph direction is LTR.
+    case firstStrongLTR = 6
+    /// Text direction is using "first strong algorithm".
+    /// The first strong directional character determines the paragraph direction.
+    /// If there is no strong directional character, the paragraph direction is RTL.
+    case firstStrongRTL = 7
+}
+struct TextDirectionProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTextDirection
+    let value: TextDirection
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Set the text direction.
+    @discardableResult
+    public func textDirection(_ value: TextDirection) -> Self {
+        TextDirectionProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: TooltipText
 
 // MARK: Top
 
+struct TopProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTop
+    let value: (Int, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
+    }
+}
+extension View {
+    /// Sets the top position of this view relative to its parent.
+    @discardableResult
+    public func top(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        TopProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: TouchDelegate
 
 // MARK: TransitionAlpha
+
+struct TransitionAlphaProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTransitionAlpha
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// This property is intended only for use by the Fade transition,
+    /// which animates it to produce a visual translucency
+    /// that does not side-effect (or get affected by) the real alpha property.
+    @discardableResult
+    public func transitionAlpha(_ value: Float) -> Self {
+        TransitionAlphaProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: TransitionName
 
 // MARK: TransitionVisibility
 
+struct TransitionVisibilityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTransitionVisibility
+    let value: ViewVisibility
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Changes the visibility of this View without triggering any other changes.
+    @discardableResult
+    public func transitionVisibility(_ value: ViewVisibility) -> Self {
+        TransitionVisibilityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: TranslationX
+
+struct TranslationXProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTranslationX
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the horizontal location of this view relative to its left position.
+    @discardableResult
+    public func translationX(_ value: Float) -> Self {
+        TranslationXProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: TranslationY
 
+struct TranslationYProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTranslationY
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the vertical location of this view relative to its top position.
+    @discardableResult
+    public func translationY(_ value: Float) -> Self {
+        TranslationYProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: TranslationZ
+
+struct TranslationZProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setTranslationZ
+    let value: Float
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension View {
+    /// Sets the depth location of this view relative to its elevation.
+    @discardableResult
+    public func translationZ(_ value: Float) -> Self {
+        TranslationZProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: VerticalFadingEdgeEnabled
 
@@ -1558,6 +2666,29 @@ extension View {
 
 // MARK: VerticalScrollbarPosition
 
+public enum VerticalScrollbarPosition: Int32 {
+    /// Position the scroll bar at the default position as determined by the system.
+    case `default` = 0
+    /// Position the scroll bar along the left edge.
+    case left = 1
+    /// Position the scroll bar along the right edge.
+    case right = 2
+}
+struct VerticalScrollbarPositionProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setVerticalScrollbarPosition
+    let value: VerticalScrollbarPosition
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Set the position of the vertical scroll bar.
+    @discardableResult
+    public func verticalScrollbarPosition(_ value: VerticalScrollbarPosition) -> Self {
+        VerticalScrollbarPositionProperty(value: value).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: VerticalScrollbarThumbDrawable
 
 // MARK: VerticalScrollbarTrackDrawable
@@ -1565,6 +2696,29 @@ extension View {
 // MARK: ViewTranslationCallback
 
 // MARK: Visibility
+
+public enum ViewVisibility: Int32 {
+    /// Visible on screen; the default value.
+    case visible = 0
+    /// Not displayed, but taken into account during layout (space is left for it).
+    case invisible = 1
+    /// Completely hidden, as if the view had not been added.
+    case gone = 2
+}
+struct VisibilityProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setVisibility
+    let value: ViewVisibility
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+    }
+}
+extension View {
+    /// Set the visibility state of this view.
+    @discardableResult
+    public func visibility(_ value: ViewVisibility) -> Self {
+        VisibilityProperty(value: value).applyOrAppend(nil, self)
+    }
+}
 
 // MARK: WillNotCacheDrawing
 
@@ -1606,6 +2760,51 @@ extension View {
 
 // MARK: X
 
+struct XProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setX
+    let value: (Float, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(value.0))
+    }
+}
+extension View {
+    /// Sets the visual x position of this view, in pixels.
+    @discardableResult
+    public func x(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        XProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: Y
 
+struct YProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setY
+    let value: (Float, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(value.0))
+    }
+}
+extension View {
+    /// Sets the visual x position of this view, in pixels.
+    @discardableResult
+    public func y(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        YProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
+
 // MARK: Z
+
+struct ZProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setZ
+    let value: (Float, DimensionUnit)
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(value.0))
+    }
+}
+extension View {
+    /// Sets the visual z position of this view, in pixels.
+    @discardableResult
+    public func z(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        ZProperty(value: (value, unit)).applyOrAppend(nil, self)
+    }
+}
