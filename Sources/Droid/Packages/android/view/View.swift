@@ -486,6 +486,7 @@ struct AccessibilityDataSensitiveViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Specifies whether this view should only allow interactions from AccessibilityServices with the AccessibilityServiceInfo.isAccessibilityTool() property set to true.
     @discardableResult
     public func accessibilityDataSensitive(_ value: AccessibilityDataSensitiveMode) -> Self {
         AccessibilityDataSensitiveViewProperty(value: value).applyOrAppend(nil, self)
@@ -506,6 +507,7 @@ struct AccessibilityHeadingViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set if view is a heading for a section of content for accessibility purposes.
     @discardableResult
     public func accessibilityHeading(_ value: Bool = true) -> Self {
         AccessibilityHeadingViewProperty(value: value).applyOrAppend(nil, self)
@@ -530,8 +532,9 @@ struct ActivatedViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Changes the activated state of this view.
     @discardableResult
-    public func Activated(_ value: Bool = true) -> Self {
+    public func activated(_ value: Bool = true) -> Self {
         ActivatedViewProperty(value: value).applyOrAppend(nil, self)
     }
 }
@@ -546,6 +549,7 @@ struct AllowClickWhenDisabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Enables or disables click events for this view when disabled.
     @discardableResult
     public func allowClickWhenDisabled(_ value: Bool = true) -> Self {
         AllowClickWhenDisabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -572,6 +576,7 @@ struct AutoHandwritingEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set whether this view enables automatic handwriting initiation.
     @discardableResult
     public func autoHandwritingEnabled(_ value: Bool = true) -> Self {
         AutoHandwritingEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -594,6 +599,7 @@ struct BackgroundColorViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets the background color for this view.
     @discardableResult
     public func backgroundColor(_ color: GraphicsColor) -> Self {
         BackgroundColorViewProperty(value: color).applyOrAppend(nil, self)
@@ -623,6 +629,7 @@ struct ClickableViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Enables or disables click events for this view.
     @discardableResult
     public func clickable(_ value: Bool = true) -> Self {
         ClickableViewProperty(value: value).applyOrAppend(nil, self)
@@ -641,6 +648,7 @@ struct ClipToOutlineViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether the View's Outline should be used to clip the contents of the View.
     @discardableResult
     public func clipToOutline(_ value: Bool = true) -> Self {
         ClipToOutlineViewProperty(value: value).applyOrAppend(nil, self)
@@ -663,6 +671,7 @@ struct ContextClickableViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Enables or disables context clicking for this view.
     @discardableResult
     public func contextClickable(_ value: Bool = true) -> Self {
         ContextClickableViewProperty(value: value).applyOrAppend(nil, self)
@@ -679,6 +688,8 @@ struct DefaultFocusHighlightEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether this View should use a default focus highlight when it gets focused
+    /// but doesn't have `R.attr.state_focused` defined in its background.
     @discardableResult
     public func defaultFocusHighlightEnabled(_ value: Bool = true) -> Self {
         DefaultFocusHighlightEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -697,6 +708,13 @@ struct DrawingCacheEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// This method was deprecated in API level 28.
+    ///
+    /// The view drawing cache was largely made obsolete
+    /// with the introduction of hardware-accelerated rendering in API 11.
+    ///
+    /// With hardware-acceleration, intermediate cache layers are largely unnecessary
+    /// and can easily result in a net loss in performance due to the cost of creating and updating the layer. 
     @discardableResult
     public func drawingCacheEnabled(_ value: Bool = true) -> Self {
         DrawingCacheEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -715,6 +733,7 @@ struct DuplicateParentStateEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Enables or disables the duplication of the parent's state into this view.
     @discardableResult
     public func duplicateParentStateEnabled(_ value: Bool = true) -> Self {
         DuplicateParentStateEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -733,6 +752,7 @@ struct EnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set the enabled state of this view.
     @discardableResult
     public func Enabled(_ value: Bool = true) -> Self {
         EnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -751,6 +771,7 @@ struct FilterTouchesWhenObscuredViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether the framework should discard touches when the view's window is obscured by another visible window at the touched location.
     @discardableResult
     public func filterTouchesWhenObscured(_ value: Bool = true) -> Self {
         FilterTouchesWhenObscuredViewProperty(value: value).applyOrAppend(nil, self)
@@ -767,6 +788,9 @@ struct SetFitsSystemWindowsViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether or not this view should account for system screen decorations
+    /// such as the status bar and inset its content;
+    /// that is, controlling whether the default implementation of `fitSystemWindows(Rect)` will be executed.
     @discardableResult
     public func fitsSystemWindows(_ value: Bool = true) -> Self {
         SetFitsSystemWindowsViewProperty(value: value).applyOrAppend(nil, self)
@@ -784,6 +808,7 @@ struct FocusableViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether this view can receive focus.
     @discardableResult
     public func focusable(_ value: Bool = true) -> Self {
         FocusableViewProperty(value: value).applyOrAppend(nil, self)
@@ -800,6 +825,7 @@ struct FocusableInTouchModeViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set whether this view can receive focus while in touch mode.
     @discardableResult
     public func focusableInTouchMode(_ value: Bool = true) -> Self {
         FocusableInTouchModeViewProperty(value: value).applyOrAppend(nil, self)
@@ -816,6 +842,7 @@ struct FocusedByDefaultViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether this View should receive focus when the focus is restored for the view hierarchy containing this view.
     @discardableResult
     public func focusedByDefault(_ value: Bool = true) -> Self {
         FocusedByDefaultViewProperty(value: value).applyOrAppend(nil, self)
@@ -832,6 +859,7 @@ struct ForceDarkAllowedViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether or not to allow force dark to apply to this view.
     @discardableResult
     public func forceDarkAllowed(_ value: Bool = true) -> Self {
         ForceDarkAllowedViewProperty(value: value).applyOrAppend(nil, self)
@@ -866,6 +894,7 @@ struct HapticFeedbackEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set whether this view should have haptic feedback for events such as long presses.
     @discardableResult
     public func hapticFeedbackEnabled(_ value: Bool = true) -> Self {
         HapticFeedbackEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -882,6 +911,7 @@ struct HasTransientStateViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set whether this view is currently tracking transient state that the framework should attempt to preserve when possible.
     @discardableResult
     public func hasTransientState(_ value: Bool = true) -> Self {
         HasTransientStateViewProperty(value: value).applyOrAppend(nil, self)
@@ -898,6 +928,7 @@ struct HorizontalFadingEdgeEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Define whether the horizontal edges should be faded when this view is scrolled horizontally.
     @discardableResult
     public func horizontalFadingEdgeEnabled(_ value: Bool = true) -> Self {
         HorizontalFadingEdgeEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -914,6 +945,7 @@ struct HorizontalScrollBarEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Define whether the horizontal scrollbar should be drawn or not.
     @discardableResult
     public func horizontalScrollBarEnabled(_ value: Bool = true) -> Self {
         HorizontalScrollBarEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -934,6 +966,7 @@ struct HoveredViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether the view is currently hovered.
     @discardableResult
     public func hovered(_ value: Bool = true) -> Self {
         HoveredViewProperty(value: value).applyOrAppend(nil, self)
@@ -941,6 +974,8 @@ extension View {
 }
 
 // MARK: Id
+
+// Inner implementation overrides it.
 
 // MARK: ImportantForAccessibility
 
@@ -958,6 +993,7 @@ struct IsCredentialViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether this view is a credential for Credential Manager purposes.
     @discardableResult
     public func isCredential(_ value: Bool = true) -> Self {
         IsCredentialViewProperty(value: value).applyOrAppend(nil, self)
@@ -974,6 +1010,7 @@ struct IsHandwritingDelegateViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets this view to be a handwriting delegate.
     @discardableResult
     public func isHandwritingDelegate(_ value: Bool = true) -> Self {
         IsHandwritingDelegateViewProperty(value: value).applyOrAppend(nil, self)
@@ -990,6 +1027,7 @@ struct KeepScreenOnViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Controls whether the screen should remain on, modifying the value of `KEEP_SCREEN_ON`.
     @discardableResult
     public func keepScreenOn(_ value: Bool = true) -> Self {
         KeepScreenOnViewProperty(value: value).applyOrAppend(nil, self)
@@ -1006,6 +1044,7 @@ struct KeyboardNavigationClusterViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set whether this view is a root of a keyboard navigation cluster.
     @discardableResult
     public func keyboardNavigationCluster(_ value: Bool = true) -> Self {
         KeyboardNavigationClusterViewProperty(value: value).applyOrAppend(nil, self)
@@ -1022,6 +1061,8 @@ extension View {
 
 // MARK: LayoutParams
 
+// Inner implementation overrides it.
+
 // MARK: Left
 
 // MARK: LeftTopRightBottom
@@ -1036,6 +1077,7 @@ struct LongClickableViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Enables or disables long click events for this view.
     @discardableResult
     public func longClickable(_ value: Bool = true) -> Self {
         LongClickableViewProperty(value: value).applyOrAppend(nil, self)
@@ -1056,6 +1098,7 @@ struct NestedScrollingEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Enable or disable nested scrolling for this view.
     @discardableResult
     public func nestedScrollingEnabled(_ value: Bool = true) -> Self {
         NestedScrollingEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -1094,6 +1137,7 @@ struct OnClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
+    /// Register a callback to be invoked when this view is clicked.
     @discardableResult
     public func onClick(_ handler: @escaping () async -> Void) -> Self {
         #if os(Android)
@@ -1102,7 +1146,7 @@ extension View {
         return self
         #endif
     }
-
+    /// Register a callback to be invoked when this view is clicked.
     @discardableResult
     public func onClick(_ handler: @escaping (Self) async -> Void) -> Self {
         #if os(Android)
@@ -1146,6 +1190,7 @@ struct OnLongClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
+    /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
     public func onLongClick(_ handler: @escaping () -> Bool) -> Self {
         #if os(Android)
@@ -1154,7 +1199,7 @@ extension View {
         return self
         #endif
     }
-
+    /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
     public func onLongClick(_ handler: @escaping () -> Void) -> Self {
         onLongClick {
@@ -1162,7 +1207,7 @@ extension View {
             return true
         }
     }
-
+    /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
     public func onLongClick(_ handler: @escaping (Self) -> Bool) -> Self {
         #if os(Android)
@@ -1174,7 +1219,7 @@ extension View {
         return self
         #endif
     }
-
+    /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
     public func onLongClick(_ handler: @escaping (Self) -> Void) -> Self {
         onLongClick { v in
@@ -1210,16 +1255,17 @@ struct PaddingViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets the padding.
     @discardableResult
     public func padding(left: Int, top: Int, right: Int, bottom: Int, _ unit: DimensionUnit = .dp) -> Self {
         PaddingViewProperty(value: (left, top, right, bottom, unit)).applyOrAppend(nil, self)
     }
-
+    /// Sets the padding.
     @discardableResult
     public func padding(h: Int, v: Int, _ unit: DimensionUnit = .dp) -> Self {
         padding(left: h, top: v, right: h, bottom: v, unit)
     }
-
+    /// Sets the padding.
     @discardableResult
     public func padding(_ value: Int = 16, _ unit: DimensionUnit = .dp) -> Self {
         padding(left: value, top: value, right: value, bottom: value, unit)
@@ -1246,6 +1292,7 @@ struct PreferKeepClearViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets the pressed state for this view.
     @discardableResult
     public func preferKeepClear(_ value: Bool = true) -> Self {
         PreferKeepClearViewProperty(value: value).applyOrAppend(nil, self)
@@ -1264,6 +1311,7 @@ struct PressedViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets the pressed state for this view.
     @discardableResult
     public func pressed(_ value: Bool = true) -> Self {
         PressedViewProperty(value: value).applyOrAppend(nil, self)
@@ -1284,6 +1332,7 @@ struct RevealOnFocusHintViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets this view's preference for reveal behavior when it gains focus.
     @discardableResult
     public func revealOnFocusHint(_ value: Bool = true) -> Self {
         RevealOnFocusHintViewProperty(value: value).applyOrAppend(nil, self)
@@ -1308,6 +1357,7 @@ struct SaveEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Controls whether the saving of this view's state is enabled (that is, whether its onSaveInstanceState() method will be called).
     @discardableResult
     public func saveEnabled(_ value: Bool = true) -> Self {
         SaveEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -1324,6 +1374,7 @@ struct SaveFromParentEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Controls whether the entire hierarchy under this view will save its state when a state saving traversal occurs from its parent.
     @discardableResult
     public func saveFromParentEnabled(_ value: Bool = true) -> Self {
         SaveFromParentEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -1344,6 +1395,7 @@ struct ScreenReaderFocusableViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Sets whether this View should be a focusable element for screen readers and include non-focusable Views from its subtree when providing feedback.
     @discardableResult
     public func screenReaderFocusable(_ value: Bool = true) -> Self {
         ScreenReaderFocusableViewProperty(value: value).applyOrAppend(nil, self)
@@ -1372,6 +1424,7 @@ struct ScrollContainerViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Change whether this view is one of the set of scrollable containers in its window.
     @discardableResult
     public func scrollContainer(_ value: Bool = true) -> Self {
         ScrollContainerViewProperty(value: value).applyOrAppend(nil, self)
@@ -1394,6 +1447,7 @@ struct ScrollbarFadingEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Define whether scrollbars will fade when the view is not scrolling.
     @discardableResult
     public func scrollbarFadingEnabled(_ value: Bool = true) -> Self {
         ScrollbarFadingEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -1410,6 +1464,7 @@ struct SelectedViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Changes the selection state of this view.
     @discardableResult
     public func selected(_ value: Bool = true) -> Self {
         SelectedViewProperty(value: value).applyOrAppend(nil, self)
@@ -1426,6 +1481,7 @@ struct SoundEffectsEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set whether this view should have sound effects enabled for events such as clicking and touching.
     @discardableResult
     public func soundEffectsEnabled(_ value: Bool = true) -> Self {
         SoundEffectsEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -1476,6 +1532,7 @@ struct VerticalFadingEdgeEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Define whether the vertical edges should be faded when this view is scrolled vertically.
     @discardableResult
     public func verticalFadingEdgeEnabled(_ value: Bool = true) -> Self {
         VerticalFadingEdgeEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -1492,6 +1549,7 @@ struct VerticalScrollBarEnabledViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// Set the position of the vertical scroll bar.
     @discardableResult
     public func verticalScrollBarEnabled(_ value: Bool = true) -> Self {
         VerticalScrollBarEnabledViewProperty(value: value).applyOrAppend(nil, self)
@@ -1518,6 +1576,9 @@ struct WillNotCacheDrawingViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// This method was deprecated in API level 28.
+    /// The view drawing cache was largely made obsolete with the introduction of hardware-accelerated rendering in API 11.
+    /// With hardware-acceleration, intermediate cache layers are largely unnecessary and can easily result in a net loss in performance due to the cost of creating and updating the layer.
     @discardableResult
     public func willNotCacheDrawing(_ value: Bool = true) -> Self {
         WillNotCacheDrawingViewProperty(value: value).applyOrAppend(nil, self)
@@ -1534,6 +1595,7 @@ struct WillNotDrawViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
+    /// If this view doesn't do any drawing on its own, set this flag to allow further optimizations.
     @discardableResult
     public func willNotDraw(_ value: Bool = true) -> Self {
         WillNotDrawViewProperty(value: value).applyOrAppend(nil, self)
