@@ -101,12 +101,12 @@ class DroidApp : Application() {
     external fun activityOnDestroy(activityId: Int)
     external fun activityOnAttachedToWindow(activityId: Int)
     external fun activityOnBackPressed(activityId: Int)
-    external fun activityOnActivityResult(
+    external fun activityOnActivityResult1(
         activityId: Int,
         requestCode: Int,
         resultCode: Int,
         data: Intent?,
         caller: ComponentCaller
     )
-    external fun activityOnActivityResult(activityId: Int, requestCode: Int, resultCode: Int, data: Intent?)
+    external fun activityOnActivityResult2(activityId: Int, requestCode: Int, resultCode: Int, data: Intent?)
 }

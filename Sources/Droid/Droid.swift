@@ -306,8 +306,8 @@ public func activityOnBackPressed(envPointer: UnsafeMutablePointer<JNIEnv?>, app
     #endif
 }
 
-@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult")
-public func activityOnActivityResult(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, resultCode: jint, intentRef: jobject?, componentCallerRef: jobject?) {
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult1")
+public func activityOnActivityResult1(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, resultCode: jint, intentRef: jobject?, componentCallerRef: jobject?) {
     let env = JEnv(envPointer)
     var intent: Intent?
     if let object = intentRef?.box(env)?.object() {
@@ -320,6 +320,20 @@ public func activityOnActivityResult(envPointer: UnsafeMutablePointer<JNIEnv?>, 
     #if canImport(AndroidLooper)
     Task { @UIThreadActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onActivityResult(requestCode: Int(requestCode), resultCode: Int(resultCode), intent: intent, componentCaller: componentCaller)
+    }
+    #endif
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult2")
+public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, resultCode: jint, intentRef: jobject?) {
+    let env = JEnv(envPointer)
+    var intent: Intent?
+    if let object = intentRef?.box(env)?.object() {
+        intent = .init(object)
+    }
+    #if canImport(AndroidLooper)
+    Task { @UIThreadActor in
+        DroidApp.shared._activeActivities[Int(activityId)]?.onActivityResult(requestCode: Int(requestCode), resultCode: Int(resultCode), intent: intent, componentCaller: nil)
     }
     #endif
 }

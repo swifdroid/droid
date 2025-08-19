@@ -3,6 +3,7 @@ package stream.swift.droid.appkit.activities
 import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import stream.swift.droid.appkit.DroidApp
@@ -84,12 +85,12 @@ open class DroidAppCompatActivity: AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data, caller)
         val app: DroidApp = applicationContext as DroidApp
-        app.activityOnActivityResult(uniqueId, requestCode, resultCode, data, caller)
+        app.activityOnActivityResult1(uniqueId, requestCode, resultCode, data, caller)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val app: DroidApp = applicationContext as DroidApp
-        app.activityOnActivityResult(uniqueId, requestCode, resultCode, data)
+        app.activityOnActivityResult2(uniqueId, requestCode, resultCode, data)
     }
 }
