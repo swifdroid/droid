@@ -265,26 +265,26 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     open func willMoveToParent() {}
     /// Triggered after this view added into parent view
     open func didMoveToParent() {
-        InnerLog.d("view(id: \(id)) didMoveToParent 1")
+        // InnerLog.d("view(id: \(id)) didMoveToParent 1")
         if let instance {
-            InnerLog.d("view(id: \(id)) didMoveToParent 2")
+            // InnerLog.d("view(id: \(id)) didMoveToParent 2")
             processProperties([], instance)
             if subviews.count > 0 {
-                InnerLog.d("view(id: \(id)) didMoveToParent iterating subviews")
+                // InnerLog.d("view(id: \(id)) didMoveToParent iterating subviews")
                 for (i, subview) in subviews.filter({ v in
                     switch v.status {
                         case .new, .floating: return true
                         default: return false
                     }
                 }).enumerated() {
-                    InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 1")
+                    // InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 1")
                     if let subviewInstance = subview.setStatusInParent(self, instance.context) {
-                        InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 2")
+                        // InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 2")
                         subview.willMoveToParent()
                         instance.addView(subviewInstance)
                         subview.didMoveToParent()
                     } else {
-                        InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 3")
+                        // InnerLog.d("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 3")
                         InnerLog.c("🟥 Unable to initialize ViewInstance for `addView` in `didMoveToParent`")
                     }
                 }
@@ -301,38 +301,38 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     }
 
     func setStatusAsContentView(_ context: ActivityContext) -> ViewInstance? {
-        InnerLog.d("view(id: \(id)) setStatusAsContentView 1")
+        // InnerLog.d("view(id: \(id)) setStatusAsContentView 1")
         switch status {
             case .new, .floating: break
             default:
                 InnerLog.d("🟨 Attempt to `setAsContentView` when view is already has parent")
                 return nil
         }
-        InnerLog.d("view(id: \(id)) setStatusAsContentView 2")
+        // InnerLog.d("view(id: \(id)) setStatusAsContentView 2")
         guard let instance: ViewInstance = ViewInstance(Self.className, self, context, id) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setAsContentView`")
             return nil
         }
-        InnerLog.d("view(id: \(id)) setStatusAsContentView 3")
+        // InnerLog.d("view(id: \(id)) setStatusAsContentView 3")
         status = .asContentView(instance)
         return instance
     }
     
     func setStatusInParent(_ parent: View, _ context: ActivityContext) -> ViewInstance? {
-        InnerLog.d("view(id: \(id)) setStatusInParent 1")
+        // InnerLog.d("view(id: \(id)) setStatusInParent 1")
         switch status {
             case .new, .floating: break
             default:
                 InnerLog.d("🟨 Attempt to `setStatusInParent` when view is already has parent")
                 return nil
         }
-        InnerLog.d("view(id: \(id)) setStatusInParent 2")
+        // InnerLog.d("view(id: \(id)) setStatusInParent 2")
         guard let instance = ViewInstance(Self.className, self, context, id) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setStatusInParent`")
             return nil
         }
         status = .inParent(parent, instance)
-        InnerLog.d("view(id: \(id)) setStatusInParent 3")
+        // InnerLog.d("view(id: \(id)) setStatusInParent 3")
         return instance
     }
 
@@ -354,7 +354,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     var _layoutParamsToApply: [any LayoutParamToApply] = []
 
     func proceedSubviewsLayoutParams(_ context: ViewInstance) {
-        InnerLog.d("view(id: \(id)) proceedSubviewsLayoutParams")
+        // InnerLog.d("view(id: \(id)) proceedSubviewsLayoutParams")
         for subview in subviews.filter({ v in
             switch v.status {
                 case .inParent: return true
@@ -381,13 +381,13 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     }
     
     func addItem(_ item: BodyBuilderItem, at index: Int? = nil) {
-        InnerLog.d("view(id: \(id)) addItem 1")
+        // InnerLog.d("view(id: \(id)) addItem 1")
         switch item {
         case .single(let view):
-            InnerLog.d("view(id: \(id)) addItem 2 (single)")
+            // InnerLog.d("view(id: \(id)) addItem 2 (single)")
             add(views: [view], at: index)
         case .multiple(let views):
-            InnerLog.d("view(id: \(id)) addItem 3 (multiple)")
+            // InnerLog.d("view(id: \(id)) addItem 3 (multiple)")
             add(views: views, at: index)
         case .forEach(let fr):
             InnerLog.d("view(id: \(id)) addItem 4 (forEach)")
@@ -421,11 +421,11 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             }
             break
         case .nested(let items):
-            InnerLog.d("view(id: \(id)) addItem 5 (nested)")
+            // InnerLog.d("view(id: \(id)) addItem 5 (nested)")
             items.forEach { addItem($0, at: index) }
             break
         case .none:
-            InnerLog.d("view(id: \(id)) addItem 6 (none)")
+            // InnerLog.d("view(id: \(id)) addItem 6 (none)")
             break
         }
     }
