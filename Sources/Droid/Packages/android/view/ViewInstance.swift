@@ -79,32 +79,32 @@ extension View {
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "requestLayout", signature: .returning(.void))
             else { return }
-            InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 1")
+            // InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 1")
             env.callVoidMethod(object: object, methodId: methodId)
-            InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 2")
+            // InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 2")
             #endif
         }
         
         public func getLayoutParams() -> LayoutParams? {
             #if os(Android)
-            InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1")
+            // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1")
             guard let env = JEnv.current() else {
-                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.1 exit")
+                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.1 exit")
                 return nil
             }
             guard let methodId = clazz.methodId(env: env, name: "getLayoutParams", signature: .returning(.object(.android.view.ViewGroup.LayoutParams))) else {
-                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
+                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
                 return nil
             }
             guard let lpClazz = context.getClassLoader()?.loadClass(lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
-                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
+                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
                 return nil
             }
             guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, clazz: lpClazz) else {
-                InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
+                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
                 return nil
             }
-            InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 2")
+            // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 2")
             return LayoutParams(globalObject)
             #else
             return nil
@@ -117,24 +117,24 @@ extension View {
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "setLayoutParams", signature: .init(.object(.android.view.ViewGroup.LayoutParams), returning: .void))
             else { return }
-            InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 1")
+            // InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 1")
             env.callVoidMethod(object: object, methodId: methodId, args: [params.object])
-            InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 2")
+            // InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 2")
             #endif
         }
 
         public func addView(_ viewInstance: ViewInstance) {
-            InnerLog.d("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
-            InnerLog.d("💚 view(id: \(id)) self viewInstance: \(self)")
-            InnerLog.d("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
+            // InnerLog.d("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
+            // InnerLog.d("💚 view(id: \(id)) self viewInstance: \(self)")
+            // InnerLog.d("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
             #if os(Android)
             guard
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "addView", signature: .init(.object(.android.view.View), returning: .void))
             else { return }
-            InnerLog.d("💚 view(id: \(id)) viewInstance addView 1")
+            // InnerLog.d("💚 view(id: \(id)) viewInstance addView 1")
             env.callVoidMethod(object: object, methodId: methodId, args: [viewInstance.object])
-            InnerLog.d("💚 view(id: \(id)) viewInstance addView 2")
+            // InnerLog.d("💚 view(id: \(id)) viewInstance addView 2")
             #endif
         }
 
