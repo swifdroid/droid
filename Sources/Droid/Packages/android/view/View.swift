@@ -544,11 +544,13 @@ struct AccessibilityPaneTitleProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setAccessibilityPaneTitle
     let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
         guard
             let env = env ?? JEnv.current(),
             let string = JString(from: value)
         else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+        #endif
     }
 }
 extension View {
@@ -633,11 +635,13 @@ struct AllowedHandwritingDelegatePackageProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setAllowedHandwritingDelegatePackage
     let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
         guard
             let env = env ?? JEnv.current(),
             let string = JString(from: value)
         else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(JString.className))])
+        #endif
     }
 }
 extension View {
@@ -654,11 +658,13 @@ struct AllowedHandwritingDelegatorPackageProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setAllowedHandwritingDelegatorPackage
     let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
         guard
             let env = env ?? JEnv.current(),
             let string = JString(from: value)
         else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(JString.className))])
+        #endif
     }
 }
 extension View {
@@ -834,11 +840,13 @@ struct ContentDescriptionProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setContentDescription
     let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
         guard
             let env = env ?? JEnv.current(),
             let string = JString(from: value)
         else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+        #endif
     }
 }
 extension View {
@@ -2482,11 +2490,13 @@ struct StateDescriptionProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setStateDescription
     let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
         guard
             let env = env ?? JEnv.current(),
             let string = JString(from: value)
         else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+        #endif
     }
 }
 extension View {
@@ -2505,11 +2515,13 @@ extension View {
 //     let key: ViewPropertyKey = .setSupplementalDescription
 //     let value: String
 //     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+//         #if os(Android)
 //         guard
 //             let env = env ?? JEnv.current(),
 //             let string = JString(from: value)
 //         else { return }
 //         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+//         #endif
 //     }
 // }
 // extension View {
@@ -2640,11 +2652,13 @@ struct TooltipTextProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setTooltipText
     let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
         guard
             let env = env ?? JEnv.current(),
             let string = JString(from: value)
         else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(.java.lang.CharSequence))])
+        #endif
     }
 }
 extension View {
@@ -2699,11 +2713,13 @@ struct TransitionNameProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setTransitionName
     let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        #if os(Android)
         guard
             let env = env ?? JEnv.current(),
             let string = JString(from: value)
         else { return }
         instance.callVoidMethod(env, name: key.rawValue, args: [(string.object, .object(JString.className))])
+        #endif
     }
 }
 extension View {
