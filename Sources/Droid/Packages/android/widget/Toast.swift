@@ -123,18 +123,20 @@ public final class Toast: JObjectable, @unchecked Sendable {
         object.callVoidMethod(name: "setGravity", args: Int32(gravity.rawValue), unit.toPixels(Int32(xOffset)), unit.toPixels(Int32(yOffset)))
     }
 
+    #if os(Android)
     private var callback: NativeToastCallback?
+    #endif
 
     public func callback(onShown: @escaping () async -> Void, onHidden: @escaping () async -> Void) {
         #if os(Android)
-        if let callback {
-            object.callVoidMethod(name: "removeCallback", args: [(callback.object, .object("android/widget/Toast$Callback"))])
+        if let instance = callback?.instance {
+            object.callVoidMethod(name: "removeCallback", args: [(instance.object, .object("android/widget/Toast$Callback"))])
         }
-        guard let callback = NativeToastCallback(context: context, onShown: onShown, onHidden: onHidden) else {
-            return
-        }
+        let callback = NativeToastCallback(DroidApp.getNextViewId(), viewId: nil)
+            .setHandlers(onShown: onShown, onHidden: onHidden)
         self.callback = callback
-        object.callVoidMethod(name: "addCallback", args: [(callback.object, .object("android/widget/Toast$Callback"))])
+        guard let instance = callback.instantiate(context) else { return }
+        object.callVoidMethod(name: "addCallback", args: [(instance.object, .object("android/widget/Toast$Callback"))])
         #endif
     }
 
