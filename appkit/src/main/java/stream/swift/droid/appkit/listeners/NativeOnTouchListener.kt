@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
 
-class NativeOnTouchListener: View.OnTouchListener {
+class NativeOnTouchListener(private val uniqueId: Int, private val viewId: Int): View.OnTouchListener {
     @SuppressLint("ClickableViewAccessibility")
     external override fun onTouch(v: View?, event: MotionEvent?): Boolean
 }

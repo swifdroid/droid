@@ -1763,7 +1763,7 @@ extension View {
     @discardableResult
     public func onClick(_ handler: @escaping () async -> Void) -> Self {
         #if os(Android)
-        return OnClickListenerViewProperty(value: .init(id).setHandler(handler)).applyOrAppend(nil, self)
+        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(handler)).applyOrAppend(nil, self)
         #else
         return self
         #endif
@@ -1772,7 +1772,7 @@ extension View {
     @discardableResult
     public func onClick(_ handler: @escaping (Self) async -> Void) -> Self {
         #if os(Android)
-        return OnClickListenerViewProperty(value: .init(id).setHandler { @UIThreadActor [weak self] in
+        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler { @UIThreadActor [weak self] in
             guard let self else { return }
             await handler(self)
         }).applyOrAppend(nil, self)
@@ -1816,7 +1816,7 @@ extension View {
     @discardableResult
     public func onLongClick(_ handler: @escaping () -> Bool) -> Self {
         #if os(Android)
-        return OnLongClickListenerViewProperty(value: .init(id).setHandler(handler)).applyOrAppend(nil, self)
+        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler(handler)).applyOrAppend(nil, self)
         #else
         return self
         #endif
@@ -1833,7 +1833,7 @@ extension View {
     @discardableResult
     public func onLongClick(_ handler: @escaping (Self) -> Bool) -> Self {
         #if os(Android)
-        return OnLongClickListenerViewProperty(value: .init(id).setHandler { @UIThreadActor [weak self] in
+        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler { @UIThreadActor [weak self] in
             guard let self else { return false }
             return handler(self)
         }).applyOrAppend(nil, self)

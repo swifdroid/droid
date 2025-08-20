@@ -15,6 +15,7 @@ protocol AnyNativeListener: AnyObject {
     static var className: JClassName { get }
     var id: Int32 { get }
     var instance: ListenerInstance? { get set }
+    var shouldInitWithViewId: Bool { get }
 }
 
 extension AnyNativeListener {
@@ -22,15 +23,29 @@ extension AnyNativeListener {
     static func stringId(_ id: Int32) -> String {
         "\(className.name)\(id)"
     }
-}
-
-extension AnyNativeListener {
+    
     func addIntoStore() {
         ListenerStore.shared.add(self)
     }
 
+    @UIThreadActor
+    func instantiate(_ context: Contextable) -> ListenerInstance? {
+        instance = .init(
+            id,
+            viewId: nil,
+            context.context,
+            Self.className
+        )
+        return instance
+    }
+
     func attach(to view: View.ViewInstance) {
-        instance = .init(view.id, view.context, Self.className)
+        instance = .init(
+            id,
+            viewId: shouldInitWithViewId ? view.id : nil,
+            view.context,
+            Self.className
+        )
     }
 }
 
@@ -38,11 +53,15 @@ class NativeListener: @unchecked Sendable {
     /// Unique identifier
     let id: Int32
 
+    /// View identifier
+    let viewId: Int32?
+
     /// JNI Instance
     var instance: ListenerInstance?
 
-    public init (_ id: Int32) {
+    public init (_ id: Int32, viewId: Int32?) {
         self.id = id
+        self.viewId = nil
         if let s = self as? AnyNativeListener {
             s.addIntoStore()
         }
@@ -59,17 +78,23 @@ class ListenerInstance: @unchecked Sendable {
     /// Object wrapper
     public let object: JObject
 
-    public convenience init? (_ id: Int32, _ context: ActivityContext, _ className: JClassName) {
+    public convenience init? (_ id: Int32, viewId: Int32? = nil, _ context: ActivityContext, _ className: JClassName) {
         guard let env = JEnv.current() else { return nil }
-        self.init(env, id, context, className)
+        self.init(env, id, viewId: viewId, context, className)
     }
     
-    public init? (_ env: JEnv, _ id: Int32, _ context: ActivityContext, _ className: JClassName) {
+    public init? (_ env: JEnv, _ id: Int32, viewId: Int32? = nil, _ context: ActivityContext, _ className: JClassName) {
+        var args: [any JValuable] = [id]
+        var signature: [JSignatureItem] = [.int]
+        if let viewId {
+            args.append(viewId)
+            signature.append(.int)
+        }
         guard
             let classLoader = context.getClassLoader(),
             let clazz = classLoader.loadClass(className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [id])
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(signature, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: args)
         else { return nil }
         self.object = global
     }

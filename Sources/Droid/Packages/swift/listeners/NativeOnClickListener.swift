@@ -20,6 +20,8 @@ final class NativeOnClickListener: NativeListener, AnyNativeListener, @unchecked
     /// The JNI class name
     class var className: JClassName { "stream/swift/droid/appkit/listeners/NativeOnClickListener" }    
 
+    var shouldInitWithViewId: Bool { true }
+
     typealias Handler = (() async -> Void)
 
     /// Action handler

@@ -2,6 +2,6 @@ package stream.swift.droid.appkit.listeners
 
 import android.view.View
 
-class NativeOnContextClickListener: View.OnContextClickListener {
     external override fun onContextClick(v: View?): Boolean
+class NativeOnContextClickListener(private val uniqueId: Int, private val viewId: Int): View.OnContextClickListener {
 }

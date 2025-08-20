@@ -6,6 +6,6 @@ import android.view.View
 import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.P)
-class NativeOnUnhandledKeyEventListener: View.OnUnhandledKeyEventListener {
     external override fun onUnhandledKeyEvent(v: View?, event: KeyEvent?): Boolean
+class NativeOnUnhandledKeyEventListener(private val uniqueId: Int, private val viewId: Int): View.OnUnhandledKeyEventListener {
 }

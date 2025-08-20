@@ -20,6 +20,8 @@ final class NativeOnLongClickListener: NativeListener, AnyNativeListener, @unche
     /// The JNI class name
     class var className: JClassName { "stream/swift/droid/appkit/listeners/NativeOnLongClickListener" }
 
+    var shouldInitWithViewId: Bool { true }
+
     /// Action handler
     var handler: (() -> Bool)?
 
