@@ -1819,18 +1819,30 @@ struct OnLongClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
+    #if canImport(AndroidLooper)
+    public typealias LongClickListenerBoolHandler = @UIThreadActor () -> Bool
+    public typealias LongClickListenerHandler = @UIThreadActor () -> Void
+    public typealias LongClickListenerEventBoolHandler = @UIThreadActor (NativeOnLongClickListenerEvent) -> Bool
+    public typealias LongClickListenerEventHandler = @UIThreadActor (NativeOnLongClickListenerEvent) -> Void
+    #else
+    public typealias LongClickListenerBoolHandler = () -> Bool
+    public typealias LongClickListenerHandler = () -> Void
+    public typealias LongClickListenerEventBoolHandler = (NativeOnLongClickListenerEvent) -> Bool
+    public typealias LongClickListenerEventHandler = (NativeOnLongClickListenerEvent) -> Void
+    #endif
+
     /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
-    public func onLongClick(_ handler: @escaping () -> Bool) -> Self {
+    public func onLongClick(_ handler: @escaping LongClickListenerBoolHandler) -> Self {
         #if os(Android)
-        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler(handler)).applyOrAppend(nil, self)
+        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
         #else
         return self
         #endif
     }
     /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
-    public func onLongClick(_ handler: @escaping () -> Void) -> Self {
+    public func onLongClick(_ handler: @escaping LongClickListenerHandler) -> Self {
         onLongClick {
             handler()
             return true
@@ -1838,11 +1850,11 @@ extension View {
     }
     /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
-    public func onLongClick(_ handler: @escaping (Self) -> Bool) -> Self {
+    public func onLongClick(_ handler: @escaping LongClickListenerEventBoolHandler) -> Self {
         #if os(Android)
-        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler { @UIThreadActor [weak self] in
+        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
             guard let self else { return false }
-            return handler(self)
+            return handler($0)
         }).applyOrAppend(nil, self)
         #else
         return self
@@ -1850,9 +1862,9 @@ extension View {
     }
     /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
-    public func onLongClick(_ handler: @escaping (Self) -> Void) -> Self {
-        onLongClick { v in
-            handler(v)
+    public func onLongClick(_ handler: @escaping LongClickListenerEventHandler) -> Self {
+        onLongClick { e in
+            handler(e)
             return true
         }
     }
