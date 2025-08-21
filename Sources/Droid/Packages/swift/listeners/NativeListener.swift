@@ -136,3 +136,13 @@ final class ListenerStore: @unchecked Sendable {
     }
 }
 #endif
+
+public final class NativeListenerTriggerView: Sendable {
+    public let id: Int32
+    public let object: JObject
+
+    init (id: Int32, object: JObject) {
+        self.id = id
+        self.object = object
+    }
+}

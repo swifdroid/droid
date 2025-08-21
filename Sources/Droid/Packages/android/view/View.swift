@@ -1759,22 +1759,29 @@ struct OnClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
+    #if canImport(AndroidLooper)
+    public typealias ClickListenerHandler = @UIThreadActor () -> Void
+    public typealias ClickListenerEventHandler = @UIThreadActor (NativeOnClickListenerEvent) -> Void
+    #else
+    public typealias ClickListenerHandler = () -> Void
+    public typealias ClickListenerEventHandler = (NativeOnClickListenerEvent) -> Void
+    #endif
     /// Register a callback to be invoked when this view is clicked.
     @discardableResult
-    public func onClick(_ handler: @escaping () async -> Void) -> Self {
+    public func onClick(_ handler: @escaping ClickListenerHandler) -> Self {
         #if os(Android)
-        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(handler)).applyOrAppend(nil, self)
+        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
         #else
         return self
         #endif
     }
     /// Register a callback to be invoked when this view is clicked.
     @discardableResult
-    public func onClick(_ handler: @escaping (Self) async -> Void) -> Self {
+    public func onClick(_ handler: @escaping ClickListenerEventHandler) -> Self {
         #if os(Android)
-        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler { @UIThreadActor [weak self] in
+        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
             guard let self else { return }
-            await handler(self)
+            handler($0)
         }).applyOrAppend(nil, self)
         #else
         return self
