@@ -6,6 +6,23 @@ import android.view.View
 import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.P)
-    external override fun onUnhandledKeyEvent(v: View?, event: KeyEvent?): Boolean
 class NativeOnUnhandledKeyEventListener(private val uniqueId: Int, private val viewId: Int): View.OnUnhandledKeyEventListener {
+    override fun onUnhandledKeyEvent(v: View?, event: KeyEvent?): Boolean {
+        if (v != null) {
+            if (event != null) {
+                return onUnhandledKeyEventViewEvent(uniqueId, v.id == viewId, v.id, v, event)
+            } else {
+                return onUnhandledKeyEventView(uniqueId, v.id == viewId, v.id, v)
+            }
+        } else if (event != null) {
+            return onUnhandledKeyEventEvent(uniqueId, event)
+        } else {
+            return onUnhandledKeyEvent(uniqueId)
+        }
+    }
+
+    private external fun onUnhandledKeyEvent(uniqueId: Int): Boolean
+    private external fun onUnhandledKeyEventView(uniqueId: Int, sameView: Boolean, vId: Int, v: View): Boolean
+    private external fun onUnhandledKeyEventEvent(uniqueId: Int, event: KeyEvent): Boolean
+    private external fun onUnhandledKeyEventViewEvent(uniqueId: Int, sameView: Boolean, vId: Int, v: View, event: KeyEvent): Boolean
 }
