@@ -273,7 +273,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             processProperties([], instance)
             if subviews.count > 0 {
                 // InnerLog.d("view(id: \(id)) didMoveToParent iterating subviews")
-                for (i, subview) in subviews.filter({ v in
+                for (_, subview) in subviews.filter({ v in
                     switch v.status {
                         case .new, .floating: return true
                         default: return false
