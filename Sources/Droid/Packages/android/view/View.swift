@@ -45,6 +45,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
     public class OnReceiveContentListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnReceiveContentListener: OnReceiveContentListenerClass { .init(parent: self, name: "View$OnReceiveContentListener") }
+    public class OnScrollChangeListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnScrollChangeListener: OnScrollChangeListenerClass { .init(parent: self, name: "View$OnScrollChangeListener") }
 }
 
 #if canImport(AndroidLooper)
@@ -2291,6 +2293,50 @@ extension View {
 }
 
 // MARK: OnScrollChangeListener
+
+#if os(Android)
+struct OnScrollChangeListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnScrollChangeListener
+    let value: NativeOnScrollChangeListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnScrollChangeListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias ScrollChangeListenerHandler = @UIThreadActor () -> Bool
+    public typealias ScrollChangeListenerEventHandler = @UIThreadActor (NativeOnScrollChangeListenerEvent) -> Bool
+    #else
+    public typealias ScrollChangeListenerHandler = () -> Bool
+    public typealias ScrollChangeListenerEventHandler = (NativeOnScrollChangeListenerEvent) -> Bool
+    #endif
+    /// Register a callback to be invoked when the scroll X or Y positions of this view change.
+    @discardableResult
+    public func onScrollChange(_ handler: @escaping ScrollChangeListenerHandler) -> Self {
+        #if os(Android)
+        return OnScrollChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Register a callback to be invoked when the scroll X or Y positions of this view change.
+    @discardableResult
+    public func onScrollChange(_ handler: @escaping ScrollChangeListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnScrollChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnSystemUiVisibilityChangeListener
 
