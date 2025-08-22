@@ -37,6 +37,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnFocusChangeListener: OnFocusChangeListenerClass { .init(parent: self, name: "View$OnFocusChangeListener") }
     public class OnGenericMotionListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnGenericMotionListener: OnGenericMotionListenerClass { .init(parent: self, name: "View$OnGenericMotionListener") }
+    public class OnHoverListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnHoverListener: OnHoverListenerClass { .init(parent: self, name: "View$OnHoverListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
@@ -2081,7 +2083,49 @@ extension View {
 
 // MARK: OnHoverListener
 
-// TODO:
+#if os(Android)
+struct OnHoverListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnHoverListener
+    let value: NativeOnHoverListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnHoverListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias HoverListenerHandler = @UIThreadActor () -> Bool
+    public typealias HoverListenerEventHandler = @UIThreadActor (NativeOnHoverListenerEvent) -> Bool
+    #else
+    public typealias HoverListenerHandler = () -> Bool
+    public typealias HoverListenerEventHandler = (NativeOnHoverListenerEvent) -> Bool
+    #endif
+    /// Register a callback to be invoked when a hover event is sent to this view.
+    @discardableResult
+    public func onHover(_ handler: @escaping HoverListenerHandler) -> Self {
+        #if os(Android)
+        return OnHoverListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Register a callback to be invoked when a hover event is sent to this view.
+    @discardableResult
+    public func onHover(_ handler: @escaping HoverListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnHoverListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnKeyListener
 
