@@ -35,6 +35,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnDragListener: OnDragListenerClass { .init(parent: self, name: "View$OnDragListener") }
     public class OnFocusChangeListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnFocusChangeListener: OnFocusChangeListenerClass { .init(parent: self, name: "View$OnFocusChangeListener") }
+    public class OnGenericMotionListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnGenericMotionListener: OnGenericMotionListenerClass { .init(parent: self, name: "View$OnGenericMotionListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
@@ -2033,7 +2035,49 @@ extension View {
 
 // MARK: OnGenericMotionListener
 
-// TODO:
+#if os(Android)
+struct OnGenericMotionListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnGenericMotionListener
+    let value: NativeOnGenericMotionListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnGenericMotionListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias GenericMotionListenerHandler = @UIThreadActor () -> Bool
+    public typealias GenericMotionListenerEventHandler = @UIThreadActor (NativeOnGenericMotionListenerEvent) -> Bool
+    #else
+    public typealias GenericMotionListenerHandler = () -> Bool
+    public typealias GenericMotionListenerEventHandler = (NativeOnGenericMotionListenerEvent) -> Bool
+    #endif
+    /// Register a callback to be invoked when a generic motion event is sent to this view.
+    @discardableResult
+    public func onGenericMotion(_ handler: @escaping GenericMotionListenerHandler) -> Self {
+        #if os(Android)
+        return OnGenericMotionListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Register a callback to be invoked when a generic motion event is sent to this view.
+    @discardableResult
+    public func onGenericMotion(_ handler: @escaping GenericMotionListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnGenericMotionListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnHoverListener
 
