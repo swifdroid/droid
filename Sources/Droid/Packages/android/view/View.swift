@@ -29,6 +29,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnClickListener: OnClickListenerClass { .init(parent: self, name: "View$OnClickListener") }
     public class OnContextClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnContextClickListener: OnContextClickListenerClass { .init(parent: self, name: "View$OnContextClickListener") }
+    public class OnCreateContextMenuListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnCreateContextMenuListener: OnCreateContextMenuListenerClass { .init(parent: self, name: "View$OnCreateContextMenuListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
