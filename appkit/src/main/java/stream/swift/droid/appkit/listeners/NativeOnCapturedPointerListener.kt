@@ -10,9 +10,9 @@ class NativeOnCapturedPointerListener(private val uniqueId: Int, private val vie
     override fun onCapturedPointer(view: View?, event: MotionEvent?): Boolean {
         if (view != null) {
             if (event != null) {
-                return onCapturedPointerViewEvent(uniqueId, view.id == viewId, view, event)
+                return onCapturedPointerViewEvent(uniqueId, view.id == viewId, view.id, view, event)
             } else {
-                return onCapturedPointerView(uniqueId, view.id == viewId, view)
+                return onCapturedPointerView(uniqueId, view.id == viewId, view.id, view)
             }
         } else if (event != null) {
             return onCapturedPointerEvent(uniqueId, event)
@@ -22,7 +22,7 @@ class NativeOnCapturedPointerListener(private val uniqueId: Int, private val vie
     }
 
     private external fun onCapturedPointer(uniqueId: Int): Boolean
-    private external fun onCapturedPointerView(uniqueId: Int, sameView: Boolean, view: View): Boolean
+    private external fun onCapturedPointerView(uniqueId: Int, sameView: Boolean, vId: Int, view: View): Boolean
     private external fun onCapturedPointerEvent(uniqueId: Int, event: MotionEvent): Boolean
-    private external fun onCapturedPointerViewEvent(uniqueId: Int, sameView: Boolean, view: View, event: MotionEvent): Boolean
+    private external fun onCapturedPointerViewEvent(uniqueId: Int, sameView: Boolean, vId: Int, view: View, event: MotionEvent): Boolean
 }
