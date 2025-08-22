@@ -16,17 +16,6 @@ extension AppKitPackage.ListenersPackage {
     public var OnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "NativeOnLongClickListener") }
 }
 
-public final class NativeOnLongClickListenerEvent {
-    public let view: View
-    public let isSameView: Bool
-    public let triggerView: NativeListenerTriggerView?
-    init (_ view: View, _ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) {
-        self.view = view
-        self.isSameView = isSameView
-        self.triggerView = triggerView
-    }
-}
-
 final class NativeOnLongClickListener: NativeListener, AnyNativeListener, @unchecked Sendable {
     /// The JNI class name
     class var className: JClassName { "stream/swift/droid/appkit/listeners/NativeOnLongClickListener" }
@@ -93,11 +82,15 @@ public func nativeListenerOnLongClickExtended(env: UnsafeMutablePointer<JNIEnv?>
     }
     return result ? 1 : 0
 }
-#else
-public final class NativeOnLongClickListenerEvent {
-    public let view: View! = nil
-    public let isSameView: Bool = false
-    public let triggerView: NativeListenerTriggerView? = nil
-    init() {}
-}
 #endif
+
+public final class NativeOnLongClickListenerEvent {
+    public let view: View
+    public let isSameView: Bool
+    public let triggerView: NativeListenerTriggerView?
+    init (_ view: View, _ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) {
+        self.view = view
+        self.isSameView = isSameView
+        self.triggerView = triggerView
+    }
+}
