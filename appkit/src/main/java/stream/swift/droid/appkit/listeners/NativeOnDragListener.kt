@@ -7,9 +7,9 @@ class NativeOnDragListener(private val uniqueId: Int, private val viewId: Int): 
     override fun onDrag(v: View?, event: DragEvent?): Boolean {
         if (v != null) {
             if (event != null) {
-                return onDragViewEvent(uniqueId, v.id == viewId, v, event)
+                return onDragViewEvent(uniqueId, v.id == viewId, v.id, v, event)
             } else {
-                return onDragView(uniqueId, v.id == viewId, v)
+                return onDragView(uniqueId, v.id == viewId, v.id, v)
             }
         } else if (event != null) {
             return onDragEvent(uniqueId, event)
@@ -19,7 +19,7 @@ class NativeOnDragListener(private val uniqueId: Int, private val viewId: Int): 
     }
 
     private external fun onDrag(uniqueId: Int): Boolean
-    private external fun onDragView(uniqueId: Int, sameView: Boolean, v: View): Boolean
+    private external fun onDragView(uniqueId: Int, sameView: Boolean, vId: Int, v: View): Boolean
     private external fun onDragEvent(uniqueId: Int, event: DragEvent): Boolean
-    private external fun onDragViewEvent(uniqueId: Int, sameView: Boolean, v: View, event: DragEvent): Boolean
+    private external fun onDragViewEvent(uniqueId: Int, sameView: Boolean, vId: Int, v: View, event: DragEvent): Boolean
 }
