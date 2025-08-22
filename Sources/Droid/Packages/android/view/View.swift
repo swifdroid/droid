@@ -33,6 +33,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnCreateContextMenuListener: OnCreateContextMenuListenerClass { .init(parent: self, name: "View$OnCreateContextMenuListener") }
     public class OnDragListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnDragListener: OnDragListenerClass { .init(parent: self, name: "View$OnDragListener") }
+    public class OnFocusChangeListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnFocusChangeListener: OnFocusChangeListenerClass { .init(parent: self, name: "View$OnFocusChangeListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
@@ -1985,7 +1987,49 @@ extension View {
 
 // MARK: OnFocusChangeListener
 
-// TODO:
+#if os(Android)
+struct OnFocusChangeListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnFocusChangeListener
+    let value: NativeOnFocusChangeListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnFocusChangeListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias FocusChangeListenerHandler = @UIThreadActor () -> Bool
+    public typealias FocusChangeListenerEventHandler = @UIThreadActor (NativeOnFocusChangeListenerEvent) -> Bool
+    #else
+    public typealias FocusChangeListenerHandler = () -> Bool
+    public typealias FocusChangeListenerEventHandler = (NativeOnFocusChangeListenerEvent) -> Bool
+    #endif
+    /// OnFocusChangeListener
+    @discardableResult
+    public func onFocusChange(_ handler: @escaping FocusChangeListenerHandler) -> Self {
+        #if os(Android)
+        return OnFocusChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// OnFocusChangeListener
+    @discardableResult
+    public func onFocusChange(_ handler: @escaping FocusChangeListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnFocusChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnGenericMotionListener
 
