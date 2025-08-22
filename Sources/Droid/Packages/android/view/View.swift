@@ -39,6 +39,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnGenericMotionListener: OnGenericMotionListenerClass { .init(parent: self, name: "View$OnGenericMotionListener") }
     public class OnHoverListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnHoverListener: OnHoverListenerClass { .init(parent: self, name: "View$OnHoverListener") }
+    public class OnKeyListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnKeyListener: OnKeyListenerClass { .init(parent: self, name: "View$OnKeyListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
@@ -2129,7 +2131,49 @@ extension View {
 
 // MARK: OnKeyListener
 
-// TODO:
+#if os(Android)
+struct OnKeyListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnKeyListener
+    let value: NativeOnKeyListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnKeyListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias KeyListenerHandler = @UIThreadActor () -> Bool
+    public typealias KeyListenerEventHandler = @UIThreadActor (NativeOnKeyListenerEvent) -> Bool
+    #else
+    public typealias KeyListenerHandler = () -> Bool
+    public typealias KeyListenerEventHandler = (NativeOnKeyListenerEvent) -> Bool
+    #endif
+    /// Register a callback to be invoked when a hardware key is pressed in this view. Key presses in software input methods will generally not trigger the methods of this listener.
+    @discardableResult
+    public func onKey(_ handler: @escaping KeyListenerHandler) -> Self {
+        #if os(Android)
+        return OnKeyListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Register a callback to be invoked when a hardware key is pressed in this view. Key presses in software input methods will generally not trigger the methods of this listener.
+    @discardableResult
+    public func onKey(_ handler: @escaping KeyListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnKeyListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnLongClickListener
 
