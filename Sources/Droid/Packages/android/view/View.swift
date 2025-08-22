@@ -21,6 +21,8 @@ extension AndroidPackage.ViewPackage {
 }
 
 extension AndroidPackage.ViewPackage {
+    public class OnApplyWindowInsetsListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnApplyWindowInsetsListener: OnApplyWindowInsetsListenerClass { .init(parent: self, name: "View$OnApplyWindowInsetsListener") }
     public class OnClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnClickListener: OnClickListenerClass { .init(parent: self, name: "View$OnClickListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
@@ -1740,6 +1742,50 @@ extension View {
 }
 
 // MARK: OnApplyWindowInsetsListener
+
+#if os(Android)
+struct OnApplyWindowInsetsListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnApplyWindowInsetsListener
+    let value: NativeOnApplyWindowInsetsListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnApplyWindowInsetsListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias ApplyWindowInsetsListenerHandler = @UIThreadActor () -> Void
+    public typealias ApplyWindowInsetsListenerEventHandler = @UIThreadActor (NativeOnApplyWindowInsetsListenerEvent) -> Void
+    #else
+    public typealias ApplyWindowInsetsListenerHandler = () -> Void
+    public typealias ApplyWindowInsetsListenerEventHandler = (NativeOnApplyWindowInsetsListenerEvent) -> Void
+    #endif
+    /// Set an OnApplyWindowInsetsListener to take over the policy for applying window insets to this view.
+    @discardableResult
+    public func onApplyWindowInsets(_ handler: @escaping ApplyWindowInsetsListenerHandler) -> Self {
+        #if os(Android)
+        return OnApplyWindowInsetsListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Set an OnApplyWindowInsetsListener to take over the policy for applying window insets to this view.
+    @discardableResult
+    public func onApplyWindowInsets(_ handler: @escaping ApplyWindowInsetsListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnApplyWindowInsetsListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return }
+            handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnCapturedPointerListener
 
