@@ -16,17 +16,6 @@ extension AppKitPackage.ListenersPackage {
     public var OnClickListener: OnClickListenerClass { .init(parent: self, name: "NativeOnClickListener") }
 }
 
-public final class NativeOnClickListenerEvent {
-    public let view: View
-    public let isSameView: Bool
-    public let triggerView: NativeListenerTriggerView?
-    init (_ view: View, _ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) {
-        self.view = view
-        self.isSameView = isSameView
-        self.triggerView = triggerView
-    }
-}
-
 final class NativeOnClickListener: NativeListener, AnyNativeListener, @unchecked Sendable {
     /// The JNI class name
     class var className: JClassName { "stream/swift/droid/appkit/listeners/NativeOnClickListener" }    
@@ -82,11 +71,15 @@ public func nativeListenerOnClick(env: UnsafeMutablePointer<JNIEnv?>, callerClas
     }
     #endif
 }
-#else
-public final class NativeOnClickListenerEvent {
-    public let view: View! = nil
-    public let isSameView: Bool = false
-    public let triggerView: NativeListenerTriggerView? = nil
-    init() {}
-}
 #endif
+
+public final class NativeOnClickListenerEvent {
+    public let view: View
+    public let isSameView: Bool
+    public let triggerView: NativeListenerTriggerView?
+    init (_ view: View, _ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) {
+        self.view = view
+        self.isSameView = isSameView
+        self.triggerView = triggerView
+    }
+}
