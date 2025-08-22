@@ -43,6 +43,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnKeyListener: OnKeyListenerClass { .init(parent: self, name: "View$OnKeyListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
+    public class OnReceiveContentListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnReceiveContentListener: OnReceiveContentListenerClass { .init(parent: self, name: "View$OnReceiveContentListener") }
 }
 
 #if canImport(AndroidLooper)
@@ -2243,6 +2245,50 @@ extension View {
 }
 
 // MARK: OnReceiveContentListener
+
+#if os(Android)
+struct OnReceiveContentListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnReceiveContentListener
+    let value: NativeOnReceiveContentListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnReceiveContentListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias ReceiveContentListenerHandler = @UIThreadActor () -> ContentInfo?
+    public typealias ReceiveContentListenerEventHandler = @UIThreadActor (NativeOnReceiveContentListenerEvent) -> ContentInfo?
+    #else
+    public typealias ReceiveContentListenerHandler = () -> ContentInfo?
+    public typealias ReceiveContentListenerEventHandler = (NativeOnReceiveContentListenerEvent) -> ContentInfo?
+    #endif
+    /// Sets the listener to be used to handle insertion of content into this view.
+    @discardableResult
+    public func onReceiveContent(_ handler: @escaping ReceiveContentListenerHandler) -> Self {
+        #if os(Android)
+        return OnReceiveContentListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Sets the listener to be used to handle insertion of content into this view.
+    @discardableResult
+    public func onReceiveContent(_ handler: @escaping ReceiveContentListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnReceiveContentListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return nil }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnScrollChangeListener
 
