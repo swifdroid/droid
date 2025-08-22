@@ -1789,6 +1789,50 @@ extension View {
 
 // MARK: OnCapturedPointerListener
 
+#if os(Android)
+struct OnCapturedPointerListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnCapturedPointerListener
+    let value: NativeOnCapturedPointerListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewCapturedPointerListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias CapturedPointerListenerHandler = @UIThreadActor () -> Bool
+    public typealias CapturedPointerListenerEventHandler = @UIThreadActor (NativeOnCapturedPointerListenerEvent) -> Bool
+    #else
+    public typealias CapturedPointerListenerHandler = () -> Bool
+    public typealias CapturedPointerListenerEventHandler = (NativeOnCapturedPointerListenerEvent) -> Bool
+    #endif
+    /// Set a listener to receive callbacks when the pointer capture state of a view changes.
+    @discardableResult
+    public func onCapturedPointer(_ handler: @escaping CapturedPointerListenerHandler) -> Self {
+        #if os(Android)
+        return OnCapturedPointerListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Set a listener to receive callbacks when the pointer capture state of a view changes.
+    @discardableResult
+    public func onCapturedPointer(_ handler: @escaping CapturedPointerListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnCapturedPointerListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
+
 // MARK: OnClickListener
 
 #if os(Android)
