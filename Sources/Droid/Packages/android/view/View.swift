@@ -47,6 +47,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnReceiveContentListener: OnReceiveContentListenerClass { .init(parent: self, name: "View$OnReceiveContentListener") }
     public class OnScrollChangeListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnScrollChangeListener: OnScrollChangeListenerClass { .init(parent: self, name: "View$OnScrollChangeListener") }
+    public class OnSystemUiVisibilityChangeListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnSystemUiVisibilityChangeListener: OnSystemUiVisibilityChangeListenerClass { .init(parent: self, name: "View$OnSystemUiVisibilityChangeListener") }
 }
 
 #if canImport(AndroidLooper)
@@ -2339,6 +2341,36 @@ extension View {
 }
 
 // MARK: OnSystemUiVisibilityChangeListener
+
+#if os(Android)
+struct OnSystemUiVisibilityChangeListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnSystemUiVisibilityChangeListener
+    let value: NativeOnSystemUiVisibilityChangeListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnSystemUiVisibilityChangeListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias SystemUiVisibilityChangeListenerHandler = @UIThreadActor (_ visibility: Int) -> Void
+    #else
+    public typealias SystemUiVisibilityChangeListenerHandler = (_ visibility: Int) -> Void
+    #endif
+    /// Set a listener to receive callbacks when the visibility of the system bar changes.
+    @discardableResult
+    public func onSystemUIVisibilityChange(_ handler: @escaping SystemUiVisibilityChangeListenerHandler) -> Self {
+        #if os(Android)
+        return OnSystemUiVisibilityChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnTouchListener
 
