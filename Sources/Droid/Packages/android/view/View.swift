@@ -49,6 +49,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnScrollChangeListener: OnScrollChangeListenerClass { .init(parent: self, name: "View$OnScrollChangeListener") }
     public class OnSystemUiVisibilityChangeListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnSystemUiVisibilityChangeListener: OnSystemUiVisibilityChangeListenerClass { .init(parent: self, name: "View$OnSystemUiVisibilityChangeListener") }
+    public class OnTouchListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnTouchListener: OnTouchListenerClass { .init(parent: self, name: "View$OnTouchListener") }
 }
 
 #if canImport(AndroidLooper)
@@ -2373,6 +2375,50 @@ extension View {
 }
 
 // MARK: OnTouchListener
+
+#if os(Android)
+struct OnTouchListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnTouchListener
+    let value: NativeOnTouchListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnTouchListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias TouchListenerHandler = @UIThreadActor () -> Bool
+    public typealias TouchListenerEventHandler = @UIThreadActor (NativeOnTouchListenerEvent) -> Bool
+    #else
+    public typealias TouchListenerHandler = () -> Bool
+    public typealias TouchListenerEventHandler = (NativeOnTouchListenerEvent) -> Bool
+    #endif
+    /// Register a callback to be invoked when a touch event is sent to this view.
+    @discardableResult
+    public func onTouch(_ handler: @escaping TouchListenerHandler) -> Self {
+        #if os(Android)
+        return OnTouchListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Register a callback to be invoked when a touch event is sent to this view.
+    @discardableResult
+    public func onTouch(_ handler: @escaping TouchListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnTouchListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OutlineAmbientShadowColor
 
