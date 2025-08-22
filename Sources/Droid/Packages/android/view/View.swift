@@ -31,6 +31,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnContextClickListener: OnContextClickListenerClass { .init(parent: self, name: "View$OnContextClickListener") }
     public class OnCreateContextMenuListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnCreateContextMenuListener: OnCreateContextMenuListenerClass { .init(parent: self, name: "View$OnCreateContextMenuListener") }
+    public class OnDragListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnDragListener: OnDragListenerClass { .init(parent: self, name: "View$OnDragListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
@@ -1937,7 +1939,49 @@ extension View {
 
 // MARK: OnDragListener
 
-// TODO:
+#if os(Android)
+struct OnDragListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnDragListener
+    let value: NativeOnDragListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnDragListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias DragListenerHandler = @UIThreadActor () -> Bool
+    public typealias DragListenerEventHandler = @UIThreadActor (NativeOnDragListenerEvent) -> Bool
+    #else
+    public typealias DragListenerHandler = () -> Bool
+    public typealias DragListenerEventHandler = (NativeOnDragListenerEvent) -> Bool
+    #endif
+    /// Register a drag event listener callback object for this View.
+    @discardableResult
+    public func onDrag(_ handler: @escaping DragListenerHandler) -> Self {
+        #if os(Android)
+        return OnDragListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Register a drag event listener callback object for this View.
+    @discardableResult
+    public func onDrag(_ handler: @escaping DragListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnDragListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
 
 // MARK: OnFocusChangeListener
 
