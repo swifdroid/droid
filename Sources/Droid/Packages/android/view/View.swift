@@ -23,8 +23,12 @@ extension AndroidPackage.ViewPackage {
 extension AndroidPackage.ViewPackage {
     public class OnApplyWindowInsetsListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnApplyWindowInsetsListener: OnApplyWindowInsetsListenerClass { .init(parent: self, name: "View$OnApplyWindowInsetsListener") }
+    public class CapturedPointerListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewCapturedPointerListener: CapturedPointerListenerClass { .init(parent: self, name: "View$OnCapturedPointerListener") }
     public class OnClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnClickListener: OnClickListenerClass { .init(parent: self, name: "View$OnClickListener") }
+    public class OnContextClickListenerClass: JClassName, @unchecked Sendable {}
+    public var ViewOnContextClickListener: OnContextClickListenerClass { .init(parent: self, name: "View$OnContextClickListener") }
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
     public var ViewOnLongClickListener: OnLongClickListenerClass { .init(parent: self, name: "View$OnLongClickListener") }
 }
@@ -1881,17 +1885,73 @@ extension View {
 
 // MARK: OnContextClickListener
 
+#if os(Android)
+struct OnContextClickListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnContextClickListener
+    let value: NativeOnContextClickListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let listener = value.instance else { return }
+        instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnContextClickListener))
+    }
+}
+#endif
+extension View {
+    #if canImport(AndroidLooper)
+    public typealias ContextClickListenerHandler = @UIThreadActor () -> Bool
+    public typealias ContextClickListenerEventHandler = @UIThreadActor (NativeOnContextClickListenerEvent) -> Bool
+    #else
+    public typealias ContextClickListenerHandler = () -> Bool
+    public typealias ContextClickListenerEventHandler = (NativeOnContextClickListenerEvent) -> Bool
+    #endif
+    /// Register a callback to be invoked when this view is context clicked. If the view is not context clickable, it becomes context clickable.
+    @discardableResult
+    public func onContextClick(_ handler: @escaping ContextClickListenerHandler) -> Self {
+        #if os(Android)
+        return OnContextClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+    /// Register a callback to be invoked when this view is context clicked. If the view is not context clickable, it becomes context clickable.
+    @discardableResult
+    public func onContextClick(_ handler: @escaping ContextClickListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnContextClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+            guard let self else { return false }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
+
 // MARK: OnCreateContextMenuListener
+
+// TODO:
 
 // MARK: OnDragListener
 
+// TODO:
+
 // MARK: OnFocusChangeListener
+
+// TODO:
 
 // MARK: OnGenericMotionListener
 
+// TODO:
+
 // MARK: OnHoverListener
 
+// TODO:
+
 // MARK: OnKeyListener
+
+// TODO:
 
 // MARK: OnLongClickListener
 
