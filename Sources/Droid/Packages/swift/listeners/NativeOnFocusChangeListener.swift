@@ -22,8 +22,8 @@ final class NativeOnFocusChangeListener: NativeListener, AnyNativeListener, @unc
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Bool)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnFocusChangeListenerEvent) -> Bool)
+    typealias Handler = (@UIThreadActor () -> Void)
+    typealias HandlerWithEvent = (@UIThreadActor (NativeOnFocusChangeListenerEvent) -> Void)
 
     /// View
     var view: View?
@@ -46,41 +46,39 @@ final class NativeOnFocusChangeListener: NativeListener, AnyNativeListener, @unc
 
     #if canImport(AndroidLooper)
     @UIThreadActor
-    func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView?, _ hasFocus: Bool) -> Bool {
+    func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView?, _ hasFocus: Bool) {
         if let view {
-            return handlerWithEvent?(.init(view, isSameView, triggerView, hasFocus)) ?? handler?() ?? false
+            handlerWithEvent?(.init(view, isSameView, triggerView, hasFocus)) ?? handler?()
         } else {
-            return handler?() ?? false
+            handler?()
         }
     }
     #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnFocusChangeListener_onFocusChange")
-public func nativeListenerOnFocusChange(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, hasFocus: jboolean) -> jboolean {
+public func nativeListenerOnFocusChange(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, hasFocus: jboolean) {
     guard
         let listener: NativeOnFocusChangeListener = ListenerStore.shared.find(id: uniqueId)
-    else { return 0 }
-    let result = UIThreadActor.assumeIsolated {
+    else { return }
+    Task { @UIThreadActor in
         listener.handle(true, nil, hasFocus == 1)
     }
-    return result ? 1 : 0
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnFocusChangeListener_onFocusChangeExtended")
-public func nativeListenerOnFocusChangeExtended(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, sameView: jboolean, vId: jint, v: jobject, hasFocus: jboolean) -> jboolean {
+public func nativeListenerOnFocusChangeExtended(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, sameView: jboolean, vId: jint, v: jobject, hasFocus: jboolean) {
     guard
         let listener: NativeOnFocusChangeListener = ListenerStore.shared.find(id: uniqueId)
-    else { return 0 }
+    else { return }
     let bool = sameView == 1 ? true : false
     var triggerView: NativeListenerTriggerView?
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    let result = UIThreadActor.assumeIsolated {
+    Task { @UIThreadActor in
         listener.handle(bool, triggerView, hasFocus == 1)
     }
-    return result ? 1 : 0
 }
 #endif
 

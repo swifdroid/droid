@@ -22,8 +22,8 @@ final class NativeOnScrollChangeListener: NativeListener, AnyNativeListener, @un
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Bool)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnScrollChangeListenerEvent) -> Bool)
+    typealias Handler = (@UIThreadActor () -> Void)
+    typealias HandlerWithEvent = (@UIThreadActor (NativeOnScrollChangeListenerEvent) -> Void)
 
     /// View
     var view: View?
@@ -53,9 +53,9 @@ final class NativeOnScrollChangeListener: NativeListener, AnyNativeListener, @un
         _ scrollY: Int,
         _ oldScrollX: Int,
         _ oldScrollY: Int
-    ) -> Bool {
+    ) {
         if let view {
-            return handlerWithEvent?(.init(
+            handlerWithEvent?(.init(
                 view,
                 isSameView,
                 triggerView,
@@ -63,9 +63,9 @@ final class NativeOnScrollChangeListener: NativeListener, AnyNativeListener, @un
                 scrollY,
                 oldScrollX,
                 oldScrollY
-            )) ?? handler?() ?? false
+            )) ?? handler?()
         } else {
-            return handler?() ?? false
+            handler?()
         }
     }
     #endif

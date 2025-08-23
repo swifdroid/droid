@@ -2016,11 +2016,11 @@ struct OnFocusChangeListenerViewProperty: ViewPropertyToApply {
 #endif
 extension View {
     #if canImport(AndroidLooper)
-    public typealias FocusChangeListenerHandler = @UIThreadActor () -> Bool
-    public typealias FocusChangeListenerEventHandler = @UIThreadActor (NativeOnFocusChangeListenerEvent) -> Bool
+    public typealias FocusChangeListenerHandler = @UIThreadActor () -> Void
+    public typealias FocusChangeListenerEventHandler = @UIThreadActor (NativeOnFocusChangeListenerEvent) -> Void
     #else
-    public typealias FocusChangeListenerHandler = () -> Bool
-    public typealias FocusChangeListenerEventHandler = (NativeOnFocusChangeListenerEvent) -> Bool
+    public typealias FocusChangeListenerHandler = () -> Void
+    public typealias FocusChangeListenerEventHandler = (NativeOnFocusChangeListenerEvent) -> Void
     #endif
     /// OnFocusChangeListener
     @discardableResult
@@ -2036,7 +2036,7 @@ extension View {
     public func onFocusChange(_ handler: @escaping FocusChangeListenerEventHandler) -> Self {
         #if os(Android)
         return OnFocusChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
-            guard let self else { return false }
+            guard let self else { return }
             return handler($0)
         }).applyOrAppend(nil, self)
         #else
@@ -2313,11 +2313,11 @@ struct OnScrollChangeListenerViewProperty: ViewPropertyToApply {
 #endif
 extension View {
     #if canImport(AndroidLooper)
-    public typealias ScrollChangeListenerHandler = @UIThreadActor () -> Bool
-    public typealias ScrollChangeListenerEventHandler = @UIThreadActor (NativeOnScrollChangeListenerEvent) -> Bool
+    public typealias ScrollChangeListenerHandler = @UIThreadActor () -> Void
+    public typealias ScrollChangeListenerEventHandler = @UIThreadActor (NativeOnScrollChangeListenerEvent) -> Void
     #else
-    public typealias ScrollChangeListenerHandler = () -> Bool
-    public typealias ScrollChangeListenerEventHandler = (NativeOnScrollChangeListenerEvent) -> Bool
+    public typealias ScrollChangeListenerHandler = () -> Void
+    public typealias ScrollChangeListenerEventHandler = (NativeOnScrollChangeListenerEvent) -> Void
     #endif
     /// Register a callback to be invoked when the scroll X or Y positions of this view change.
     @discardableResult
@@ -2333,8 +2333,8 @@ extension View {
     public func onScrollChange(_ handler: @escaping ScrollChangeListenerEventHandler) -> Self {
         #if os(Android)
         return OnScrollChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
-            guard let self else { return false }
-            return handler($0)
+            guard let self else { return }
+            handler($0)
         }).applyOrAppend(nil, self)
         #else
         return self
