@@ -123,7 +123,11 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             .height,
             .setMargins,
             .startMargin,
-            .endMargin
+            .endMargin,
+            .leftMargin,
+            .rightMargin,
+            .topMargin,
+            .bottomMargin
         ]
     }
 
