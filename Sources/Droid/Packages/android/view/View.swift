@@ -98,6 +98,9 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     /// Otherwise `ViewGroup`'s one will be provided which could cause crash.
     open class var layoutParamsClass: LayoutParams.Class { .viewGroup }
 
+    /// Set true if LayoutParams should never be initialized but only loaded from the instance
+    open class var layoutParamsShouldBeLoaded: Bool { false }
+
     /// Layout Params for subviews, it uses `layoutParamsClass` so no need to override it in each view.
     /// 
     /// - **Very important**: Call it only when view already have its instance
@@ -339,6 +342,9 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setAsContentView`")
             return nil
         }
+        if Self.layoutParamsShouldBeLoaded {
+            instance.lpClassName = Self.layoutParamsClass.className
+        }
         // InnerLog.d("view(id: \(id)) setStatusAsContentView 3")
         status = .asContentView(instance)
         return instance
@@ -356,6 +362,9 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         guard let instance = ViewInstance(Self.className, self, context, id) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setStatusInParent`")
             return nil
+        }
+        if Self.layoutParamsShouldBeLoaded {
+            instance.lpClassName = Self.layoutParamsClass.className
         }
         status = .inParent(parent, instance)
         // InnerLog.d("view(id: \(id)) setStatusInParent 3")
@@ -387,7 +396,10 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
                 default: return false
             }
         }) {
-            if let lp = layoutParamsForSubviews() {
+            if Self.layoutParamsShouldBeLoaded, let lp = subview.instance?.getLayoutParams(Self.layoutParamsClass.className) {
+                processLayoutParams(context, lp, for: subview)
+                subview.setLayoutParams(lp)
+            } else if let lp = layoutParamsForSubviews() {
                 processLayoutParams(context, lp, for: subview)
                 subview.setLayoutParams(lp)
             }
