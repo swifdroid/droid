@@ -87,7 +87,7 @@ extension View {
             #endif
         }
         
-        public func getLayoutParams() -> LayoutParams? {
+        public func getLayoutParams(_ lpClassName: JClassName? = nil) -> LayoutParams? {
             #if os(Android)
             // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1")
             guard let env = JEnv.current() else {
@@ -98,8 +98,8 @@ extension View {
                 // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
                 return nil
             }
-            guard let lpClazz = context.getClassLoader()?.loadClass(lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
                 // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
+            guard let lpClazz = context.getClassLoader()?.loadClass(lpClassName ?? self.lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
                 return nil
             }
             guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, clazz: lpClazz) else {
