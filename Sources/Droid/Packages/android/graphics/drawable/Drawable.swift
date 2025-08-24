@@ -10,11 +10,11 @@ extension AndroidPackage.GraphicsPackage.DrawablePackage {
     public var Drawable: DrawableClass { .init(parent: self, name: "Drawable") }
 }
 
-open class Drawable: @unchecked Sendable {
+open class Drawable: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .android.graphics.drawable.Drawable }
     
-    let object: JObject
+    public let object: JObject
 
     @discardableResult
     public init(_ object: JObject) {
