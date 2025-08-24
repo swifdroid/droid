@@ -27,6 +27,7 @@ open class CoordinatorLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .coordinatorLayout }
+    open override class var layoutParamsShouldBeLoaded: Bool { true }
     open class var behaviorClassName: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior }
     open override class var gradleDependencies: [String] { [
         #"implementation("androidx.coordinatorlayout:coordinatorlayout:1.3.0")"#
