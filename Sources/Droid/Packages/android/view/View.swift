@@ -738,7 +738,11 @@ extension View {
 
 // MARK: Animation
 
+// TODO:
+
 // MARK: AnimationMatrix
+
+// TODO:
 
 // MARK: AutoHandwritingEnabled
 
@@ -759,9 +763,15 @@ extension View {
 
 // MARK: AutofillHints
 
+// TODO:
+
 // MARK: AutofillId
 
+// TODO:
+
 // MARK: Background
+
+// TODO:
 
 // MARK: BackgroundColor
 
@@ -800,9 +810,15 @@ extension View {
 
 // MARK: BackgroundTintBlendMode
 
+// TODO:
+
 // MARK: BackgroundTintList
 
+// TODO:
+
 // MARK: BackgroundTintMode
+
+// TODO:
 
 // MARK: Bottom
 
@@ -857,6 +873,8 @@ extension View {
 
 // MARK: ClipBounds
 
+// TODO:
+
 // MARK: ClipToOutline
 
 struct ClipToOutlineViewProperty: ViewPropertyToApply {
@@ -875,6 +893,8 @@ extension View {
 }
 
 // MARK: ContentCaptureSession
+
+// TODO:
 
 // MARK: ContentDescription
 
@@ -1210,6 +1230,8 @@ extension View {
 
 // MARK: Foreground
 
+// TODO:
+
 // MARK: ForegroundGravity
 
 struct ForegroundGravityProperty: ViewPropertyToApply {
@@ -1229,9 +1251,15 @@ extension View {
 
 // MARK: ForegroundTintBlendMode
 
+// TODO:
+
 // MARK: ForegroundTintList
 
+// TODO:
+
 // MARK: ForegroundTintMode
+
+// TODO:
 
 // MARK: FrameContentVelocity
 
@@ -1290,6 +1318,8 @@ extension View {
 }
 
 // MARK: HandwritingDelegatorCallback
+
+// TODO:
 
 // MARK: HapticFeedbackEnabled
 
@@ -1361,7 +1391,11 @@ extension View {
 
 // MARK: HorizontalScrollbarThumbDrawable
 
+// TODO:
+
 // MARK: HorizontalScrollbarTrackDrawable
+
+// TODO:
 
 // MARK: Hovered
 
@@ -1542,7 +1576,11 @@ extension View {
 
 // MARK: LayerPaint
 
+// TODO:
+
 // MARK: LayerType
+
+// TODO:
 
 // MARK: LayoutDirection
 
@@ -1967,7 +2005,49 @@ extension View {
 
 // MARK: OnCreateContextMenuListener
 
-// TODO:
+// #if os(Android)
+// struct OnCreateContextMenuListenerViewProperty: ViewPropertyToApply {
+//     let key: ViewPropertyKey = .setOnCreateContextMenuListener
+//     let value: NativeOnCreateContextMenuListener
+//     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+//         if value.instance == nil {
+//             value.attach(to: instance)
+//         }
+//         guard let listener = value.instance else { return }
+//         instance.callVoidMethod(env, name: key.rawValue, args: listener.object.signed(as: .android.view.ViewOnCreateContextMenuListener))
+//     }
+// }
+// #endif
+// extension View {
+//     #if canImport(AndroidLooper)
+//     public typealias CreateContextMenuListenerHandler = @UIThreadActor () -> Void
+//     public typealias CreateContextMenuListenerEventHandler = @UIThreadActor (NativeOnCreateContextMenuListenerEvent) -> Void
+//     #else
+//     public typealias CreateContextMenuListenerHandler = () -> Void
+//     public typealias CreateContextMenuListenerEventHandler = (NativeOnCreateContextMenuListenerEvent) -> Void
+//     #endif
+//     /// Register a callback to be invoked when the context menu for this view is being built. If this view is not long clickable, it becomes long clickable.
+//     @discardableResult
+//     public func onCreateContextMenu(_ handler: @escaping CreateContextMenuListenerHandler) -> Self {
+//         #if os(Android)
+//         return OnCreateContextMenuListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
+//         #else
+//         return self
+//         #endif
+//     }
+//     /// Register a callback to be invoked when the context menu for this view is being built. If this view is not long clickable, it becomes long clickable.
+//     @discardableResult
+//     public func onCreateContextMenu(_ handler: @escaping CreateContextMenuListenerHandler) -> Self {
+//         #if os(Android)
+//         return OnCreateContextMenuListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+//             guard let self else { return false }
+//             return handler($0)
+//         }).applyOrAppend(nil, self)
+//         #else
+//         return self
+//         #endif
+//     }
+// }
 
 // MARK: OnDragListener
 
@@ -2455,6 +2535,8 @@ extension View {
 
 // MARK: OutlineProvider
 
+// TODO:
+
 // MARK: OutlineSpotShadowColor
 
 struct OutlineSpotShadowColorProperty: ViewPropertyToApply {
@@ -2553,6 +2635,8 @@ extension View {
 
 // MARK: PendingCredentialRequest
 
+// TODO:
+
 // MARK: PivotX
 
 struct PivotXProperty: ViewPropertyToApply {
@@ -2587,7 +2671,11 @@ extension View {
     }
 }
 
+// TODO:
+
 // MARK: PointerIcon
+
+// TODO:
 
 // MARK: PreferKeepClear
 
@@ -2608,6 +2696,8 @@ extension View {
 
 // MARK: PreferKeepClearRects
 
+// TODO:
+
 // MARK: Pressed
 
 struct PressedViewProperty: ViewPropertyToApply {
@@ -2626,6 +2716,8 @@ extension View {
 }
 
 // MARK: RenderEffect
+
+// TODO:
 
 // MARK: RequestedFrameRate
 
@@ -2907,6 +2999,8 @@ extension View {
 
 // MARK: ScrollCaptureCallback
 
+// TODO:
+
 // MARK: ScrollCaptureHint
 
 public enum ScrollCaptureHint: Int32 {
@@ -3086,6 +3180,8 @@ extension View {
 
 // MARK: StateListAnimator
 
+// TODO:
+
 // MARK: SupplementalDescription
 
 // struct SupplementalDescriptionProperty: ViewPropertyToApply {
@@ -3110,6 +3206,8 @@ extension View {
 // }
 
 // MARK: SystemGestureExclusionRects
+
+// TODO:
 
 // MARK: SystemUiVisibility
 
@@ -3145,6 +3243,8 @@ extension View {
 }
 
 // MARK: Tag
+
+// TODO:
 
 // MARK: TextAlignment
 
@@ -3264,6 +3364,8 @@ extension View {
 }
 
 // MARK: TouchDelegate
+
+// TODO:
 
 // MARK: TransitionAlpha
 
@@ -3436,9 +3538,15 @@ extension View {
 
 // MARK: VerticalScrollbarThumbDrawable
 
+// TODO:
+
 // MARK: VerticalScrollbarTrackDrawable
 
+// TODO:
+
 // MARK: ViewTranslationCallback
+
+// TODO:
 
 // MARK: Visibility
 
@@ -3502,6 +3610,8 @@ extension View {
 }
 
 // MARK: WindowInsetsAnimationCallback
+
+// TODO:
 
 // MARK: X
 
