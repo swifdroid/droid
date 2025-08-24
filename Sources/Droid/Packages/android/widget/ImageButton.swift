@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ImageButton: ImageButtonClass { .init(parent: self, name: "ImageButton") }
 }
 
-open class ImageButton: View, @unchecked Sendable {
+open class ImageButton: ImageView, @unchecked Sendable {
     @discardableResult
     public override init() {
         super.init()
