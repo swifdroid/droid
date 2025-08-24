@@ -54,6 +54,7 @@ open class CoordinatorLayout: ViewGroup, @unchecked Sendable {
             .anchorId,
             .anchorGravity,
             .dodgeInsetEdges,
+            .gravity,
             .insetEdge,
             .keyline
         ]
