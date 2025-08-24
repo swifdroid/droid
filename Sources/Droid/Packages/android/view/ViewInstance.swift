@@ -131,11 +131,20 @@ extension View {
         ///
         /// - Parameters:
         ///     - viewInstance: `ViewInstance` of the child view to add
-        public func addView(_ viewInstance: ViewInstance) {
+        ///     - index: the position at which to add the child
+        ///     - layoutParams: the layout parameters to set on the child
+        public func addView(_ viewInstance: ViewInstance, index: Int? = nil, layoutParams: LayoutParams? = nil) {
             // InnerLog.d("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
             // InnerLog.d("💚 view(id: \(id)) self viewInstance: \(self)")
             // InnerLog.d("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
-            object.callVoidMethod(name: "addView", args: viewInstance.object.signed(as: .android.view.View))
+            var args: [JSignatureItemable] = [viewInstance.object.signed(as: .android.view.View)]
+            if let index {
+                args.append(Int32(index))
+            }
+            if let layoutParams {
+                args.append(layoutParams.object.signed(as: .android.view.ViewGroup.LayoutParams))
+            }
+            object.callVoidMethod(name: "addView", args: args)
             // InnerLog.d("💚 view(id: \(id)) viewInstance addView 2")
         }
 
