@@ -91,63 +91,63 @@ struct AlignParentTopLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentTop
     let verb: Int32 = 10
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct AlignParentBottomLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentBottom
     let verb: Int32 = 12
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct AlignParentLeftLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentLeft
     let verb: Int32 = 9
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct AlignParentRightLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentRight
     let verb: Int32 = 11
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct AlignParentStartLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentStart
     let verb: Int32 = 20
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct AlignParentEndLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .alignParentEnd
     let verb: Int32 = 21
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct CenterInParentLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .centerInParent
     let verb: Int32 = 13
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct CenterHorizontalLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .centerHorizontal
     let verb: Int32 = 14
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct CenterVerticalLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .centerVertical
     let verb: Int32 = 15
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(env, name: "addRule", args: verb, 0)
+        lp.callVoidMethod(env, name: "addRule", args: verb)
     }
 }
 struct AboveLayoutParam: LayoutParamToApply {
