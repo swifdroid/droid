@@ -125,6 +125,12 @@ extension View {
             #endif
         }
 
+        /// Adds a child view.
+        ///
+        /// If no layout parameters are already set on the child, the default parameters for this `ViewGroup` are set on the child.
+        ///
+        /// - Parameters:
+        ///     - viewInstance: `ViewInstance` of the child view to add
         public func addView(_ viewInstance: ViewInstance) {
             // InnerLog.d("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
             // InnerLog.d("💚 view(id: \(id)) self viewInstance: \(self)")
@@ -140,6 +146,10 @@ extension View {
             #endif
         }
 
+        /// Removes a child view.
+        ///
+        /// - Parameters:
+        ///     - viewInstance: `ViewInstance` of the child view to remove
         public func removeView(_ viewInstance: ViewInstance) {
             #if os(Android)
             guard
