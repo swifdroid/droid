@@ -73,13 +73,13 @@ enum ViewStatus: Sendable {
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public protocol JClassNameable {
+public protocol JClassNameable: AnyObject {
     static var className: JClassName { get }
     var className: JClassName { get }
 }
 
 extension JClassNameable {
-    public var className: JClassName { Self.className }
+    public var className: JClassName { type(of: self).className }
 }
 
 open class View: _AnyView, JClassNameable, @unchecked Sendable {
