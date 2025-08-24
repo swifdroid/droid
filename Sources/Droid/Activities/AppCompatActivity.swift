@@ -140,11 +140,9 @@ open class AppCompatActivity: Activity {
             return
         }
         #if os(Android)
-        guard
-            let env = JEnv.current(),
-            let methodId = context.clazz.methodId(env: env, name: "setContentView", signature: .init(.object(.android.view.View), returning: .void))
-        else { return }
-        env.callVoidMethod(object: .init(context.ref, context.clazz), methodId: methodId, args: [viewInstance.object])
+        InnerLog.c("SETTING CONTENT VIEW")
+        JObject(context.ref, context.clazz)
+            .callVoidMethod(name: "setContentView", args: viewInstance.object.signed(as: .android.view.View))
         #endif
         view.didMoveToParent()
     }
