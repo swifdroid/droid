@@ -131,8 +131,8 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         ]
     }
 
-    public func filteredLayoutParams() -> [any LayoutParamToApply] {
-        var applicableKeys = applicableLayoutParams()
+    public func filteredLayoutParams(_ parentApplicableKeys: [LayoutParamKey]) -> [any LayoutParamToApply] {
+        var applicableKeys = parentApplicableKeys
         return _layoutParamsToApply.filter {
             if let index = applicableKeys.firstIndex(of: $0.key) {
                 applicableKeys.remove(at: index)
@@ -143,7 +143,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     }
     
     open func processLayoutParams(_ context: ViewInstance, _ lp: LayoutParams, for subview: View) {
-        let params = subview.filteredLayoutParams()
+        let params = subview.filteredLayoutParams(applicableLayoutParams())
         let env = JEnv.current()
         params.forEach { $0.apply(env, context, lp) }
     }
