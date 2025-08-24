@@ -135,15 +135,8 @@ extension View {
             // InnerLog.d("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
             // InnerLog.d("💚 view(id: \(id)) self viewInstance: \(self)")
             // InnerLog.d("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
-            #if os(Android)
-            guard
-                let env = JEnv.current(),
-                let methodId = clazz.methodId(env: env, name: "addView", signature: .init(.object(.android.view.View), returning: .void))
-            else { return }
-            // InnerLog.d("💚 view(id: \(id)) viewInstance addView 1")
-            env.callVoidMethod(object: object, methodId: methodId, args: [viewInstance.object])
+            object.callVoidMethod(name: "addView", args: viewInstance.object.signed(as: .android.view.View))
             // InnerLog.d("💚 view(id: \(id)) viewInstance addView 2")
-            #endif
         }
 
         /// Removes a child view.
@@ -151,13 +144,7 @@ extension View {
         /// - Parameters:
         ///     - viewInstance: `ViewInstance` of the child view to remove
         public func removeView(_ viewInstance: ViewInstance) {
-            #if os(Android)
-            guard
-                let env = JEnv.current(),
-                let methodId = clazz.methodId(env: env, name: "removeView", signature: .init(.object(.android.view.View), returning: .void))
-            else { return }
-            env.callVoidMethod(object: object, methodId: methodId, args: [viewInstance.object])
-            #endif
+            object.callVoidMethod(name: "removeView", args: viewInstance.object.signed(as: .android.view.View))
         }
 
         // public func getParent() -> ViewParent? {
