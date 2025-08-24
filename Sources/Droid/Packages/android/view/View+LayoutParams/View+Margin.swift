@@ -40,7 +40,7 @@ extension View {
     /// - FlexboxLayout: Manages RTL-aware flex container spacing
     /// - GridLayout: Affects RTL-aware cell spacing
     @discardableResult
-    public func startMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+    public func marginStart(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         StartMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
@@ -60,7 +60,31 @@ extension View {
     /// - FlexboxLayout: Manages RTL-aware flex container spacing
     /// - GridLayout: Affects RTL-aware cell spacing
     @discardableResult
-    public func endMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+    public func marginEnd(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         EndMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
+    }
+
+    /// Sets the left margin for the view.
+    @discardableResult
+    public func marginLeft(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        LeftMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
+    }
+
+    /// Sets the right margin for the view.
+    @discardableResult
+    public func marginRight(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        RightMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
+    }
+
+    /// Sets the top margin for the view.
+    @discardableResult
+    public func marginTop(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        TopMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
+    }
+
+    /// Sets the bottom margin for the view.
+    @discardableResult
+    public func marginBottom(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        BottomMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 }
