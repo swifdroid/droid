@@ -151,7 +151,10 @@ public final class LayoutParams: Sendable, JObjectable {
         guard
             let env = env ?? JEnv.current(),
             let fieldId = clazz.fieldId(name: name, signature: arg.signatureItemWithValue.signatureItem)
-        else { return }
+        else {
+            InnerLog.t("⚠️ LayoutParams field \(name) NOT FOUND in \(clazz.name.path)")
+            return
+        }
         switch arg.signatureItemWithValue {
             case .boolean(let value):
                 env.setBooleanField(object, fieldId, value ? 1 : 0)
