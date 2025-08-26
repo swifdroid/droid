@@ -99,7 +99,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     open class var layoutParamsClass: LayoutParams.Class { .viewGroup }
 
     /// Set true if LayoutParams should never be initialized but only loaded from the instance
-    open class var layoutParamsShouldBeLoaded: Bool { false }
+    open class var layoutParamsShouldBeLoaded: Bool { true }
 
     /// Layout Params for subviews, it uses `layoutParamsClass` so no need to override it in each view.
     /// 

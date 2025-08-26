@@ -21,7 +21,6 @@ open class RelativeLayout: View, @unchecked Sendable {
     /// The JNI class name
     public override class var className: JClassName { .android.widget.RelativeLayout }
     public override class var layoutParamsClass: LayoutParams.Class { .relativeLayout }
-    public override class var layoutParamsShouldBeLoaded: Bool { true }
 
     @discardableResult
     public override init() {
