@@ -4,10 +4,10 @@ import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import stream.swift.droid.appkit.DroidApp
 
-open class DroidAppCompatActivity: AppCompatActivity() {
+class DroidComponentActivity: ComponentActivity() {
     private val uniqueId by lazy { View.generateViewId() }
     private var isStopping = false
 

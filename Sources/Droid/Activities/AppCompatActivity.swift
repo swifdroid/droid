@@ -18,7 +18,7 @@ extension AppCompatActivity: @unchecked Sendable {}
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-open class AppCompatActivity: Activity {
+open class AppCompatActivity: FragmentActivity {
     open class override var className: JClassName { "androidx/appcompat/app/AppCompatActivity" }
     open class override var gradleDependencies: [String] { [
         #"implementation("androidx.appcompat:appcompat:1.7.1")"#,
