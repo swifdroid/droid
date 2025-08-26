@@ -23,8 +23,8 @@ open class TableRow: View, @unchecked Sendable {
     open override class var layoutParamsClass: LayoutParams.Class { .tableRow }
 
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
 
     open override func applicableLayoutParams() -> [LayoutParamKey] {

@@ -15,8 +15,8 @@ extension AndroidPackage.WidgetPackage {
 
 open class SeekBar: AbsSeekBar, @unchecked Sendable {
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
     
     public func setOnSeekBarChangeListener(_ listener: JClass) {

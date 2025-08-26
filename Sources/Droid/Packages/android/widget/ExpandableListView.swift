@@ -12,7 +12,7 @@ extension AndroidPackage.WidgetPackage {
 
 open class ExpandableListView: View, @unchecked Sendable {
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
 }

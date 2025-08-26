@@ -15,7 +15,7 @@ open class AutoCompleteTextView: EditText, @unchecked Sendable {
     open override class var className: JClassName { .android.widget.AutoCompleteTextView }
 
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
 }

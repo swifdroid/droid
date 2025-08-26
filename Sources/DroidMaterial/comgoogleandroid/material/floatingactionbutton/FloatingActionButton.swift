@@ -40,8 +40,8 @@ open class FloatingActionButton: ImageButton, @unchecked Sendable {
     var textState: State<String>?
 
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
 }
 

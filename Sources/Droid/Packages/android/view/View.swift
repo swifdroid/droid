@@ -179,15 +179,15 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     // MARK: - Initializers
 
     @discardableResult
-    public init () {
-        id = DroidApp.getNextViewId()
+    public init (id: Int32? = nil) {
+        self.id = id ?? .nextViewId()
         _setup()
     }
 
     
     @discardableResult
-    public init (@BodyBuilder content: BodyBuilder.SingleView) {
-        id = DroidApp.getNextViewId()
+    public init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
+        self.id = id ?? .nextViewId()
         _setup()
         body { content() }
     }

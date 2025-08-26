@@ -15,12 +15,12 @@ class MotionLayout: ConstraintLayout, @unchecked Sendable {
     public override class var className: JClassName { .androidx.constraintlayout.motion.widget.MotionLayout }
 
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
 
     @discardableResult
-    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
-        super.init(content: content)
+    public override init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(id: id, content: content)
     }
 }

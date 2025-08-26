@@ -17,19 +17,19 @@ open class TextView: View, @unchecked Sendable {
     var textState: State<String>?
 
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
 
     @discardableResult
-    public init(_ text: String) {
-        super.init()
+    public init (id: Int32? = nil, _ text: String) {
+        super.init(id: id)
         self.text(text)
     }
 
     @discardableResult
-    public init(_ state: State<String>) {
-        super.init()
+    public init (id: Int32? = nil, _ state: State<String>) {
+        super.init(id: id)
         self.text(state)
     }
 }

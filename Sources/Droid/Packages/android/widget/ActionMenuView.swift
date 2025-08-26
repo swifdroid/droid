@@ -23,12 +23,12 @@ open class ActionMenuView: LinearLayout, @unchecked Sendable {
     open override class var layoutParamsClass: LayoutParams.Class { .actionMenuView }
 
     @discardableResult
-    public override init() {
-        super.init()
+    public override init (id: Int32? = nil) {
+        super.init(id: id)
     }
 
     @discardableResult
-    public override init (@BodyBuilder content: BodyBuilder.SingleView) {
-        super.init(content: content)
+    public override init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(id: id, content: content)
     }
 }
