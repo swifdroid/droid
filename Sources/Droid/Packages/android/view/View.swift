@@ -169,13 +169,6 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         }
     }
 
-    // MARK: Applied Layout Params
-
-    var marginLeft: Int32 = 0
-    var marginTop: Int32 = 0
-    var marginRight: Int32 = 0
-    var marginBottom: Int32 = 0
-
     // MARK: - Initializers
 
     @discardableResult
