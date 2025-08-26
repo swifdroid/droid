@@ -328,7 +328,7 @@ extension FloatingActionButton {
 // MARK: Gravity
 
 struct GravityViewLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = "setGravity"
+    let key: LayoutParamKey = "gravity"
     let value: Gravity
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
         lp.setField(nil, name: key.rawValue, arg: Int32(value.rawValue))
