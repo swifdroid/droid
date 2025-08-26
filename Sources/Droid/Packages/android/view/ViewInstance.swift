@@ -62,6 +62,8 @@ extension View {
             self.object = object
             self.view = view
             self.context = context
+            // Assign Swift-generated id
+            object.callVoidMethod(name: "setId", args: id)
             #else
             return nil
             #endif
