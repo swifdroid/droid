@@ -9,7 +9,7 @@
 import AndroidLooper
 #endif
 
-public protocol Contextable {
+public protocol Contextable: Sendable {
 	#if canImport(AndroidLooper)
 	@UIThreadActor
 	#endif
