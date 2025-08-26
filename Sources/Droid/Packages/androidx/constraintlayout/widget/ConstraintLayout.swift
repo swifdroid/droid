@@ -85,6 +85,14 @@ open class ConstraintLayout: ViewGroup, @unchecked Sendable {
     }
 }
 
+extension ConstraintLayout {
+    public enum ChainStyle: Int32 {
+        case spread = 0
+        case spreadInside = 1
+        case packed = 2
+    }
+}
+
 extension LayoutParamKey {
     // - Directional Constraints
     static let leftToLeft: Self = "leftToLeft"
@@ -359,9 +367,9 @@ struct CircleConstraintLayoutParam: LayoutParamToApply {
 
 struct CircleRadiusLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .circleRadius
-    let value: Int32
+    let value: (Int, DimensionUnit)
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.setField(env, name: key.rawValue, arg: value)
+        lp.setField(env, name: key.rawValue, arg: value.1.toPixels(Int32(value.0)))
     }
 }
 
