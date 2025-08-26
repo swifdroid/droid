@@ -7,14 +7,18 @@ extension View {
     /// Creates a horizontal alignment constraint between left edges of views.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based positioning
-    /// - RelativeLayout: Similar behavior using layout rules
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func leftToLeft(_ id: Int32) -> Self {
+    public func leftToLeft(_ id: Int32 = 0) -> Self {
         LeftToLeftLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's left edge to another view's left edge.
+    ///
+    /// Creates a horizontal alignment constraint between left edge of the view and left edge of the parent.
+    @discardableResult
+    public func leftToParent() -> Self {
+        LeftToLeftLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's left edge to another view's right edge.
@@ -22,14 +26,18 @@ extension View {
     /// Positions the view's left edge adjacent to another view's right edge.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based positioning
-    /// - RelativeLayout: Similar behavior using layout rules
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func leftToRight(_ id: Int32) -> Self {
+    public func leftToRight(_ id: Int32 = 0) -> Self {
         LeftToRightLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's left edge to another view's right edge.
+    ///
+    /// Positions the view's left edge adjacent to parent's right edge.
+    @discardableResult
+    public func leftToParentRight() -> Self {
+        LeftToRightLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's right edge to another view's left edge.
@@ -37,14 +45,18 @@ extension View {
     /// Positions the view's right edge adjacent to another view's left edge.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based positioning
-    /// - RelativeLayout: Similar behavior using layout rules
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func rightToLeft(_ id: Int32) -> Self {
+    public func rightToLeft(_ id: Int32 = 0) -> Self {
         RightToLeftLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's right edge to another view's left edge.
+    ///
+    /// Positions the view's right edge adjacent to parent's left edge.
+    @discardableResult
+    public func rightToParentLeft() -> Self {
+        RightToLeftLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's right edge to another view's right edge.
@@ -52,14 +64,18 @@ extension View {
     /// Creates a horizontal alignment constraint between right edges of views.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based positioning
-    /// - RelativeLayout: Similar behavior using layout rules
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func rightToRight(_ id: Int32) -> Self {
+    public func rightToRight(_ id: Int32 = 0) -> Self {
         RightToRightLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's right edge to another view's right edge.
+    ///
+    /// Creates a horizontal alignment constraint between right edge of the view and right edge of the parent.
+    @discardableResult
+    public func rightToParent() -> Self {
+        RightToRightLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's top edge to another view's top edge.
@@ -67,14 +83,18 @@ extension View {
     /// Creates a vertical alignment constraint between top edges of views.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based positioning
-    /// - RelativeLayout: Similar behavior using layout rules
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func topToTop(_ id: Int32) -> Self {
+    public func topToTop(_ id: Int32 = 0) -> Self {
         TopToTopLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's top edge to another view's top edge.
+    ///
+    /// Creates a vertical alignment constraint between top edge of view and parent's top edge.
+    @discardableResult
+    public func topToParent() -> Self {
+        TopToTopLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's top edge to another view's bottom edge.
@@ -82,15 +102,18 @@ extension View {
     /// Positions the view's top edge adjacent to another view's bottom edge.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based positioning
-    /// - RelativeLayout: Similar behavior using layout rules
-    /// - LinearLayout: Implicitly creates this relationship in vertical orientation
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func topToBottom(_ id: Int32) -> Self {
+    public func topToBottom(_ id: Int32 = 0) -> Self {
         TopToBottomLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's top edge to another view's bottom edge.
+    ///
+    /// Positions the view's top edge adjacent to parent's bottom edge.
+    @discardableResult
+    public func topToParentBottom() -> Self {
+        TopToBottomLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's bottom edge to another view's top edge.
@@ -98,15 +121,18 @@ extension View {
     /// Positions the view below another view with bottom edge touching its top edge.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates vertical spacing constraint
-    /// - RelativeLayout: Similar to layout_below attribute
-    /// - LinearLayout: Naturally occurs in vertical orientation
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func bottomToTop(_ id: Int32) -> Self {
+    public func bottomToTop(_ id: Int32 = 0) -> Self {
         BottomToTopLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's bottom edge to another view's top edge.
+    ///
+    /// Positions the view below parent view with bottom edge touching its top edge.
+    @discardableResult
+    public func bottomToParentTop() -> Self {
+        BottomToTopLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's bottom edge to another view's bottom edge.
@@ -114,15 +140,18 @@ extension View {
     /// Aligns the bottom edges of both views vertically.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates bottom alignment constraint
-    /// - RelativeLayout: Similar to alignBottom attribute
-    /// - FrameLayout: Can be achieved with gravity settings
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func bottomToBottom(_ id: Int32) -> Self {
+    public func bottomToBottom(_ id: Int32 = 0) -> Self {
         BottomToBottomLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's bottom edge to another view's bottom edge.
+    ///
+    /// Aligns the bottom edge to parent's bottom edge.
+    @discardableResult
+    public func bottomToParent() -> Self {
+        BottomToBottomLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's start edge to another view's start edge.
@@ -130,15 +159,18 @@ extension View {
     /// Aligns the leading edges (left in LTR, right in RTL) of both views.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates RTL-aware start alignment
-    /// - RelativeLayout: Similar to alignStart attribute
-    /// - FlexboxLayout: Controls item alignment in container
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func startToStart(_ id: Int32) -> Self {
+    public func startToStart(_ id: Int32 = 0) -> Self {
         StartToStartLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's start edge to another view's start edge.
+    ///
+    /// Aligns the leading edge to parent's leading edge (left in LTR, right in RTL).
+    @discardableResult
+    public func startToParent() -> Self {
+        StartToStartLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's start edge to another view's end edge.
@@ -146,15 +178,18 @@ extension View {
     /// Positions view's start edge adjacent to another view's end edge.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates RTL-aware positioning
-    /// - RelativeLayout: Similar to toEndOf attribute
-    /// - FlexboxLayout: Affects item ordering in RTL
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func startToEnd(_ id: Int32) -> Self {
+    public func startToEnd(_ id: Int32 = 0) -> Self {
         StartToEndLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's start edge to another view's end edge.
+    ///
+    /// Positions view's start edge adjacent to parent's end edge.
+    @discardableResult
+    public func startToParentEnd() -> Self {
+        StartToEndLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's end edge to another view's start edge.
@@ -162,15 +197,18 @@ extension View {
     /// Positions view's end edge adjacent to another view's start edge.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates RTL-aware positioning
-    /// - RelativeLayout: Similar to toStartOf attribute
-    /// - FlexboxLayout: Affects item ordering in RTL
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func endToStart(_ id: Int32) -> Self {
+    public func endToStart(_ id: Int32 = 0) -> Self {
         EndToStartLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's end edge to another view's start edge.
+    ///
+    /// Positions view's end edge adjacent to parent's start edge.
+    @discardableResult
+    public func endToParentStart() -> Self {
+        EndToStartLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's end edge to another view's end edge.
@@ -178,15 +216,18 @@ extension View {
     /// Aligns the trailing edges (right in LTR, left in RTL) of both views.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates RTL-aware end alignment
-    /// - RelativeLayout: Similar to alignEnd attribute
-    /// - FlexboxLayout: Controls item alignment in container
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func endToEnd(_ id: Int32) -> Self {
+    public func endToEnd(_ id: Int32 = 0) -> Self {
         EndToEndLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's end edge to another view's end edge.
+    ///
+    /// Aligns the trailing edge to parent's trailing edge (right in LTR, left in RTL).
+    @discardableResult
+    public func endToParent() -> Self {
+        EndToEndLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Constrains the view's baseline to another view's baseline.
@@ -194,15 +235,18 @@ extension View {
     /// Aligns text baselines of both views vertically.
     ///
     /// - Parameters:
-    ///   - id: The view ID to constrain to
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates text baseline alignment
-    /// - RelativeLayout: Similar to alignBaseline attribute
-    /// - LinearLayout: Supports baseline alignment in vertical orientation
+    ///   - id: The view ID to constrain to, or leave blank to constrain to parent
     @discardableResult
-    public func baselineToBaseline(_ id: Int32) -> Self {
+    public func baselineToBaseline(_ id: Int32 = 0) -> Self {
         BaselineToBaselineLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Constrains the view's baseline to another view's baseline.
+    ///
+    /// Aligns text baseline to parent's baseline.
+    @discardableResult
+    public func baselineToParent() -> Self {
+        BaselineToBaselineLayoutParam(value: 0).applyOrAppend(self)
     }
 
     // MARK: Dimensions
@@ -212,14 +256,18 @@ extension View {
     /// Sets the view's width to match the referenced view's width by default.
     ///
     /// - Parameters:
-    ///   - id: The view ID to match width with
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based dimension matching
-    /// - RelativeLayout: Similar behavior using layout rules
+    ///   - id: The view ID to match width with, or leave blank to constrain to parent
     @discardableResult
-    public func matchConstraintDefaultWidth(_ id: Int32) -> Self {
+    public func matchConstraintDefaultWidth(_ id: Int32 = 0) -> Self {
         MatchConstraintDefaultWidthLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Matches the view's default width to another view's width.
+    ///
+    /// Sets the view's width to match the parent's width by default.
+    @discardableResult
+    public func matchConstraintDefaultWidthToParent() -> Self {
+        MatchConstraintDefaultWidthLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Matches the view's default height to another view's height.
@@ -227,14 +275,18 @@ extension View {
     /// Sets the view's height to match the referenced view's height by default.
     ///
     /// - Parameters:
-    ///   - id: The view ID to match height with
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for constraint-based dimension matching
-    /// - RelativeLayout: Similar behavior using layout rules
+    ///   - id: The view ID to match height with, or leave blank to match with parent
     @discardableResult
-    public func matchConstraintDefaultHeight(_ id: Int32) -> Self {
+    public func matchConstraintDefaultHeight(_ id: Int32 = 0) -> Self {
         MatchConstraintDefaultHeightLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Matches the view's default height to another view's height.
+    ///
+    /// Sets the view's height to match the parent's height by default.
+    @discardableResult
+    public func matchConstraintDefaultHeightToParent() -> Self {
+        MatchConstraintDefaultHeightLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Sets the minimum width constraint by matching another view's width.
@@ -242,14 +294,18 @@ extension View {
     /// The view will never be narrower than the referenced view's width.
     ///
     /// - Parameters:
-    ///   - id: The view ID to match minimum width with
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates minimum width constraint
-    /// - FlexboxLayout: Controls minimum main size in flex container
+    ///   - id: The view ID to match minimum width with, or leave blank to match with parent
     @discardableResult
-    public func matchConstraintMinWidth(_ id: Int32) -> Self {
+    public func matchConstraintMinWidth(_ id: Int32 = 0) -> Self {
         MatchConstraintMinWidthLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Sets the minimum width constraint by matching another view's width.
+    ///
+    /// The view will never be narrower than the parent's width.
+    @discardableResult
+    public func matchConstraintMinWidthToParent() -> Self {
+        MatchConstraintMinWidthLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Sets the minimum height constraint by matching another view's height.
@@ -257,14 +313,18 @@ extension View {
     /// The view will never be shorter than the referenced view's height.
     ///
     /// - Parameters:
-    ///   - id: The view ID to match minimum height with
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates minimum height constraint
-    /// - FlexboxLayout: Controls minimum cross size in flex container
+    ///   - id: The view ID to match minimum height with, or leave blank to match with parent
     @discardableResult
-    public func matchConstraintMinHeight(_ id: Int32) -> Self {
+    public func matchConstraintMinHeight(_ id: Int32 = 0) -> Self {
         MatchConstraintMinHeightLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Sets the minimum height constraint by matching another view's height.
+    ///
+    /// The view will never be shorter than the parent's height.
+    @discardableResult
+    public func matchConstraintMinHeightToParent() -> Self {
+        MatchConstraintMinHeightLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Sets the maximum width constraint by matching another view's width.
@@ -272,14 +332,18 @@ extension View {
     /// The view will never be wider than the referenced view's width.
     ///
     /// - Parameters:
-    ///   - id: The view ID to match maximum width with
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates maximum width constraint
-    /// - FlexboxLayout: Controls maximum main size in flex container
+    ///   - id: The view ID to match maximum width with, or leave blank to match with parent
     @discardableResult
-    public func matchConstraintMaxWidth(_ id: Int32) -> Self {
+    public func matchConstraintMaxWidth(_ id: Int32 = 0) -> Self {
         MatchConstraintMaxWidthLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Sets the maximum width constraint by matching another view's width.
+    ///
+    /// The view will never be wider than the parent's width.
+    @discardableResult
+    public func matchConstraintMaxWidthToParent() -> Self {
+        MatchConstraintMaxWidthLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Sets the maximum height constraint by matching another view's height.
@@ -287,14 +351,18 @@ extension View {
     /// The view will never be taller than the referenced view's height.
     ///
     /// - Parameters:
-    ///   - id: The view ID to match maximum height with
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Creates maximum height constraint
-    /// - FlexboxLayout: Controls maximum cross size in flex container
+    ///   - id: The view ID to match maximum height with, or leave blank to match with parent
     @discardableResult
-    public func matchConstraintMaxHeight(_ id: Int32) -> Self {
+    public func matchConstraintMaxHeight(_ id: Int32 = 0) -> Self {
         MatchConstraintMaxHeightLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Sets the maximum height constraint by matching another view's height.
+    ///
+    /// The view will never be taller than the parent's height.
+    @discardableResult
+    public func matchConstraintMaxHeightToParent() -> Self {
+        MatchConstraintMaxHeightLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Sets the view's width as a percentage of available space.
@@ -303,11 +371,6 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: The percentage value (0.0 to 1.0)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Percentage-based width constraint
-    /// - PercentFrameLayout: Primary percentage dimension control
-    /// - PercentRelativeLayout: Percentage-based sizing
     @discardableResult
     public func matchConstraintPercentWidth(_ value: Float) -> Self {
         MatchConstraintPercentWidthLayoutParam(value: value).applyOrAppend(self)
@@ -319,11 +382,6 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: The percentage value (0.0 to 1.0)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Percentage-based height constraint
-    /// - PercentFrameLayout: Primary percentage dimension control
-    /// - PercentRelativeLayout: Percentage-based sizing
     @discardableResult
     public func matchConstraintPercentHeight(_ value: Float) -> Self {
         MatchConstraintPercentHeightLayoutParam(value: value).applyOrAppend(self)
@@ -337,10 +395,6 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: Bias value between 0.0 (left) and 1.0 (right)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for bias positioning
-    /// - RelativeLayout: Similar effect using gravity or margins
     @discardableResult
     public func horizontalBias(_ value: Float) -> Self {
         HorizontalBiasLayoutParam(value: value).applyOrAppend(self)
@@ -352,10 +406,6 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: Bias value between 0.0 (top) and 1.0 (bottom)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Primary use for bias positioning
-    /// - RelativeLayout: Similar effect using gravity or margins
     @discardableResult
     public func verticalBias(_ value: Float) -> Self {
         VerticalBiasLayoutParam(value: value).applyOrAppend(self)
@@ -368,13 +418,10 @@ extension View {
     /// Defines how views in a horizontal chain are positioned and spaced.
     ///
     /// - Parameters:
-    ///   - value: Chain style constant (CHAIN_SPREAD, CHAIN_SPREAD_INSIDE, CHAIN_PACKED)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Exclusive chain layout feature
+    ///   - value: Chain style
     @discardableResult
-    public func horizontalChainStyle(_ value: Int32) -> Self {
-        HorizontalChainStyleLayoutParam(value: value).applyOrAppend(self)
+    public func horizontalChainStyle(_ value: ConstraintLayout.ChainStyle) -> Self {
+        HorizontalChainStyleLayoutParam(value: value.rawValue).applyOrAppend(self)
     }
 
     /// Sets the vertical chain style for constrained views.
@@ -382,13 +429,10 @@ extension View {
     /// Defines how views in a vertical chain are positioned and spaced.
     ///
     /// - Parameters:
-    ///   - value: Chain style constant (CHAIN_SPREAD, CHAIN_SPREAD_INSIDE, CHAIN_PACKED)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Exclusive chain layout feature
+    ///   - value: Chain style
     @discardableResult
-    public func verticalChainStyle(_ value: Int32) -> Self {
-        VerticalChainStyleLayoutParam(value: value).applyOrAppend(self)
+    public func verticalChainStyle(_ value: ConstraintLayout.ChainStyle) -> Self {
+        VerticalChainStyleLayoutParam(value: value.rawValue).applyOrAppend(self)
     }
 
     /// Enables RTL (right-to-left) support for chain layouts.
@@ -397,10 +441,6 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: Boolean to enable/disable RTL chain support (default: true)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects chain behavior in RTL contexts
-    /// - FlexboxLayout: Similar RTL support for flex directions
     @discardableResult
     public func chainUseRtl(_ value: Bool = true) -> Self {
         ChainUseRtlLayoutParam(value: value).applyOrAppend(self)
@@ -413,14 +453,18 @@ extension View {
     /// Positions the view along a circular path around the referenced view.
     ///
     /// - Parameters:
-    ///   - id: The view ID to circle around
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Exclusive circular positioning feature
-    /// - MotionLayout: Similar path-based motion constraints
+    ///   - id: The view ID to circle around, or leave blank to match with parent
     @discardableResult
-    public func circleConstraint(_ id: Int32) -> Self {
+    public func circleConstraint(_ id: Int32 = 0) -> Self {
         CircleConstraintLayoutParam(value: id).applyOrAppend(self)
+    }
+
+    /// Creates circular positioning constraint relative to another view.
+    ///
+    /// Positions the view along a circular path around the parent.
+    @discardableResult
+    public func circleConstraintToParent() -> Self {
+        CircleConstraintLayoutParam(value: 0).applyOrAppend(self)
     }
 
     /// Sets the radius for circular constraint positioning.
@@ -429,13 +473,10 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: Radius in density-independent pixels
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Used with circular constraints
-    /// - MotionLayout: Similar path motion attributes
+    ///   - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
     @discardableResult
-    public func circleRadius(_ value: Int32) -> Self {
-        CircleRadiusLayoutParam(value: value).applyOrAppend(self)
+    public func circleRadius(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
+        CircleRadiusLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 
     /// Sets the angle for circular constraint positioning.
@@ -444,10 +485,6 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: Angle in degrees
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Used with circular constraints
-    /// - MotionLayout: Similar path motion attributes
     @discardableResult
     public func circleAngle(_ value: Float) -> Self {
         CircleAngleLayoutParam(value: value).applyOrAppend(self)
@@ -461,10 +498,6 @@ extension View {
     ///
     /// - Parameters:
     ///   - value: Ratio string (e.g., "16:9" or "1.5")
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Maintains aspect ratio constraints
-    /// - FlexboxLayout: Similar aspect ratio control for flex items
     @discardableResult
     public func dimensionRatio(_ value: String) -> Self {
         DimensionRatioLayoutParam(value: value).applyOrAppend(self)
@@ -479,10 +512,6 @@ extension View {
     /// - Parameters:
     ///    - value: Margin size in density-independent pixels
     ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects layout when view is GONE
-    /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneTopMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         GoneTopMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
@@ -495,10 +524,6 @@ extension View {
     /// - Parameters:
     ///    - value: Margin size in density-independent pixels
     ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects layout when view is GONE
-    /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneBottomMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         GoneBottomMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
@@ -511,10 +536,6 @@ extension View {
     /// - Parameters:
     ///    - value: Margin size in density-independent pixels
     ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects layout when view is GONE
-    /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneLeftMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         GoneLeftMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
@@ -527,10 +548,6 @@ extension View {
     /// - Parameters:
     ///    - value: Margin size in density-independent pixels
     ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects layout when view is GONE
-    /// - RelativeLayout: Similar behavior for gone view margins
     @discardableResult
     public func goneRightMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         GoneRightMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
@@ -543,10 +560,6 @@ extension View {
     /// - Parameters:
     ///    - value: Margin size in density-independent pixels
     ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects RTL-aware gone margins
-    /// - RelativeLayout: Similar RTL-aware gone margin behavior
     @discardableResult
     public func goneStartMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         GoneStartMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
@@ -559,12 +572,9 @@ extension View {
     /// - Parameters:
     ///    - value: Margin size in density-independent pixels
     ///    - unit: The measurement unit: px, dp, sp, pt, inch, mm (default: .dp)
-    ///
-    /// Supported layouts:
-    /// - ConstraintLayout: Affects RTL-aware gone margins
-    /// - RelativeLayout: Similar RTL-aware gone margin behavior
     @discardableResult
     public func goneEndMargin(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         GoneEndMarginLayoutParam(value: (value, unit)).applyOrAppend(self)
     }
 }
+// TODO: center constraints via `ConstraintSet`
