@@ -11,6 +11,9 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var Toolbar: ToolbarClass { .init(parent: self, name: "Toolbar") }
 }
 
+/// A standard toolbar for use within application content.
+/// 
+/// [Learn more](https://developer.android.com/reference/androidx/appcompat/widget/Toolbar#hasExpandedActionView())
 public final class Toolbar: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     public override class var className: JClassName { .androidx.appcompat.widget.Toolbar }
