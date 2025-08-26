@@ -184,6 +184,14 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         _setup()
     }
 
+    @discardableResult
+    public init (id: Int32? = nil, _ object: JObject, _ context: ActivityContext) {
+        self.id = id ?? .nextViewId()
+        if let instance = ViewInstance(object, self, context, self.id) {
+            status = .asContentView(instance)
+        }
+        _setup()
+    }
     
     @discardableResult
     public init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
