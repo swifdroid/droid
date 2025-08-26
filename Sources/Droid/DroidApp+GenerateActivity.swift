@@ -7,7 +7,7 @@
 
 #if !os(Android)
 extension DroidApp {
-    func generateActivity(_ activity: Activity.Type) -> String? {
+    func generateActivity(_ activity: AnyActivity.Type) -> String? {
         let imports = activity.javaImports.map { "import \($0)" }.joined(separator: "\n")
         return """
         \(imports)

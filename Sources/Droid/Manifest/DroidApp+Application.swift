@@ -1067,7 +1067,7 @@ extension DroidApp {
 		/// Declares activities (an Activity subclass) that implement parts of the application's visual user interface.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element)
-		public func activities(_ activities: Activity.Type...) -> Self {
+		public func activities(_ activities: AnyActivity.Type...) -> Self {
 			activities.forEach { activity($0) }
 			return self
 		}
@@ -1076,7 +1076,7 @@ extension DroidApp {
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element)
 		@discardableResult
-		public func activity(_ activity: Activity.Type) -> Self {
+		public func activity(_ activity: AnyActivity.Type) -> Self {
 			DroidApp.shared._activities.append(activity)
 			let manifestTag = ActivityTag(activity)
 			manifestTag.param(.androidName, ".\(activity.className)")
