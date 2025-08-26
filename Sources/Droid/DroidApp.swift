@@ -361,6 +361,11 @@ var androidBuildingArguments: AndroidBuildingArguments {
     // }
     // return v
 }
+extension Int32 {
+    public static func nextViewId() -> Int32 {
+        DroidApp.getNextViewId()
+    }
+}
 
 #if canImport(Android)
 import Android
