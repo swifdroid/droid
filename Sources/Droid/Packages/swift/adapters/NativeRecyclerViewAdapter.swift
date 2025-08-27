@@ -127,7 +127,7 @@ public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchec
                 instance.lpClassName = .androidx.recyclerview.widget.RecyclerView.LayoutParams
                 if let lp = instance.layoutParams() {
                     holder.view.processLayoutParams(instance, lp, for: holder.view)
-                    holder.view.setLayoutParams(lp)
+                    holder.view.layoutParams(lp)
                 }
             }
             holder.view.didMoveToParent()

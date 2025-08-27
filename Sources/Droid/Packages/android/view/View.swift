@@ -209,7 +209,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     // MARK: - Properties
     
     @discardableResult
-    public func setLayoutParams(_ params: LayoutParams) -> Self {
+    public func layoutParams(_ params: LayoutParams) -> Self {
         if let instance {
             instance.setLayoutParams(params)
         }
@@ -403,10 +403,10 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         }) {
             if Self.layoutParamsShouldBeLoaded, let lp = subview.instance?.layoutParams(Self.layoutParamsClass.className) {
                 processLayoutParams(context, lp, for: subview)
-                subview.setLayoutParams(lp)
+                subview.layoutParams(lp)
             } else if let lp = layoutParamsForSubviews() {
                 processLayoutParams(context, lp, for: subview)
-                subview.setLayoutParams(lp)
+                subview.layoutParams(lp)
             }
         }
     }

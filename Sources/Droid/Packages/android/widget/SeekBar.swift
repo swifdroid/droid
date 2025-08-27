@@ -19,15 +19,15 @@ open class SeekBar: AbsSeekBar, @unchecked Sendable {
         super.init(id: id)
     }
     
-    public func setOnSeekBarChangeListener(_ listener: JClass) {
+    public func onSeekBarChangeListener(_ listener: JClass) {
         // callVoidWithMethod("setOnSeekBarChangeListener", .object(.android.widget.SeekBarOnSeekBarChangeListener) / listener)
     }
     
-    public func setProgress(_ value: Int) {
+    public func progress(_ value: Int) {
         // callVoidWithMethod("setProgress", .int(value))
     }
     
-    public func setProgress(_ value: Int, animated: Bool) {
+    public func progress(_ value: Int, animated: Bool) {
         // callVoidWithMethod("setProgress", .int(value), .boolean(animated))
     }
 }

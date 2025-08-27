@@ -1140,7 +1140,7 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     // public static func metaStateHasNoModifiers
     // public static func normalizeMetaState
 
-    public func setSource(_ source: Int) {
+    public func source(_ source: Int) {
         object.callVoidMethod(name: "setSource", args: Int32(source))
     }
 

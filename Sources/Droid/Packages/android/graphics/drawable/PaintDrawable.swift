@@ -20,7 +20,7 @@ extension AndroidPackage.GraphicsPackage.DrawablePackage {
 //         super.init(environment, ref, object)
 //     }
     
-//     func setCornerRadius(_ radius: Float) {
+//     func cornerRadius(_ radius: Float) {
 //         callVoidWithMethod("setCornerRadius", .float(radius))
 //     }
 // }

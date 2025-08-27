@@ -64,7 +64,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
     }
 
     @discardableResult
-    public func setView(_ view: View) -> Self {
+    public func view(_ view: View) -> Self {
         guard
             let instance = view.setStatusAsContentView(context)
         else { return self }
@@ -77,13 +77,13 @@ public final class Toast: JObjectable, @unchecked Sendable {
     }
 
     @discardableResult
-    public func setDuration(_ length: Length) -> Self {
+    public func duration(_ length: Length) -> Self {
         object.callVoidMethod(name: "setDuration", args: length.rawValue)
         return self
     }
 
     @discardableResult
-    public func setText(_ text: String) -> Self {
+    public func text(_ text: String) -> Self {
         #if os(Android)
         guard let string = JString(from: text) else { return self }
         object.callVoidMethod(name: "setText", args: [(string, .object(.java.lang.CharSequence))])
@@ -92,7 +92,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
     }
 
     @discardableResult
-    public func setText(_ resId: Int32) -> Self {
+    public func text(_ resId: Int32) -> Self {
         object.callVoidMethod(name: "setText", args: resId)
         return self
     }
@@ -102,7 +102,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
     public private(set) var marginDimensionUnit: DimensionUnit = .dp
 
     @discardableResult
-    public func setMargin(_ horizontalMargin: Float, _ verticalMargin: Float, unit: DimensionUnit = .dp) -> Self {
+    public func margin(_ horizontalMargin: Float, _ verticalMargin: Float, unit: DimensionUnit = .dp) -> Self {
         self.horizontalMargin = horizontalMargin
         self.verticalMargin = verticalMargin
         self.marginDimensionUnit = unit
@@ -115,7 +115,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
     public private(set) var gravityYOffset: Int = 0
     public private(set) var gravityDimensionUnit: DimensionUnit = .dp
 
-    public func setGravity(gravity: Gravity, xOffset: Int, yOffset: Int, unit: DimensionUnit = .dp) {
+    public func gravity(gravity: Gravity, xOffset: Int, yOffset: Int, unit: DimensionUnit = .dp) {
         self.gravity = gravity
         self.gravityXOffset = xOffset
         self.gravityYOffset = yOffset

@@ -13,13 +13,13 @@ import AndroidLooper
 @UIThreadActor
 #endif
 public protocol Checkable: ViewInstanceable {
-    func setChecked(_ checked: Bool)
+    func checked(_ checked: Bool)
     func isChecked() -> Bool
     func toggle()
 }
 
 extension Checkable {
-    public func setChecked(_ checked: Bool) {
+    public func checked(_ checked: Bool) {
         instance?.callVoidMethod(name: "setChecked", args: [checked])
     }
 

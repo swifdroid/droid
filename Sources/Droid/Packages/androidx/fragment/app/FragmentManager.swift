@@ -251,7 +251,7 @@ extension FragmentManager {
     /// Set a `FragmentFactory` for this `FragmentManager` that will be used to create new `Fragment` instances from this point onward.
     /// 
     /// The child `FragmentManager` of all `Fragments` in this `FragmentManager` will also use this factory if one is not explicitly set.
-    public func setFragmentFactory(_ factory: FragmentFactory) {
+    public func fragmentFactory(_ factory: FragmentFactory) {
         object.callVoidMethod(name: "setFragmentFactory", args: factory.signed(as: FragmentFactory.className))
     }
 
@@ -260,7 +260,7 @@ extension FragmentManager {
     /// This result will be delivered to a `FragmentResultListener` that is called given to `setFragmentResultListener` with the same requestKey.
     /// If no `FragmentResultListener` with the same key is set or the Lifecycle associated with the listener is not at least STARTED,
     /// the result is stored until one becomes available, or `clearFragmentResult` is called with the same `requestKey`.
-    public func setFragmentResult(requestKey: String, result: Bundle) {
+    public func fragmentResult(requestKey: String, result: Bundle) {
         guard let str = JString(from: requestKey) else { return }
         object.callVoidMethod(name: "setFragmentFactory", args: str.signedAsString(), result.signed(as: Bundle.className))
     }
