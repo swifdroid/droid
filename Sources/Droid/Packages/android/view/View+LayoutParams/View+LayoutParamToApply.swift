@@ -20,7 +20,7 @@ extension LayoutParamToApply {
     #endif
     @discardableResult
     public func applyOrAppend<T: View>(_ view: T) -> T {
-        if let instance = view.instance, let lp = instance.getLayoutParams() {
+        if let instance = view.instance, let lp = instance.layoutParams() {
             apply(nil, instance, lp)
             instance.setLayoutParams(lp)
         } else {

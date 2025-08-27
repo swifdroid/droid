@@ -89,7 +89,7 @@ extension View {
             #endif
         }
         
-        public func getLayoutParams(_ lpClassName: JClassName? = nil) -> LayoutParams? {
+        public func layoutParams(_ lpClassName: JClassName? = nil) -> LayoutParams? {
             #if os(Android)
             // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1")
             guard let env = JEnv.current() else {
@@ -158,7 +158,7 @@ extension View {
             object.callVoidMethod(name: "removeView", args: viewInstance.object.signed(as: .android.view.View))
         }
 
-        // public func getParent() -> ViewParent? {
+        // public func parent() -> ViewParent? {
         //     #if os(Android)
         //     guard
         //         let env = JEnv.current(),

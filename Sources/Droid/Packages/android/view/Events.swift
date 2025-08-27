@@ -62,7 +62,7 @@ open class InputEvent: JObjectable, @unchecked Sendable {
     }
 
     /// Gets the device that this event came from.
-    public func getDevice() -> InputDevice? {
+    public func device() -> InputDevice? {
         guard
             let global = object.callObjectMethod(name: "getDevice", returning: .object(InputDevice.className))
         else { return nil }
@@ -70,19 +70,19 @@ open class InputEvent: JObjectable, @unchecked Sendable {
     }
 
     /// Gets the id for the device that this event came from.
-    public func getDeviceId() -> Int? {
+    public func deviceId() -> Int? {
         guard let value = object.callIntMethod(name: "getDeviceId") else { return nil }
         return Int(value)
     }
 
     /// Retrieve the time this event occurred, in the SystemClock.uptimeMillis() time base.
-    public func getEventTime() -> Int? {
+    public func eventTime() -> Int? {
         guard let value = object.callLongMethod(name: "getEventTime") else { return nil }
         return Int(value)
     }
 
     /// Gets the source of the event.
-    public func getSource() -> Int {
+    public func source() -> Int {
         guard let value = object.callIntMethod(name: "getSource") else { return 0 }
         return Int(value)
     }
@@ -113,31 +113,31 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Return the kind of action being performed.
-    public func getAction() -> Action? {
+    public func action() -> Action? {
         guard let value = object.callIntMethod(name: "getAction") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Gets which button has been modified during a press or release action.
-    public func getActionButton() -> ActionButton? {
+    public func actionButton() -> ActionButton? {
         guard let value = object.callIntMethod(name: "getActionButton") else { return nil }
         return .init(rawValue: value)
     }
 
     /// For `ACTION_POINTER_DOWN` or `ACTION_POINTER_UP` as returned by `getActionMasked()`, this returns the associated pointer index.
-    public func getActionIndex() -> Int? {
+    public func actionIndex() -> Int? {
         guard let value = object.callIntMethod(name: "getActionIndex") else { return nil }
         return Int(value)
     }
 
     /// Return the masked action being performed, without pointer index information.
-    public func getActionMasked() -> Action? {
+    public func actionMasked() -> Action? {
         guard let value = object.callIntMethod(name: "getActionMasked") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Returns the value of the requested axis.
-    public func getAxisValue(axis: Axis, pointerIndex: Int? = nil) -> Float? {
+    public func axisValue(axis: Axis, pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = [axis.rawValue]
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -146,42 +146,42 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Gets the state of all buttons that are pressed such as a mouse or stylus button.
-    public func getButtonState() -> Button? {
+    public func buttonState() -> Button? {
         guard let value = object.callIntMethod(name: "getButtonState") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Returns the classification for the current gesture. The classification may change as more events become available for the same gesture.
-    public func getClassification() -> Classification? {
+    public func classification() -> Classification? {
         guard let value = object.callIntMethod(name: "getClassification") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Returns the time (in ms) when the user originally pressed down to start a stream of position events.
-    public func getDownTime() -> Int64? {
+    public func downTime() -> Int64? {
         object.callLongMethod(name: "getDownTime")
     }
 
     /// Returns a bitfield indicating which edges, if any, were touched by this MotionEvent.
-    public func getEdgeFlags() -> Edge? {
+    public func edgeFlags() -> Edge? {
         guard let value = object.callIntMethod(name: "getEdgeFlags") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Retrieve the time this event occurred, in the `SystemClock.uptimeMillis()` time base but with nanosecond precision.
-    public func getEventTimeNanos() -> Int? {
+    public func eventTimeNanos() -> Int? {
         guard let value = object.callLongMethod(name: "getEventTimeNanos") else { return nil }
         return Int(value)
     }
 
     /// Gets the motion event flags.
-    public func getFlags() -> Flag? {
+    public func flags() -> Flag? {
         guard let value = object.callIntMethod(name: "getFlags") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Returns the historical value of the requested axis, as per `getAxisValue(int, int)`, occurred between this event and the previous event for the given pointer. Only applies to `ACTION_MOVE` events.
-    public func getHistoricalAxisValue(axis: Axis, pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalAxisValue(axis: Axis, pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = [axis.rawValue]
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -190,19 +190,19 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns the time that a historical movement occurred between this event and the previous event, in the `SystemClock.uptimeMillis()` time base.
-    public func getHistoricalEventTime(position: Int) -> Int? {
+    public func historicalEventTime(position: Int) -> Int? {
         guard let value = object.callLongMethod(name: "getHistoricalEventTime", args: Int32(position)) else { return nil }
         return Int(value)
     }
 
     /// Returns the time that a historical movement occurred between this event and the previous event, in the `SystemClock.uptimeMillis()` time base but with nanosecond (instead of millisecond) precision.
-    public func getHistoricalEventTimeNanos(position: Int) -> Int? {
+    public func historicalEventTimeNanos(position: Int) -> Int? {
         guard let value = object.callLongMethod(name: "getHistoricalEventTimeNanos", args: Int32(position)) else { return nil }
         return Int(value)
     }
 
     /// Returns a historical orientation coordinate, as per `getOrientation(int)`, that occurred between this event and the previous event for the given pointer. Only applies to `ACTION_MOVE` events.
-    public func getHistoricalOrientation(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalOrientation(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -214,7 +214,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     // TODO: getHistoricalPointerCoords()
 
     /// Returns a historical pressure coordinate, as per `getPressure(int)`, that occurred between this event and the previous event for the given pointer. Only applies to `ACTION_MOVE` events.
-    public func getHistoricalPressure(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalPressure(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -224,7 +224,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Gets historical size for the first pointer index (may be an arbitrary pointer identifier).
-    public func getHistoricalSize(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalSize(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -234,7 +234,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns a historical tool major axis coordinate, as per `getToolMajor(int)`, that occurred between this event and the previous event for the given pointer. 
-    public func getHistoricalToolMajor(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalToolMajor(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -244,7 +244,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns a historical tool minor axis coordinate, as per `getToolMinor(int)`, that occurred between this event and the previous event for the given pointer. 
-    public func getHistoricalToolMinor(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalToolMinor(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -254,7 +254,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns a historical touch major axis coordinate, as per `getTouchMajor(int)`, that occurred between this event and the previous event for the given pointer.
-    public func getHistoricalTouchMajor(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalTouchMajor(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -264,7 +264,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns a historical touch minor axis coordinate, as per `getTouchMinor(int)`, that occurred between this event and the previous event for the given pointer.
-    public func getHistoricalTouchMinor(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalTouchMinor(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -274,7 +274,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns a historical X coordinate, as per `getX(int)`, that occurred between this event and the previous event for the given pointer.
-    public func getHistoricalX(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalX(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -284,7 +284,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns a historical Y coordinate, as per `getY(int)`, that occurred between this event and the previous event for the given pointer.
-    public func getHistoricalY(pointerIndex: Int? = nil, position: Int) -> Float? {
+    public func historicalY(pointerIndex: Int? = nil, position: Int) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -294,19 +294,19 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns the number of historical points in this event.
-    public func getHistorySize() -> Int? {
+    public func historySize() -> Int? {
         guard let value = object.callIntMethod(name: "getHistorySize") else { return nil }
         return Int(value)
     }
 
     /// Returns the state of any meta / modifier keys that were in effect when the event was generated.
-    public func getMetaState() -> Int? {
+    public func metaState() -> Int? {
         guard let value = object.callIntMethod(name: "getMetaState") else { return nil }
         return Int(value)
     }
 
     /// Returns the value of AXIS_ORIENTATION for the given pointer index.
-    public func getOrientation(pointerIndex: Int? = nil) -> Float? {
+    public func orientation(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -317,13 +317,13 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     // TODO: getPointerCoords()
 
     /// The number of pointers of data contained in this event. Always >= 1.
-    public func getPointerCount() -> Int? {
+    public func pointerCount() -> Int? {
         guard let value = object.callIntMethod(name: "getPointerCount") else { return nil }
         return Int(value)
     }
 
     /// Return the pointer identifier associated with a particular pointer data index in this event. The identifier tells you the actual pointer number associated with the data, accounting for individual pointers going up and down since the start of the current gesture.
-    public func getPointerId(pointerIndex: Int) -> Int? {
+    public func pointerId(pointerIndex: Int) -> Int? {
         guard let value = object.callIntMethod(name: "getPointerCount", args: Int32(pointerIndex)) else { return nil }
         return Int(value)
     }
@@ -331,7 +331,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     // TODO: getPointerProperties()
 
     /// Returns the value of `AXIS_PRESSURE`.
-    public func getPressure(pointerIndex: Int? = nil) -> Float? {
+    public func pressure(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -340,17 +340,17 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns the X coordinate of the pointer referenced by `pointerIndex` for this motion event.
-    public func getRawX(pointerIndex: Int = 0) -> Float? {
+    public func rawX(pointerIndex: Int = 0) -> Float? {
         return object.callFloatMethod(name: "getRawX", args: Int32(pointerIndex))
     }
 
     /// Returns the Y coordinate of the pointer referenced by `pointerIndex` for this motion event.
-    public func getRawY(pointerIndex: Int = 0) -> Float? {
+    public func rawY(pointerIndex: Int = 0) -> Float? {
         object.callFloatMethod(name: "getRawY", args: Int32(pointerIndex))
     }
 
     /// Returns the value of `AXIS_SIZE`.
-    public func getSize(pointerIndex: Int? = nil) -> Float? {
+    public func size(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -359,13 +359,13 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Gets the source of the event.
-    public func getSource() -> Int? {
+    public func source() -> Int? {
         guard let value = object.callIntMethod(name: "getSource") else { return nil }
         return Int(value)
     }
 
     /// Returns the value of `AXIS_TOOL_MAJOR`.
-    public func getToolMajor(pointerIndex: Int? = nil) -> Float? {
+    public func toolMajor(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -374,7 +374,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns the value of `AXIS_TOOL_MINOR`.
-    public func getToolMinor(pointerIndex: Int? = nil) -> Float? {
+    public func toolMinor(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -383,13 +383,13 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Gets the tool type of a pointer for the given pointer index. The tool type indicates the type of tool used to make contact such as a finger or stylus, if known.
-    public func getToolType(pointerIndex: Int) -> Int? {
+    public func toolType(pointerIndex: Int) -> Int? {
         guard let value = object.callIntMethod(name: "getToolType", args: Int32(pointerIndex)) else { return nil }
         return Int(value)
     }
 
     /// Returns the value of `AXIS_TOUCH_MAJOR`.
-    public func getTouchMajor(pointerIndex: Int? = nil) -> Float? {
+    public func touchMajor(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -398,7 +398,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns the value of `AXIS_TOUCH_MINOR`.
-    public func getTouchMinor(pointerIndex: Int? = nil) -> Float? {
+    public func touchMinor(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -407,7 +407,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns the X coordinate of the pointer referenced by `pointerIndex` for this motion event.
-    public func getX(pointerIndex: Int? = nil) -> Float? {
+    public func x(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -416,7 +416,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Return the precision of the X coordinates being reported.
-    public func getXPrecision(pointerIndex: Int? = nil) -> Float? {
+    public func xPrecision(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -425,7 +425,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Returns the Y coordinate of the pointer referenced by `pointerIndex` for this motion event.
-    public func getY(pointerIndex: Int? = nil) -> Float? {
+    public func y(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -434,7 +434,7 @@ public final class MotionEvent: InputEvent, @unchecked Sendable {
     }
 
     /// Return the precision of the Y coordinates being reported.
-    public func getYPrecision(pointerIndex: Int? = nil) -> Float? {
+    public func yPrecision(pointerIndex: Int? = nil) -> Float? {
         var args: [any JSignatureItemable] = []
         if let pointerIndex {
             args.append(Int32(pointerIndex))
@@ -738,7 +738,7 @@ open class DragEvent: JObjectable, @unchecked Sendable {
     }
 
     /// Inspect the action value of this event.
-    public func getAction() -> Action? {
+    public func action() -> Action? {
         guard let value = object.callIntMethod(name: "getAction") else { return nil }
         return .init(rawValue: value)
     }
@@ -746,14 +746,14 @@ open class DragEvent: JObjectable, @unchecked Sendable {
     /// Returns the `ClipData` object sent to the system as part of the call to `startDragAndDrop()`.
     ///
     /// This method only returns valid data if the event action is `ACTION_DROP`.
-    public func getClipData() -> ClipData? {
+    public func clipData() -> ClipData? {
         guard
             let global = object.callObjectMethod(name: "getClipData", returning: .object(ClipData.className))
         else { return nil }
         return .init(global)
     }
 
-    public func getClipDescription() -> ClipDescription? {
+    public func clipDescription() -> ClipDescription? {
         guard
             let global = object.callObjectMethod(name: "getClipDescription", returning: .object(ClipDescription.className))
         else { return nil }
@@ -765,7 +765,7 @@ open class DragEvent: JObjectable, @unchecked Sendable {
     /// The local state is available only to views in the activity which has started the drag operation. In all other activities this method will return null
     ///
     /// This method returns valid data for all event actions.
-    public func getLocalState() -> JObject? {
+    public func localState() -> JObject? {
         object.callObjectMethod(name: "getLocalState")
     }
 
@@ -774,21 +774,21 @@ open class DragEvent: JObjectable, @unchecked Sendable {
     /// If the user releases the drag shadow on a View that can accept a drop, the system sends an `ACTION_DROP` event to the View object's drag event listener. If the listener returns true, then `getResult()` will return true. If the listener returns false, then `getResult()` returns false.
     ///
     /// Notice that `getResult()` also returns false if no `ACTION_DROP` is sent. This happens, for example, when the user releases the drag shadow over an area outside of the application. In this case, the system sends out `ACTION_DRAG_ENDED` for the current operation, but never sends out `ACTION_DROP`.
-    public func getResult() -> Bool? {
+    public func result() -> Bool? {
         object.callBoolMethod(name: "getResult")
     }
 
     /// Gets the X coordinate of the drag point.
     ///
     /// The value is only valid if the event action is `ACTION_DRAG_STARTED`, `ACTION_DRAG_LOCATION` or `ACTION_DROP`.
-    public func getX() -> Float? {
+    public func x() -> Float? {
         object.callFloatMethod(name: "getX")
     }
 
     /// Gets the Y coordinate of the drag point.
     ///
     /// The value is only valid if the event action is `ACTION_DRAG_STARTED`, `ACTION_DRAG_LOCATION` or `ACTION_DROP`.
-    public func getY() -> Float? {
+    public func y() -> Float? {
         object.callFloatMethod(name: "getY")
     }
 
@@ -905,13 +905,13 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// Deliver this key event to a Callback interface. If this is an `ACTION_MULTIPLE` event and it is not handled, then an attempt will be made to deliver a single normal event.
     // public func dispatch() -> Bool {}
 
-    public func getAction() -> Action? {
+    public func action() -> Action? {
         guard let value = object.callIntMethod(name: "getAction") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Get the character that is produced by putting accent on the character c. For example, getDeadChar('`', 'e') returns è.
-    public func getDeadChar(accent: Int, c: Int) -> Int? {
+    public func deadChar(accent: Int, c: Int) -> Int? {
         guard let value = object.callIntMethod(name: "getDeadChar", args: Int32(accent), Int32(c)) else { return nil }
         return Int(value)
     }
@@ -919,35 +919,35 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// Gets the id for the device that this event came from.
     /// An id of zero indicates that the event didn't come from a physical device and maps to the default keymap.
     /// The other numbers are arbitrary and you shouldn't depend on the values.
-    public func getDeviceId() -> Int? {
+    public func deviceId() -> Int? {
         guard let value = object.callIntMethod(name: "getDeviceId") else { return nil }
         return Int(value)
     }
 
     /// Gets the primary character for this key. In other words, the label that is physically printed on it.
-    public func getDisplayLabel() -> UInt16? {
+    public func displayLabel() -> UInt16? {
         object.callCharMethod(name: "getDisplayLabel")
     }
 
     /// Retrieve the time of the most recent key down event, in the `SystemClock.uptimeMillis()` time base. If this is a down event, this will be the same as `getEventTime()`. Note that when chording keys, this value is the down time of the most recently pressed key, which may not be the same physical key of this event.
-    public func getDownTime() -> Float? {
+    public func downTime() -> Float? {
         object.callFloatMethod(name: "getDownTime")
     }
 
     /// Retrieve the time this event occurred, in the `SystemClock.uptimeMillis()` time base.
-    public func getEventTime() -> Int? {
+    public func eventTime() -> Int? {
         guard let value = object.callLongMethod(name: "getEventTime") else { return nil }
         return Int(value)
     }
 
     /// Returns the flags for this key event.
-    public func getFlags() -> Flag? {
+    public func flags() -> Flag? {
         guard let value = object.callIntMethod(name: "getFlags") else { return nil }
         return .init(rawValue: value)
     }
 
     /// Gets the `KeyCharacterMap` associated with the keyboard device.
-    public func getKeyCharacterMap() -> KeyCharacterMap? {
+    public func keyCharacterMap() -> KeyCharacterMap? {
         guard
             let global = object.callObjectMethod(name: "getKeyCharacterMap", returning: .object(KeyCharacterMap.className))
         else { return nil }
@@ -957,7 +957,7 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// Retrieve the key code of the key event.
     ///
     /// This is the physical key that was pressed, not the Unicode character.
-    public func getKeyCode() -> KeyCode? {
+    public func keyCode() -> KeyCode? {
         guard let value = object.callIntMethod(name: "getKeyCode") else { return nil }
         return .init(rawValue: value)
     }
@@ -965,31 +965,31 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// Gets the first character in the character array that can be generated by the specified key code.
     ///
     /// If there are multiple choices, prefers the one that would be generated with the specified meta key modifier state.
-    public func getMatch(_ chars: [UInt16], metaState: Int? = nil) -> UInt16? {
+    public func match(_ chars: [UInt16], metaState: Int? = nil) -> UInt16? {
         // TODO: implement method
         return nil
     }
 
     /// Returns the maximum keycode.
-    public func getMaxKeyCode() -> Int? {
+    public func maxKeyCode() -> Int? {
         guard let value = object.callIntMethod(name: "getMaxKeyCode") else { return nil }
         return Int(value)
     }
 
     /// Returns the state of the meta keys.
-    public func getMetaState() -> Int? {
+    public func metaState() -> Int? {
         guard let value = object.callIntMethod(name: "getMetaState") else { return nil }
         return Int(value)
     }
 
     /// Gets a mask that includes all valid modifier key meta state bits.
-    public func getModifierMetaStateMask() -> Int? {
+    public func modifierMetaStateMask() -> Int? {
         guard let value = object.callIntMethod(name: "getModifierMetaStateMask") else { return nil }
         return Int(value)
     }
 
     /// Returns the state of the modifier keys.
-    public func getModifiers() -> Int? {
+    public func modifiers() -> Int? {
         guard let value = object.callIntMethod(name: "getModifiers") else { return nil }
         return Int(value)
     }
@@ -997,14 +997,14 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// Gets the number or symbol associated with the key.
     ///
     /// The character value is returned, not the numeric value. If the key is not a number, but is a symbol, the symbol is retuned.
-    public func getNumber() -> UInt16? {
+    public func number() -> UInt16? {
         object.callCharMethod(name: "getNumber")
     }
 
     /// Retrieve the repeat count of the event.
     /// For key down events, this is the number of times the key has repeated with the first down starting at 0 and counting up from there.
     /// For key up events, this is always equal to zero. For multiple key events, this is the number of down/up pairs that have occurred.
-    public func getRepeatCount() -> Int? {
+    public func repeatCount() -> Int? {
         guard let value = object.callIntMethod(name: "getRepeatCount") else { return nil }
         return Int(value)
     }
@@ -1012,13 +1012,13 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// Retrieve the hardware key id of this key event. These values are not reliable and vary from device to device.
     ///
     /// Mostly this is here for debugging purposes.
-    public func getScanCode() -> Int? {
+    public func scanCode() -> Int? {
         guard let value = object.callIntMethod(name: "getScanCode") else { return nil }
         return Int(value)
     }
 
     /// Gets the source of the event.
-    public func getSource() -> Int? {
+    public func source() -> Int? {
         guard let value = object.callIntMethod(name: "getSource") else { return nil }
         return Int(value)
     }
@@ -1029,7 +1029,7 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// (see [MetaKeyKeyListener](https://developer.android.com/reference/android/text/method/MetaKeyKeyListener)) were active.
     ///
     /// Returns 0 if the key is not one that is used to type Unicode characters.
-    public func getUnicodeChar(metaState: Int? = nil) -> Int? {
+    public func unicodeChar(metaState: Int? = nil) -> Int? {
         var args: [any JSignatureItemable] = []
         if let metaState {
             args.append(Int32(metaState))

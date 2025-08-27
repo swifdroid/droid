@@ -72,7 +72,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
         return self
     }
 
-    public func getView() -> JObject? {
+    public func view() -> JObject? {
         object.callObjectMethod(name: "getView", returning: .object(.android.view.View))
     }
 

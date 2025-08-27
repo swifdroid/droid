@@ -401,7 +401,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
                 default: return false
             }
         }) {
-            if Self.layoutParamsShouldBeLoaded, let lp = subview.instance?.getLayoutParams(Self.layoutParamsClass.className) {
+            if Self.layoutParamsShouldBeLoaded, let lp = subview.instance?.layoutParams(Self.layoutParamsClass.className) {
                 processLayoutParams(context, lp, for: subview)
                 subview.setLayoutParams(lp)
             } else if let lp = layoutParamsForSubviews() {

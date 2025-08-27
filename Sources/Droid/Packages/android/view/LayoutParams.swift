@@ -180,7 +180,7 @@ public final class LayoutParams: Sendable, JObjectable {
 
     // MARK: - Standard
 
-    public func getWidth() -> Int32? {
+    public func width() -> Int32? {
         #if os(Android)
         InnerLog.t("lp.getWidth case 1")
         guard
@@ -199,7 +199,7 @@ public final class LayoutParams: Sendable, JObjectable {
         setField(nil, name: "height", arg: value)
     }
 
-    public func getHeight() -> Int32? {
+    public func height() -> Int32? {
         #if os(Android)
         InnerLog.t("lp.getHeight case 1")
         guard

@@ -210,7 +210,7 @@ public final class Snackbar: JObjectable, Sendable {
         object.callVoidMethod(name: "dismiss")
     }
 
-    public func getDuration() -> Int {
+    public func duration() -> Int {
         Int(object.callIntMethod(name: "getDuration") ?? 0)
     }
 

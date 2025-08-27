@@ -126,7 +126,7 @@ extension FragmentManager {
     // TODO: getBackStackEntryAt?
 
     /// Return the number of entries currently in the back stack.
-    public func getBackStackEntryCount() -> Int {
+    public func backStackEntryCount() -> Int {
         Int(object.callIntMethod(name: "getBackStackEntryCount") ?? 0)
     }
 
@@ -136,7 +136,7 @@ extension FragmentManager {
     /// 
     /// If no factory has been explicitly set on this `FragmentManager` via `setFragmentFactory`,
     /// the `FragmentFactory` of the parent `FragmentManager` will be returned.
-    public func getFragmentFactory() -> FragmentFactory! {
+    public func fragmentFactory() -> FragmentFactory! {
         guard
             let global = object.callObjectMethod(name: "getFragmentFactory", returning: .object(FragmentFactory.className))
         else { return nil }
@@ -150,7 +150,7 @@ extension FragmentManager {
     /// 
     /// The primary navigation fragment's child `FragmentManager` will be called first to process delegated navigation actions
     /// such as `popBackStack` if no `ID` or transaction name is provided to pop to.
-    public func getPrimaryNavigationFragment() -> Fragment? {
+    public func primaryNavigationFragment() -> Fragment? {
         guard
             let global = object.callObjectMethod(name: "getPrimaryNavigationFragment", returning: .object(Fragment.className))
         else { return nil }

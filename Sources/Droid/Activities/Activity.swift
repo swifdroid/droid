@@ -184,7 +184,7 @@ open class Activity: AnyActivity {
 
     // MARK: Methods
 
-    public func getTheme() -> Resources.Theme? {
+    public func theme() -> Resources.Theme? {
         #if os(Android)
         InnerLog.t("Activity.getTheme 1")
         guard let env = JEnv.current() else {

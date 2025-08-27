@@ -44,7 +44,7 @@ final class JavaLangString: Sendable, JObjectable {
         #endif
     }
     
-    // public func getBytes() -> [UInt8] {
+    // public func bytes() -> [UInt8] {
     //     let bytesPointer = callJObjectWithMethod("getBytes", returning: .byte(array: true))
     //     guard let byteArrayElementsPointer = self.environment.pointer.pointee?.pointee.GetByteArrayElements(self.environment.pointer, bytesPointer, nil) else { return [] }
     //     guard let _arrayLength = self.environment.pointer.pointee?.pointee.GetArrayLength(self.environment.pointer, bytesPointer) else { return [] }
