@@ -43,7 +43,7 @@ extension FragmentTransaction {
         fragment: Fragment
     ) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -56,7 +56,7 @@ extension FragmentTransaction {
     ) -> FragmentTransaction! {
         guard
             let str = JString(from: tag),
-            let global = object.callObjectMethod(name: "add", args: fragment.signed(as: Fragment.className), str.signedAsString())
+            let global = object.callObjectMethod(name: "add", args: fragment.signed(as: Fragment.className), str.signedAsString(), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -73,7 +73,7 @@ extension FragmentTransaction {
         guard
             let str = JString(from: tag),
             let container = container.instance,
-            let global = object.callObjectMethod(name: "add", args: container.object.signed(as: ViewGroup.className), fragment.signed(as: Fragment.className), str.signedAsString())
+            let global = object.callObjectMethod(name: "add", args: container.object.signed(as: ViewGroup.className), fragment.signed(as: Fragment.className), str.signedAsString(), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -86,7 +86,7 @@ extension FragmentTransaction {
     //     args: Bundle
     // ) -> FragmentTransaction! {
     //     guard
-    //         let global = object.callObjectMethod(name: "add", args: containerViewId, fragmentClass., args.signed(as: Bundle.className))
+    //         let global = object.callObjectMethod(name: "add", args: containerViewId, fragmentClass., args.signed(as: Bundle.className), returning: .object(FragmentTransaction.className))
     //     else { return nil }
     //     return .init(global)
     // }
@@ -102,7 +102,7 @@ extension FragmentTransaction {
     ) -> FragmentTransaction! {
         guard
             let str = JString(from: tag),
-            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), str.signedAsString())
+            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), str.signedAsString(), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -117,7 +117,7 @@ extension FragmentTransaction {
         guard
             let name = JString(from: name),
             let sharedElement = sharedElement.instance,
-            let global = object.callObjectMethod(name: "addSharedElement", args: sharedElement.signed(as: View.className), name.signedAsString())
+            let global = object.callObjectMethod(name: "addSharedElement", args: sharedElement.signed(as: View.className), name.signedAsString(), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -134,7 +134,7 @@ extension FragmentTransaction {
     ) -> FragmentTransaction! {
         guard
             let name = JString(from: name),
-            let global = object.callObjectMethod(name: "addToBackStack", args: name.signedAsString())
+            let global = object.callObjectMethod(name: "addToBackStack", args: name.signedAsString(), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -147,7 +147,7 @@ extension FragmentTransaction {
         fragment: Fragment
     ) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "attach", args: fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "attach", args: fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -218,7 +218,7 @@ extension FragmentTransaction {
     /// When going into this state its view hierarchy is destroyed.
     public func detach(_ fragment: Fragment) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "detach", args: fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "detach", args: fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -229,7 +229,7 @@ extension FragmentTransaction {
     /// If `addToBackStack` has already been called, this method will throw `IllegalStateException`.
     public func disallowAddToBackStack() -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "disallowAddToBackStack")
+            let global = object.callObjectMethod(name: "disallowAddToBackStack", returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -239,7 +239,7 @@ extension FragmentTransaction {
     /// This is only relevant for fragments whose views have been added to a container, as this will cause the view to be hidden.
     public func hide(_ fragment: Fragment) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "hide", args: fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "hide", args: fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -261,7 +261,7 @@ extension FragmentTransaction {
     /// If it was added to a container, its view is also removed from that container.
     public func remove(_ fragment: Fragment) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "remove", args: fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "remove", args: fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -273,7 +273,7 @@ extension FragmentTransaction {
         fragment: Fragment
     ) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -290,7 +290,7 @@ extension FragmentTransaction {
     ) -> FragmentTransaction! {
         guard
             let tag = JString(from: tag),
-            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), tag.signedAsString())
+            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), tag.signedAsString(), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -300,7 +300,7 @@ extension FragmentTransaction {
     /// These animations will not be played when popping the back stack.
     public func setCustomAnimations(_ enter: Int32, _ exit: Int32) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit)
+            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -310,7 +310,7 @@ extension FragmentTransaction {
     /// The `popEnter` and `popExit` animations will be played for enter/exit operations specifically when popping the back stack.
     public func setCustomAnimations(_ enter: Int32, _ exit: Int32, _ popEnter: Int32, _ popExit: Int32) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, popEnter, popExit)
+            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, popEnter, popExit, returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -328,7 +328,7 @@ extension FragmentTransaction {
     /// or previously added as part of this transaction.
     public func setPrimaryNavigationFragment(_ fragment: Fragment) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "setPrimaryNavigationFragment", args: fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "setPrimaryNavigationFragment", args: fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -353,7 +353,7 @@ extension FragmentTransaction {
     /// The default is `false`.
     public func setReorderingAllowed(_ reorderingAllowed: Bool) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "setReorderingAllowed", args: reorderingAllowed)
+            let global = object.callObjectMethod(name: "setReorderingAllowed", args: reorderingAllowed, returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -361,7 +361,7 @@ extension FragmentTransaction {
     /// Select a standard transition animation for this transaction.
     public func setTransition(_ transition: Transit) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "setTransition", args: transition.rawValue)
+            let global = object.callObjectMethod(name: "setTransition", args: transition.rawValue, returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -371,7 +371,7 @@ extension FragmentTransaction {
     /// This is only relevant for fragments whose views have been added to a container, as this will cause the view to be shown.
     public func show(_ fragment: Fragment) -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "show", args: fragment.signed(as: Fragment.className))
+            let global = object.callObjectMethod(name: "show", args: fragment.signed(as: Fragment.className), returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }

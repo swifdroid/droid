@@ -63,7 +63,9 @@ open class InputEvent: JObjectable, @unchecked Sendable {
 
     /// Gets the device that this event came from.
     public func getDevice() -> InputDevice? {
-        guard let global = object.callObjectMethod(name: "getDevice") else { return nil }
+        guard
+            let global = object.callObjectMethod(name: "getDevice", returning: .object(InputDevice.className))
+        else { return nil }
         return .init(global)
     }
 
@@ -745,12 +747,16 @@ open class DragEvent: JObjectable, @unchecked Sendable {
     ///
     /// This method only returns valid data if the event action is `ACTION_DROP`.
     public func getClipData() -> ClipData? {
-        guard let global = object.callObjectMethod(name: "getClipData") else { return nil }
+        guard
+            let global = object.callObjectMethod(name: "getClipData", returning: .object(ClipData.className))
+        else { return nil }
         return .init(global)
     }
 
     public func getClipDescription() -> ClipDescription? {
-        guard let global = object.callObjectMethod(name: "getClipDescription") else { return nil }
+        guard
+            let global = object.callObjectMethod(name: "getClipDescription", returning: .object(ClipDescription.className))
+        else { return nil }
         return .init(global)
     }
 
@@ -942,7 +948,9 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
 
     /// Gets the `KeyCharacterMap` associated with the keyboard device.
     public func getKeyCharacterMap() -> KeyCharacterMap? {
-        guard let global = object.callObjectMethod(name: "getKeyCharacterMap") else { return nil }
+        guard
+            let global = object.callObjectMethod(name: "getKeyCharacterMap", returning: .object(KeyCharacterMap.className))
+        else { return nil }
         return .init(global)
     }
 

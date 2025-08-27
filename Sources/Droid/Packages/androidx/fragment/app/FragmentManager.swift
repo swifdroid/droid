@@ -43,7 +43,7 @@ extension FragmentManager {
     /// This is because the framework takes care of saving your current fragments in the state, and if changes are made after the state is saved then they will be lost.
     public func beginTransaction() -> FragmentTransaction! {
         guard
-            let global = object.callObjectMethod(name: "beginTransaction")
+            let global = object.callObjectMethod(name: "beginTransaction", returning: .object(FragmentTransaction.className))
         else { return nil }
         return .init(global)
     }
@@ -118,7 +118,7 @@ extension FragmentManager {
     /// Recurse up the view hierarchy, looking for a FragmentManager
     public func findFragmentManager() -> FragmentManager? {
         guard
-            let global = object.callObjectMethod(name: "findFragmentManager")
+            let global = object.callObjectMethod(name: "findFragmentManager", returning: .object(FragmentManager.className))
         else { return nil }
         return .init(global)
     }
@@ -138,7 +138,7 @@ extension FragmentManager {
     /// the `FragmentFactory` of the parent `FragmentManager` will be returned.
     public func getFragmentFactory() -> FragmentFactory! {
         guard
-            let global = object.callObjectMethod(name: "getFragmentFactory")
+            let global = object.callObjectMethod(name: "getFragmentFactory", returning: .object(FragmentFactory.className))
         else { return nil }
         return .init(global)
     }
@@ -152,7 +152,7 @@ extension FragmentManager {
     /// such as `popBackStack` if no `ID` or transaction name is provided to pop to.
     public func getPrimaryNavigationFragment() -> Fragment? {
         guard
-            let global = object.callObjectMethod(name: "getPrimaryNavigationFragment")
+            let global = object.callObjectMethod(name: "getPrimaryNavigationFragment", returning: .object(Fragment.className))
         else { return nil }
         return .init(global)
     }

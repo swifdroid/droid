@@ -23,7 +23,7 @@ extension FragmentFactory {
     public func instantiate(_ classLoader: JClassLoader, _ className: JClassName) -> Fragment? {
         guard
             let str = JString(from: className.path),
-            let global = object.callObjectMethod(name: "instantiate", args: classLoader.signed(as: JClassLoader.className), str.signedAsString())
+            let global = object.callObjectMethod(name: "instantiate", args: classLoader.signed(as: JClassLoader.className), str.signedAsString(), returning: .object(Fragment.className))
         else { return nil }
         return .init(global)
     }

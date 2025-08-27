@@ -39,7 +39,7 @@ public final class ShapeAppearanceModel: JObjectable, Sendable {
     /// Returns a copy of this `ShapeAppearanceModel` with the same edges and corners, but with the corner size for all corners updated.
     public func withCornerSize(_ cornerSize: Float) -> Self? {
         guard
-            let newObject = object.callObjectMethod(name: "withCornerSize", args: cornerSize)
+            let newObject = object.callObjectMethod(name: "withCornerSize", args: cornerSize, returning: .object(ShapeAppearanceModel.className))
         else { return nil }
         return .init(newObject)
     }

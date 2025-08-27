@@ -68,12 +68,12 @@ public final class Toast: JObjectable, @unchecked Sendable {
         guard
             let instance = view.setStatusAsContentView(context)
         else { return self }
-        object.callVoidMethod(name: "setView", args: instance.signed(as: .android.view))
+        object.callVoidMethod(name: "setView", args: instance.signed(as: .android.view.View))
         return self
     }
 
     public func getView() -> JObject? {
-        object.callObjectMethod(name: "getView", returning: .object(.android.view))
+        object.callObjectMethod(name: "getView", returning: .object(.android.view.View))
     }
 
     @discardableResult
