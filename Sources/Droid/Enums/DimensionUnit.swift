@@ -41,4 +41,31 @@ public enum DimensionUnit: Sendable {
         return Int32(toPixels(Float(value)))
         #endif
     }
+    
+    /// Converts a pixel value into the current dimension unit.
+    public func from(_ pixels: Float) -> Float {
+        switch self {
+        case .px:
+            return pixels
+        case .dp:
+            return pixels / DroidApp.shared.configuration.displayMetricsDensity
+        case .sp:
+            return pixels / DroidApp.shared.configuration.displayMetricsScaledDensity
+        case .pt:
+            return pixels / (DroidApp.shared.configuration.displayMetricsXdpi * (1.0 / 72))
+        case .inch:
+            return pixels / DroidApp.shared.configuration.displayMetricsXdpi
+        case .mm:
+            return pixels / (DroidApp.shared.configuration.displayMetricsXdpi * (1.0 / 25.4))
+        }
+    }
+    
+    /// Converts a pixel value into the current dimension unit.
+    public func from(_ pixels: Int32) -> Int {
+        #if canImport(Android)
+        return Int(round(from(Float(pixels))))
+        #else
+        return Int(from(Float(pixels)))
+        #endif
+    }
 }
