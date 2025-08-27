@@ -53,7 +53,7 @@
 //     /// Supported layouts:
 //     /// - AppBarLayout: Exclusive to AppBarLayout children
 //     @discardableResult
-//     public func liftOnScroll(_ value: Bool) -> Self {
+//     public func liftOnScroll(_ value: Bool = true) -> Self {
 //         if let _ = instance {
 //             // TODO:
 //         } else {

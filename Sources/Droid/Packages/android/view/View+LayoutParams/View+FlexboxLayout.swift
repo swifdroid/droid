@@ -91,7 +91,7 @@ extension View {
     /// - FlexboxLayout: Controls line wrapping behavior
     /// - GridLayout: Similar row-breaking behavior
     @discardableResult
-    public func wrapBefore(_ value: Bool) -> Self {
+    public func wrapBefore(_ value: Bool = true) -> Self {
         WrapBeforeLayoutParam(value: value).applyOrAppend(self)
     }
 

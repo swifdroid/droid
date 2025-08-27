@@ -19,7 +19,7 @@ public class Instrumentation {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/instrumentation-element#ftest)
     @discardableResult
-    public func functionalTest(_ value: Bool) -> Self {
+    public func functionalTest(_ value: Bool = true) -> Self {
         functionalTest = value
         return self
     }
@@ -35,7 +35,7 @@ public class Instrumentation {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/instrumentation-element#hprof)
     @discardableResult
-    public func handleProfiling(_ value: Bool) -> Self {
+    public func handleProfiling(_ value: Bool = true) -> Self {
         handleProfiling = value
         return self
     }

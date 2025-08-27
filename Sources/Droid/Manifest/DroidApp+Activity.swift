@@ -42,7 +42,7 @@ extension DroidApp {
 		/// Indicate that the activity can be launched as the embedded child of another activity.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#embedded)
-		public func allowEmbedded(_ value: Bool) -> Self {
+		public func allowEmbedded(_ value: Bool = true) -> Self {
 			params[.androidAllowEmbedded] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -54,7 +54,7 @@ extension DroidApp {
 		/// if it can move, and "false" if it must remain with the task where it started.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#reparent)
-		public func allowTaskReparenting(_ value: Bool) -> Self {
+		public func allowTaskReparenting(_ value: Bool = true) -> Self {
 			params[.androidAllowTaskReparenting] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -68,7 +68,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#always)
-		public func alwaysRetainTaskState(_ value: Bool) -> Self {
+		public func alwaysRetainTaskState(_ value: Bool = true) -> Self {
 			params[.androidAlwaysRetainTaskState] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -81,7 +81,7 @@ extension DroidApp {
 		/// use of **FLAG_ACTIVITY_RETAIN_IN_RECENTS**. It must be a boolean value, either "true" or "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#autoremrecents)
-		public func autoRemoveFromRecents(_ value: Bool) -> Self {
+		public func autoRemoveFromRecents(_ value: Bool = true) -> Self {
 			params[.androidAutoRemoveFromRecents] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -106,7 +106,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#clear)
-		public func clearTaskOnLaunch(_ value: Bool) -> Self {
+		public func clearTaskOnLaunch(_ value: Bool = true) -> Self {
 			params[.androidClearTaskOnLaunch] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -143,7 +143,7 @@ extension DroidApp {
 		/// Whether or not the activity is direct-boot aware; that is, whether or not it can run before the user unlocks the device.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#directBootAware)
-		public func directBootAware(_ value: Bool) -> Self {
+		public func directBootAware(_ value: Bool = true) -> Self {
 			params[.androidDirectBootAware] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -166,7 +166,7 @@ extension DroidApp {
 		/// The default value is "true".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#enabled)
-		public func enabled(_ value: Bool) -> Self {
+		public func enabled(_ value: Bool = true) -> Self {
 			params[.androidEnabled] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -177,7 +177,7 @@ extension DroidApp {
 		/// from the list of recently used applications, the overview screen.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#exclude)
-		public func excludeFromRecents(_ value: Bool) -> Self {
+		public func excludeFromRecents(_ value: Bool = true) -> Self {
 			params[.androidExcludeFromRecents] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -193,7 +193,7 @@ extension DroidApp {
 		/// This is the default value when there are no intent filters.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#exported)
-		public func exported(_ value: Bool) -> Self {
+		public func exported(_ value: Bool = true) -> Self {
 			params[.androidExported] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -208,7 +208,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#finish)
-		public func finishOnTaskLaunch(_ value: Bool) -> Self {
+		public func finishOnTaskLaunch(_ value: Bool = true) -> Self {
 			params[.androidFinishOnTaskLaunch] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -221,7 +221,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#hwaccel)
-		public func hardwareAccelerated(_ value: Bool) -> Self {
+		public func hardwareAccelerated(_ value: Bool = true) -> Self {
 			params[.androidHardwareAccelerated] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -249,7 +249,7 @@ extension DroidApp {
 		/// Sets the immersive mode setting for the current activity.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#immersive)
-		public func immersive(_ value: Bool) -> Self {
+		public func immersive(_ value: Bool = true) -> Self {
 			params[.androidImmersive] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -312,7 +312,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#multi)
-		public func multiprocess(_ value: Bool) -> Self {
+		public func multiprocess(_ value: Bool = true) -> Self {
 			params[.androidMultiprocess] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -326,7 +326,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#nohist)
-		public func noHistory(_ value: Bool) -> Self {
+		public func noHistory(_ value: Bool = true) -> Self {
 			params[.androidNoHistory] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -378,7 +378,7 @@ extension DroidApp {
 		/// Whether or not the activity relinquishes its task identifiers to an activity above it in the task stack.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#relinquish)
-		public func relinquishTaskIdentity(_ value: Bool) -> Self {
+		public func relinquishTaskIdentity(_ value: Bool = true) -> Self {
 			params[.androidRelinquishTaskIdentity] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -388,7 +388,7 @@ extension DroidApp {
 		/// Specifies whether the app supports multi-window mode.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#resizeableActivity)
-		public func resizeableActivity(_ value: Bool) -> Self {
+		public func resizeableActivity(_ value: Bool = true) -> Self {
 			params[.androidResizeableActivity] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -413,7 +413,7 @@ extension DroidApp {
 		/// to a resource or theme attribute that contains a boolean value.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#showForAllUsers)
-		public func showForAllUsers(_ value: Bool) -> Self {
+		public func showForAllUsers(_ value: Bool = true) -> Self {
 			params[.androidShowForAllUsers] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -427,7 +427,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#state)
-		public func stateNotNeeded(_ value: Bool) -> Self {
+		public func stateNotNeeded(_ value: Bool = true) -> Self {
 			params[.androidStateNotNeeded] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -437,7 +437,7 @@ extension DroidApp {
 		/// Specifies whether the activity supports Picture-in-Picture display.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#supportsPIP)
-		public func supportsPictureInPicture(_ value: Bool) -> Self {
+		public func supportsPictureInPicture(_ value: Bool = true) -> Self {
 			params[.androidSupportsPictureInPicture] = ManifestTagParamValue(value).value
 			return self
 		}

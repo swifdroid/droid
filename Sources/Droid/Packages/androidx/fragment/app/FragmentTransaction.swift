@@ -351,7 +351,7 @@ extension FragmentTransaction {
     /// `postponeEnterTransition` requires `setReorderingAllowed(true)`.
     /// 
     /// The default is `false`.
-    public func setReorderingAllowed(_ reorderingAllowed: Bool) -> FragmentTransaction! {
+    public func setReorderingAllowed(_ reorderingAllowed: Bool = true) -> FragmentTransaction! {
         guard
             let global = object.callObjectMethod(name: "setReorderingAllowed", args: reorderingAllowed, returning: .object(FragmentTransaction.className))
         else { return nil }

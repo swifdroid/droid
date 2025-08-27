@@ -30,7 +30,7 @@ extension DroidApp {
 		/// The default value is "true".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#enabled)
-		public func enabled(_ value: Bool) -> Self {
+		public func enabled(_ value: Bool = true) -> Self {
 			params[.androidEnabled] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -41,7 +41,7 @@ extension DroidApp {
 		/// The default value is "true".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#enabled)
-		public static func enabled(_ value: Bool) -> Self {
+		public static func enabled(_ value: Bool = true) -> Self {
 			Self().enabled(value)
 		}
 		
@@ -56,7 +56,7 @@ extension DroidApp {
 		/// The default value depends on whether the alias contains intent filters.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#exported)
-		public func exported(_ value: Bool) -> Self {
+		public func exported(_ value: Bool = true) -> Self {
 			params[.androidExported] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -70,7 +70,7 @@ extension DroidApp {
 		/// The default value depends on whether the alias contains intent filters.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#exported)
-		public static func exported(_ value: Bool) -> Self {
+		public static func exported(_ value: Bool = true) -> Self {
 			Self().exported(value)
 		}
 		

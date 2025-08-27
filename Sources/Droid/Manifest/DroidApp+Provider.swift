@@ -70,7 +70,7 @@ extension DroidApp {
 		/// The default value is "true".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#directBootAware)
-		public func enabled(_ value: Bool) -> Self {
+		public func enabled(_ value: Bool = true) -> Self {
 			params[.androidEnabled] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -80,7 +80,7 @@ extension DroidApp {
 		/// The default value is "true".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#directBootAware)
-		public static func enabled(_ value: Bool) -> Self {
+		public static func enabled(_ value: Bool = true) -> Self {
 			Self().enabled(value)
 		}
 		
@@ -91,7 +91,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#enabled)
-		public func directBootAware(_ value: Bool) -> Self {
+		public func directBootAware(_ value: Bool = true) -> Self {
 			params[.androidDirectBootAware] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -101,7 +101,7 @@ extension DroidApp {
 		/// The default value is "false".
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#enabled)
-		public static func directBootAware(_ value: Bool) -> Self {
+		public static func directBootAware(_ value: Bool = true) -> Self {
 			Self().directBootAware(value)
 		}
 		
@@ -118,7 +118,7 @@ extension DroidApp {
 		/// that have been temporarily granted access to the provider through the android:grantUriPermissions element, have access to it.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#exported)
-		public func exported(_ value: Bool) -> Self {
+		public func exported(_ value: Bool = true) -> Self {
 			params[.androidExported] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -134,7 +134,7 @@ extension DroidApp {
 		/// that have been temporarily granted access to the provider through the android:grantUriPermissions element, have access to it.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#exported)
-		public static func exported(_ value: Bool) -> Self {
+		public static func exported(_ value: Bool = true) -> Self {
 			Self().exported(value)
 		}
 		
@@ -146,7 +146,7 @@ extension DroidApp {
 		/// and exported attributes — "true" if permission can be granted, and "false" if not.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#gprmsn)
-		public func grantUriPermissions(_ value: Bool) -> Self {
+		public func grantUriPermissions(_ value: Bool = true) -> Self {
 			params[.androidGrantUriPermissions] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -157,7 +157,7 @@ extension DroidApp {
 		/// and exported attributes — "true" if permission can be granted, and "false" if not.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#gprmsn)
-		public static func grantUriPermissions(_ value: Bool) -> Self {
+		public static func grantUriPermissions(_ value: Bool = true) -> Self {
 			Self().grantUriPermissions(value)
 		}
 		
@@ -230,7 +230,7 @@ extension DroidApp {
 		/// The default value is false.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#multi)
-		public func multiprocess(_ value: Bool) -> Self {
+		public func multiprocess(_ value: Bool = true) -> Self {
 			params[.androidMultiprocess] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -245,7 +245,7 @@ extension DroidApp {
 		/// The default value is false.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#multi)
-		public static func multiprocess(_ value: Bool) -> Self {
+		public static func multiprocess(_ value: Bool = true) -> Self {
 			Self().multiprocess(value)
 		}
 		
@@ -335,7 +335,7 @@ extension DroidApp {
 		/// with data on a server — "true" if it is to be synchronized, and "false" if not.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#sync)
-		public func syncable(_ value: Bool) -> Self {
+		public func syncable(_ value: Bool = true) -> Self {
 			params[.androidSyncable] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -344,7 +344,7 @@ extension DroidApp {
 		/// with data on a server — "true" if it is to be synchronized, and "false" if not.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/provider-element#sync)
-		public static func syncable(_ value: Bool) -> Self {
+		public static func syncable(_ value: Bool = true) -> Self {
 			Self().syncable(value)
 		}
 		

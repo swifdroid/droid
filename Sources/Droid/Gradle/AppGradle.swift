@@ -695,12 +695,12 @@ extension AppGradle {
             
             var viewBinding: Bool?
             
-            public func viewBinding(_ value: Bool) -> Self {
+            public func viewBinding(_ value: Bool = true) -> Self {
                 viewBinding = value
                 return self
             }
             
-            public static func viewBinding(_ value: Bool) -> Self {
+            public static func viewBinding(_ value: Bool = true) -> Self {
                 Self().viewBinding(value)
             }
             

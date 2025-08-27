@@ -286,7 +286,7 @@ struct EnsureMinTouchTargetSizeProperty: ViewPropertyToApply {
 extension FloatingActionButton {
     /// Sets whether this FloatingActionButton should expand its bounds (if needed) to meet the minimum touch target size.
     @discardableResult
-    public func ensureMinTouchTargetSize(_ value: Bool) -> Self {
+    public func ensureMinTouchTargetSize(_ value: Bool = true) -> Self {
         EnsureMinTouchTargetSizeProperty(value: value).applyOrAppend(nil, self)
     }
 }
@@ -303,7 +303,7 @@ struct ExpandedProperty: ViewPropertyToApply {
 extension FloatingActionButton {
     /// Sets the expanded state on this widget.
     @discardableResult
-    public func expanded(_ value: Bool) -> Self {
+    public func expanded(_ value: Bool = true) -> Self {
         ExpandedProperty(value: value).applyOrAppend(nil, self)
     }
 }
@@ -502,7 +502,7 @@ extension FloatingActionButton {
     /// Set whether FloatingActionButton should add inner padding
     /// on platforms Lollipop and after, to ensure consistent dimensions on all platforms.
     @discardableResult
-    public func useCompatPadding(_ value: Bool) -> Self {
+    public func useCompatPadding(_ value: Bool = true) -> Self {
         UseCompatPaddingProperty(value: value).applyOrAppend(nil, self)
     }
 }

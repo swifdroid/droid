@@ -84,7 +84,7 @@ extension FragmentManager {
     /// Control whether the framework's internal fragment manager debugging logs are turned on.
     ///
     /// If enabled, you will see output in logcat as the framework performs fragment operations.
-    public func enableDebugLogging(_ enabled: Bool) {
+    public func enableDebugLogging(_ enabled: Bool = true) {
         object.callVoidMethod(name: "enableDebugLogging", args: enabled)
     }
 
@@ -93,7 +93,7 @@ extension FragmentManager {
     /// 
     /// This should only be changed before any fragment transactions are done
     /// (i.e., in your Application class or prior to `super.onCreate()` in every activity).
-    public func enablePredictiveBack(_ enabled: Bool) {
+    public func enablePredictiveBack(_ enabled: Bool = true) {
         object.callVoidMethod(name: "enablePredictiveBack", args: enabled)
     }
 

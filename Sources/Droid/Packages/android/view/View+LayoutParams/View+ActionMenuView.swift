@@ -10,7 +10,7 @@ extension View {
     /// Supported layouts:
     /// - ActionMenuView: Exclusive to `ActionMenuView` for overflow menu handling.
     @discardableResult
-    public func isOverflow(_ value: Bool) -> Self {
+    public func isOverflow(_ value: Bool = true) -> Self {
         IsOverflowButtonLayoutParam(value: value).applyOrAppend(self)
     }
 
@@ -32,7 +32,7 @@ extension View {
 
     /// Enables or disables extra pixels behavior for the view in an `ActionMenuView`.
     @discardableResult
-    public func extraPixels(_ value: Bool) -> Self {
+    public func extraPixels(_ value: Bool = true) -> Self {
         ExtraPixelsLayoutParam(value: value).applyOrAppend(self)
     }
 
@@ -48,7 +48,7 @@ extension View {
     /// - SlidingPaneLayout: Allows expandable/collapsible pane behavior.
     /// - DrawerLayout: Supports expandable/collapsible drawer views.
     @discardableResult
-    public func expandable(_ value: Bool) -> Self {
+    public func expandable(_ value: Bool = true) -> Self {
         ExpandableLayoutParam(value: value).applyOrAppend(self)
     }
 }

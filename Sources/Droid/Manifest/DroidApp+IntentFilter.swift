@@ -104,7 +104,7 @@ extension DroidApp {
 		/// The default value is false.
 		///
 		/// [Learn more](https://developer.android.com/training/app-links/verify-site-associations)
-		public func autoVerify(_ value: Bool) -> Self {
+		public func autoVerify(_ value: Bool = true) -> Self {
 			params[.androidAutoVerify] = ManifestTagParamValue(value).value
 			return self
 		}
@@ -115,7 +115,7 @@ extension DroidApp {
 		/// The default value is false.
 		///
 		/// [Learn more](https://developer.android.com/training/app-links/verify-site-associations)
-		public static func autoVerify(_ value: Bool) -> Self {
+		public static func autoVerify(_ value: Bool = true) -> Self {
 			Self().autoVerify(value)
 		}
 		

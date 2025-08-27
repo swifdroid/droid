@@ -19,7 +19,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#reparent)
     @discardableResult
-    public func allowTaskReparenting(_ value: Bool) -> Self {
+    public func allowTaskReparenting(_ value: Bool = true) -> Self {
         allowTaskReparenting = value
         return self
     }
@@ -34,7 +34,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#allowbackup)
     @discardableResult
-    public func allowBackup(_ value: Bool) -> Self {
+    public func allowBackup(_ value: Bool = true) -> Self {
         allowBackup = value
         return self
     }
@@ -48,7 +48,7 @@ public class Application {
     ///
     /// [Learn more](___)
     @discardableResult
-    public func allowClearUserData(_ value: Bool) -> Self {
+    public func allowClearUserData(_ value: Bool = true) -> Self {
         allowClearUserData = value
         return self
     }
@@ -61,7 +61,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#allowNativeHeapPointerTagging)
     @discardableResult
-    public func allowNativeHeapPointerTagging(_ value: Bool) -> Self {
+    public func allowNativeHeapPointerTagging(_ value: Bool = true) -> Self {
         allowNativeHeapPointerTagging = value
         return self
     }
@@ -83,7 +83,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#backupInForeground)
     @discardableResult
-    public func backupInForeground(_ value: Bool) -> Self {
+    public func backupInForeground(_ value: Bool = true) -> Self {
         backupInForeground = value
         return self
     }
@@ -107,7 +107,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#debug)
     @discardableResult
-    public func debuggable(_ value: Bool) -> Self {
+    public func debuggable(_ value: Bool = true) -> Self {
         debuggable = value
         return self
     }
@@ -127,7 +127,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#enabled)
     @discardableResult
-    public func enabled(_ value: Bool) -> Self {
+    public func enabled(_ value: Bool = true) -> Self {
         enabled = value
         return self
     }
@@ -138,7 +138,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#extractNativeLibs)
     @discardableResult
-    public func extractNativeLibs(_ value: Bool) -> Self {
+    public func extractNativeLibs(_ value: Bool = true) -> Self {
         extractNativeLibs = value
         return self
     }
@@ -160,7 +160,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#fullBackupOnly)
     @discardableResult
-    public func fullBackupOnly(_ value: Bool) -> Self {
+    public func fullBackupOnly(_ value: Bool = true) -> Self {
         fullBackupOnly = value
         return self
     }
@@ -191,7 +191,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#code)
     @discardableResult
-    public func hasCode(_ value: Bool) -> Self {
+    public func hasCode(_ value: Bool = true) -> Self {
         hasCode = value
         return self
     }
@@ -204,7 +204,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#fragileuserdata)
     @discardableResult
-    public func hasFragileUserData(_ value: Bool) -> Self {
+    public func hasFragileUserData(_ value: Bool = true) -> Self {
         hasFragileUserData = value
         return self
     }
@@ -216,7 +216,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#hwaccel)
     @discardableResult
-    public func hardwareAccelerated(_ value: Bool) -> Self {
+    public func hardwareAccelerated(_ value: Bool = true) -> Self {
         hardwareAccelerated = value
         return self
     }
@@ -236,7 +236,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#isGame)
     @discardableResult
-    public func isGame(_ value: Bool) -> Self {
+    public func isGame(_ value: Bool = true) -> Self {
         isGame = value
         return self
     }
@@ -247,7 +247,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#killrst)
     @discardableResult
-    public func killAfterRestore(_ value: Bool) -> Self {
+    public func killAfterRestore(_ value: Bool = true) -> Self {
         killAfterRestore = value
         return self
     }
@@ -258,7 +258,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#largeHeap)
     @discardableResult
-    public func largeHeap(_ value: Bool) -> Self {
+    public func largeHeap(_ value: Bool = true) -> Self {
         largeHeap = value
         return self
     }
@@ -333,7 +333,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#persistent)
     @discardableResult
-    public func persistent(_ value: Bool) -> Self {
+    public func persistent(_ value: Bool = true) -> Self {
         persistent = value
         return self
     }
@@ -357,7 +357,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#restoreany)
     @discardableResult
-    public func restoreAnyVersion(_ value: Bool) -> Self {
+    public func restoreAnyVersion(_ value: Bool = true) -> Self {
         restoreAnyVersion = value
         return self
     }
@@ -368,7 +368,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#requestLegacyExternalStorage)
     @discardableResult
-    public func requestLegacyExternalStorage(_ value: Bool) -> Self {
+    public func requestLegacyExternalStorage(_ value: Bool = true) -> Self {
         requestLegacyExternalStorage = value
         return self
     }
@@ -390,7 +390,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#resizeableActivity)
     @discardableResult
-    public func resizeableActivity(_ value: Bool) -> Self {
+    public func resizeableActivity(_ value: Bool = true) -> Self {
         resizeableActivity = value
         return self
     }
@@ -412,7 +412,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#supportsrtl)
     @discardableResult
-    public func supportsRtl(_ value: Bool) -> Self {
+    public func supportsRtl(_ value: Bool = true) -> Self {
         supportsRtl = value
         return self
     }
@@ -434,7 +434,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#testOnly)
     @discardableResult
-    public func testOnly(_ value: Bool) -> Self {
+    public func testOnly(_ value: Bool = true) -> Self {
         testOnly = value
         return self
     }
@@ -469,7 +469,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#usesCleartextTraffic)
     @discardableResult
-    public func usesCleartextTraffic(_ value: Bool) -> Self {
+    public func usesCleartextTraffic(_ value: Bool = true) -> Self {
         usesCleartextTraffic = value
         return self
     }
@@ -482,7 +482,7 @@ public class Application {
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#vmSafeMode)
     @discardableResult
-    public func vmSafeMode(_ value: Bool) -> Self {
+    public func vmSafeMode(_ value: Bool = true) -> Self {
         vmSafeMode = value
         return self
     }
