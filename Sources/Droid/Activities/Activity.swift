@@ -216,6 +216,14 @@ open class Activity: AnyActivity {
     }
 }
 
+extension Activity {
+    public func findViewById(_ id: Int32) -> View? {
+        guard
+            let global = _context.object.callObjectMethod(name: "findViewById", args: id, returning: .object(.android.view.View))
+        else { return nil }
+        return .init(id: Int32.nextViewId(), global, context)
+    }
+}
 public final class Intent: JObjectable, @unchecked Sendable {
     /// JNI Object
     public let object: JObject
