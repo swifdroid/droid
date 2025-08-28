@@ -92,6 +92,10 @@ open class Activity: AnyActivity {
         #endif
     }
 
+    public init (_ object: JObject) {
+        _context = .init(object: object)
+    }
+
     public func attach(to context: JObject) {
         _context = ActivityContext(object: context)
         onCreate(self.context)
