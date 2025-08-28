@@ -224,7 +224,11 @@ extension Activity {
         return .init(id: Int32.nextViewId(), global, context)
     }
 }
+
+/// [Learn more](https://developer.android.com/reference/android/content/Intent.html)
 public final class Intent: JObjectable, @unchecked Sendable {
+    public class var className: JClassName { .init(stringLiteral: "android/content/Intent") }
+
     /// JNI Object
     public let object: JObject
     
