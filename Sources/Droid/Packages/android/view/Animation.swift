@@ -796,3 +796,84 @@ extension Animator {
         object.callVoidMethod(name: "start")
     }
 }
+
+/// This class plays a set of Animator objects in the specified order.
+/// 
+/// Animations can be set up to play together, in sequence, or after a specified delay.
+///
+/// There are two different approaches to adding animations to a AnimatorSet:
+/// either the playTogether() or playSequentially() methods can be called to add a set of animations all at once,
+/// or the AnimatorSet.play(Animator) can be used in conjunction with methods in the Builder class to add animations one by one.
+///
+/// It is possible to set up a AnimatorSet with circular dependencies between its animations.
+/// 
+/// For example, an animation a1 could be set up to start before animation a2, a2 before a3, and a3 before a1.
+/// 
+/// The results of this configuration are undefined, but will typically result in none of the affected animations being played.
+/// 
+/// Because of this (and because circular dependencies do not make logical sense anyway), circular dependencies should be avoided,
+/// and the dependency flow of animations should only be in one direction.
+public final class AnimatorSet: Animator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/AnimatorSet" }
+}
+
+extension AnimatorSet {
+    // TODO: getChildAnimations
+
+    /// Returns the milliseconds elapsed since the start of the animation.
+    ///
+    /// For ongoing animations, this method returns the current progress of the animation in terms of play time.
+    /// 
+    /// For an animation that has not yet been started: if the animation has been seeked to a certain time
+    /// via setCurrentPlayTime(long), the seeked play time will be returned; otherwise, this method will return 0.
+    public func currentPlayTime() -> Int {
+        Int(object.callLongMethod(name: "getCurrentPlayTime") ?? 0)
+    }
+
+    /// This method creates a Builder object, which is used to set up playing constraints.
+    /// 
+    /// This initial play() method tells the Builder the animation that is the dependency for the succeeding commands to the Builder.
+    /// For example, calling play(a1).with(a2) sets up the AnimatorSet to play a1 and a2 at the same time, play(a1).before(a2) sets up
+    /// the AnimatorSet to play a1 first, followed by a2, and play(a1).after(a2) sets up the AnimatorSet to play a2 first, followed by a1.
+    /// 
+    /// Note that play() is the only way to tell the Builder the animation upon which the dependency is created,
+    /// so successive calls to the various functions in Builder will all refer to the initial parameter supplied in play() as the dependency of the other animations.
+    /// 
+    /// For example, calling play(a1).before(a2).before(a3) will play both a2 and a3 when a1 ends; it does not set up a dependency between a2 and a3.
+    public func play() {
+        object.callVoidMethod(name: "play")
+    }
+
+    // TODO: playSequentially
+    // TODO: playTogether
+
+    /// Plays the AnimatorSet in reverse.
+    /// 
+    /// If the animation has been seeked to a specific play time using setCurrentPlayTime(long),
+    /// it will play backwards from the point seeked when reverse was called.
+    /// 
+    /// Otherwise, then it will start from the end and play backwards.
+    /// 
+    /// This behavior is only set for the current animation;
+    /// future playing of the animation will use the default behavior of playing forward.
+    /// 
+    /// Note: reverse is not supported for infinite AnimatorSet.
+    public func reverse() {
+        object.callVoidMethod(name: "reverse")
+    }
+
+    /// Sets the position of the animation to the specified point in time.
+    /// 
+    /// This time should be between 0 and the total duration of the animation, including any repetition.
+    /// 
+    /// If the animation has not yet been started, then it will not advance forward after it is set to this time;
+    /// it will simply set the time to this value and perform any appropriate actions based on that time.
+    /// 
+    /// If the animation is already running, then setCurrentPlayTime() will set the current playing time to this value and continue playing from that point.
+    /// 
+    /// On Build.VERSION_CODES.UPSIDE_DOWN_CAKE and above, an AnimatorSet that hasn't been start()ed,
+    /// will issue Animator.AnimatorListener.onAnimationStart(Animator, boolean) and Animator.AnimatorListener.onAnimationEnd(Animator, boolean) events.
+    public func currentPlayTime(_ playTime: Int) {
+        object.callVoidMethod(name: "setCurrentPlayTime", args: Int64(playTime))
+    }
+}
