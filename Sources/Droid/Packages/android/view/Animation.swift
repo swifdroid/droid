@@ -2724,3 +2724,43 @@ extension Path {
 
     // TODO: transform with Matrix
 }
+
+extension Path {
+    /// Specifies how closed shapes (e.g. rects, ovals) are oriented when they are added to a path.
+    /// 
+    /// [Learn more](https://developer.android.com/reference/android/graphics/Path.Direction)
+    public final class Direction: JObjectable, Sendable {
+        public static var className: JClassName { "android/graphics/Path$Direction" }
+
+        public let object: JObject
+
+        public init (_ object: JObject) {
+            self.object = object
+        }
+
+        private static func byOrdinal(_ index: Int) -> JObject! {
+            #if os(Android)
+            guard
+                let env = JEnv.current(),
+                let clazz = JClass.load(Direction.className),
+                let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Direction.className))),
+                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
+                let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
+            else { return nil }
+            return element
+            #else
+            return nil
+            #endif
+        }
+
+        public static func clockwise() -> Direction! {
+            Direction(byOrdinal(0))
+        }
+
+        public static func counterClockwise() -> Direction! {
+            Direction(byOrdinal(1))
+        }
+
+        // TODO: implement some kind of cache for these enum values
+    }
+}
