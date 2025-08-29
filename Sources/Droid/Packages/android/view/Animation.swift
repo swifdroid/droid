@@ -1484,3 +1484,44 @@ public final class LinearInterpolator: BaseInterpolator, @unchecked Sendable {
         #endif
     }
 }
+
+/// An interpolator where the change flings forward and overshoots the last value then comes back.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/OvershootInterpolator)
+public final class OvershootInterpolator: BaseInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/OvershootInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `OvershootInterpolator` from code.
+    public init! () {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `OvershootInterpolator` from code.
+    public init! (tension: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [tension])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
