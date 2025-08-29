@@ -1122,3 +1122,31 @@ extension ObjectAnimator {
         object.callVoidMethod(name: "setPropertyName", args: str.signedAsString())
     }
 }
+
+/// This class provides a simple callback mechanism to listeners that is synchronized with all other animators in the system.
+/// 
+/// There is no duration, interpolation, or object value-setting with this Animator. Instead, it is simply started,
+/// after which it proceeds to send out events on every animation frame to its TimeListener (if set), with information about this animator,
+/// the total elapsed time, and the elapsed time since the previous animation frame.
+public final class TimeAnimator: Animator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/TimeAnimator" }
+}
+
+extension TimeAnimator {
+    /// Sets the position of the animation to the specified point in time.
+    /// 
+    /// This time should be between 0 and the total duration of the animation, including any repetition.
+    /// 
+    /// If the animation has not yet been started, then it will not advance forward after it is set to this time;
+    /// it will simply set the time to this value and perform any appropriate actions based on that time.
+    /// 
+    /// If the animation is already running, then setCurrentPlayTime() will set the current playing time to this value and continue playing from that point.
+    /// 
+    /// On Build.VERSION_CODES.UPSIDE_DOWN_CAKE and above, an AnimatorSet that hasn't been start()ed,
+    /// will issue Animator.AnimatorListener.onAnimationStart(Animator, boolean) and Animator.AnimatorListener.onAnimationEnd(Animator, boolean) events.
+    public func currentPlayTime(_ playTime: Int) {
+        object.callVoidMethod(name: "setCurrentPlayTime", args: Int64(playTime))
+    }
+
+    // TODO: setTimeListener
+}
