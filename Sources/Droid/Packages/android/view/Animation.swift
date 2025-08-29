@@ -1965,3 +1965,351 @@ extension Rect {
 
     // TODO: writeToParcel
 }
+
+/// RectF holds four float coordinates for a rectangle.
+/// 
+/// The rectangle is represented by the coordinates of its 4 edges (left, top, right, bottom).
+/// 
+/// These fields can be accessed directly.
+/// 
+/// Use width() and height() to retrieve the rectangle's width and height.
+/// 
+/// Note: most methods do not check to see that the coordinates are sorted correctly (i.e. left <= right and top <= bottom).
+/// 
+/// [Learn more](https://developer.android.com/reference/android/graphics/RectF)
+public final class RectF: JObjectable, @unchecked Sendable {
+    public static var className: JClassName { "android/graphics/RectF" }
+
+    public let object: JObject
+
+    public init (_ object: JObject) {
+        self.object = object
+    }
+
+    /// Create a new rectangle, initialized with the values in the specified rectangle (which is left unmodified).
+    public init! () {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+        else { return nil }
+        self.object = global
+        #else
+        return nil
+        #endif
+    }
+
+    /// Create a new rectangle with the specified coordinates.
+    /// 
+    /// Note: no range checking is performed, so the caller must ensure that left <= right and top <= bottom.
+    public init! (
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        _ unit: DimensionUnit = .dp
+    ) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom)])
+        else { return nil }
+        self.object = global
+        #else
+        return nil
+        #endif
+    }
+}
+
+extension RectF {
+    public func bottom(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.floatField(name: "bottom") ?? 0)
+    }
+
+    public func left(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.floatField(name: "left") ?? 0)
+    }
+
+    public func right(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.floatField(name: "right") ?? 0)
+    }
+
+    public func top(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.floatField(name: "top") ?? 0)
+    }
+
+    /// The horizontal center of the rectangle.
+    /// 
+    /// If the computed value is fractional, this method returns the largest integer that is less than the computed value.
+    public func centerX(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.callFloatMethod(name: "centerX") ?? 0)
+    }
+
+    /// The vertical center of the rectangle.
+    /// 
+    /// If the computed value is fractional, this method returns the largest integer that is less than the computed value.
+    public func centerY(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.callFloatMethod(name: "centerY") ?? 0)
+    }
+
+    /// Returns true iff the 4 specified sides of a rectangle are inside or equal to this rectangle.
+    /// 
+    /// i.e. is this rectangle a superset of the specified rectangle. An empty rectangle never contains another rectangle.
+    public func contains(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        _ unit: DimensionUnit = .dp
+    ) -> Bool {
+        object.callBoolMethod(name: "contains", args: unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom)) ?? false
+    }
+
+    /// Returns true iff the specified rectangle r is inside or equal to this rectangle.
+    /// 
+    /// An empty rectangle never contains another rectangle.
+    public func contains(_ r: RectF) -> Bool {
+        object.callBoolMethod(name: "contains", args: r.signed(as: RectF.className)) ?? false
+    }
+
+    /// Returns true if (x,y) is inside the rectangle.
+    /// 
+    /// The left and top are considered to be inside, while the right and bottom are not.
+    /// 
+    /// This means that for a x,y to be contained: left <= x < right and top <= y < bottom.
+    /// 
+    /// An empty rectangle never contains any point.
+    public func contains(
+        x: Float,
+        y: Float,
+        _ unit: DimensionUnit = .dp
+    ) -> Bool {
+        object.callBoolMethod(name: "contains", args: unit.toPixels(x), unit.toPixels(y)) ?? false
+    }
+
+    /// Parcelable interface methods
+    public func describeContents() -> Int {
+        Int(object.callIntMethod(name: "describeContents") ?? 0)
+    }
+
+    // TODO: equals?
+
+    /// The exact horizontal center of the rectangle as a float.
+    public func exactCenterX(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.callFloatMethod(name: "exactCenterX") ?? 0)
+    }
+
+    /// Returns a hash code value for the object.
+    /// 
+    /// This method is supported for the benefit of hash tables such as those provided by HashMap.
+    public func hashCode() -> Int {
+        Int(object.callIntMethod(name: "hashCode") ?? 0)
+    }
+
+    /// The rectangle's height.
+    /// 
+    /// This does not check for a valid rectangle (i.e. top <= bottom) so the result may be negative.
+    public func height(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.callFloatMethod(name: "height") ?? 0)
+    }
+
+    /// Inset the rectangle by `(dx,dy)`.
+    /// 
+    /// If dx is positive, then the sides are moved inwards, making the rectangle narrower.
+    /// 
+    /// If dx is negative, then the sides are moved outwards, making the rectangle wider.
+    /// 
+    /// The same holds `true` for `dy` and the top and bottom.
+    public func inset(
+        dx: Float,
+        dy: Float,
+        _ unit: DimensionUnit = .dp
+    ) {
+        object.callVoidMethod(name: "inset", args: unit.toPixels(dx), unit.toPixels(dy))
+    }
+
+    /// If the rectangle specified by left,top,right,bottom intersects this rectangle,
+    /// return true and set this rectangle to that intersection,
+    /// otherwise return false and do not change this rectangle. No check is performed to see if either rectangle is empty.
+    ///
+    /// Note: To just test for intersection, use: `intersects()`
+    public func intersect(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        _ unit: DimensionUnit = .dp
+    ) -> Bool {
+        object.callBoolMethod(name: "intersect", args: unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom)) ?? false
+    }
+
+    /// If the specified rectangle intersects this rectangle,
+    /// return true and set this rectangle to that intersection,
+    /// otherwise return false and do not change this rectangle.
+    /// 
+    /// No check is performed to see if either rectangle is empty.
+    /// 
+    /// To just test for intersection, use `intersects()`
+    public func intersect(_ r: RectF) -> Bool {
+        object.callBoolMethod(name: "intersect", args: r.signed(as: RectF.className)) ?? false
+    }
+
+    /// Returns true if this rectangle intersects the specified rectangle.
+    /// 
+    /// In no event is this rectangle modified.
+    /// 
+    /// No check is performed to see if either rectangle is empty.
+    /// 
+    /// To record the intersection, use `intersect()` or `setIntersect()`.
+    public func intersects(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        _ unit: DimensionUnit = .dp
+    ) -> Bool {
+        object.callBoolMethod(name: "intersects", args: unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom)) ?? false
+    }
+
+    /// Returns true iff the two specified rectangles intersect.
+    /// 
+    /// In no event is this rectangle modified.
+    /// 
+    /// No check is performed to see if either rectangle is empty.
+    /// 
+    /// To record the intersection, use `intersect()` or `setIntersect()`.
+    // public static func intersect(_ a: Rect, _ b: Rect) -> Bool { // TODO: make static
+    //     object.callBoolMethod(name: "intersect", args: a.signed(as: Rect.className), b.signed(as: Rect.className)) ?? false
+    // }
+
+    /// Returns true if the rectangle is empty (left >= right or top >= bottom)
+    public func isEmpty() -> Bool {
+        object.callBoolMethod(name: "isEmpty") ?? false
+    }
+
+    /// Offset the rectangle by adding dx to its left and right coordinates,
+    /// and adding dy to its top and bottom coordinates.
+    public func offset(
+        dx: Float,
+        dy: Float,
+        _ unit: DimensionUnit = .dp
+    ) {
+        object.callVoidMethod(name: "offset", args: unit.toPixels(dx), unit.toPixels(dy))
+    }
+
+    /// Offset the rectangle to a specific (left, top) position,
+    /// keeping its width and height the same.
+    public func offsetTo(
+        newLeft: Float,
+        newTop: Float,
+        _ unit: DimensionUnit = .dp
+    ) {
+        object.callVoidMethod(name: "offsetTo", args: unit.toPixels(newLeft), unit.toPixels(newTop))
+    }
+
+    // TODO: readFromParcel
+
+    /// Set the dst integer Rect by rounding "out" this rectangle,
+    /// choosing the floor of top and left, and the ceiling of right and bottom.
+    public func round(_ dst: Rect) {
+        object.callVoidMethod(name: "round", args: dst.signed(as: Rect.className))
+    }
+
+    /// Set the rectangle's coordinates to the specified values.
+    /// 
+    // Note: no range checking is performed, so it is up to the caller to ensure that left <= right and top <= bottom.
+    public func set(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        _ unit: DimensionUnit = .dp
+    ) {
+        object.callVoidMethod(name: "set", args: unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom))
+    }
+
+    /// Copy the coordinates from src into this rectangle.
+    public func set(_ src: Rect) {
+        object.callVoidMethod(name: "set", args: src.signed(as: Rect.className))
+    }
+
+    /// Copy the coordinates from src into this rectangle.
+    public func set(_ src: RectF) {
+        object.callVoidMethod(name: "set", args: src.signed(as: RectF.className))
+    }
+
+    /// Set the rectangle to (0,0,0,0)
+    public func setEmpty() {
+        object.callVoidMethod(name: "setEmpty")
+    }
+
+    /// If rectangles a and b intersect, return true and set this rectangle to that intersection,
+    /// otherwise return false and do not change this rectangle.
+    /// 
+    /// No check is performed to see if either rectangle is empty.
+    /// 
+    /// To just test for intersection, use `intersects()`
+    public func setIntersect(_ a: RectF, _ b: RectF) -> Bool {
+        object.callBoolMethod(name: "setIntersect", args: a.signed(as: RectF.className), b.signed(as: RectF.className)) ?? false
+    }
+
+    /// Swap top/bottom or left/right if there are flipped (i.e. left > right and/or top > bottom).
+    /// 
+    /// This can be called if the edges are computed separately, and may have crossed over each other.
+    /// 
+    /// If the edges are already correct (i.e. left <= right and top <= bottom) then nothing is done.
+    public func sort() {
+        object.callVoidMethod(name: "sort")
+    }
+
+    // TODO: toShortString
+    // TODO: unflattenFromString
+
+    /// Update this Rect to enclose itself and the specified rectangle.
+    /// 
+    /// If the specified rectangle is empty, nothing is done.
+    /// 
+    /// If this rectangle is empty it is set to the specified rectangle.
+    public func union(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        _ unit: DimensionUnit = .dp
+    ) {
+        object.callVoidMethod(name: "union", args: unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom))
+    }
+
+    /// Update this Rect to enclose itself and the specified rectangle.
+    /// 
+    /// If the specified rectangle is empty, nothing is done.
+    /// 
+    /// If this rectangle is empty it is set to the specified rectangle.
+    public func union(_ r: RectF) {
+        object.callVoidMethod(name: "union", args: r.signed(as: RectF.className))
+    }
+
+    /// Update this Rect to enclose itself and the [x,y] coordinate.
+    /// 
+    /// There is no check to see that this rectangle is non-empty.
+    public func union(
+        x: Float,
+        y: Float,
+        _ unit: DimensionUnit = .dp
+    ) {
+        object.callVoidMethod(name: "union", args: unit.toPixels(x), unit.toPixels(y))
+    }
+
+    /// The rectangle's width.
+    /// 
+    /// This does not check for a valid rectangle (i.e. left <= right) so the result may be negative.
+    public func width(_ unit: DimensionUnit = .dp) -> Float {
+        unit.from(object.callFloatMethod(name: "width") ?? 0)
+    }
+
+    // TODO: writeToParcel
+}
