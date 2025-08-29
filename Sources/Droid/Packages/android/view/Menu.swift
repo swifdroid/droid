@@ -1,3 +1,4 @@
+//
 //  Menu.swift
 //  Droid
 //
@@ -507,6 +508,520 @@ extension SubMenu {
     public func icon(_ resId: Int32) -> SubMenu! {
         guard
             let global = object.callObjectMethod(name: "setIcon", args: resId, returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+}
+
+/// Interface for direct access to a previously created menu item.
+/// 
+/// An Item is returned by calling one of the `Menu.add(int)` methods.
+///
+/// For a feature set of specific menu types, see `Menu`.
+/// 
+/// [Learn more](https://developer.android.com/reference/android/view/MenuItem)
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+public final class MenuItem: JObjectable, Contextable, @unchecked Sendable {
+    /// The JNI class name
+    public class var className: JClassName { "android/view/MenuItem" }
+
+    public let object: JObject
+    public let context: ActivityContext
+
+    public init (_ object: JObject, _ context: Contextable) {
+        self.object = object
+        self.context = context.context
+    }
+}
+
+extension MenuItem {
+    public enum ShowAsAction: Int32 {
+        /// Always show this item as a button in an Action Bar.
+        ///
+        /// Use sparingly! If too many items are set to always show in the Action Bar it can crowd the Action Bar
+        /// and degrade the user experience on devices with smaller screens.
+        /// A good rule of thumb is to have no more than 2 items set to always show at a time.
+        case always = 2
+        /// This item's action view collapses to a normal menu item.
+        /// When expanded, the action view temporarily takes over a larger segment of its container.
+        case collapseActionView = 8
+        /// Show this item as a button in an Action Bar if the system decides there is room for it.
+        case ifRoom = 1
+        /// Never show this item as a button in an Action Bar.
+        case never = 0
+        /// When this item is in the action bar, always show it with a text label even if it also has an icon specified.
+        case withText = 4
+    }
+}
+
+extension MenuItem {
+    /// Collapse the action view associated with this menu item.
+    ///
+    /// The menu item must have an action view set, as well as the `showAsAction` flag `SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW`.
+    /// 
+    /// If a listener has been set using `setOnActionExpandListener(android.view.MenuItem.OnActionExpandListener)`
+    /// it will have its `OnActionExpandListener.onMenuItemActionCollapse(MenuItem)` method invoked.
+    /// 
+    /// The listener may return false from this method to prevent collapsing the action view.
+    public func collapseActionView() -> Bool {
+        object.callBoolMethod(name: "collapseActionView") ?? false
+    }
+
+    /// Expand the action view associated with this menu item.
+    ///
+    /// The menu item must have an action view set, as well as the `showAsAction` flag `SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW`.
+    /// 
+    /// If a listener has been set using `setOnActionExpandListener(android.view.MenuItem.OnActionExpandListener)`
+    /// it will have its `OnActionExpandListener.onMenuItemActionCollapse(MenuItem)` method invoked.
+    /// 
+    /// The listener may return false from this method to prevent collapsing the action view.
+    public func expandActionView() -> Bool {
+        object.callBoolMethod(name: "expandActionView") ?? false
+    }
+
+    /// Gets the `ActionProvider`.
+    public func actionProvider() -> ActionProvider? {
+        guard
+            let global = object.callObjectMethod(name: "getActionProvider", returning: .object(ActionProvider.className))
+        else { return nil }
+        return .init(global, context)
+    }
+
+    /// Returns the currently set action view for this menu item.
+    public func actionView() -> View? {
+        guard
+            let global = object.callObjectMethod(name: "getActionView", returning: .object(View.className))
+        else { return nil }
+        return .init(global, context)
+    }
+
+    /// Return the modifier for this menu item's alphabetic shortcut.
+    /// 
+    /// The modifier is a combination of
+    ///    - KeyEvent.META_META_ON
+    ///    - KeyEvent.META_CTRL_ON
+    ///    - KeyEvent.META_ALT_ON
+    ///    - KeyEvent.META_SHIFT_ON
+    ///    - KeyEvent.META_SYM_ON
+    ///    - KeyEvent.META_FUNCTION_ON
+    /// 
+    /// For example: `KeyEvent.META_FUNCTION_ON | KeyEvent.META_CTRL_ON`
+    public func alphabeticModifiers() -> Int { // TODO: implement as OptionSet?
+        Int(object.callIntMethod(name: "getAlphabeticModifiers") ?? 0)
+    }
+
+    /// Return the char for this menu item's alphabetic shortcut.
+    public func alphabeticShortcut() -> UInt16 {
+        object.callCharMethod(name: "getAlphabeticShortcut") ?? 0
+    }
+
+    /// Retrieve the content description associated with this menu item.
+    public func contentDescription() -> String? {
+        guard
+            let str = object.callObjectMethod(name: "getContentDescription")
+        else { return nil }
+        return JString(str).toString()
+    }
+
+    /// Return the group identifier that this menu item is part of.
+    /// 
+    /// The group identifier can not be changed after the menu is created.
+    public func groupId() -> Int {
+        Int(object.callIntMethod(name: "getGroupId") ?? 0)
+    }
+
+    /// Returns the icon for this item as a Drawable (getting it from resources if it hasn't been loaded before).
+    /// 
+    /// Note that if you call `setIconTintList(ColorStateList)` or `setIconTintMode(PorterDuff.Mode)` on this item,
+    /// and you use a custom menu presenter in your application,
+    /// you have to apply the tinting explicitly on the Drawable returned by this method.
+    public func icon() -> Drawable? {
+        guard
+            let global = object.callObjectMethod(name: "getIcon")
+        else { return nil }
+        return .init(global)
+    }
+
+    // TODO: getIconTintBlendMode implement BlendMode
+    // TODO: getIconTintList implement ColorStateList
+    // TODO: getIconTintMode implement PorterDuff.Mode
+
+    /// Return the Intent associated with this item.
+    /// 
+    /// This returns a reference to the Intent which you can change as desired to modify what the Item is holding.
+    public func intent() -> Intent? {
+        guard
+            let global = object.callObjectMethod(name: "getIntent")
+        else { return nil }
+        return .init(global)
+    }
+
+    /// Return the identifier for this menu item.
+    /// 
+    /// The identifier can not be changed after the menu is created.
+    public func itemId() -> Int {
+        Int(object.callIntMethod(name: "getItemId") ?? 0)
+    }
+
+    // TODO: getMenuInfo implement ContextMenu.ContextMenuInfo
+    
+    /// Return the modifiers for this menu item's numeric (12-key) shortcut.
+    /// 
+    /// The modifier is a combination of
+    ///    - KeyEvent.META_META_ON
+    ///    - KeyEvent.META_CTRL_ON
+    ///    - KeyEvent.META_ALT_ON
+    ///    - KeyEvent.META_SHIFT_ON
+    ///    - KeyEvent.META_SYM_ON
+    ///    - KeyEvent.META_FUNCTION_ON
+    /// 
+    /// For example: `KeyEvent.META_FUNCTION_ON | KeyEvent.META_CTRL_ON`
+    public func numericModifiers() -> Int { // TODO: implement as OptionSet?
+        Int(object.callIntMethod(name: "getNumericModifiers") ?? 0)
+    }
+
+    /// Return the char for this menu item's numeric (12-key) shortcut.
+    public func numericShortcut() -> UInt16 {
+        object.callCharMethod(name: "getNumericShortcut") ?? 0
+    }
+
+    /// Return the category and order within the category of this item.
+    /// 
+    /// This item will be shown before all items (within its category) that have order greater than this value.
+    public func order() -> Int {
+        Int(object.callIntMethod(name: "getOrder") ?? 0)
+    }
+
+    /// Get the sub-menu to be invoked when this item is selected, if it has one.
+    public func subMenu() -> SubMenu? {
+        guard
+            let global = object.callObjectMethod(name: "getSubMenu", returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Retrieve the current title of the item.
+    public func title() -> String? {
+        guard
+            let str = object.callObjectMethod(name: "getTitle")
+        else { return nil }
+        return JString(str).toString()
+    }
+
+    /// Retrieve the current condensed title of the item.
+    /// 
+    /// If a condensed title was never set, it will return the normal title.
+    public func titleCondensed() -> String? {
+        guard
+            let str = object.callObjectMethod(name: "getTitleCondensed")
+        else { return nil }
+        return JString(str).toString()
+    }
+
+    /// Retrieve the tooltip text associated with this menu item.
+    public func tooltipText() -> String? {
+        guard
+            let str = object.callObjectMethod(name: "getTooltipText")
+        else { return nil }
+        return JString(str).toString()
+    }
+
+    /// Check whether this item has an associated sub-menu.
+    /// 
+    /// I.e. it is a sub-menu of another menu.
+    public func hasSubMenu() -> Bool {
+        object.callBoolMethod(name: "hasSubMenu") ?? false
+    }
+
+    /// Returns true if this menu item's action view has been expanded.
+    public func isActionViewExpanded() -> Bool {
+        object.callBoolMethod(name: "isActionViewExpanded") ?? false
+    }
+
+    /// Return whether the item can currently display a check mark.
+    public func isCheckable() -> Bool {
+        object.callBoolMethod(name: "isCheckable") ?? false
+    }
+
+    /// Return whether the item is currently displaying a check mark.
+    public func isChecked() -> Bool {
+        object.callBoolMethod(name: "isChecked") ?? false
+    }
+
+    /// Return the enabled state of the menu item.
+    public func isEnabled() -> Bool {
+        object.callBoolMethod(name: "isEnabled") ?? false
+    }
+
+    /// Return the visibility of the menu item.
+    public func isVisible() -> Bool {
+        object.callBoolMethod(name: "isVisible") ?? false
+    }
+
+    /// Sets the `ActionProvider` responsible for creating an action view if the item is placed on the action bar.
+    /// 
+    /// The provider also provides a default action invoked if the item is placed in the overflow menu.
+    ///
+    /// Note: Setting an action provider overrides the action view set via `setActionView(int)` or `setActionView(View)`.
+    public func actionProvider(_ provider: ActionProvider) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setActionProvider", args: provider.signed(as: ActionProvider.className), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Set an action view for this menu item.
+    /// 
+    /// An action view will be displayed in place of an automatically generated menu item element in the UI when this item is shown as an action within a parent.
+    /// 
+    /// Note: Setting an action view overrides the action provider set via `setActionProvider(ActionProvider)`.
+    public func actionView(_ resId: Int32) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setActionView", args: resId, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Set an action view for this menu item.
+    /// 
+    /// An action view will be displayed in place of an automatically generated menu item element in the UI when this item is shown as an action within a parent.
+    /// 
+    /// Note: Setting an action view overrides the action provider set via `setActionProvider(ActionProvider)`.
+    public func actionView(_ view: View) -> MenuItem! {
+        guard
+            let view = view.instance,
+            let global = object.callObjectMethod(name: "setActionView", args: view.signed(as: View.className), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the alphabetic shortcut associated with this item.
+    /// 
+    /// The shortcut will be triggered when the key that generates the given character is pressed along with the corresponding modifier key.
+    /// 
+    /// The default modifier is `KeyEvent.META_CTRL_ON` in case nothing is specified.
+    /// 
+    /// Case is not significant and shortcut characters will be displayed in lower case.
+    /// 
+    /// Note that menu items with the characters '\b' or '\n' as shortcuts will get triggered by the Delete key or Carriage Return key, respectively.
+    /// 
+    /// See Menu for the menu types that support shortcuts.
+    public func alphabeticShortcut(_ alphaChar: UInt16) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the alphabetic shortcut associated with this item.
+    /// 
+    /// The shortcut will be triggered when the key that generates the given character is pressed along with the corresponding modifier key.
+    /// 
+    /// The default modifier is `KeyEvent.META_CTRL_ON` in case nothing is specified.
+    /// 
+    /// Case is not significant and shortcut characters will be displayed in lower case.
+    /// 
+    /// Note that menu items with the characters '\b' or '\n' as shortcuts will get triggered by the Delete key or Carriage Return key, respectively.
+    /// 
+    /// See Menu for the menu types that support shortcuts.
+    public func alphabeticShortcut(_ alphaChar: UInt16, alphaModifiers: Int) -> MenuItem! { // TODO: OptionSet for modifiers?
+        guard
+            let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, Int32(alphaModifiers), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Control whether this item can display a check mark.
+    /// 
+    /// Setting this does not actually display a check mark (see setChecked(boolean) for that);
+    /// 
+    /// rather, it ensures there is room in the item in which to display a check mark.
+    ///
+    /// See Menu for the menu types that support check marks.
+    public func checkable(_ value: Bool = true) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setCheckable", args: value, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Control whether this item is shown with a check mark.
+    /// 
+    /// Note that you must first have enabled checking with `setCheckable(boolean)`
+    /// or else the check mark will not appear.
+    /// 
+    /// If this item is a member of a group that contains mutually-exclusive items (set via Menu.setGroupCheckable(int, boolean, boolean), the other items in the group will be unchecked.
+    ///
+    /// See Menu for the menu types that support check marks.
+    public func checked(_ value: Bool = true) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setChecked", args: value, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the content description associated with this menu item.
+    public func contentDescription(_ value: String) -> MenuItem! {
+        guard
+            let str = JString(from: value),
+            let global = object.callObjectMethod(name: "setContentDescription", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets whether the menu item is enabled.
+    /// 
+    /// Disabling a menu item will not allow it to be invoked via its shortcut.
+    /// 
+    /// The menu item will still be visible.
+    public func enabled(_ value: Bool = true) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setEnabled", args: value, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the icon associated with this item.
+    /// 
+    /// This icon will not always be shown, so the title should be sufficient in describing this item.
+    public func icon(_ value: Drawable) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the icon associated with this item.
+    /// 
+    /// This icon will not always be shown, so the title should be sufficient in describing this item.
+    public func icon(_ resId: Int32) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setIcon", args: resId, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    // TODO: setIconTintBlendMode implement BlendMode
+    // TODO: setIconTintList implement ColorStateList
+    // TODO: setIconTintMode implement PorterDuff.Mode
+
+    /// Change the Intent associated with this item.
+    ///
+    /// By default there is no Intent associated with a menu item.
+    /// 
+    /// If you set one, and nothing else handles the item, then the default behavior will be to call `Context.startActivity(Intent)` with the given Intent.
+    ///
+    /// Note that `setIntent()` can not be used with the versions of `Menu.add` that take a `Runnable`,
+    /// because `Runnable.run` does not return a value so there is no way to tell if it handled the item.
+    /// 
+    /// In this case it is assumed that the `Runnable` always handles the item, and the intent will never be started.
+    public func intent(_ intent: Intent) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setIntent", args: intent.signed(as: Intent.className), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the numeric shortcut and modifiers associated with this item.
+    public func numericShortcut(numericChar: UInt16, numericModifiers: Int) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, Int32(numericModifiers), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the numeric shortcut associated with this item.
+    public func numericShortcut(numericChar: UInt16) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    // TODO: setOnActionExpandListener
+    // TODO: setOnMenuItemClickListener
+
+    /// Change the numeric shortcut and modifiers associated with this item.
+    public func shortcut(numericChar: UInt16, numericModifiers: Int) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setShortcut", args: numericChar, Int32(numericModifiers), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the numeric shortcut associated with this item.
+    public func shortcut(numericChar: UInt16) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setShortcut", args: numericChar, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets how this item should display in the presence of an Action Bar.
+    public func showAsAction(_ value: ShowAsAction) {
+        object.callVoidMethod(name: "setShowAsAction", args: value.rawValue)
+    }
+
+    /// Sets how this item should display in the presence of an Action Bar.
+    public func setShowAsActionFlags(_ value: ShowAsAction) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setShowAsActionFlags", args: value.rawValue, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the title associated with this item.
+    public func title(_ value: String) -> MenuItem! {
+        guard
+            let str = JString(from: value),
+            let global = object.callObjectMethod(name: "setTitle", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the title associated with this item.
+    public func title(_ resId: Int32) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setTitle", args: resId, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the condensed title associated with this item.
+    /// 
+    /// The condensed title is used in situations where the normal title may be too long to be displayed.
+    public func titleCondensed(_ value: String) -> MenuItem! {
+        guard
+            let str = JString(from: value),
+            let global = object.callObjectMethod(name: "setTitleCondensed", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the condensed title associated with this item.
+    /// 
+    /// The condensed title is used in situations where the normal title may be too long to be displayed.
+    public func titleCondensed(_ resId: Int32) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setTitleCondensed", args: resId, returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the tooltip text associated with this menu item.
+    public func tooltipText(_ value: String) -> MenuItem! {
+        guard
+            let str = JString(from: value),
+            let global = object.callObjectMethod(name: "setTooltipText", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    public func visible(_ value: Bool = true) -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "setVisible", args: value, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
