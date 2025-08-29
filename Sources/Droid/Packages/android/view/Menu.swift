@@ -313,3 +313,52 @@ extension ContextMenu {
         }
     }
 }
+
+extension AdapterView {
+    /// Extra menu information provided
+    /// to the `View.OnCreateContextMenuListener.onCreateContextMenu(ContextMenu, View, ContextMenuInfo)`
+    /// callback when a context menu is brought up for this `AdapterView`.
+    public final class AdapterContextMenuInfo: ContextMenu.ContextMenuInfo, @unchecked Sendable {
+        /// The JNI class name
+        public class override var className: JClassName { "android/widget/AdapterView$AdapterContextMenuInfo" }
+
+        public init! (
+            targetView: View,
+            potision: Int,
+            id: Int32 = .nextViewId(),
+            context: Contextable
+        ) {
+            #if os(Android)
+            guard
+                let env = JEnv.current(),
+                let targetView = targetView.instance,
+                let classLoader = context.context.getClassLoader(),
+                let clazz = classLoader.loadClass(Self.className),
+                let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(View.className), .int, .int, returning: .void)),
+                let global = env.newObject(clazz: clazz, constructor: methodId, args: [targetView.object, Int32(potision), id])
+            else { return nil }
+            super.init(global, context)
+            #else
+            return nil
+            #endif
+        }
+
+        /// The row id of the item for which the context menu is being displayed.
+        public func id() -> Int {
+            Int(object.longField(name: "id") ?? 0)
+        }
+
+        /// The position in the adapter for which the context menu is being displayed.
+        public func position() -> Int {
+            Int(object.intField(name: "position") ?? 0)
+        }
+
+        /// The child view for which the context menu is being displayed.
+        public func targetView() -> View! {
+            guard
+                let global = object.objectField(name: "targetView", .object(View.className))
+            else { return nil }
+            return .init(global, context)
+        }
+    }
+}
