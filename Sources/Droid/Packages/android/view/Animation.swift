@@ -1525,3 +1525,78 @@ public final class OvershootInterpolator: BaseInterpolator, @unchecked Sendable 
         #endif
     }
 }
+
+/// An interpolator that can traverse a `Path` that extends from Point `(0, 0)` to `(1, 1)`.
+/// 
+/// The x coordinate along the `Path` is the input value and the output is the y coordinate of the line at that point.
+/// 
+/// This means that the Path must conform to a function `y = f(x)`.
+/// 
+/// The `Path` must not have gaps in the x direction and must not loop back on itself such that there can be two points sharing the same x coordinate.
+/// 
+/// It is alright to have a disjoint line in the vertical direction:
+/// ```
+/// Path().lineTo(0.25, 0.25)
+///          .moveTo(0.25, 0.5)
+///          .lineTo(1.0, 1.0)
+/// ```
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/PathInterpolator)
+public final class PathInterpolator: BaseInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/PathInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Create an interpolator for an arbitrary `Path`.
+    /// 
+    /// The Path must begin at `(0, 0)` and end at `(1, 1)`.
+    public init! (_ path: Path) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(Path.className), returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [path.object])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Create an interpolator for a quadratic Bezier curve.
+    /// 
+    /// The end points `(0, 0)` and `(1, 1)` are assumed.
+    public init! (controlX: Float, controlY: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [controlX, controlY])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Create an interpolator for a quadratic Bezier curve.
+    /// 
+    /// The end points `(0, 0)` and `(1, 1)` are assumed.
+    public init! (controlX1: Float, controlY1: Float, controlX2: Float, controlY2: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [controlX1, controlY1, controlX2, controlY2])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
