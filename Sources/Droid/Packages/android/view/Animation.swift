@@ -1040,3 +1040,85 @@ extension ValueAnimator {
 
     // TODO: setValues
 }
+
+/// This subclass of ValueAnimator provides support for animating properties on target objects.
+/// 
+/// The constructors of this class take parameters to define the target object that will be animated
+/// as well as the name of the property that will be animated.
+/// 
+/// Appropriate set/get functions are then determined internally and the animation will call these functions as necessary to animate the property.
+public final class ObjectAnimator: Animator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/ObjectAnimator" }
+}
+
+extension ObjectAnimator {
+    /// Gets the name of the property that will be animated.
+    /// 
+    /// This name will be used to derive a setter function that will be called to set animated values.
+    /// 
+    /// For example, a property name of foo will result in a call to the function setFoo() on the target object.
+    /// 
+    /// If either valueFrom or valueTo is null, then a getter function will also be derived and called.
+    ///
+    /// If this animator was created with a Property object instead of the string name of a property,
+    /// then this method will return the name of that Property object instead.
+    /// 
+    /// If this animator was created with one or more PropertyValuesHolder objects,
+    /// then this method will return the name of that object (if there was just one)
+    /// or a comma-separated list of all of the names (if there are more than one).
+    public func propertyName() -> String! {
+        guard
+            let str = object.callObjectMethod(name: "getPropertyName", returning: .object(JString.className))
+        else { return nil }
+        return JString(str).toString()
+    }
+
+    /// The target object whose property will be animated by this animation
+    public func getTarget() -> JObject? {
+        object.callObjectMethod(name: "getTarget")
+    }
+
+    /// `autoCancel` controls whether an `ObjectAnimator` will be canceled automatically
+    /// when any other `ObjectAnimator` with the same target and properties is started.
+    /// 
+    /// Setting this flag may make it easier to run different animators on the same target object
+    /// without having to keep track of whether there are conflicting animators that need to be manually canceled.
+    /// 
+    /// Canceling animators must have the same exact set of target properties, in the same order.
+    public func autoCancel(_ value: Bool = true) {
+        object.callVoidMethod(name: "setAutoCancel", args: value)
+    }
+
+    // TODO: setFloatValues
+    // TODO: setIntValues
+    // TODO: setObjectValues
+    // TODO: setProperty
+
+    /// Sets the name of the property that will be animated.
+    /// 
+    /// This name is used to derive a setter function that will be called to set animated values.
+    /// 
+    /// For example, a property name of foo will result in a call to the function setFoo() on the target object.
+    /// 
+    /// If either valueFrom or valueTo is null, then a getter function will also be derived and called.
+    ///
+    /// 
+    /// For best performance of the mechanism that calls the setter function determined by the name of the property being animated,
+    /// use float or int typed values, and make the setter function for those properties have a void return value.
+    ///
+    /// This will cause the code to take an optimized path for these constrained circumstances.
+    /// 
+    /// Other property types and return types will work, but will have more overhead in processing the requests due to normal reflection mechanisms.
+    /// 
+    /// Note that the setter function derived from this property name must take the same parameter type as the valueFrom and valueTo properties,
+    /// otherwise the call to the setter function will fail.
+    /// 
+    /// If this ObjectAnimator has been set up to animate several properties together, using more than one PropertyValuesHolder objects,
+    /// then setting the propertyName simply sets the propertyName in the first of those PropertyValuesHolder objects.
+    public func propertyName(_ name: String) {
+        guard
+            let str = JString(from: name)
+        else { return }
+        object.callVoidMethod(name: "setPropertyName", args: str.signedAsString())
+    }
+}
