@@ -1458,3 +1458,29 @@ public final class DecelerateInterpolator: BaseInterpolator, @unchecked Sendable
         #endif
     }
 }
+
+/// An interpolator where the rate of change is constant
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/LinearInterpolator)
+public final class LinearInterpolator: BaseInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/LinearInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `LinearInterpolator` from code.
+    public init! () {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
