@@ -1175,3 +1175,16 @@ extension TimeInterpolator {
         object.callFloatMethod(name: "getInterpolation", args: input)
     }
 }
+
+/// An interpolator defines the rate of change of an animation.
+/// 
+/// This allows the basic animation effects (alpha, scale, translate, rotate) to be accelerated, decelerated, repeated, etc.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/Interpolator)
+open class Interpolator: TimeInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/Interpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+}
