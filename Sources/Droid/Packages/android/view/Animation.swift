@@ -2763,4 +2763,59 @@ extension Path {
 
         // TODO: implement some kind of cache for these enum values
     }
+
+    /// The logical operations that can be performed when combining two paths.
+    /// 
+    /// [Learn more](https://developer.android.com/reference/android/graphics/Path.Op)
+    public final class Op: JObjectable, @unchecked Sendable {
+        public static var className: JClassName { "android/graphics/Path$Op" }
+
+        public let object: JObject
+
+        public init (_ object: JObject) {
+            self.object = object
+        }
+
+        private static func byOrdinal(_ index: Int) -> JObject! {
+            #if os(Android)
+            guard
+                let env = JEnv.current(),
+                let clazz = JClass.load(Direction.className),
+                let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Direction.className))),
+                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
+                let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
+            else { return nil }
+            return element
+            #else
+            return nil
+            #endif
+        }
+
+        /// Subtract the second path from the first path
+        public static func difference() -> Op! {
+            Op(byOrdinal(0))
+        }
+
+        /// Intersection of the two paths
+        public static func intersect() -> Op! {
+            Op(byOrdinal(1))
+        }
+
+        /// Union of the two paths
+        public static func union() -> Op! {
+            Op(byOrdinal(2))
+        }
+
+        /// Exclusive OR of the two paths
+        public static func xor() -> Op! {
+            Op(byOrdinal(3))
+        }
+
+        /// Subtract the first path from the second path
+        public static func reverseDifference() -> Op! {
+            Op(byOrdinal(4))
+        }
+
+        // TODO: implement some kind of cache for these enum values
+    }
 }
