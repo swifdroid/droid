@@ -1150,3 +1150,28 @@ extension TimeAnimator {
 
     // TODO: setTimeListener
 }
+
+/// [Learn more](https://developer.android.com/reference/android/view/animation/TimeInterpolator)
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+open class TimeInterpolator: JObjectable, @unchecked Sendable {
+    open class var className: JClassName { "android/view/animation/TimeInterpolator" }
+
+    public let object: JObject
+
+    public init (_ object: JObject) {
+        self.object = object
+    }
+}
+
+extension TimeInterpolator {
+    /// Maps a value representing the elapsed fraction of an animation
+    /// to a value that represents the interpolated fraction.
+    /// 
+    /// This interpolated value is then multiplied by the change in value of an animation
+    /// to derive the animated value at the current elapsed animation time.
+    public func getInterpolation(_ input: Float) -> Float! {
+        object.callFloatMethod(name: "getInterpolation", args: input)
+    }
+}
