@@ -1389,3 +1389,31 @@ public final class BounceInterpolator: BaseInterpolator, @unchecked Sendable {
         #endif
     }
 }
+
+/// Repeats the animation for a specified number of cycles.
+/// 
+/// The rate of change follows a sinusoidal pattern.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/CycleInterpolator)
+public final class CycleInterpolator: BaseInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/CycleInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `CycleInterpolator` from code.
+    public init! (cycles: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [cycles])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
