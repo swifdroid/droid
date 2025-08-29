@@ -1199,3 +1199,29 @@ open class BaseInterpolator: Interpolator, @unchecked Sendable {
         super.init(object)
     }
 }
+
+/// An interpolator where the rate of change starts and ends slowly but accelerates through the middle.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/AccelerateDecelerateInterpolator)
+public final class AccelerateDecelerateInterpolator: BaseInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/AccelerateDecelerateInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `AccelerateDecelerateInterpolator` from code.
+    public init! () {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
