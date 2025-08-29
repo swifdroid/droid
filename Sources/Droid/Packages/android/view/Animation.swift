@@ -1307,3 +1307,59 @@ public final class AnticipateInterpolator: BaseInterpolator, @unchecked Sendable
         #endif
     }
 }
+
+/// An interpolator where the change starts backward then flings forward.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/AnticipateOvershootInterpolator)
+public final class AnticipateOvershootInterpolator: BaseInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/AnticipateOvershootInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `AnticipateOvershootInterpolator` from code.
+    public init! () {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `AnticipateOvershootInterpolator` from code.
+    public init! (tension: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [tension])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `AnticipateOvershootInterpolator` from code.
+    public init! (tension: Float, extraTension: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [tension, extraTension])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
