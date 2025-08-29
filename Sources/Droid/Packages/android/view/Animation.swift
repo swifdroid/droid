@@ -1188,3 +1188,14 @@ open class Interpolator: TimeInterpolator, @unchecked Sendable {
         super.init(object)
     }
 }
+
+/// An abstract class which is extended by default interpolators.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/BaseInterpolator)
+open class BaseInterpolator: Interpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/BaseInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+}
