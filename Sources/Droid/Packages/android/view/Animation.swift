@@ -349,3 +349,31 @@ extension Animation {
         object.callBoolMethod(name: "willChangeTransformationMatrix") ?? false
     }
 }
+
+/// An animation that controls the alpha level of an object.
+/// 
+/// Useful for fading things in and out. This animation ends up changing the alpha property of a `Transformation`.
+/// 
+/// [Learn more](https://developer.android.com/reference/android/view/animation/AlphaAnimation)
+public final class AlphaAnimation: Animation, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/AlphaAnimation" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `AlphaAnimation` from code.
+    public init! (from: Float, to: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [from, to])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
