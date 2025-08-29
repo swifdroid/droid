@@ -1225,3 +1225,44 @@ public final class AccelerateDecelerateInterpolator: BaseInterpolator, @unchecke
         #endif
     }
 }
+
+/// An interpolator where the rate of change starts out slowly and and then accelerates.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/AccelerateInterpolator)
+public final class AccelerateInterpolator: BaseInterpolator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/AccelerateInterpolator" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `AccelerateInterpolator` from code.
+    public init! () {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `AccelerateInterpolator` from code.
+    public init! (factor: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [factor])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
