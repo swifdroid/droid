@@ -539,3 +539,52 @@ public final class ScaleAnimation: Animation, @unchecked Sendable {
         #endif
     }
 }
+
+/// An animation that controls the position of an object.
+/// 
+/// See the [full package](https://developer.android.com/reference/android/view/animation/package-summary)
+/// description for details and sample code.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/TranslateAnimation)
+public final class TranslateAnimation: Animation, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/TranslateAnimation" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `TranslateAnimation` from code.
+    public init! (fromXDelta: Float, toXDelta: Float, fromYDelta: Float, toYDelta: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromXDelta, toXDelta, fromYDelta, toYDelta])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `TranslateAnimation` from code.
+    public init! (
+        fromXType: Dimension, fromXValue: Float,
+        toXType: Dimension, toXValue: Float,
+        fromYType: Dimension, fromYValue: Float,
+        toYType: Dimension, toYValue: Float
+    ) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, .float, .int, .float, .int, .float, .int, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromXType.rawValue, fromXValue, toXType.rawValue, toXValue, fromYType.rawValue, fromYValue, toYType.rawValue, toYValue])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
