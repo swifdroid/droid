@@ -588,3 +588,211 @@ public final class TranslateAnimation: Animation, @unchecked Sendable {
         #endif
     }
 }
+
+/// This is the superclass for classes which provide basic support for animations which can be started, ended, and have AnimatorListeners added to them.
+/// 
+/// [Learn more](https://developer.android.com/reference/android/view/animation/Animator)
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+open class Animator: JObjectable, @unchecked Sendable {
+    open class var className: JClassName { "android/view/animation/Animator" }
+
+    public let object: JObject
+
+    public init (_ object: JObject) {
+        self.object = object
+    }
+}
+
+extension Animator {
+    // TODO: addListener
+    // TODO: addPauseListener
+
+    /// Cancels the animation.
+    /// 
+    /// Unlike `end()` it causes the animation to stop in its tracks,
+    /// sending an `.onAnimationCancel()` to its listeners,
+    /// followed by an `.onAnimationEnd()` message.
+    /// 
+    /// This method must be called on the thread that is running the animation.
+    public func cancel() {
+        object.callVoidMethod(name: "cancel")
+    }
+
+    /// Creates and returns a copy of this object.
+    /// 
+    /// The precise meaning of "copy" may depend on the class of the object.
+    public func clone() -> Animator! {
+        guard
+            let global = object.callObjectMethod(name: "clone", returning: .object(Animator.className))
+        else { return nil }
+        return .init(global)
+    }
+
+    /// Ends the animation.
+    /// 
+    /// This causes the animation to assign the end value of the property being animated,
+    /// then calling the `.onAnimationEnd(Animator)` method on its listeners.
+    /// 
+    /// This method must be called on the thread that is running the animation.
+    public func end() {
+        object.callVoidMethod(name: "end")
+    }
+
+    /// Gets the duration of the animation.
+    public func duration() -> Int {
+        Int(object.callLongMethod(name: "getDuration") ?? 0)
+    }
+
+    /// Returns the timing interpolator that this animation uses.
+    public func interpolator() -> TimeInterpolator! {
+        guard
+            let global = object.callObjectMethod(name: "getInterpolator")
+        else { return nil }
+        return .init(global)
+    }
+
+    // TODO: getListeners
+
+    /// The amount of time, in milliseconds, to delay processing the animation after `start()` is called.
+    public func startDelay() -> Int {
+        Int(object.callLongMethod(name: "getStartDelay") ?? 0)
+    }
+
+    /// Gets the total duration of the animation, accounting for animation sequences, start delay, and repeating.
+    /// 
+    /// Return `DURATION_INFINITE` if the duration is infinite.
+    public func totalDuration() -> Int {
+        Int(object.callLongMethod(name: "getTotalDuration") ?? 0)
+    }
+
+    /// Returns whether this animator is currently in a paused state.
+    public func isPaused() -> Bool {
+        object.callBoolMethod(name: "isPaused") ?? false
+    }
+
+    /// Returns whether this Animator is currently running
+    /// (having been started and gone past any initial startDelay period and not yet ended).
+    public func isRunning() -> Bool {
+        object.callBoolMethod(name: "isRunning") ?? false
+    }
+
+    /// Returns whether this Animator has been started and not yet ended.
+    /// 
+    /// For reusable Animators (which most Animators are,
+    /// apart from the one-shot animator produced by createCircularReveal()),
+    /// this state is a superset of isRunning(), because an Animator
+    /// with a nonzero `startDelay` will return true for isStarted() during the delay phase,
+    /// whereas isRunning() will return true only after the delay phase is complete.
+    /// 
+    /// Non-reusable animators will always return true after they have been started,
+    /// because they cannot return to a non-started state.
+    public func isStarted() -> Bool {
+        object.callBoolMethod(name: "isStarted") ?? false
+    }
+
+    /// Pauses a running animation.
+    /// 
+    /// This method should only be called on the same thread on which the animation was started.
+    /// 
+    /// If the animation has not yet been started or has since ended, then the call is ignored.
+    /// 
+    /// Paused animations can be resumed by calling resume().
+    public func pause() {
+        object.callVoidMethod(name: "pause")
+    }
+
+    /// Removes all `listeners` and `pauseListeners` from this object.
+    public func removeAllListeners() {
+        object.callVoidMethod(name: "removeAllListeners")
+    }
+
+    // TODO: removeListener
+    // TODO: removePauseListener
+
+    /// Resumes a paused animation, causing the animator to pick up where it left off when it was paused.
+    /// 
+    /// This method should only be called on the same thread on which the animation was started.
+    /// 
+    /// Calls to resume() on an animator that is not currently paused will be ignored.
+    public func resume() {
+        object.callVoidMethod(name: "resume")
+    }
+
+    /// Sets the duration of the animation.
+    public func duration(_ duration: Int) -> Animator! {
+        guard
+            let global = object.callObjectMethod(name: "setDuration", args: Int32(duration), returning: .object(Animator.className))
+        else { return nil }
+        return .init(global)
+    }
+
+    /// The time interpolator used in calculating the elapsed fraction of the animation.
+    /// 
+    /// The interpolator determines whether the animation runs with linear or non-linear motion,
+    /// such as acceleration and deceleration.
+    /// 
+    /// The default value is `AccelerateDecelerateInterpolator`.
+    public func interpolator(_ interpolator: TimeInterpolator) {
+        object.callVoidMethod(name: "setInterpolator", args: interpolator.signed(as: TimeInterpolator.className))
+    }
+
+    /// The amount of time, in milliseconds, to delay processing the animation after `start()` is called.
+    public func startDelay(_ delay: Int) {
+        object.callVoidMethod(name: "setStartDelay", args: Int32(delay))
+    }
+
+    /// Sets the target object whose property will be animated by this animation.
+    /// 
+    /// Not all subclasses operate on target objects (for example, `ValueAnimator`,
+    /// but this method is on the superclass for the convenience of dealing generically
+    /// with those subclasses that do handle targets.
+    /// 
+    /// **Note:** The target is stored as a weak reference internally to avoid leaking resources
+    /// by having animators directly reference old targets.
+    /// 
+    /// Therefore, you should ensure that animator targets always have a hard reference elsewhere.
+    public func target(_ target: JObjectable) {
+        object.callVoidMethod(name: "setTarget", args: target.signed(as: "java/lang/Object"))
+    }
+
+    /// This method tells the object to use appropriate information to extract ending values for the animation.
+    /// 
+    /// For example, a `AnimatorSet` object will pass this call to its child objects to tell them to set up the values.
+    /// 
+    /// A `ObjectAnimator` object will use the information it has about its target object and PropertyValuesHolder objects to get the start values for its properties.
+    /// 
+    /// A `ValueAnimator` object will ignore the request since it does not have enough information (such as a target object) to gather these values.
+    public func setupEndValues() {
+        object.callVoidMethod(name: "setupEndValues")
+    }
+
+    /// This method tells the object to use appropriate information to extract starting values for the animation.
+    /// 
+    /// For example, a `AnimatorSet` object will pass this call to its child objects to tell them to set up the values.
+    /// 
+    /// A `ObjectAnimator` object will use the information it has about its target object and PropertyValuesHolder objects to get the start values for its properties.
+    /// 
+    /// A `ValueAnimator` object will ignore the request since it does not have enough information (such as a target object) to gather these values.
+    public func setupStartValues() {
+        object.callVoidMethod(name: "setupStartValues")
+    }
+
+    /// Starts this animation.
+    /// 
+    /// If the animation has a nonzero startDelay, the animation will start running after that delay elapses.
+    /// 
+    /// A non-delayed animation will have its initial value(s) set immediately, followed by calls to `AnimatorListener.onAnimationStart(Animator)`
+    /// for any listeners of this animator.
+    /// 
+    /// The animation started by calling this method will be run on the thread that called this method.
+    /// 
+    /// This thread should have a Looper on it (a runtime exception will be thrown if this is not the case).
+    /// 
+    /// Also, if the animation will animate properties of objects in the view hierarchy,
+    /// then the calling thread should be the UI thread for that view hierarchy.
+    public func start() {
+        object.callVoidMethod(name: "start")
+    }
+}
