@@ -290,3 +290,26 @@ extension ContextMenu {
         return .init(global, self)
     }
 }
+
+extension ContextMenu {
+/// Additional information regarding the creation of the context menu.
+/// 
+/// For example, AdapterViews use this to pass the exact item position within the adapter that initiated the context menu.
+///
+/// [Learn more](https://developer.android.com/reference/android/view/ContextMenu.ContextMenuInfo)
+#if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
+    open class ContextMenuInfo: JObjectable, Contextable, @unchecked Sendable {
+        /// The JNI class name
+        open class var className: JClassName { "android/view/ContextMenu$ContextMenuInfo" }
+
+        public let object: JObject
+        public let context: ActivityContext
+
+        public init (_ object: JObject, _ context: Contextable) {
+            self.object = object
+            self.context = context.context
+        }
+    }
+}
