@@ -413,3 +413,101 @@ extension ExpandableListView {
         }
     }
 }
+
+/// Subclass of Menu for sub menus.
+///
+/// Sub menus do not support item icons, or nested sub menus.
+/// 
+/// [Learn more](https://developer.android.com/reference/android/view/SubMenu)
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+public final class SubMenu: JObjectable, Sendable, Contextable {
+    /// The JNI class name
+    public class var className: JClassName { "android/view/SubMenu" }
+
+    public let object: JObject
+    public let context: ActivityContext
+
+    public init (_ object: JObject, _ context: Contextable) {
+        self.object = object
+        self.context = context.context
+    }
+}
+
+extension SubMenu {
+    /// Clears the header of the submenu.
+    public func clearHeader() {
+        object.callVoidMethod(name: "clearHeader")
+    }
+
+    /// Gets the MenuItem that represents this submenu in the parent menu.
+    /// 
+    /// Use this for setting additional item attributes.
+    public func item() -> MenuItem! {
+        guard
+            let global = object.callObjectMethod(name: "getItem", returning: .object(MenuItem.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the submenu header's icon to the icon given in iconRes resource id.
+    public func headerIcon(_ resId: Int32) -> SubMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the submenu header's icon to the icon given in icon `Drawable`.
+    public func headerIcon(_ value: Drawable) -> SubMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the submenu header's title to the title given in titleRes resource identifier.
+    public func headerTitle(_ resId: Int32) -> SubMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the submenu header's title to the title given in title.
+    public func headerTitle(_ value: String) -> SubMenu! {
+        guard
+            let str = JString(from: value),
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the header of the submenu to the View given in view.
+    /// 
+    /// This replaces the header title and icon (and those replace this).
+    public func headerView(_ view: View) -> SubMenu! {
+        guard
+            let view = view.instance,
+            let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the icon associated with this submenu's item in its parent menu.
+    public func icon(_ value: Drawable) -> SubMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Change the icon associated with this submenu's item in its parent menu.
+    public func icon(_ resId: Int32) -> SubMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setIcon", args: resId, returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+}
