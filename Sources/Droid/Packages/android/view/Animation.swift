@@ -432,3 +432,52 @@ extension AnimationSet {
 
     // TODO: getAnimations
 }
+
+/// An animation that controls the rotation of an object.
+/// 
+/// This rotation takes place in the X-Y plane.
+/// 
+/// You can specify the point to use for the center of the rotation, where `(0,0)` is the top left point.
+/// 
+/// If not specified, `(0,0)` is the default rotation point.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/RotateAnimation)
+public final class RotateAnimation: Animation, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/RotateAnimation" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `RotateAnimation` from code.
+    /// 
+    /// Default pivotX/pivotY point is (0,0).
+    public init! (fromDegrees: Float, toDegrees: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromDegrees, toDegrees])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `RotateAnimation` from code.
+    public init! (fromDegrees: Float, toDegrees: Float, pivotXType: Dimension, pivotX: Float, pivotYType: Dimension, pivotY: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .int, .float, .int, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromDegrees, toDegrees, pivotXType.rawValue, pivotX, pivotYType.rawValue, pivotY])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
