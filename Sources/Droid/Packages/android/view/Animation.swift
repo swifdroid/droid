@@ -377,3 +377,58 @@ public final class AlphaAnimation: Animation, @unchecked Sendable {
         #endif
     }
 }
+
+/// Represents a group of Animations that should be played together.
+/// The transformation of each individual animation are composed together into a single transform.
+/// If `AnimationSet` sets any properties that its children also set (for example, duration or `fillBefore`),
+/// the values of `AnimationSet` override the child values.
+/// 
+/// The way that `AnimationSet` inherits behavior from Animation is important to understand.
+/// Some of the Animation attributes applied to `AnimationSet` affect the `AnimationSet` itself,
+/// some are pushed down to the children, and some are ignored, as follows:
+/// 
+///    - `duration`, `repeatMode`, `fillBefore`, `fillAfter`: These properties, when set on an `AnimationSet` object,
+/// will be pushed down to all child animations.
+///    - `repeatCount`, `fillEnabled`: These properties are ignored for `AnimationSet`.
+///    - `startOffset`, `shareInterpolator`: These properties apply to the `AnimationSet` itself.
+/// 
+/// Starting with `Build.VERSION_CODES.ICE_CREAM_SANDWICH`,
+/// the behavior of these properties is the same in XML resources and at runtime
+/// (prior to that release, the values set in XML were ignored for `AnimationSet`).
+/// That is, calling `setDuration(500)` on an `AnimationSet` has the same effect
+/// as declaring `android:duration="500"` in an XML resource for an `AnimationSet` object.
+///
+/// [Lean more](https://developer.android.com/reference/android/view/animation/AnimationSet)
+public final class AnimationSet: Animation, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/AnimationSet" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `AnimationSet` from code.
+    public init! (shareInterpolator: Bool) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.boolean, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [shareInterpolator])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
+
+extension AnimationSet {
+    /// Add a child animation to this animation set.
+    /// 
+    /// The transforms of the child animations are applied in the order that they were added
+    public func addAnimation(_ value: Animation) {
+        object.callVoidMethod(name: "addAnimation", args: value.signed(as: Animation.className))
+    }
+
+    // TODO: getAnimations
+}
