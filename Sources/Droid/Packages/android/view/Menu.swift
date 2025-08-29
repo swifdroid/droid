@@ -229,3 +229,64 @@ extension Menu {
         Int(object.callIntMethod(name: "size") ?? 0)
     }
 }
+
+/// Extension of Menu for context menus providing functionality to modify the header of the context menu.
+///
+/// Context menus do not support item shortcuts and item icons.
+/// 
+/// [Learn more](https://developer.android.com/reference/android/view/ContextMenu.html)
+open class ContextMenu: Menu, @unchecked Sendable {
+    /// The JNI class name
+    open class override var className: JClassName { "android/view/ContextMenu" }
+}
+
+extension ContextMenu {
+    /// Clears the header of the context menu.
+    public func clearHeader() {
+        object.callVoidMethod(name: "clearHeader")
+    }
+
+    /// Sets the context menu header's icon to the icon given in iconRes resource id.
+    public func headerIcon(_ resId: Int32) -> ContextMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the context menu header's icon to the icon given in icon `Drawable`.
+    public func headerIcon(_ value: Drawable) -> ContextMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the context menu header's title to the title given in titleRes resource identifier.
+    public func headerTitle(_ resId: Int32) -> ContextMenu! {
+        guard
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the context menu header's title to the title given in title.
+    public func headerTitle(_ value: String) -> ContextMenu! {
+        guard
+            let str = JString(from: value),
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+
+    /// Sets the header of the context menu to the View given in view.
+    /// 
+    /// This replaces the header title and icon (and those replace this).
+    public func headerView(_ view: View) -> ContextMenu! {
+        guard
+            let view = view.instance,
+            let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returning: .object(SubMenu.className))
+        else { return nil }
+        return .init(global, self)
+    }
+}
