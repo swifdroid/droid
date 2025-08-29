@@ -2313,3 +2313,414 @@ extension RectF {
 
     // TODO: writeToParcel
 }
+
+/// The Path class encapsulates compound (multiple contour) geometric paths consisting of straight line segments,
+/// quadratic curves, and cubic curves. It can be drawn with `canvas.drawPath(path, paint)`,
+/// either filled or stroked (based on the paint's Style), or it can be used for clipping or to draw text on a path.
+///
+/// [Learn more](https://developer.android.com/reference/android/graphics/Path)
+public final class Path: JObjectable, @unchecked Sendable {
+    public static var className: JClassName { "android/graphics/Path" }
+
+    public let object: JObject
+
+    public init (_ object: JObject) {
+        self.object = object
+    }
+
+    public init! () {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+        else { return nil }
+        self.object = global
+        #else
+        return nil
+        #endif
+    }
+
+    public init! (_ src: Path) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(Path.className), returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [src.object])
+        else { return nil }
+        self.object = global
+        #else
+        return nil
+        #endif
+    }
+}
+
+extension Path {
+    /// Add the specified arc to the path as a new contour.
+    public func addArc(oval: RectF, startAngle: Float, sweepAngle: Float) {
+        object.callVoidMethod(name: "addArc", args: oval.signed(as: RectF.className), startAngle, sweepAngle)
+    }
+
+    /// Add the specified arc to the path as a new contour.
+    public func addArc(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        startAngle: Float,
+        sweepAngle: Float
+    ) {
+        object.callVoidMethod(name: "addArc", args: left, top, right, bottom, startAngle, sweepAngle)
+    }
+
+    /// Add a closed circle contour to the path
+    public func addCircle(x: Float, y: Float, radius: Float, direction: Direction) {
+        object.callVoidMethod(name: "addCircle", args: x, y, radius, direction.signed(as: Direction.className))
+    }
+
+    /// Add a closed oval contour to the path
+    public func addOval(oval: RectF, direction: Direction) {
+        object.callVoidMethod(name: "addOval", args: oval.signed(as: RectF.className), direction.signed(as: Direction.className))
+    }
+
+    /// Add a closed oval contour to the path
+    public func addOval(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        direction: Direction
+    ) {
+        object.callVoidMethod(name: "addOval", args: left, top, right, bottom, direction.signed(as: Direction.className))
+    }
+
+    // TODO: addPath with Matrix
+
+    /// Add a copy of src to the path
+    public func addPath(_ src: Path) {
+        object.callVoidMethod(name: "addPath", args: src.signed(as: Path.className))
+    }
+
+    /// Add a copy of src to the path, offset by (dx,dy)
+    public func addPath(_ src: Path, dx: Float, dy: Float) {
+        object.callVoidMethod(name: "addPath", args: src.signed(as: Path.className), dx, dy)
+    }
+
+    /// Add a closed rectangle contour to the path
+    public func addRect(_ rect: RectF, direction: Direction) {
+        object.callVoidMethod(name: "addRect", args: rect.signed(as: RectF.className), direction.signed(as: Direction.className))
+    }
+
+    /// Add a closed rectangle contour to the path
+    public func addRect(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        direction: Direction
+    ) {
+        object.callVoidMethod(name: "addRect", args: left, top, right, bottom, direction.signed(as: Direction.className))
+    }
+
+    /// Add a closed round-rectangle contour to the path
+    public func addaddRoundRectRect(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        rx: Float,
+        ry: Float,
+        direction: Direction
+    ) {
+        object.callVoidMethod(name: "addRoundRect", args: left, top, right, bottom, rx, ry, direction.signed(as: Direction.className))
+    }
+
+    // TODO: addRoundRect with float[] radii
+
+    /// Add a closed round-rectangle contour to the path
+    public func addRoundRect(_ rect: RectF, rx: Float, ry: Float, direction: Direction) {
+        object.callVoidMethod(name: "addRoundRect", args: rect.signed(as: RectF.className), rx, ry, direction.signed(as: Direction.className))
+    }
+
+    // TODO: addRoundRect with float[] radii
+    // TODO: approximate
+
+    /// Append the specified arc to the path as a new contour.
+    /// 
+    /// If the start of the path is different from the path's current last point,
+    /// then an automatic `lineTo()` is added to connect the current contour to the start of the arc.
+    /// 
+    /// However, if the path is empty, then we call `moveTo()` with the first point of the arc.
+    public func arcTo(
+        oval: RectF,
+        startAngle: Float,
+        sweepAngle: Float,
+        forceMoveTo: Bool
+    ) {
+        object.callVoidMethod(name: "arcTo", args: oval.signed(as: RectF.className), startAngle, sweepAngle, forceMoveTo)
+    }
+
+    /// Append the specified arc to the path as a new contour.
+    /// 
+    /// If the start of the path is different from the path's current last point,
+    /// then an automatic `lineTo()` is added to connect the current contour to the start of the arc.
+    /// 
+    /// However, if the path is empty, then we call `moveTo()` with the first point of the arc.
+    public func arcTo(
+        left: Float,
+        top: Float,
+        right: Float,
+        bottom: Float,
+        startAngle: Float,
+        sweepAngle: Float,
+        forceMoveTo: Bool
+    ) {
+        object.callVoidMethod(name: "arcTo", args: left, top, right, bottom, startAngle, sweepAngle, forceMoveTo)
+    }
+
+    /// Append the specified arc to the path as a new contour.
+    /// 
+    /// If the start of the path is different from the path's current last point,
+    /// then an automatic `lineTo()` is added to connect the current contour to the start of the arc.
+    /// 
+    /// However, if the path is empty, then we call `moveTo()` with the first point of the arc.
+    public func arcTo(
+        oval: RectF,
+        startAngle: Float,
+        sweepAngle: Float
+    ) {
+        object.callVoidMethod(name: "arcTo", args: oval.signed(as: RectF.className), startAngle, sweepAngle)
+    }
+
+    /// Close the current contour.
+    /// 
+    /// If the current point is not equal to the first point of the contour, a line segment is automatically added.
+    public func close() {
+        object.callVoidMethod(name: "close")
+    }
+
+    /// Compute the bounds of the control points of the path, and write the answer into bounds.
+    /// 
+    /// If the path contains 0 or 1 points, the bounds is set to `(0,0,0,0)`
+    public func computeBounds(bounds: RectF) {
+        object.callVoidMethod(name: "computeBounds", args: bounds.signed(as: RectF.className))
+    }
+
+    /// Compute the bounds of the control points of the path, and write the answer into bounds.
+    /// 
+    /// If the path contains 0 or 1 points, the bounds is set to `(0,0,0,0)`
+    public func computeBounds(bounds: RectF, exact: Bool) {
+        object.callVoidMethod(name: "computeBounds", args: bounds.signed(as: RectF.className), exact)
+    }
+
+    /// Add a quadratic bezier from the last point, approaching control point (x1,y1),
+    /// and ending at (x2,y2), weighted by weight. If no moveTo() call has been made for this contour,
+    /// the first point is automatically set to (0,0).
+    ///
+    /// A weight of 1 is equivalent to calling quadTo(float, float, float, float)
+    /// 
+    /// A weight of 0 is equivalent to calling lineTo(float, float) to (x1, y1) followed by lineTo(float, float) to (x2, y2).
+    public func conicTo(x1: Float, y1: Float, x2: Float, y2: Float, weight: Float) {
+        object.callVoidMethod(name: "conicTo", args: x1, y1, x2, y2, weight)
+    }
+
+    /// Add a cubic bezier from the last point, approaching control points (x1,y1) and (x2,y2),
+    /// and ending at (x3,y3). If no moveTo() call has been madefor this contour,
+    /// the first point is automatically set to (0,0).
+    public func cubicTo(x1: Float, y1: Float, x2: Float, y2: Float, x3: Float, y3: Float) {
+        object.callVoidMethod(name: "conicTo", args: x1, y1, x2, y2, x3, y3)
+    }
+
+    // TODO: getFillType
+
+    /// Returns the generation ID of this path.
+    /// 
+    /// The generation ID changes whenever the path is modified.
+    /// 
+    /// This can be used as an efficient way to check if a path has changed.
+    public func generationId() -> Int {
+        Int(object.callIntMethod(name: "getGenerationId") ?? 0)
+    }
+
+    // TODO: getPathIterator
+
+    /// Hint to the path to prepare for adding more points.
+    /// 
+    /// This can allow the path to more efficiently allocate its storage.
+    public func incReserve(extraPtCount: Int) {
+        object.callVoidMethod(name: "incReserve", args: Int32(extraPtCount))
+    }
+
+    /// This method will linearly interpolate from this path to `otherPath`
+    /// given the interpolation parameter `t`, returning the result in `interpolatedPath`.
+    /// 
+    /// Interpolation will only succeed if the structures of the two paths match exactly,
+    /// as discussed in `isInterpolatable()`.
+    public func interpolate(
+        otherPath: Path,
+        t: Float,
+        interpolatedPath: Path
+    ) -> Bool {
+        object.callBoolMethod(name: "interpolate", args: otherPath.signed(as: Path.className), t, interpolatedPath.signed(as: Path.className)) ?? false
+    }
+
+    /// Returns true if the path is empty (contains no lines or curves)
+    public func isEmpty() -> Bool {
+        object.callBoolMethod(name: "isEmpty") ?? false
+    }
+
+    /// Two paths can be interpolated, by calling `interpolate(Path, Float, Path)`,
+    /// if they have exactly the same structure.
+    /// 
+    /// That is, both paths must have the same operations, in the same order.
+    /// 
+    /// If any of the operations are of type `PathIterator.VERB_CONIC`, then the weights of those conics must also match.
+    public func isInterpolatable(otherPath: Path) -> Bool {
+        object.callBoolMethod(name: "isInterpolatable", args: otherPath.signed(as: Path.className)) ?? false
+    }
+
+    /// Returns true if the filltype is one of the `INVERSE` variants
+    public func isInverseFillType() -> Bool {
+        object.callBoolMethod(name: "isInverseFillType") ?? false
+    }
+
+    /// Returns true if the path specifies a rectangle.
+    /// 
+    /// If so, and if rect is not null, set rect to the bounds of the path.
+    /// 
+    /// If the path does not specify a rectangle, return false and ignore rect.
+    public func isRect(rect: RectF) -> Bool {
+        object.callBoolMethod(name: "isRect", args: rect.signed(as: RectF.className)) ?? false
+    }
+
+    /// Add a line from the last point to the specified point (x,y).
+    /// 
+    /// If no moveTo() call has been made for this contour, the first point is automatically set to (0,0).
+    public func lineTo(x: Float, y: Float) {
+        object.callVoidMethod(name: "lineTo", args: x, y)
+    }
+
+    /// Set the beginning of the next contour to the point (x,y).
+    public func moveTo(x: Float, y: Float) {
+        object.callVoidMethod(name: "moveTo", args: x, y)
+    }
+
+    /// Offset the path by (dx,dy)
+    public func offset(dx: Float, dy: Float, dst: Path) {
+        object.callVoidMethod(name: "offset", args: dx, dy, dst.signed(as: Path.className))
+    }
+
+    /// Offset the path by (dx,dy)
+    public func offset(dx: Float, dy: Float) {
+        object.callVoidMethod(name: "offset", args: dx, dy)
+    }
+
+    /// Set this path to the result of applying the Op to the two specified paths.
+    /// 
+    /// The resulting path will be constructed from non-overlapping contours.
+    /// 
+    /// The curve order is reduced where possible so that cubics may be turned into quadratics, and quadratics maybe turned into lines.
+    public func op(path1: Path, path2: Path, op: Op) {
+        object.callVoidMethod(name: "op", args: path1.signed(as: Path.className), path2.signed(as: Path.className), op.signed(as: Op.className))
+    }
+
+    /// Set this path to the result of applying the Op to the two specified paths.
+    /// 
+    /// The resulting path will be constructed from non-overlapping contours.
+    /// 
+    /// The curve order is reduced where possible so that cubics may be turned into quadratics, and quadratics maybe turned into lines.
+    public func op(path: Path, op: Op) {
+        object.callVoidMethod(name: "op", args: path.signed(as: Path.className), op.signed(as: Op.className))
+    }
+
+    /// Add a quadratic bezier from the last point, approaching control point (x1,y1),
+    /// and ending at (x2,y2). If no moveTo() call has been made for this contour,
+    /// the first point is automatically set to (0,0).
+    public func quadTo(x1: Float, y1: Float, x2: Float, y2: Float) {
+        object.callVoidMethod(name: "quadTo", args: x1, y1, x2, y2)
+    }
+
+    /// Same as conicTo, but the coordinates are considered relative to the last point on this contour.
+    /// 
+    /// If there is no previous point, then a moveTo(0,0) is inserted automatically.
+    public func rConicTo(
+        dx1: Float,
+        dy1: Float,
+        dx2: Float,
+        dy2: Float,
+        weight: Float
+    ) {
+        object.callVoidMethod(name: "quadTo", args: dx1, dy1, dx2, dy2, weight)
+    }
+
+    /// Same as cubicTo, but the coordinates are considered relative to the current point on this contour.
+    /// 
+    /// If there is no previous point, then a moveTo(0,0) is inserted automatically.
+    public func rCubicTo(x1: Float, y1: Float, x2: Float, y2: Float, x3: Float, y3: Float) {
+        object.callVoidMethod(name: "rCubicTo", args: x1, y1, x2, y2, x3, y3)
+    }
+
+    /// Same as lineTo, but the coordinates are considered relative to the last point on this contour.
+    /// 
+    /// If there is no previous point, then a moveTo(0,0) is inserted automatically.
+    public func rLineTo(dx: Float, dy: Float) {
+        object.callVoidMethod(name: "rLineTo", args: dx, dy)
+    }
+
+    /// Set the beginning of the next contour relative to the last point on the previous contour.
+    /// 
+    /// If there is no previous contour, this is treated the same as moveTo().
+    public func rMoveTo(dx: Float, dy: Float) {
+        object.callVoidMethod(name: "rMoveTo", args: dx, dy)
+    }
+
+    /// Same as quadTo, but the coordinates are considered relative to the last point on this contour.
+    /// 
+    /// If there is no previous point, then a moveTo(0,0) is inserted automatically.
+    public func rQuadTo(
+        dx1: Float,
+        dy1: Float,
+        dx2: Float,
+        dy2: Float
+    ) {
+        object.callVoidMethod(name: "rQuadTo", args: dx1, dy1, dx2, dy2)
+    }
+
+    /// Clear any lines and curves from the path, making it empty.
+    /// 
+    /// This does NOT change the fill-type setting.
+    public func reset() {
+        object.callVoidMethod(name: "reset")
+    }
+
+    /// Rewinds the path: clears any lines and curves from the path but keeps the internal data structure for faster reuse.
+    public func rewind() {
+        object.callVoidMethod(name: "rewind")
+    }
+
+    /// Replace the contents of this with the contents of src.
+    public func set(_ src: Path) {
+        object.callVoidMethod(name: "set", args: src.signed(as: Path.className))
+    }
+
+    /// Set the path's fill type.
+    /// 
+    /// This defines how "inside" is computed.
+    public func fillType(_ ft: FillType) {
+        object.callVoidMethod(name: "setFillType", args: ft.signed(as: FillType.className))
+    }
+
+    /// Sets the last point of the path.
+    public func lastPoint(dx: Float, dy: Float) {
+        object.callVoidMethod(name: "setLastPoint", args: dx, dy)
+    }
+
+    /// Toggles the `INVERSE` state of the filltype
+    public func toggleInverseFillType() {
+        object.callVoidMethod(name: "toggleInverseFillType")
+    }
+
+    // TODO: transform with Matrix
+}
