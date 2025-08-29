@@ -481,3 +481,61 @@ public final class RotateAnimation: Animation, @unchecked Sendable {
         #endif
     }
 }
+
+/// An animation that controls the scale of an object.
+/// 
+/// You can specify the point to use for the center of scaling.
+/// 
+/// [Lean more](https://developer.android.com/reference/android/view/animation/ScaleAnimation)
+public final class ScaleAnimation: Animation, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/ScaleAnimation" }
+
+    public override init (_ object: JObject) {
+        super.init(object)
+    }
+
+    /// Constructor to use when building an `ScaleAnimation` from code.
+    public init! (fromX: Float, toX: Float, fromY: Float, toY: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromX, toX, fromY, toY])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `ScaleAnimation` from code.
+    public init! (fromX: Float, toX: Float, fromY: Float, toY: Float, pivotX: Float, pivotY: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, .float, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromX, toX, fromY, toY, pivotX, pivotY])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+
+    /// Constructor to use when building an `ScaleAnimation` from code.
+    public init! (fromX: Float, toX: Float, fromY: Float, toY: Float, pivotXType: Dimension, pivotX: Float, pivotYType: Dimension, pivotY: Float) {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let clazz = JClass.load(Self.className),
+            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, .int, .float, .int, .float, returning: .void)),
+            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromX, toX, fromY, toY, pivotXType.rawValue, pivotX, pivotYType.rawValue, pivotY])
+        else { return nil }
+        super.init(global)
+        #else
+        return nil
+        #endif
+    }
+}
