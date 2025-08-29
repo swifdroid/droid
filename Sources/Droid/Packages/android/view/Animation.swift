@@ -2818,4 +2818,54 @@ extension Path {
 
         // TODO: implement some kind of cache for these enum values
     }
+
+    /// Enum for the ways a path may be filled.
+    /// 
+    /// [Learn more](https://developer.android.com/reference/android/graphics/Path.FillType)
+    public final class FillType: JObjectable, @unchecked Sendable {
+        public static var className: JClassName { "android/graphics/Path$FillType" }
+
+        public let object: JObject
+
+        public init (_ object: JObject) {
+            self.object = object
+        }
+
+        private static func byOrdinal(_ index: Int) -> JObject! {
+            #if os(Android)
+            guard
+                let env = JEnv.current(),
+                let clazz = JClass.load(Direction.className),
+                let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Direction.className))),
+                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
+                let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
+            else { return nil }
+            return element
+            #else
+            return nil
+            #endif
+        }
+
+        /// Non-zero winding rule (default)
+        public static func winding() -> Op! {
+            Op(byOrdinal(0))
+        }
+
+        /// Even-odd winding rule
+        public static func evenOdd() -> Op! {
+            Op(byOrdinal(1))
+        }
+
+        /// Inverse non-zero winding rule
+        public static func inverseWinding() -> Op! {
+            Op(byOrdinal(2))
+        }
+
+        /// Inverse even-odd winding rule
+        public static func inverseEvenOdd() -> Op! {
+            Op(byOrdinal(3))
+        }
+
+        // TODO: implement some kind of cache for these enum values
+    }
 }
