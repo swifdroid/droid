@@ -877,3 +877,166 @@ extension AnimatorSet {
         object.callVoidMethod(name: "setCurrentPlayTime", args: Int64(playTime))
     }
 }
+
+/// This class provides a simple timing engine for running animations which calculate animated values and set them on target objects.
+///
+/// There is a single timing pulse that all animations use. It runs in a custom handler to ensure that property changes happen on the UI thread.
+/// 
+/// By default, ValueAnimator uses non-linear time interpolation, via the AccelerateDecelerateInterpolator class,
+/// which accelerates into and decelerates out of an animation. This behavior can be changed by calling `ValueAnimator.setInterpolator(TimeInterpolator)`.
+public final class ValueAnimator: Animator, @unchecked Sendable {
+    public class override var className: JClassName { "android/view/animation/ValueAnimator" }
+}
+
+extension ValueAnimator {
+    // TODO: static areAnimatorsEnabled
+
+    /// Returns the current animation fraction,
+    /// which is the elapsed/interpolated fraction used in the most recent frame update on the animation.
+    public func animatedFraction() -> Float {
+        object.callFloatMethod(name: "getAnimatedFraction") ?? 0
+    }
+
+    /// The most recent value calculated by this `ValueAnimator` when there is just one property being animated.
+    /// 
+    /// This value is only sensible while the animation is running.
+    /// 
+    /// The main purpose for this read-only property is to retrieve the value from the ValueAnimator
+    /// during a call to AnimatorUpdateListener.onAnimationUpdate(ValueAnimator),
+    /// which is called during each animation frame, immediately after the value is calculated.
+    public func animatedValue() -> JObject? {
+        guard
+            let global = object.callObjectMethod(name: "getAnimatedValue", returning: .object("java/lang/Object"))
+        else { return nil }
+        return global
+    }
+
+    /// The most recent value calculated by this `ValueAnimator` for `propertyName`.
+    /// 
+    /// This value is only sensible while the animation is running.
+    /// 
+    /// The main purpose for this read-only property is to retrieve the value from the ValueAnimator
+    /// during a call to AnimatorUpdateListener.onAnimationUpdate(ValueAnimator),
+    /// which is called during each animation frame, immediately after the value is calculated.
+    public func animatedValue(_ propertyName: String) -> JObject? {
+        guard
+            let str = JString(from: propertyName),
+            let global = object.callObjectMethod(name: "getAnimatedValue", args: str.signedAsString(), returning: .object("java/lang/Object"))
+        else { return nil }
+        return global
+    }
+
+    /// Gets the current position of the animation in time,
+    /// which is equal to the current time minus the time that the animation started.
+    /// 
+    /// An animation that is not yet started will return a value of zero,
+    /// unless the animation has has its play time set via setCurrentPlayTime(long)
+    /// or setCurrentFraction(float), in which case it will return the time that was set.
+    public func currentPlayTime() -> Int {
+        Int(object.callLongMethod(name: "getCurrentPlayTime") ?? 0)
+    }
+
+    // TODO: static getDurationScale
+    // public func durationScale() -> Float {
+    //     object.callFloatMethod(name: "getDurationScale") ?? 0
+    // }
+    // TODO: getFrameDelay
+
+    /// Defines how many times the animation should repeat. The default value is 0.
+    public func repeatCount() -> Int {
+        Int(object.callIntMethod(name: "getRepeatCount") ?? 0)
+    }
+
+    /// Defines what this animation should do when it reaches the end.
+    public func repeatMode() -> Animation.RepeatMode {
+        .init(rawValue: object.callIntMethod(name: "getRepeatMode") ?? 1) ?? .restart
+    }
+
+    // TODO: getValues
+    // TODO: ofArgb
+    // TODO: ofFloat
+    // TODO: ofInt
+    // TODO: ofObject
+    // TODO: ofPropertyValuesHolder
+    
+    public func removeAllUpdateListeners() {
+        object.callVoidMethod(name: "removeAllUpdateListeners")
+    }
+
+    // TODO: removeUpdateListener
+    
+    /// Plays the AnimatorSet in reverse.
+    /// 
+    /// If the animation has been seeked to a specific play time using setCurrentPlayTime(long),
+    /// it will play backwards from the point seeked when reverse was called.
+    /// 
+    /// Otherwise, then it will start from the end and play backwards.
+    /// 
+    /// This behavior is only set for the current animation;
+    /// future playing of the animation will use the default behavior of playing forward.
+    /// 
+    /// Note: reverse is not supported for infinite AnimatorSet.
+    public func reverse() {
+        object.callVoidMethod(name: "reverse")
+    }
+    
+    /// Sets the position of the animation to the specified fraction.
+    /// 
+    /// This fraction should be between 0 and the total fraction of the animation, including any repetition.
+    /// 
+    /// That is, a fraction of 0 will position the animation at the beginning, a value of 1 at the end,
+    /// and a value of 2 at the end of a reversing animator that repeats once.
+    /// 
+    /// If the animation has not yet been started, then it will not advance forward after it is set to this fraction;
+    /// it will simply set the fraction to this value and perform any appropriate actions based on that fraction.
+    /// 
+    /// If the animation is already running, then setCurrentFraction() will set the current fraction to this value and continue playing from that point.
+    /// 
+    /// Animator.AnimatorListener events are not called due to changing the fraction; those events are only processed while the animation is running.
+    public func currentFraction(_ fraction: Float) {
+        object.callVoidMethod(name: "setCurrentFraction", args: fraction)
+    }
+
+    /// Sets the position of the animation to the specified point in time.
+    /// 
+    /// This time should be between 0 and the total duration of the animation, including any repetition.
+    /// 
+    /// If the animation has not yet been started, then it will not advance forward after it is set to this time;
+    /// it will simply set the time to this value and perform any appropriate actions based on that time.
+    /// 
+    /// If the animation is already running, then setCurrentPlayTime() will set the current playing time to this value and continue playing from that point.
+    /// 
+    /// On Build.VERSION_CODES.UPSIDE_DOWN_CAKE and above, an AnimatorSet that hasn't been start()ed,
+    /// will issue Animator.AnimatorListener.onAnimationStart(Animator, boolean) and Animator.AnimatorListener.onAnimationEnd(Animator, boolean) events.
+    public func currentPlayTime(_ playTime: Int) {
+        object.callVoidMethod(name: "setCurrentPlayTime", args: Int64(playTime))
+    }
+
+    // TODO: setEvaluator
+    // TODO: setFloatValues
+    // TODO: static setFrameDelay
+    // TODO: setIntValues
+    // TODO: setObjectValues
+    
+    /// Sets how many times the animation should be repeated.
+    /// 
+    /// If the repeat count is 0, the animation is never repeated.
+    /// 
+    /// If the repeat count is greater than 0 or INFINITE, the repeat mode will be taken into account.
+    /// 
+    /// The repeat count is 0 by default.
+    public func repeatCount(_ value: Int) {
+        object.callVoidMethod(name: "setRepeatCount", args: Int32(value))
+    }
+
+    /// Defines what this animation should do when it reaches the end.
+    /// 
+    /// This setting is applied only when the repeat count is either greater than 0 or `INFINITE`.
+    /// 
+    /// Defaults to `RESTART`.
+    public func repeatMode(_ value: Animation.RepeatMode) {
+        object.callVoidMethod(name: "setRepeatMode", args: value.rawValue)
+    }
+
+    // TODO: setValues
+}
