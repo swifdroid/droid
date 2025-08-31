@@ -112,9 +112,7 @@ open class Activity: AnyActivity {
             return
         }
         #if os(Android)
-        InnerLog.c("SETTING CONTENT VIEW")
-        JObject(context.ref, context.clazz)
-            .callVoidMethod(name: "setContentView", args: viewInstance.object.signed(as: .android.view.View))
+        context.callVoidMethod(name: "setContentView", args: viewInstance.object.signed(as: .android.view.View))
         #endif
         view.didMoveToParent()
     }
