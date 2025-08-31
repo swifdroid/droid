@@ -219,9 +219,11 @@ open class Activity: AnyActivity {
 extension Activity {
     public func findViewById(_ id: Int32) -> View? {
         guard
-            let global = _context.object.callObjectMethod(name: "findViewById", args: id, returning: .object(.android.view.View))
+            let classLoader = context.getClassLoader(),
+            let returningClazz = classLoader.loadClass(.android.view.View),
+            let global = context.object.callObjectMethod(name: "findViewById", args: id, returningClass: returningClazz, returning: .object(.android.view.View))
         else { return nil }
-        return .init(id: Int32.nextViewId(), global, context)
+        return .init(id: id, global, context)
     }
 }
 
