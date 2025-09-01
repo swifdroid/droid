@@ -78,11 +78,11 @@ open class AppCompatActivity: FragmentActivity {
 
 extension AppCompatActivity {
     public func closeOptionsMenu() {
-        _context.object.callVoidMethod(name: "closeOptionsMenu")
+        context.object.callVoidMethod(name: "closeOptionsMenu")
     }
 
     public func dispatchKeyEvent(_ event: KeyEvent) -> Bool {
-        _context.object.callBoolMethod(name: "dispatchKeyEvent", args: event.signed(as: KeyEvent.className)) ?? false
+        context.object.callBoolMethod(name: "dispatchKeyEvent", args: event.signed(as: KeyEvent.className)) ?? false
     }
 
     // TODO: getDelegate
@@ -108,11 +108,11 @@ extension AppCompatActivity {
     }
 
     public func invalidateOptionsMenu() {
-        _context.object.callVoidMethod(name: "invalidateOptionsMenu")
+        context.object.callVoidMethod(name: "invalidateOptionsMenu")
     }
 
     public func openOptionsMenu() {
-        _context.object.callVoidMethod(name: "openOptionsMenu")
+        context.object.callVoidMethod(name: "openOptionsMenu")
     }
 
     /// Set a Toolbar to act as the `androidx.appcompat.app.ActionBar` for this Activity window.
@@ -128,30 +128,30 @@ extension AppCompatActivity {
         guard
             let toolbar = toolbar.instance
         else { return }
-        _context.object.callVoidMethod(name: "setSupportActionBar", args: toolbar.signed(as: Toolbar.className))
+        context.object.callVoidMethod(name: "setSupportActionBar", args: toolbar.signed(as: Toolbar.className))
     }
 
     public func theme(_ resId: Int32) {
-        _context.object.callVoidMethod(name: "setTheme", args: resId)
+        context.object.callVoidMethod(name: "setTheme", args: resId)
     }
 
     // TODO: startSupportActionMode
 
     public func supportNavigateUpTo(_ upIntent: Intent) {
-        _context.object.callVoidMethod(name: "supportNavigateUpTo", args: upIntent.signed(as: Intent.className))
+        context.object.callVoidMethod(name: "supportNavigateUpTo", args: upIntent.signed(as: Intent.className))
     }
 
     /// Enable extended support library window features.
     ///
     /// This is a convenience for calling `getWindow().requestFeature()`.
     public func supportRequestWindowFeature(_ feature: AppCompatDelegate.Feature) -> Bool {
-        _context.object.callBoolMethod(name: "supportRequestWindowFeature", args: feature.rawValue) ?? false
+        context.object.callBoolMethod(name: "supportRequestWindowFeature", args: feature.rawValue) ?? false
     }
 
     /// Returns true if sourceActivity should recreate the task when navigating 'up' by using targetIntent.
     ///
     /// If this method returns false the app can trivially call supportNavigateUpTo using the same parameters to correctly perform up navigation. If this method returns false, the app should synthesize a new task stack by using androidx.core.app.TaskStackBuilder or another similar mechanism to perform up navigation.
     public func supportShouldUpRecreateTask(_ targetIntent: Intent) -> Bool {
-        _context.object.callBoolMethod(name: "supportRequestWindowFeature", args: targetIntent.signed(as: Intent.className)) ?? false
+        context.object.callBoolMethod(name: "supportRequestWindowFeature", args: targetIntent.signed(as: Intent.className)) ?? false
     }
 }
