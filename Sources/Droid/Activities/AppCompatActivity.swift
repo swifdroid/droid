@@ -93,7 +93,9 @@ extension AppCompatActivity {
     /// Retrieve a reference to this activity's ActionBar.
     public func supportActionBar() -> ActionBar! {
         guard
-            let value = _context.object.callObjectMethod(name: "getSupportActionBar", returning: .object(ActionBar.className))
+            let classLoader = context.context.getClassLoader(),
+            let returningClazz = classLoader.loadClass(ActionBar.className),
+            let value = context.object.callObjectMethod(name: "getSupportActionBar", returningClass: returningClazz, returning: .object(ActionBar.className))
         else { return nil }
         return .init(value, context)
     }
@@ -102,7 +104,9 @@ extension AppCompatActivity {
     /// If the device is running **Jellybean** or newer, the `android:parentActivityName` attribute will be preferred if it is present.
     public func supportParentActivityIntent() -> Intent! {
         guard
-            let value = _context.object.callObjectMethod(name: "getSupportParentActivityIntent", returning: .object(Intent.className))
+            let classLoader = context.context.getClassLoader(),
+            let returningClazz = classLoader.loadClass(Intent.className),
+            let value = context.object.callObjectMethod(name: "getSupportParentActivityIntent", returningClass: returningClazz, returning: .object(Intent.className))
         else { return nil }
         return .init(value)
     }
