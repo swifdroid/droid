@@ -27,12 +27,11 @@ open class ActionProvider: JObjectable, Contextable, @unchecked Sendable {
     open class var className: JClassName { "android/view/ActionProvider" }
 
     public let object: JObject
-
     public let context: ActivityContext
 
-    public init (_ object: JObject, _ context: ActivityContext) {
+    public init (_ object: JObject, _ context: Contextable) {
         self.object = object
-        self.context = context
+        self.context = context.context
     }
 
     /// Called to prepare an associated submenu for the menu item backed by this `ActionProvider`.
