@@ -88,12 +88,12 @@ public func nativeListenerOnDragEvent(env: UnsafeMutablePointer<JNIEnv?>, caller
     guard
         let listener: NativeOnDragListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
-    var dragEvent: DragEvent?
-    if let object = event.box(JEnv(env))?.object() {
-        dragEvent = .init(object)
-    }
+    let box = event.box(JEnv(env))
     let result = UIThreadActor.assumeIsolated {
-        listener.handle(true, nil, dragEvent)
+        if let object = box?.object() {
+            return listener.handle(true, nil, .init(object))
+        }
+        return false
     }
     return result ? 1 : 0
 }
@@ -108,12 +108,12 @@ public func nativeListenerOnDragViewEvent(env: UnsafeMutablePointer<JNIEnv?>, ca
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    var dragEvent: DragEvent?
-    if let object = event.box(JEnv(env))?.object() {
-        dragEvent = .init(object)
-    }
+    let box = event.box(JEnv(env))
     let result = UIThreadActor.assumeIsolated {
-        listener.handle(bool, triggerView, dragEvent)
+        if let object = box?.object() {
+            return listener.handle(bool, triggerView, .init(object))
+        }
+        return false
     }
     return result ? 1 : 0
 }

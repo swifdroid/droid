@@ -88,12 +88,12 @@ public func nativeListenerOnUnhandledKeyEventEvent(env: UnsafeMutablePointer<JNI
     guard
         let listener: NativeOnUnhandledKeyEventListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
-    var keyEvent: KeyEvent?
-    if let object = event.box(JEnv(env))?.object() {
-        keyEvent = .init(object)
-    }
+    let box = event.box(JEnv(env))
     let result = UIThreadActor.assumeIsolated {
-        listener.handle(true, nil, keyEvent)
+        if let object = box?.object() {
+            return listener.handle(true, nil, .init(object))
+        }
+        return false
     }
     return result ? 1 : 0
 }
@@ -108,12 +108,12 @@ public func nativeListenerOnUnhandledKeyEventViewEvent(env: UnsafeMutablePointer
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    var keyEvent: KeyEvent?
-    if let object = event.box(JEnv(env))?.object() {
-        keyEvent = .init(object)
-    }
+    let box = event.box(JEnv(env))
     let result = UIThreadActor.assumeIsolated {
-        listener.handle(bool, triggerView, keyEvent)
+        if let object = box?.object() {
+        return listener.handle(bool, triggerView, .init(object))
+        }
+        return false
     }
     return result ? 1 : 0
 }

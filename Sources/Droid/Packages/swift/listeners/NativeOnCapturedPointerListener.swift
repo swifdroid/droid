@@ -88,12 +88,12 @@ public func nativeListenerOnCapturedPointerEvent(env: UnsafeMutablePointer<JNIEn
     guard
         let listener: NativeOnCapturedPointerListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
-    var motionEvent: MotionEvent?
-    if let object = event.box(JEnv(env))?.object() {
-        motionEvent = .init(object)
-    }
+    let box = event.box(JEnv(env))
     let result = UIThreadActor.assumeIsolated {
-        listener.handle(true, nil, motionEvent)
+        if let object = box?.object() {
+            return listener.handle(true, nil, .init(object))
+        }
+        return false
     }
     return result ? 1 : 0
 }
@@ -108,12 +108,12 @@ public func nativeListenerOnCapturedPointerViewEvent(env: UnsafeMutablePointer<J
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    var motionEvent: MotionEvent?
-    if let object = event.box(JEnv(env))?.object() {
-        motionEvent = .init(object)
-    }
+    let box = event.box(JEnv(env))
     let result = UIThreadActor.assumeIsolated {
-        listener.handle(bool, triggerView, motionEvent)
+        if let object = box?.object() {
+            return listener.handle(bool, triggerView, .init(object))
+        }
+        return false
     }
     return result ? 1 : 0
 }
