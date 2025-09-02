@@ -161,6 +161,9 @@ open class DroidApp: @unchecked Sendable {
             if let appObject =  localCallerObjectRef.box(env)?.object() {
                 let context = AppContext(appObject)
                 shared = Self(context)
+                if let classLoaderObj = context.getClassLoader() {
+                    JNICache.shared.setClassLoader(classLoaderObj)
+                }
             }
         }
         start()
