@@ -89,7 +89,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     open class var gradleDependencies: [String] { [] }
     
     /// Unique identifier
-    nonisolated let id: Int32
+    public nonisolated let id: Int32
 
     /// Layout Params class
     /// 
