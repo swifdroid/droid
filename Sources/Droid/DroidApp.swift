@@ -36,9 +36,11 @@ open class DroidApp: @unchecked Sendable {
     public typealias ModuleGradle = AppGradle.ModuleAppGradle
     
     public static func main() {
+        #if !os(Android)
         if shared == nil {
             shared = Self()
         }
+        #endif
         Self.start()
     }
     
@@ -46,22 +48,35 @@ open class DroidApp: @unchecked Sendable {
 
     /// Last unique id for the view which increases via mutex
     private var lastViewId: Int32 = 0x7F000000
+
+    #if os(Android)
+    let context: AppContext
+    #else
+    var context: AppContext!
+    #endif
     
     public class var current: Self { shared as! Self }
     
-    required public init () {
+    #if os(Android)
+    required public init (_ context: AppContext) {
+        self.context = context
         globalLogLevelMutex.activate(recursive: true)
         innerLogLevelMutex.activate(recursive: true)
         lastViewIdMutex.activate(recursive: true)
         setLogLevel(.notice)
         setInnerLogLevel(.notice)
     }
+    #else
+    required public init () {}
+    #endif
 
+    #if os(Android)
     deinit {
         globalLogLevelMutex.destroy()
         innerLogLevelMutex.destroy()
         lastViewIdMutex.destroy()
     }
+    #endif
 
     /// Mutex used to protect access to the logger's log level.
     private var globalLogLevelMutex = pthread_mutex_t()
@@ -142,7 +157,11 @@ open class DroidApp: @unchecked Sendable {
             #endif
             let jvm = envPointer.jvm()
             JNIKit.shared.initialize(with: jvm)
-            shared = Self()
+            let env = JEnv(envPointer)
+            if let appObject =  localCallerObjectRef.box(env)?.object() {
+                let context = AppContext(appObject)
+                shared = Self(context)
+            }
         }
         start()
     }
