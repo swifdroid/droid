@@ -180,7 +180,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     @discardableResult
     public init (id: Int32? = nil, _ object: JObject, _ context: ActivityContext) {
         self.id = id ?? .nextViewId()
-        if let instance = ViewInstance(object, self, context, self.id) {
+        if let instance = ViewInstance(object, self, context, self.id, setId: id != nil) {
             status = .asContentView(instance)
         }
         _setup()

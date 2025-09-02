@@ -56,14 +56,16 @@ extension View {
             #endif
         }
         
-        public init? (_ object: JObject, _ view: View, _ context: ActivityContext, _ id: Int32) {
+        public init? (_ object: JObject, _ view: View, _ context: ActivityContext, _ id: Int32, setId: Bool) {
             #if os(Android)
             self.id = id
             self.object = object
             self.view = view
             self.context = context
-            // Assign Swift-generated id
-            object.callVoidMethod(name: "setId", args: id)
+            if setId {
+                // Assign Swift-generated id
+                object.callVoidMethod(name: "setId", args: id)
+            }
             #else
             return nil
             #endif
