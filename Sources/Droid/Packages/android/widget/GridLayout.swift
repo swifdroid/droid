@@ -109,8 +109,7 @@ fileprivate extension LayoutParamToApply {
         #if os(Android)
         guard
             let env = env ?? JEnv.current(),
-            let classLoader = instance.context.getClassLoader(),
-            let clazz = classLoader.loadClass(GridLayout.className)
+            let clazz = JClass.load(GridLayout.className)
         else { return }
         func getAlignment(_ type: GridLayout.Alignment) -> JObject? {
             guard

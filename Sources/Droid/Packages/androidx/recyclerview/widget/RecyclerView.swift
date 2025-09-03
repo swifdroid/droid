@@ -322,8 +322,7 @@ extension RecyclerView {
         public init? (_ env: JEnv, _ context: ActivityContext) {
             #if os(Android)
             guard
-                let classLoader = context.getClassLoader(),
-                let clazz = classLoader.loadClass(PagerSnapHelper.className),
+                let clazz = JClass.load(PagerSnapHelper.className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
             else { return nil }
@@ -361,8 +360,7 @@ public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
     public init? (_ env: JEnv, _ context: ActivityContext) {
         #if os(Android)
         guard
-            let classLoader = context.getClassLoader(),
-            let clazz = classLoader.loadClass(PagerSnapHelper.className),
+            let clazz = JClass.load(PagerSnapHelper.className),
             let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
             let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
         else { return nil }
@@ -402,8 +400,7 @@ open class LayoutManager: @unchecked Sendable {
         public init? (_ env: JEnv, _ className: JClassName, _ context: ActivityContext, _ initWithContext: Bool, _ initializerItems: [JSignatureItemable]) {
             #if os(Android)
             guard
-                let classLoader = context.getClassLoader(),
-                let clazz = classLoader.loadClass(className),
+                let clazz = JClass.load(className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init((initWithContext ? [.object(.android.content.Context)] : []) + initializerItems.map { $0.signatureItemWithValue.signatureItem }, returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: (initWithContext ? [context.object] : []) + initializerItems.map { $0.signatureItemWithValue.value })
             else { return nil }

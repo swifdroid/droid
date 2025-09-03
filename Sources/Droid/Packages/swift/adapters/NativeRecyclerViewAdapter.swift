@@ -171,12 +171,7 @@ final class RecyclerViewAdapterInstance: JObjectable, Sendable {
     init? (_ env: JEnv, _ context: ActivityContext, _ id: Int32) {
         #if os(Android)
         guard
-            let classLoader = context.getClassLoader()
-        else {
-            return nil
-        }
-        guard
-            let clazz = classLoader.loadClass(Self.className)
+            let clazz = JClass.load(Self.className)
         else {
             return nil
         }

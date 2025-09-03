@@ -333,8 +333,7 @@ extension AdapterView {
             guard
                 let env = JEnv.current(),
                 let targetView = targetView.instance,
-                let classLoader = context.context.getClassLoader(),
-                let clazz = classLoader.loadClass(Self.className),
+                let clazz = JClass.load(Self.className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(View.className), .int, .int, returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [targetView.object, Int32(potision), id])
             else { return nil }
@@ -382,8 +381,7 @@ extension ExpandableListView {
             guard
                 let env = JEnv.current(),
                 let targetView = targetView.instance,
-                let classLoader = context.context.getClassLoader(),
-                let clazz = classLoader.loadClass(Self.className),
+                let clazz = JClass.load(Self.className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(View.className), .int, .int, returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [targetView.object, Int64(packedPosition), Int64(id)])
             else { return nil }

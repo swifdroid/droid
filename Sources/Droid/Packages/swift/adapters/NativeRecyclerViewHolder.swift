@@ -104,12 +104,7 @@ public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolde
     public init? (_ env: JEnv, _ context: ActivityContext, _ view: V) {
         #if os(Android)
         guard
-            let classLoader = context.getClassLoader()
-        else {
-            return nil
-        }
-        guard
-            let clazz = classLoader.loadClass(Self.className)
+            let clazz = JClass.load(Self.className)
         else {
             return nil
         }

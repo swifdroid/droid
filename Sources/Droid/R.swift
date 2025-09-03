@@ -123,13 +123,7 @@ public struct InnerR: Sendable {
             }
             guard let env = JEnv.current() else { return 0 }
             let className = JClassName(stringLiteral: classKey)
-            let optionalClass: JClass?
-            if let classLoader = context?.getClassLoader() {
-                optionalClass = classLoader.loadClass(className)
-            } else {
-                optionalClass = env.findClass(className)
-            }
-            guard let clazz = optionalClass else { return 0 }
+            guard let clazz = JClass.load(className) else { return 0 }
             guard let fieldId = clazz.staticFieldId(name: attrName, signature: .int) else { return 0 }
             let value = env.getStaticIntField(clazz, fieldId)
             RCache.shared.set(cacheKey, value)

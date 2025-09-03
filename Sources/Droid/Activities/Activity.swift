@@ -217,8 +217,7 @@ open class Activity: AnyActivity {
 extension Activity {
     public func findViewById(_ id: Int32) -> View? {
         guard
-            let classLoader = context.getClassLoader(),
-            let returningClazz = classLoader.loadClass(.android.view.View),
+            let returningClazz = JClass.load(.android.view.View),
             let global = context.object.callObjectMethod(name: "findViewById", args: id, returningClass: returningClazz, returning: .object(.android.view.View))
         else { return nil }
         return .init(id: id, global, context)
@@ -239,9 +238,8 @@ public final class Intent: JObjectable, @unchecked Sendable {
     public init? (_ env: JEnv, _ context: ActivityContext, _ className: JClassName) {
         #if os(Android)
         guard
-            let classLoader = context.getClassLoader(),
-            let intentClazz = classLoader.loadClass(.android.content.Intent),
-            let activityClazz = classLoader.loadClass(className),
+            let intentClazz = JClass.load(.android.content.Intent),
+            let activityClazz = JClass.load(className),
             let methodId = intentClazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), .object(.java.lang.Class), returning: .void)),
             let global = env.newObject(clazz: intentClazz, constructor: methodId, args: [context.object, activityClazz])
         else { return nil }

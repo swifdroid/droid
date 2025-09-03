@@ -83,8 +83,7 @@ public final class LayoutParams: Sendable, JObjectable {
         InnerLog.t("💡 1LayoutParams trying to load class: \(className)")
         #if os(Android)
         guard
-            let classLoader = context.getClassLoader(),
-            let clazz = classLoader.loadClass(className),
+            let clazz = JClass.load(className),
             let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
             let global = env.newObject(clazz: clazz, constructor: methodId, args: nil)
         else { return nil }
@@ -119,8 +118,7 @@ public final class LayoutParams: Sendable, JObjectable {
         }
         InnerLog.t("💡 2LayoutParams trying to load class: \(className)")
         guard
-            let classLoader = context.getClassLoader(),
-            let clazz = classLoader.loadClass(className),
+            let clazz = JClass.load(className),
             let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, .int, returning: .void)),
             let global = env.newObject(clazz: clazz, constructor: methodId, args: [correctWidth, correctHeight])
         else { return nil }

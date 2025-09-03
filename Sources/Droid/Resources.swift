@@ -21,9 +21,8 @@ extension Resources {
         
         public init? (_ env: JEnv, _ className: JClassName, _ context: ActivityContext) {
             #if os(Android)
-            let classLoader = context.getClassLoader()
             guard
-                let clazz = JClass.load(className, classLoader),
+                let clazz = JClass.load(className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.object])
             else { return nil }

@@ -40,8 +40,7 @@ extension View {
         public init? (_ env: JEnv, _ className: JClassName, _ view: View, _ context: ActivityContext, _ id: Int32) {
             #if os(Android)
             guard
-                let classLoader = context.getClassLoader(),
-                let clazz = classLoader.loadClass(className),
+                let clazz = JClass.load(className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.object])
             else { return nil }
@@ -103,7 +102,7 @@ extension View {
                 return nil
             }
                 // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
-            guard let lpClazz = context.getClassLoader()?.loadClass(lpClassName ?? self.lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
+            guard let lpClazz = JClass.load(lpClassName ?? self.lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
                 return nil
             }
             guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, clazz: lpClazz) else {

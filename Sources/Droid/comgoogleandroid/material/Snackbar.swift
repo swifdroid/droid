@@ -50,8 +50,7 @@ public final class Snackbar: JObjectable, Sendable {
         guard
             let env = JEnv.current(),
             let viewInstance = view.instance,
-            let loader = viewInstance.context.getClassLoader(),
-            let clazz = loader.loadClass(Self.className),
+            let clazz = JClass.load(Self.className),
             let methodId = clazz.staticMethodId(name: "make", signature: .init(.object(.android.content.Context), .object(.android.view.View), .object(.java.lang.CharSequence), .int, returning: .object(Snackbar.className))),
             let str = JString(from: text),
             let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [viewInstance.context.object, viewInstance.object, str, duration.value])
@@ -79,8 +78,7 @@ public final class Snackbar: JObjectable, Sendable {
         guard
             let env = JEnv.current(),
             let viewInstance = view.instance,
-            let loader = viewInstance.context.getClassLoader(),
-            let clazz = loader.loadClass(Self.className),
+            let clazz = JClass.load(Self.className),
             let methodId = clazz.staticMethodId(name: "make", signature: .init(.object(.android.content.Context), .object(.android.view.View), .int, .int, returning: .object(Snackbar.className))),
             let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [viewInstance.context.object, viewInstance.object, textResId, duration.value])
         else { return nil }

@@ -2780,8 +2780,8 @@ extension Path {
             #if os(Android)
             guard
                 let env = JEnv.current(),
-                let clazz = JClass.load(Direction.className),
-                let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Direction.className))),
+                let clazz = JClass.load(Op.className),
+                let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Op.className))),
                 let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
                 let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
             else { return nil }
@@ -2835,8 +2835,8 @@ extension Path {
             #if os(Android)
             guard
                 let env = JEnv.current(),
-                let clazz = JClass.load(Direction.className),
-                let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Direction.className))),
+                let clazz = JClass.load(FillType.className),
+                let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, FillType.className))),
                 let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
                 let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
             else { return nil }

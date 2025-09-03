@@ -91,8 +91,7 @@ class ListenerInstance: @unchecked Sendable {
             signature.append(.int)
         }
         guard
-            let classLoader = context.getClassLoader(),
-            let clazz = classLoader.loadClass(className),
+            let clazz = JClass.load(className),
             let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(signature, returning: .void)),
             let global = env.newObject(clazz: clazz, constructor: methodId, args: args)
         else { return nil }
