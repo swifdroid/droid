@@ -388,6 +388,15 @@ extension Int32 {
         DroidApp.getNextViewId()
     }
 }
+extension JObject {
+    /// Returns object's context reference
+    public func context(_ className: JClassName = .android.content.Context) -> JObject? {
+        guard
+            let returningClazz = JClass.load(className)
+        else { return nil }
+        return callObjectMethod(name: "getContext", returningClass: returningClazz, returning: .object(className))
+    }
+}
 
 #if canImport(Android)
 import Android
