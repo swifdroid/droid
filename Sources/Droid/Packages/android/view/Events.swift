@@ -64,7 +64,8 @@ open class InputEvent: JObjectable, @unchecked Sendable {
     /// Gets the device that this event came from.
     public func device() -> InputDevice? {
         guard
-            let global = object.callObjectMethod(name: "getDevice", returning: .object(InputDevice.className))
+            let returningClazz = JClass.load(InputDevice.className),
+            let global = object.callObjectMethod(name: "getDevice", returningClass: returningClazz, returning: .object(InputDevice.className))
         else { return nil }
         return .init(global)
     }
@@ -748,14 +749,16 @@ open class DragEvent: JObjectable, @unchecked Sendable {
     /// This method only returns valid data if the event action is `ACTION_DROP`.
     public func clipData() -> ClipData? {
         guard
-            let global = object.callObjectMethod(name: "getClipData", returning: .object(ClipData.className))
+            let returningClazz = JClass.load(ClipData.className),
+            let global = object.callObjectMethod(name: "getClipData", returningClass: returningClazz, returning: .object(ClipData.className))
         else { return nil }
         return .init(global)
     }
 
     public func clipDescription() -> ClipDescription? {
         guard
-            let global = object.callObjectMethod(name: "getClipDescription", returning: .object(ClipDescription.className))
+            let returningClazz = JClass.load(ClipDescription.className),
+            let global = object.callObjectMethod(name: "getClipDescription", returningClass: returningClazz, returning: .object(ClipDescription.className))
         else { return nil }
         return .init(global)
     }
@@ -766,7 +769,10 @@ open class DragEvent: JObjectable, @unchecked Sendable {
     ///
     /// This method returns valid data for all event actions.
     public func localState() -> JObject? {
-        object.callObjectMethod(name: "getLocalState")
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getLocalState", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     /// Returns an indication of the result of the drag and drop operation. This method only returns valid data if the action type is `ACTION_DRAG_ENDED`. The return value depends on what happens after the user releases the drag shadow.
@@ -949,7 +955,8 @@ open class KeyEvent: JObjectable, @unchecked Sendable {
     /// Gets the `KeyCharacterMap` associated with the keyboard device.
     public func keyCharacterMap() -> KeyCharacterMap? {
         guard
-            let global = object.callObjectMethod(name: "getKeyCharacterMap", returning: .object(KeyCharacterMap.className))
+            let returningClazz = JClass.load(KeyCharacterMap.className),
+            let global = object.callObjectMethod(name: "getKeyCharacterMap", returningClass: returningClazz, returning: .object(KeyCharacterMap.className))
         else { return nil }
         return .init(global)
     }

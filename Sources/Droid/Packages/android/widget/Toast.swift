@@ -73,7 +73,8 @@ public final class Toast: JObjectable, @unchecked Sendable {
     }
 
     public func view() -> JObject? {
-        object.callObjectMethod(name: "getView", returning: .object(.android.view.View))
+        guard let returningClazz = JClass.load(.android.view.View) else { return nil }
+        return object.callObjectMethod(name: "getView", returningClass: returningClazz, returning: .object(.android.view.View))
     }
 
     @discardableResult

@@ -66,12 +66,13 @@ extension Menu {
         itemId: Int32,
         order: Int = 100,
         title: String
-    ) -> Self {
+    ) -> Menu {
         guard
-            let str = JString(from: title)
+            let str = JString(from: title),
+            let returningClazz = JClass.load(Menu.className),
+            let global = object.callObjectMethod(name: "add", args: groupId, itemId, Int32(order), str.signed(as: .java.lang.CharSequence), returningClass: returningClazz, returning: .object(Menu.className))
         else { return self }
-        _ = object.callObjectMethod(name: "add", args: groupId, itemId, Int32(order), str.signed(as: .java.lang.CharSequence), returning: .object(Menu.className))
-        return self
+        return .init(global)
     }
 
     // TODO: addIntentOptions
@@ -84,7 +85,8 @@ extension Menu {
     public func addSubMenu(_ title: String) -> SubMenu! {
         guard
             let str = JString(from: title),
-            let global = object.callObjectMethod(name: "addSubMenu", args: str.signedAsCharSequence(), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "addSubMenu", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -96,7 +98,8 @@ extension Menu {
     /// To modify other attributes on the submenu's menu item, use `SubMenu.getItem()`.
     public func addSubMenu(_ titleResId: Int32) -> SubMenu! {
         guard
-            let global = object.callObjectMethod(name: "addSubMenu", args: titleResId, returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "addSubMenu", args: titleResId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -114,7 +117,8 @@ extension Menu {
     ) -> SubMenu! {
         guard
             let str = JString(from: title),
-            let global = object.callObjectMethod(name: "addSubMenu", args: Int32(groupId), Int32(itemId), Int32(order), str.signedAsCharSequence(), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "addSubMenu", args: Int32(groupId), Int32(itemId), Int32(order), str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -131,7 +135,8 @@ extension Menu {
         _ titleResId: Int32
     ) -> SubMenu! {
         guard
-            let global = object.callObjectMethod(name: "addSubMenu", args: Int32(groupId), Int32(itemId), Int32(order), titleResId, returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "addSubMenu", args: Int32(groupId), Int32(itemId), Int32(order), titleResId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -149,7 +154,8 @@ extension Menu {
     /// Return the menu item with a particular identifier.
     public func findItem(_ id: Int) -> MenuItem? {
         guard
-            let global = object.callObjectMethod(name: "findItem", args: Int32(id), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "findItem", args: Int32(id), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -157,7 +163,8 @@ extension Menu {
     /// Gets the menu item at the given index.
     public func getItem(at index: Int) -> MenuItem? {
         guard
-            let global = object.callObjectMethod(name: "getItem", args: Int32(index), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "getItem", args: Int32(index), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -250,7 +257,8 @@ extension ContextMenu {
     /// Sets the context menu header's icon to the icon given in iconRes resource id.
     public func headerIcon(_ resId: Int32) -> ContextMenu! {
         guard
-            let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(ContextMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -258,7 +266,8 @@ extension ContextMenu {
     /// Sets the context menu header's icon to the icon given in icon `Drawable`.
     public func headerIcon(_ value: Drawable) -> ContextMenu! {
         guard
-            let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(ContextMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -266,7 +275,8 @@ extension ContextMenu {
     /// Sets the context menu header's title to the title given in titleRes resource identifier.
     public func headerTitle(_ resId: Int32) -> ContextMenu! {
         guard
-            let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(ContextMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -275,7 +285,8 @@ extension ContextMenu {
     public func headerTitle(_ value: String) -> ContextMenu! {
         guard
             let str = JString(from: value),
-            let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(ContextMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -286,7 +297,8 @@ extension ContextMenu {
     public func headerView(_ view: View) -> ContextMenu! {
         guard
             let view = view.instance,
-            let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(ContextMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -445,7 +457,8 @@ extension SubMenu {
     /// Use this for setting additional item attributes.
     public func item() -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "getItem", returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "getItem", returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -453,7 +466,8 @@ extension SubMenu {
     /// Sets the submenu header's icon to the icon given in iconRes resource id.
     public func headerIcon(_ resId: Int32) -> SubMenu! {
         guard
-            let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -461,7 +475,8 @@ extension SubMenu {
     /// Sets the submenu header's icon to the icon given in icon `Drawable`.
     public func headerIcon(_ value: Drawable) -> SubMenu! {
         guard
-            let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -469,7 +484,8 @@ extension SubMenu {
     /// Sets the submenu header's title to the title given in titleRes resource identifier.
     public func headerTitle(_ resId: Int32) -> SubMenu! {
         guard
-            let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -478,7 +494,8 @@ extension SubMenu {
     public func headerTitle(_ value: String) -> SubMenu! {
         guard
             let str = JString(from: value),
-            let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -489,7 +506,8 @@ extension SubMenu {
     public func headerView(_ view: View) -> SubMenu! {
         guard
             let view = view.instance,
-            let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -497,7 +515,8 @@ extension SubMenu {
     /// Change the icon associated with this submenu's item in its parent menu.
     public func icon(_ value: Drawable) -> SubMenu! {
         guard
-            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -505,7 +524,8 @@ extension SubMenu {
     /// Change the icon associated with this submenu's item in its parent menu.
     public func icon(_ resId: Int32) -> SubMenu! {
         guard
-            let global = object.callObjectMethod(name: "setIcon", args: resId, returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "setIcon", args: resId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -582,7 +602,8 @@ extension MenuItem {
     /// Gets the `ActionProvider`.
     public func actionProvider() -> ActionProvider? {
         guard
-            let global = object.callObjectMethod(name: "getActionProvider", returning: .object(ActionProvider.className))
+            let returningClazz = JClass.load(ActionProvider.className),
+            let global = object.callObjectMethod(name: "getActionProvider", returningClass: returningClazz, returning: .object(ActionProvider.className))
         else { return nil }
         return .init(global, context)
     }
@@ -590,7 +611,8 @@ extension MenuItem {
     /// Returns the currently set action view for this menu item.
     public func actionView() -> View? {
         guard
-            let global = object.callObjectMethod(name: "getActionView", returning: .object(View.className))
+            let returningClazz = JClass.load(View.className),
+            let global = object.callObjectMethod(name: "getActionView", returningClass: returningClazz, returning: .object(View.className))
         else { return nil }
         return .init(global, context)
     }
@@ -618,7 +640,8 @@ extension MenuItem {
     /// Retrieve the content description associated with this menu item.
     public func contentDescription() -> String? {
         guard
-            let str = object.callObjectMethod(name: "getContentDescription")
+            let returningClazz = JClass.load(JString.charSequenseClassName),
+            let str = object.callObjectMethod(name: "getContentDescription", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
         else { return nil }
         return JString(str).toString()
     }
@@ -637,7 +660,8 @@ extension MenuItem {
     /// you have to apply the tinting explicitly on the Drawable returned by this method.
     public func icon() -> Drawable? {
         guard
-            let global = object.callObjectMethod(name: "getIcon")
+            let returningClazz = JClass.load(Drawable.className),
+            let global = object.callObjectMethod(name: "getIcon", returningClass: returningClazz, returning: .object(Drawable.className))
         else { return nil }
         return .init(global)
     }
@@ -651,7 +675,8 @@ extension MenuItem {
     /// This returns a reference to the Intent which you can change as desired to modify what the Item is holding.
     public func intent() -> Intent? {
         guard
-            let global = object.callObjectMethod(name: "getIntent")
+            let returningClazz = JClass.load(Intent.className),
+            let global = object.callObjectMethod(name: "getIntent", returningClass: returningClazz, returning: .object(Intent.className))
         else { return nil }
         return .init(global)
     }
@@ -695,7 +720,8 @@ extension MenuItem {
     /// Get the sub-menu to be invoked when this item is selected, if it has one.
     public func subMenu() -> SubMenu? {
         guard
-            let global = object.callObjectMethod(name: "getSubMenu", returning: .object(SubMenu.className))
+            let returningClazz = JClass.load(SubMenu.className),
+            let global = object.callObjectMethod(name: "getSubMenu", returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
         return .init(global, self)
     }
@@ -703,7 +729,8 @@ extension MenuItem {
     /// Retrieve the current title of the item.
     public func title() -> String? {
         guard
-            let str = object.callObjectMethod(name: "getTitle")
+            let returningClazz = JClass.load(JString.charSequenseClassName),
+            let str = object.callObjectMethod(name: "getTitle", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
         else { return nil }
         return JString(str).toString()
     }
@@ -713,7 +740,8 @@ extension MenuItem {
     /// If a condensed title was never set, it will return the normal title.
     public func titleCondensed() -> String? {
         guard
-            let str = object.callObjectMethod(name: "getTitleCondensed")
+            let returningClazz = JClass.load(JString.charSequenseClassName),
+            let str = object.callObjectMethod(name: "getTitleCondensed", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
         else { return nil }
         return JString(str).toString()
     }
@@ -721,7 +749,8 @@ extension MenuItem {
     /// Retrieve the tooltip text associated with this menu item.
     public func tooltipText() -> String? {
         guard
-            let str = object.callObjectMethod(name: "getTooltipText")
+            let returningClazz = JClass.load(JString.charSequenseClassName),
+            let str = object.callObjectMethod(name: "getTooltipText", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
         else { return nil }
         return JString(str).toString()
     }
@@ -765,7 +794,8 @@ extension MenuItem {
     /// Note: Setting an action provider overrides the action view set via `setActionView(int)` or `setActionView(View)`.
     public func actionProvider(_ provider: ActionProvider) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setActionProvider", args: provider.signed(as: ActionProvider.className), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setActionProvider", args: provider.signed(as: ActionProvider.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -777,7 +807,8 @@ extension MenuItem {
     /// Note: Setting an action view overrides the action provider set via `setActionProvider(ActionProvider)`.
     public func actionView(_ resId: Int32) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setActionView", args: resId, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setActionView", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -790,7 +821,8 @@ extension MenuItem {
     public func actionView(_ view: View) -> MenuItem! {
         guard
             let view = view.instance,
-            let global = object.callObjectMethod(name: "setActionView", args: view.signed(as: View.className), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setActionView", args: view.signed(as: View.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -808,7 +840,8 @@ extension MenuItem {
     /// See Menu for the menu types that support shortcuts.
     public func alphabeticShortcut(_ alphaChar: UInt16) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -826,7 +859,8 @@ extension MenuItem {
     /// See Menu for the menu types that support shortcuts.
     public func alphabeticShortcut(_ alphaChar: UInt16, alphaModifiers: Int) -> MenuItem! { // TODO: OptionSet for modifiers?
         guard
-            let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, Int32(alphaModifiers), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, Int32(alphaModifiers), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -840,7 +874,8 @@ extension MenuItem {
     /// See Menu for the menu types that support check marks.
     public func checkable(_ value: Bool = true) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setCheckable", args: value, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setCheckable", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -855,7 +890,8 @@ extension MenuItem {
     /// See Menu for the menu types that support check marks.
     public func checked(_ value: Bool = true) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setChecked", args: value, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setChecked", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -864,7 +900,8 @@ extension MenuItem {
     public func contentDescription(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
-            let global = object.callObjectMethod(name: "setContentDescription", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setContentDescription", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -876,7 +913,8 @@ extension MenuItem {
     /// The menu item will still be visible.
     public func enabled(_ value: Bool = true) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setEnabled", args: value, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setEnabled", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -886,7 +924,8 @@ extension MenuItem {
     /// This icon will not always be shown, so the title should be sufficient in describing this item.
     public func icon(_ value: Drawable) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -896,7 +935,8 @@ extension MenuItem {
     /// This icon will not always be shown, so the title should be sufficient in describing this item.
     public func icon(_ resId: Int32) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setIcon", args: resId, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setIcon", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -917,7 +957,8 @@ extension MenuItem {
     /// In this case it is assumed that the `Runnable` always handles the item, and the intent will never be started.
     public func intent(_ intent: Intent) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setIntent", args: intent.signed(as: Intent.className), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setIntent", args: intent.signed(as: Intent.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -925,7 +966,8 @@ extension MenuItem {
     /// Change the numeric shortcut and modifiers associated with this item.
     public func numericShortcut(numericChar: UInt16, numericModifiers: Int) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, Int32(numericModifiers), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, Int32(numericModifiers), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -933,7 +975,8 @@ extension MenuItem {
     /// Change the numeric shortcut associated with this item.
     public func numericShortcut(numericChar: UInt16) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -944,7 +987,8 @@ extension MenuItem {
     /// Change the numeric shortcut and modifiers associated with this item.
     public func shortcut(numericChar: UInt16, numericModifiers: Int) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setShortcut", args: numericChar, Int32(numericModifiers), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setShortcut", args: numericChar, Int32(numericModifiers), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -952,7 +996,8 @@ extension MenuItem {
     /// Change the numeric shortcut associated with this item.
     public func shortcut(numericChar: UInt16) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setShortcut", args: numericChar, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setShortcut", args: numericChar, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -965,7 +1010,8 @@ extension MenuItem {
     /// Sets how this item should display in the presence of an Action Bar.
     public func setShowAsActionFlags(_ value: ShowAsAction) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setShowAsActionFlags", args: value.rawValue, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setShowAsActionFlags", args: value.rawValue, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -974,7 +1020,8 @@ extension MenuItem {
     public func title(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
-            let global = object.callObjectMethod(name: "setTitle", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setTitle", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -982,7 +1029,8 @@ extension MenuItem {
     /// Change the title associated with this item.
     public func title(_ resId: Int32) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setTitle", args: resId, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setTitle", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -993,7 +1041,8 @@ extension MenuItem {
     public func titleCondensed(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
-            let global = object.callObjectMethod(name: "setTitleCondensed", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setTitleCondensed", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -1003,7 +1052,8 @@ extension MenuItem {
     /// The condensed title is used in situations where the normal title may be too long to be displayed.
     public func titleCondensed(_ resId: Int32) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setTitleCondensed", args: resId, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setTitleCondensed", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
@@ -1012,14 +1062,16 @@ extension MenuItem {
     public func tooltipText(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
-            let global = object.callObjectMethod(name: "setTooltipText", args: str.signedAsCharSequence(), returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setTooltipText", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }
 
     public func visible(_ value: Bool = true) -> MenuItem! {
         guard
-            let global = object.callObjectMethod(name: "setVisible", args: value, returning: .object(MenuItem.className))
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "setVisible", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
         return .init(global, self)
     }

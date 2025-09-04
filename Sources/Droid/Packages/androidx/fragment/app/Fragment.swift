@@ -251,7 +251,8 @@ open class Fragment: JObjectable, @unchecked Sendable {
     /// Return the FragmentActivity this fragment is currently associated with.
     public func requireActivity() -> FragmentActivity! {
         guard
-            let global = object.callObjectMethod(name: "requireActivity", returning: .object(FragmentActivity.className))
+            let returningClazz = JClass.load(FragmentActivity.className),
+            let global = object.callObjectMethod(name: "requireActivity", returningClass: returningClazz, returning: .object(FragmentActivity.className))
         else { return nil }
         return .init(global)
     }
@@ -259,7 +260,8 @@ open class Fragment: JObjectable, @unchecked Sendable {
     /// Return the arguments supplied when the fragment was instantiated.
     public func requireArguments() -> Bundle! {
         guard
-            let global = object.callObjectMethod(name: "requireArguments", returning: .object(Bundle.className))
+            let returningClazz = JClass.load(Bundle.className),
+            let global = object.callObjectMethod(name: "requireArguments", returningClass: returningClazz, returning: .object(Bundle.className))
         else { return nil }
         return .init(global)
     }
@@ -267,20 +269,25 @@ open class Fragment: JObjectable, @unchecked Sendable {
     /// Return the Context this fragment is currently associated with.
     public func requireContext() -> ActivityContext! {
         guard
-            let global = object.callObjectMethod(name: "requireContext", returning: .object(.android.content.Context))
+            let returningClazz = JClass.load(.android.content.Context),
+            let global = object.callObjectMethod(name: "requireContext", returningClass: returningClazz, returning: .object(.android.content.Context))
         else { return nil }
         return .init(object: global)
     }
 
     /// Return the host object of this fragment.
     public func requireHost() -> JObject! {
-        object.callObjectMethod(name: "requireHost", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "requireHost", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     /// Returns the parent Fragment containing this Fragment.
     public func requireParentFragment() -> Fragment! {
         guard
-            let global = object.callObjectMethod(name: "requireParentFragment", returning: .object(Fragment.className))
+            let returningClazz = JClass.load(Fragment.className),
+            let global = object.callObjectMethod(name: "requireParentFragment", returningClass: returningClazz, returning: .object(Fragment.className))
         else { return nil }
         return .init(global)
     }
@@ -288,8 +295,8 @@ open class Fragment: JObjectable, @unchecked Sendable {
     /// Get the root view for the fragment's layout (the one returned by onCreateView).
     public func requireView() -> View! {
         guard
-            let context = context(), // TODO: replace with instance?.context
-            let global = object.callObjectMethod(name: "requireView", returning: .object(View.className))
+            let returningClazz = JClass.load(View.className),
+            let global = object.callObjectMethod(name: "requireView", returningClass: returningClazz, returning: .object(View.className))
         else { return nil }
         return .init(global, context)
     }
@@ -448,7 +455,8 @@ extension Fragment {
     /// May return null if the fragment is associated with a `Context` instead.
     public func activity() -> FragmentActivity? {
         guard
-            let global = object.callObjectMethod(name: "getActivity", returning: .object(FragmentActivity.className))
+            let returningClazz = JClass.load(FragmentActivity.className),
+            let global = object.callObjectMethod(name: "getActivity", returningClass: returningClazz, returning: .object(FragmentActivity.className))
         else { return nil }
         return .init(global)
     }
@@ -474,7 +482,8 @@ extension Fragment {
     /// Return the arguments supplied when the fragment was instantiated, if any.
     public func arguments() -> Bundle? {
         guard
-            let global = object.callObjectMethod(name: "getArguments", returning: .object(Bundle.className))
+            let returningClazz = JClass.load(Bundle.className),
+            let global = object.callObjectMethod(name: "getArguments", returningClass: returningClazz, returning: .object(Bundle.className))
         else { return nil }
         return .init(global)
     }
@@ -482,7 +491,8 @@ extension Fragment {
     /// Return a private FragmentManager for placing and managing Fragments inside of this Fragment.
     public func childFragmentManager() -> FragmentManager! {
         guard
-            let global = object.callObjectMethod(name: "getChildFragmentManager", returning: .object(FragmentManager.className))
+            let returningClazz = JClass.load(FragmentManager.className),
+            let global = object.callObjectMethod(name: "getChildFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
         else { return nil }
         return .init(global)
     }
@@ -490,7 +500,8 @@ extension Fragment {
     /// Return the `Context` this fragment is currently associated with.
     public func context() -> ActivityContext? {
         guard
-            let global = object.callObjectMethod(name: "getContext", returning: .object("android/content/Context"))
+            let returningClazz = JClass.load("android/content/Context"),
+            let global = object.callObjectMethod(name: "getContext", returningClass: returningClazz, returning: .object("android/content/Context"))
         else { return nil }
         return .init(object: global)
     }
@@ -500,19 +511,28 @@ extension Fragment {
     
     /// Returns the Transition that will be used to move Views into the initial scene.
     public func enterTransition() -> JObject? {
-        object.callObjectMethod(name: "getEnterTransition", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getEnterTransition", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     /// Returns the Transition that will be used to move Views out of the scene when the fragment is removed, hidden, or detached when not popping the back stack.
     public func exitTransition() -> JObject? {
-        object.callObjectMethod(name: "getExitTransition", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getExitTransition", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
     
     /// Return the host object of this fragment.
     /// 
     /// May return null if the fragment isn't currently being hosted.
     public func host() -> JObject? {
-        object.callObjectMethod(name: "getHost", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getHost", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
     
     /// Return the identifier this fragment is known by.
@@ -530,7 +550,8 @@ extension Fragment {
     /// If this Fragment is attached directly to an Activity, returns null.
     public func parentFragment() -> Fragment? {
         guard
-            let global = object.callObjectMethod(name: "getParentFragment", returning: .object(Fragment.className))
+            let returningClazz = JClass.load(Fragment.className),
+            let global = object.callObjectMethod(name: "getParentFragment", returningClass: returningClazz, returning: .object(Fragment.className))
         else { return nil }
         return .init(global)
     }
@@ -542,39 +563,53 @@ extension Fragment {
     /// If this Fragment is a child of another Fragment, the FragmentManager returned here will be the parent's getChildFragmentManager.
     public func parentFragmentManager() -> FragmentManager! {
         guard
-            let global = object.callObjectMethod(name: "getParentFragmentManager", returning: .object(FragmentManager.className))
+            let returningClazz = JClass.load(Fragment.className),
+            let global = object.callObjectMethod(name: "getParentFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
         else { return nil }
         return .init(global)
     }
 
     /// Returns the Transition that will be used to move Views in to the scene when returning due to popping a back stack.
     public func reenterTransition() -> JObject? {
-        object.callObjectMethod(name: "getReenterTransition", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getReenterTransition", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     // TODO: getResources
 
     /// Returns the Transition that will be used to move Views out of the scene when the Fragment is preparing to be removed, hidden, or detached because of popping the back stack.
     public func returnTransition() -> JObject? {
-        object.callObjectMethod(name: "getReturnTransition", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getReturnTransition", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     // TODO: getSavedStateRegistry
 
     /// Returns the Transition that will be used for shared elements transferred into the content Scene.
     public func sharedElementEnterTransition() -> JObject? {
-        object.callObjectMethod(name: "getSharedElementEnterTransition", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getSharedElementEnterTransition", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     /// Return the Transition that will be used for shared elements transferred back during a pop of the back stack.
     public func sharedElementReturnTransition() -> JObject? {
-        object.callObjectMethod(name: "getSharedElementReturnTransition", returning: .object("java/lang/Object"))
+        guard
+            let returningClazz = JClass.load("java/lang/Object")
+        else { return nil }
+        return object.callObjectMethod(name: "getSharedElementReturnTransition", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     /// Return a localized string from the application's package's default string table.
     public func string(_ resId: Int32) -> String! {
         guard
-            let obj = object.callObjectMethod(name: "getString", args: resId, returning: .object(JString.className))
+            let returningClazz = JClass.load(JString.className),
+            let obj = object.callObjectMethod(name: "getString", args: resId, returningClass: returningClazz, returning: .object(JString.className))
         else { return nil }
         return JString(obj).toString()
     }
@@ -582,7 +617,8 @@ extension Fragment {
     /// Get the tag name of the fragment, if specified.
     public func tag() -> String? {
         guard
-            let obj = object.callObjectMethod(name: "getTag", returning: .object(JString.className))
+            let returningClazz = JClass.load(JString.className),
+            let obj = object.callObjectMethod(name: "getTag", returningClass: returningClazz, returning: .object(JString.className))
         else { return nil }
         return JString(obj).toString()
     }
@@ -590,15 +626,16 @@ extension Fragment {
     /// Return a localized, styled `CharSequence` from the application's package's default string table.
     public func text(_ resId: Int32) -> String? {
         guard
-            let obj = object.callObjectMethod(name: "getText", args: resId, returning: .object(JString.charSequenseClassName))
+            let returningClazz = JClass.load(JString.charSequenseClassName),
+            let obj = object.callObjectMethod(name: "getText", args: resId, returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
         else { return nil }
         return JString(obj).toString()
     }
 
     public func view() -> View? {
         guard
-            let global = object.callObjectMethod(name: "getView", returning: .object(View.className)),
-            let context = context()
+            let returningClazz = JClass.load(View.className),
+            let global = object.callObjectMethod(name: "getView", returningClass: returningClazz, returning: .object(View.className))
         else { return nil }
         let id = global.callIntMethod(name: "getId")
         return .init(id: id, global, context)

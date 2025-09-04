@@ -110,7 +110,8 @@ extension Animation {
     /// Returns the timing interpolator that this animation uses.
     public func interpolator() -> TimeInterpolator! {
         guard
-            let global = object.callObjectMethod(name: "getInterpolator", returning: .object(TimeInterpolator.className))
+            let returningClazz = JClass.load(TimeInterpolator.className),
+            let global = object.callObjectMethod(name: "getInterpolator", returningClass: returningClazz, returning: .object(TimeInterpolator.className))
         else { return nil }
         return .init(global)
     }
@@ -625,7 +626,8 @@ extension Animator {
     /// The precise meaning of "copy" may depend on the class of the object.
     public func clone() -> Animator! {
         guard
-            let global = object.callObjectMethod(name: "clone", returning: .object(Animator.className))
+            let returningClazz = JClass.load(Animator.className),
+            let global = object.callObjectMethod(name: "clone", returningClass: returningClazz, returning: .object(Animator.className))
         else { return nil }
         return .init(global)
     }
@@ -648,7 +650,8 @@ extension Animator {
     /// Returns the timing interpolator that this animation uses.
     public func interpolator() -> TimeInterpolator! {
         guard
-            let global = object.callObjectMethod(name: "getInterpolator")
+            let returningClazz = JClass.load(TimeInterpolator.className),
+            let global = object.callObjectMethod(name: "getInterpolator", returningClass: returningClazz, returning: .object(TimeInterpolator.className))
         else { return nil }
         return .init(global)
     }
@@ -723,7 +726,8 @@ extension Animator {
     /// Sets the duration of the animation.
     public func duration(_ duration: Int) -> Animator! {
         guard
-            let global = object.callObjectMethod(name: "setDuration", args: Int32(duration), returning: .object(Animator.className))
+            let returningClazz = JClass.load(Animator.className),
+            let global = object.callObjectMethod(name: "setDuration", args: Int32(duration), returningClass: returningClazz, returning: .object(Animator.className))
         else { return nil }
         return .init(global)
     }
@@ -906,7 +910,8 @@ extension ValueAnimator {
     /// which is called during each animation frame, immediately after the value is calculated.
     public func animatedValue() -> JObject? {
         guard
-            let global = object.callObjectMethod(name: "getAnimatedValue", returning: .object("java/lang/Object"))
+            let returningClazz = JClass.load("java/lang/Object"),
+            let global = object.callObjectMethod(name: "getAnimatedValue", returningClass: returningClazz, returning: .object("java/lang/Object"))
         else { return nil }
         return global
     }
@@ -921,7 +926,8 @@ extension ValueAnimator {
     public func animatedValue(_ propertyName: String) -> JObject? {
         guard
             let str = JString(from: propertyName),
-            let global = object.callObjectMethod(name: "getAnimatedValue", args: str.signedAsString(), returning: .object("java/lang/Object"))
+            let returningClazz = JClass.load("java/lang/Object"),
+            let global = object.callObjectMethod(name: "getAnimatedValue", args: str.signedAsString(), returningClass: returningClazz, returning: .object("java/lang/Object"))
         else { return nil }
         return global
     }
@@ -1068,14 +1074,18 @@ extension ObjectAnimator {
     /// or a comma-separated list of all of the names (if there are more than one).
     public func propertyName() -> String! {
         guard
-            let str = object.callObjectMethod(name: "getPropertyName", returning: .object(JString.className))
+            let returningClazz = JClass.load(JString.className),
+            let str = object.callObjectMethod(name: "getPropertyName", returningClass: returningClazz, returning: .object(JString.className))
         else { return nil }
         return JString(str).toString()
     }
 
     /// The target object whose property will be animated by this animation
     public func getTarget() -> JObject? {
-        object.callObjectMethod(name: "getTarget")
+        guard
+            let returningClazz = JClass.load(JString.className)
+        else { return nil }
+        return object.callObjectMethod(name: "getTarget", returningClass: returningClazz, returning: .object("java/lang/Object"))
     }
 
     /// `autoCancel` controls whether an `ObjectAnimator` will be canceled automatically
@@ -1750,7 +1760,8 @@ extension Rect {
     /// Return a string representation of the rectangle in a well-defined format.
     public func flattenToString() -> String? {
         guard
-            let global = object.callObjectMethod(name: "flattenToString", returning: .object(JString.className))
+            let returningClazz = JClass.load(JString.className),
+            let global = object.callObjectMethod(name: "flattenToString", returningClass: returningClazz, returning: .object(JString.className))
         else { return nil }
         return JString(global).toString()
     }

@@ -349,7 +349,8 @@ extension ActionBar {
     /// The current custom view.
     public func customView() -> View! {
         guard
-            let global = object.callObjectMethod(name: "getCustomView", returning: .object(.android.view.View))
+            let returningClazz = JClass.load(.android.view.View),
+            let global = object.callObjectMethod(name: "getCustomView", returningClass: returningClazz, returning: .object(.android.view.View))
         else { return nil }
         return .init(id: .nextViewId(), global, context)
     }
@@ -430,7 +431,8 @@ extension ActionBar {
     /// Returns the current ActionBar subtitle in standard mode.
     public func subtitle() -> String? {
         guard
-            let str = object.callObjectMethod(name: "getSubtitle", returning: .object(JString.charSequenseClassName))
+            let returningClazz = JClass.load(JString.charSequenseClassName),
+            let str = object.callObjectMethod(name: "getSubtitle", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
         else { return nil }
         return JString(str).toSwiftString()
     }
@@ -439,7 +441,8 @@ extension ActionBar {
 
     public func title() -> String? {
         guard
-            let str = object.callObjectMethod(name: "getTitle", returning: .object(JString.charSequenseClassName))
+            let returningClazz = JClass.load(JString.charSequenseClassName),
+            let str = object.callObjectMethod(name: "getTitle", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
         else { return nil }
         return JString(str).toSwiftString()
     }

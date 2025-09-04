@@ -31,7 +31,8 @@ open class FragmentActivity: ComponentActivity {
     /// Return the `FragmentManager` for interacting with fragments associated with this activity.
     public func supportFragmentManager() -> FragmentManager! {
         guard
-            let global = _context.object.callObjectMethod(name: "getSupportFragmentManager", returning: .object(FragmentManager.className))
+            let returningClazz = JClass.load(FragmentManager.className),
+            let global = _context.object.callObjectMethod(name: "getSupportFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
         else { return nil }
         return .init(global)
     }
