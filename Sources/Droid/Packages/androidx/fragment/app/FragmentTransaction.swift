@@ -342,7 +342,7 @@ extension FragmentTransaction {
     /// Set specific animation resources to run for the fragments that are entering and exiting in this transaction.
     /// 
     /// These animations will not be played when popping the back stack.
-    public func setCustomAnimations(_ enter: Int32, _ exit: Int32) -> FragmentTransaction! {
+    public func customAnimations(_ enter: Int32, _ exit: Int32) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
@@ -353,7 +353,7 @@ extension FragmentTransaction {
     /// Set specific animation resources to run for the fragments that are entering and exiting in this transaction.
     /// 
     /// The `popEnter` and `popExit` animations will be played for enter/exit operations specifically when popping the back stack.
-    public func setCustomAnimations(_ enter: Int32, _ exit: Int32, _ popEnter: Int32, _ popExit: Int32) -> FragmentTransaction! {
+    public func customAnimations(_ enter: Int32, _ exit: Int32, _ popEnter: Int32, _ popExit: Int32) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, popEnter, popExit, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
@@ -372,7 +372,7 @@ extension FragmentTransaction {
     /// 
     /// The fragment provided must currently be added to the `FragmentManager` to be set as a primary navigation fragment,
     /// or previously added as part of this transaction.
-    public func setPrimaryNavigationFragment(_ fragment: Fragment) -> FragmentTransaction! {
+    public func primaryNavigationFragment(_ fragment: Fragment) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setPrimaryNavigationFragment", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
@@ -398,7 +398,7 @@ extension FragmentTransaction {
     /// `postponeEnterTransition` requires `setReorderingAllowed(true)`.
     /// 
     /// The default is `false`.
-    public func setReorderingAllowed(_ reorderingAllowed: Bool = true) -> FragmentTransaction! {
+    public func reorderingAllowed(_ reorderingAllowed: Bool = true) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setReorderingAllowed", args: reorderingAllowed, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
@@ -407,7 +407,7 @@ extension FragmentTransaction {
     }
 
     /// Select a standard transition animation for this transaction.
-    public func setTransition(_ transition: Transit) -> FragmentTransaction! {
+    public func transition(_ transition: Transit) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setTransition", args: transition.rawValue, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
