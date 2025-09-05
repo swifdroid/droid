@@ -151,7 +151,7 @@ final class RecyclerViewAdapterInstance: JObjectable, Sendable {
     static var className: JClassName { "stream/swift/droid/appkit/adapters/NativeRecyclerViewAdapter" }
 
     /// Context
-    let context: ActivityContext
+    unowned let context: ActivityContext
 
     /// Object wrapper
     let object: JObject

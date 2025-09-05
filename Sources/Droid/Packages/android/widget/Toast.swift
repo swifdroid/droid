@@ -20,7 +20,7 @@ extension AndroidPackage.WidgetPackage {
 public final class Toast: JObjectable, @unchecked Sendable {
     public static var className: JClassName { .android.widget.Toast }
 
-    let context: ActivityContext
+    unowned let context: ActivityContext
     public let object: JObject
 
     public convenience init? (_ context: Contextable) {

@@ -32,7 +32,7 @@ extension AnyNativeObject {
 @UIThreadActor
 #endif
 open class NativeUIObject: NativeObject, Contextable, @unchecked Sendable {
-    public let context: ActivityContext
+    public unowned let context: ActivityContext
 
     public init (_ object: JObject, _ context: Contextable) {
         self.context = context.context

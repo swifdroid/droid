@@ -17,7 +17,7 @@ extension View {
         public let id: Int32
 
         /// Context
-        public let context: ActivityContext
+        public unowned let context: ActivityContext
 
         /// View
         public let view: View

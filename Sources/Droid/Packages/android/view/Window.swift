@@ -334,7 +334,7 @@ public final class ActionBar: JObjectable, Sendable {
     public static var lpClassName: JClassName { "androidx/appcompat/app/ActionBar$LayoutParams" }
 
     public let object: JObject
-    public let context: ActivityContext
+    public unowned let context: ActivityContext
 
     public init (_ object: JObject, _ context: ActivityContext) {
         self.object = object

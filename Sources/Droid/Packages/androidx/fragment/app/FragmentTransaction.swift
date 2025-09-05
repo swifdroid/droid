@@ -17,7 +17,7 @@ public final class FragmentTransaction: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentTransaction") }
 
     public let object: JObject
-    public let context: ActivityContext
+    public unowned let context: ActivityContext
 
     public init (_ object: JObject, _ context: Contextable) {
         self.object = object

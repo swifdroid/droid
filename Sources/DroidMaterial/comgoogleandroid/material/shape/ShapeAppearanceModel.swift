@@ -14,7 +14,7 @@ public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
     public class var className: JClassName { "com/google/android/material/shape/ShapeAppearanceModel" }
 
     public let object: JObject
-    public let context: ActivityContext
+    public unowned let context: ActivityContext
 
     public init (_ object: JObject, _ context: Contextable) {
         self.object = object

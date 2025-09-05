@@ -392,7 +392,7 @@ open class LayoutManager: @unchecked Sendable {
     #endif
     public final class LayoutManagerInstance: JObjectable, @unchecked Sendable {
         /// Context
-        public let context: ActivityContext
+        public unowned let context: ActivityContext
         
         /// Object
         public let object: JObject
