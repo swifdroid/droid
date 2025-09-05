@@ -1618,6 +1618,9 @@ public final class PathInterpolator: BaseInterpolator, @unchecked Sendable {
 /// and row described by its left and top coordinates, but not those of its bottom and right.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/graphics/Rect)
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 public final class Rect: JObjectable, @unchecked Sendable {
     public static var className: JClassName { "android/graphics/Rect" }
 
@@ -1980,6 +1983,9 @@ extension Rect {
 /// Note: most methods do not check to see that the coordinates are sorted correctly (i.e. left <= right and top <= bottom).
 /// 
 /// [Learn more](https://developer.android.com/reference/android/graphics/RectF)
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 public final class RectF: JObjectable, @unchecked Sendable {
     public static var className: JClassName { "android/graphics/RectF" }
 
@@ -2322,6 +2328,9 @@ extension RectF {
 /// either filled or stroked (based on the paint's Style), or it can be used for clipping or to draw text on a path.
 ///
 /// [Learn more](https://developer.android.com/reference/android/graphics/Path)
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
 public final class Path: JObjectable, @unchecked Sendable {
     public static var className: JClassName { "android/graphics/Path" }
 
@@ -2732,6 +2741,9 @@ extension Path {
     /// Specifies how closed shapes (e.g. rects, ovals) are oriented when they are added to a path.
     /// 
     /// [Learn more](https://developer.android.com/reference/android/graphics/Path.Direction)
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
     public final class Direction: JObjectable, Sendable {
         public static var className: JClassName { "android/graphics/Path$Direction" }
 
@@ -2770,6 +2782,9 @@ extension Path {
     /// The logical operations that can be performed when combining two paths.
     /// 
     /// [Learn more](https://developer.android.com/reference/android/graphics/Path.Op)
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
     public final class Op: JObjectable, @unchecked Sendable {
         public static var className: JClassName { "android/graphics/Path$Op" }
 
@@ -2825,6 +2840,9 @@ extension Path {
     /// Enum for the ways a path may be filled.
     /// 
     /// [Learn more](https://developer.android.com/reference/android/graphics/Path.FillType)
+    #if canImport(AndroidLooper)
+    @UIThreadActor
+    #endif
     public final class FillType: JObjectable, @unchecked Sendable {
         public static var className: JClassName { "android/graphics/Path$FillType" }
 
