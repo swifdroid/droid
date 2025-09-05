@@ -9,14 +9,16 @@ import AndroidLooper
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public final class ShapeAppearanceModel: JObjectable, Sendable {
+public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
     /// The JNI class name
     public class var className: JClassName { "com/google/android/material/shape/ShapeAppearanceModel" }
 
     public let object: JObject
+    public let context: ActivityContext
 
-    public init (_ object: JObject) {
+    public init (_ object: JObject, _ context: Contextable) {
         self.object = object
+        self.context = context.context
     }
 
     public init? (_ context: Contextable) {
@@ -28,6 +30,7 @@ public final class ShapeAppearanceModel: JObjectable, Sendable {
             let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.context.object])
         else { return nil }
         self.object = global
+        self.context = context.context
         #else
         return nil
         #endif
@@ -41,6 +44,6 @@ public final class ShapeAppearanceModel: JObjectable, Sendable {
             let returningClazz = JClass.load(ShapeAppearanceModel.className),
             let newObject = object.callObjectMethod(name: "withCornerSize", args: cornerSize, returningClass: returningClazz, returning: .object(ShapeAppearanceModel.className))
         else { return nil }
-        return .init(newObject)
+        return .init(newObject, self)
     }
 }

@@ -105,16 +105,14 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     /// 
     /// - **Very important**: Call it only when view already have its instance
     open func layoutParamsForSubviews() -> LayoutParams? {
-        guard let instance else { return nil }
-        return .init(instance.context, Self.layoutParamsClass.className)
+        .init(Self.layoutParamsClass.className)
     }
 
     /// Layout Params for subviews, it uses `layoutParamsClass` so no need to override it in each view.
     /// 
     /// - **Very important**: Call it only when view already have its instance
     open func layoutParamsForSubviews(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) -> LayoutParams? {
-        guard let instance else { return nil }
-        return .init(instance.context, Self.layoutParamsClass.className, width: width, height: height, unit: unit)
+        .init(Self.layoutParamsClass.className, width: width, height: height, unit: unit)
     }
 
     open func applicableLayoutParams() -> [LayoutParamKey] {
@@ -142,10 +140,13 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         }
     }
     
-    open func processLayoutParams(_ context: ViewInstance, _ lp: LayoutParams, for subview: View) {
+    open func processLayoutParams(_ instance: ViewInstance, _ lp: LayoutParams, for subview: View) {
         let params = subview.filteredLayoutParams(applicableLayoutParams())
         let env = JEnv.current()
-        params.forEach { $0.apply(env, context, lp) }
+        params.forEach {
+            InnerLog.t("Processing LP: \($0.key) for \(subview.className.path)#\(subview.id)")
+            $0.apply(env, instance, lp)
+        }
     }
 
     open func processProperties(_ propertiesToSkip: [ViewPropertyKey], _ instance: View.ViewInstance) {
@@ -393,8 +394,8 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     var _propertiesToApply: [any ViewPropertyToApply] = []
     var _layoutParamsToApply: [any LayoutParamToApply] = []
 
-    func proceedSubviewsLayoutParams(_ context: ViewInstance) {
         // InnerLog.d("view(id: \(id)) proceedSubviewsLayoutParams")
+    func proceedSubviewsLayoutParams(_ instance: ViewInstance) {
         for subview in subviews.filter({ v in
             switch v.status {
                 case .inParent: return true
@@ -402,10 +403,10 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             }
         }) {
             if Self.layoutParamsShouldBeLoaded, let lp = subview.instance?.layoutParams(Self.layoutParamsClass.className) {
-                processLayoutParams(context, lp, for: subview)
+                processLayoutParams(instance, lp, for: subview)
                 subview.layoutParams(lp)
             } else if let lp = layoutParamsForSubviews() {
-                processLayoutParams(context, lp, for: subview)
+                processLayoutParams(instance, lp, for: subview)
                 subview.layoutParams(lp)
             }
         }

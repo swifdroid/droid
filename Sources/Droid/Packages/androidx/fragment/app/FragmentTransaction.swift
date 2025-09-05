@@ -163,7 +163,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "addToBackStack", args: name.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
         #else
         return nil
         #endif
@@ -181,7 +181,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "attach", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
         #else
         return nil
         #endif
@@ -256,7 +256,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "detach", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Disallow calls to `addToBackStack`.
@@ -268,7 +268,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "disallowAddToBackStack", returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Hides an existing fragment.
@@ -279,7 +279,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "hide", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Returns true if this `FragmentTransaction` is allowed to be added to the back stack.
@@ -302,7 +302,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "remove", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Calls `replace` with a `null` tag.
@@ -315,7 +315,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Replace an existing fragment that was added to a container.
@@ -333,7 +333,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), tag.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Set specific animation resources to run for the fragments that are entering and exiting in this transaction.
@@ -344,7 +344,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Set specific animation resources to run for the fragments that are entering and exiting in this transaction.
@@ -355,7 +355,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, popEnter, popExit, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     // TODO: setMaxLifecycle (implement passing Lifecycle.State via JNI)
@@ -374,7 +374,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setPrimaryNavigationFragment", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Sets whether or not to allow optimizing operations within and across transactions.
@@ -400,7 +400,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setReorderingAllowed", args: reorderingAllowed, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Select a standard transition animation for this transaction.
@@ -409,7 +409,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "setTransition", args: transition.rawValue, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Shows a previously hidden fragment.
@@ -420,6 +420,6 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "show", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 }

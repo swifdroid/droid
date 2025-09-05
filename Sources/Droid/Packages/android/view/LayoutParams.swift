@@ -74,12 +74,12 @@ public final class LayoutParams: Sendable, JObjectable {
         self.object = object
     }
 
-    convenience init? (_ context: ActivityContext, _ className: JClassName) {
+    convenience init? (_ className: JClassName) {
         guard let env = JEnv.current() else { return nil }
-        self.init(env, context, className)
+        self.init(env, className)
     }
     
-    init? (_ env: JEnv, _ context: ActivityContext, _ className: JClassName) {
+    init? (_ env: JEnv, _ className: JClassName) {
         InnerLog.t("💡 1LayoutParams trying to load class: \(className)")
         #if os(Android)
         guard
@@ -93,16 +93,16 @@ public final class LayoutParams: Sendable, JObjectable {
         #endif
     }
     
-    convenience init? (_ context: ActivityContext, _ className: JClassName, width: LayoutSize, height: LayoutSize, unit: DimensionUnit = .dp) {
+    convenience init? (_ className: JClassName, width: LayoutSize, height: LayoutSize, unit: DimensionUnit = .dp) {
         #if os(Android)
         guard let env = JEnv.current() else { return nil }
-        self.init(env, context, className, width: width, height: height, unit: unit)
+        self.init(env, className, width: width, height: height, unit: unit)
         #else
         return nil
         #endif
     }
     
-    init? (_ env: JEnv, _ context: ActivityContext, _ className: JClassName, width: LayoutSize, height: LayoutSize, unit: DimensionUnit = .dp) {
+    init? (_ env: JEnv, _ className: JClassName, width: LayoutSize, height: LayoutSize, unit: DimensionUnit = .dp) {
         #if os(Android)
         let correctWidth: LayoutSize
         if [.matchParent, .wrapContent].contains(width) {

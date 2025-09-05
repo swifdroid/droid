@@ -83,13 +83,10 @@ open class Behavior: @unchecked Sendable {
     @UIThreadActor
     #endif
     public final class BehaviorInstance: JObjectable, @unchecked Sendable {
-        /// Context
-        public let context: ActivityContext
-        
         /// Object
         public let object: JObject
 
-        public init? (_ env: JEnv, _ className: JClassName, _ context: ActivityContext) {
+        public init? (_ env: JEnv, _ className: JClassName) {
             #if os(Android)
             guard
                 let classLoader = context.getClassLoader(),
@@ -98,7 +95,6 @@ open class Behavior: @unchecked Sendable {
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
             else { return nil }
             self.object = global
-            self.context = context
             #else
             return nil
             #endif
@@ -109,10 +105,10 @@ open class Behavior: @unchecked Sendable {
     
     public init() {}
 
-    func instantiate(_ env: JEnv?, _ context: ActivityContext) -> BehaviorInstance? {
+    func instantiate(_ env: JEnv?) -> BehaviorInstance? {
         guard
             let env = env ?? JEnv.current(),
-            let instance = BehaviorInstance(env, Self.className, context)
+            let instance = BehaviorInstance(env, Self.className)
         else { return nil }
         _paramsToApply.forEach { $0.apply(env, instance) }
         return instance
@@ -163,7 +159,7 @@ struct BehaviorLayoutParam: LayoutParamToApply {
     let value: Behavior
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
         guard
-            let behavior = value.instantiate(env, context.context)
+            let behavior = value.instantiate(env)
         else { return }
         lp.callVoidMethod(env, name: key.rawValue, args: behavior.signed(as: CoordinatorLayout.behaviorClassName))
     }

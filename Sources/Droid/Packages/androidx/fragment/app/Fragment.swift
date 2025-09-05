@@ -289,7 +289,7 @@ open class Fragment: JObjectable, @unchecked Sendable {
             let returningClazz = JClass.load(Fragment.className),
             let global = object.callObjectMethod(name: "requireParentFragment", returningClass: returningClazz, returning: .object(Fragment.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Get the root view for the fragment's layout (the one returned by onCreateView).
@@ -494,7 +494,7 @@ extension Fragment {
             let returningClazz = JClass.load(FragmentManager.className),
             let global = object.callObjectMethod(name: "getChildFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Return the `Context` this fragment is currently associated with.
@@ -553,7 +553,7 @@ extension Fragment {
             let returningClazz = JClass.load(Fragment.className),
             let global = object.callObjectMethod(name: "getParentFragment", returningClass: returningClazz, returning: .object(Fragment.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Return the FragmentManager for interacting with fragments associated with this fragment's activity.
@@ -566,7 +566,7 @@ extension Fragment {
             let returningClazz = JClass.load(Fragment.className),
             let global = object.callObjectMethod(name: "getParentFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Returns the Transition that will be used to move Views in to the scene when returning due to popping a back stack.

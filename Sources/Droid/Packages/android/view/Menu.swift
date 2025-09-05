@@ -24,16 +24,14 @@ import AndroidLooper
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-open class Menu: JObjectable, Contextable, @unchecked Sendable {
+open class Menu: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { "android/view/Menu" }
 
     public let object: JObject
-    public let context: ActivityContext
 
-    public init (_ object: JObject, _ context: Contextable) {
+    public init (_ object: JObject) {
         self.object = object
-        self.context = context.context
     }
 }
 
@@ -88,7 +86,7 @@ extension Menu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "addSubMenu", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Add a new sub-menu to the menu.
@@ -101,7 +99,7 @@ extension Menu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "addSubMenu", args: titleResId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Add a new sub-menu to the menu.
@@ -120,7 +118,7 @@ extension Menu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "addSubMenu", args: Int32(groupId), Int32(itemId), Int32(order), str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Add a new sub-menu to the menu.
@@ -138,7 +136,7 @@ extension Menu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "addSubMenu", args: Int32(groupId), Int32(itemId), Int32(order), titleResId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Remove all existing items from the menu, leaving it empty as if it had just been created.
@@ -157,7 +155,7 @@ extension Menu {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "findItem", args: Int32(id), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Gets the menu item at the given index.
@@ -166,7 +164,7 @@ extension Menu {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "getItem", args: Int32(index), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Return whether the menu currently has item items that are visible.
@@ -260,7 +258,7 @@ extension ContextMenu {
             let returningClazz = JClass.load(ContextMenu.className),
             let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the context menu header's icon to the icon given in icon `Drawable`.
@@ -269,7 +267,7 @@ extension ContextMenu {
             let returningClazz = JClass.load(ContextMenu.className),
             let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the context menu header's title to the title given in titleRes resource identifier.
@@ -278,7 +276,7 @@ extension ContextMenu {
             let returningClazz = JClass.load(ContextMenu.className),
             let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the context menu header's title to the title given in title.
@@ -288,7 +286,7 @@ extension ContextMenu {
             let returningClazz = JClass.load(ContextMenu.className),
             let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the header of the context menu to the View given in view.
@@ -300,7 +298,7 @@ extension ContextMenu {
             let returningClazz = JClass.load(ContextMenu.className),
             let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returningClass: returningClazz, returning: .object(ContextMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 }
 
@@ -313,16 +311,14 @@ extension ContextMenu {
 #if canImport(AndroidLooper)
     @UIThreadActor
     #endif
-    open class ContextMenuInfo: JObjectable, Contextable, @unchecked Sendable {
+    open class ContextMenuInfo: JObjectable, @unchecked Sendable {
         /// The JNI class name
         open class var className: JClassName { "android/view/ContextMenu$ContextMenuInfo" }
 
         public let object: JObject
-        public let context: ActivityContext
 
-        public init (_ object: JObject, _ context: Contextable) {
+        public init (_ object: JObject) {
             self.object = object
-            self.context = context.context
         }
     }
 }
@@ -338,8 +334,7 @@ extension AdapterView {
         public init! (
             targetView: View,
             potision: Int,
-            id: Int32 = .nextViewId(),
-            context: Contextable
+            id: Int32 = .nextViewId()
         ) {
             #if os(Android)
             guard
@@ -349,7 +344,7 @@ extension AdapterView {
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(View.className), .int, .int, returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [targetView.object, Int32(potision), id])
             else { return nil }
-            super.init(global, context)
+            super.init(global)
             #else
             return nil
             #endif
@@ -366,7 +361,7 @@ extension AdapterView {
         }
 
         /// The child view for which the context menu is being displayed.
-        public func targetView() -> View! {
+        public func targetView(_ context: ActivityContext) -> View! {
             guard
                 let global = object.objectField(name: "targetView", .object(View.className))
             else { return nil }
@@ -386,8 +381,7 @@ extension ExpandableListView {
         public init! (
             targetView: View,
             packedPosition: Int,
-            id: Int32 = .nextViewId(),
-            context: Contextable
+            id: Int32 = .nextViewId()
         ) {
             #if os(Android)
             guard
@@ -397,7 +391,7 @@ extension ExpandableListView {
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(View.className), .int, .int, returning: .void)),
                 let global = env.newObject(clazz: clazz, constructor: methodId, args: [targetView.object, Int64(packedPosition), Int64(id)])
             else { return nil }
-            super.init(global, context)
+            super.init(global)
             #else
             return nil
             #endif
@@ -416,7 +410,7 @@ extension ExpandableListView {
         /// The view for which the context menu is being displayed.
         /// 
         /// This will be one of the children Views of this ExpandableListView.
-        public func targetView() -> View! {
+        public func targetView(_ context: ActivityContext) -> View! {
             guard
                 let global = object.objectField(name: "targetView", .object(View.className))
             else { return nil }
@@ -433,16 +427,14 @@ extension ExpandableListView {
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public final class SubMenu: JObjectable, Sendable, Contextable {
+public final class SubMenu: JObjectable, Sendable {
     /// The JNI class name
     public class var className: JClassName { "android/view/SubMenu" }
 
     public let object: JObject
-    public let context: ActivityContext
 
-    public init (_ object: JObject, _ context: Contextable) {
+    public init (_ object: JObject) {
         self.object = object
-        self.context = context.context
     }
 }
 
@@ -460,7 +452,7 @@ extension SubMenu {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "getItem", returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the submenu header's icon to the icon given in iconRes resource id.
@@ -469,7 +461,7 @@ extension SubMenu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "setHeaderIcon", args: resId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the submenu header's icon to the icon given in icon `Drawable`.
@@ -478,7 +470,7 @@ extension SubMenu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "setHeaderIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the submenu header's title to the title given in titleRes resource identifier.
@@ -487,7 +479,7 @@ extension SubMenu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "setHeaderTitle", args: resId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the submenu header's title to the title given in title.
@@ -497,7 +489,7 @@ extension SubMenu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "setHeaderTitle", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets the header of the submenu to the View given in view.
@@ -509,7 +501,7 @@ extension SubMenu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "setHeaderView", args: view.signed(as: View.className), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the icon associated with this submenu's item in its parent menu.
@@ -518,7 +510,7 @@ extension SubMenu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the icon associated with this submenu's item in its parent menu.
@@ -527,7 +519,7 @@ extension SubMenu {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "setIcon", args: resId, returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 }
 
@@ -541,16 +533,14 @@ extension SubMenu {
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public final class MenuItem: JObjectable, Contextable, @unchecked Sendable {
+public final class MenuItem: JObjectable, @unchecked Sendable {
     /// The JNI class name
     public class var className: JClassName { "android/view/MenuItem" }
 
     public let object: JObject
-    public let context: ActivityContext
 
-    public init (_ object: JObject, _ context: Contextable) {
+    public init (_ object: JObject) {
         self.object = object
-        self.context = context.context
     }
 }
 
@@ -605,11 +595,11 @@ extension MenuItem {
             let returningClazz = JClass.load(ActionProvider.className),
             let global = object.callObjectMethod(name: "getActionProvider", returningClass: returningClazz, returning: .object(ActionProvider.className))
         else { return nil }
-        return .init(global, context)
+        return .init(global)
     }
 
     /// Returns the currently set action view for this menu item.
-    public func actionView() -> View? {
+    public func actionView(_ context: ActivityContext) -> View? {
         guard
             let returningClazz = JClass.load(View.className),
             let global = object.callObjectMethod(name: "getActionView", returningClass: returningClazz, returning: .object(View.className))
@@ -723,7 +713,7 @@ extension MenuItem {
             let returningClazz = JClass.load(SubMenu.className),
             let global = object.callObjectMethod(name: "getSubMenu", returningClass: returningClazz, returning: .object(SubMenu.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Retrieve the current title of the item.
@@ -797,7 +787,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setActionProvider", args: provider.signed(as: ActionProvider.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Set an action view for this menu item.
@@ -810,7 +800,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setActionView", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Set an action view for this menu item.
@@ -824,7 +814,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setActionView", args: view.signed(as: View.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the alphabetic shortcut associated with this item.
@@ -843,7 +833,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the alphabetic shortcut associated with this item.
@@ -862,7 +852,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setAlphabeticShortcut", args: alphaChar, Int32(alphaModifiers), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Control whether this item can display a check mark.
@@ -877,7 +867,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setCheckable", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Control whether this item is shown with a check mark.
@@ -893,7 +883,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setChecked", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the content description associated with this menu item.
@@ -903,7 +893,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setContentDescription", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets whether the menu item is enabled.
@@ -916,7 +906,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setEnabled", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the icon associated with this item.
@@ -927,7 +917,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the icon associated with this item.
@@ -938,7 +928,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setIcon", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     // TODO: setIconTintBlendMode implement BlendMode
@@ -960,7 +950,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setIntent", args: intent.signed(as: Intent.className), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the numeric shortcut and modifiers associated with this item.
@@ -969,7 +959,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, Int32(numericModifiers), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the numeric shortcut associated with this item.
@@ -978,7 +968,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setNumericShortcut", args: numericChar, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     // TODO: setOnActionExpandListener
@@ -990,7 +980,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setShortcut", args: numericChar, Int32(numericModifiers), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the numeric shortcut associated with this item.
@@ -999,7 +989,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setShortcut", args: numericChar, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Sets how this item should display in the presence of an Action Bar.
@@ -1013,7 +1003,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setShowAsActionFlags", args: value.rawValue, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the title associated with this item.
@@ -1023,7 +1013,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setTitle", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the title associated with this item.
@@ -1032,7 +1022,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setTitle", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the condensed title associated with this item.
@@ -1044,7 +1034,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setTitleCondensed", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the condensed title associated with this item.
@@ -1055,7 +1045,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setTitleCondensed", args: resId, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Change the tooltip text associated with this menu item.
@@ -1065,7 +1055,7 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setTooltipText", args: str.signedAsCharSequence(), returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     public func visible(_ value: Bool = true) -> MenuItem! {
@@ -1073,6 +1063,6 @@ extension MenuItem {
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setVisible", args: value, returningClass: returningClazz, returning: .object(MenuItem.className))
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 }

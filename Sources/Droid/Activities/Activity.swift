@@ -207,7 +207,7 @@ open class Activity: AnyActivity {
             return nil
         }
         InnerLog.t("Activity.getTheme 2")
-        return Resources.Theme(globalObject, context)
+        return Resources.Theme(globalObject)
         #else
         return nil
         #endif
@@ -235,13 +235,13 @@ public final class Intent: JObjectable, @unchecked Sendable {
         self.object = object
     }
 
-    public init? (_ env: JEnv, _ context: ActivityContext, _ className: JClassName) {
+    public init? (_ env: JEnv, _ className: JClassName) {
         #if os(Android)
         guard
             let intentClazz = JClass.load(.android.content.Intent),
             let activityClazz = JClass.load(className),
             let methodId = intentClazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), .object(.java.lang.Class), returning: .void)),
-            let global = env.newObject(clazz: intentClazz, constructor: methodId, args: [context.object, activityClazz])
+            let global = env.newObject(clazz: intentClazz, constructor: methodId, args: [AppContext.shared.object, activityClazz])
         else { return nil }
         self.object = global
         #else
@@ -275,7 +275,7 @@ public final class ActivityContext: Contextable, JObjectable, JClassLoadable, @u
     #if canImport(AndroidLooper)
     @UIThreadActor
     #endif
-    public var R: InnerR { .init(self) }
+    public var R: InnerR { .init() }
 
     /// Helper method that returns the full path to an activity class.
     ///

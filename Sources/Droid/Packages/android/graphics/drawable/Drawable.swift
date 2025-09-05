@@ -17,17 +17,15 @@ extension AndroidPackage.GraphicsPackage.DrawablePackage {
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-open class Drawable: JObjectable, Contextable, @unchecked Sendable {
+open class Drawable: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .android.graphics.drawable.Drawable }
     
     public let object: JObject
-    public let context: ActivityContext
 
     @discardableResult
-    public init(_ object: JObject, _ context: Contextable) {
+    public init(_ object: JObject) {
         self.object = object
-        self.context = context.context
     }
 
     // TODO: implement Drawable

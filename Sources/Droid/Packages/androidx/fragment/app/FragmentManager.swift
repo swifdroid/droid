@@ -13,13 +13,15 @@ import AndroidLooper
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public final class FragmentManager: JObjectable, Sendable {
+public final class FragmentManager: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentManager") }
 
     public let object: JObject
+    public let context: ActivityContext
 
-    public init (_ object: JObject) {
+    public init (_ object: JObject, _ context: Contextable) {
         self.object = object
+        self.context = context.context
     }
 }
 
@@ -46,7 +48,7 @@ extension FragmentManager {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "beginTransaction", returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     /// Clears the back stack previously saved via `saveBackStack`.
@@ -122,7 +124,7 @@ extension FragmentManager {
             let returningClazz = JClass.load(FragmentManager.className),
             let global = object.callObjectMethod(name: "findFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     // TODO: getBackStackEntryAt?
@@ -143,7 +145,7 @@ extension FragmentManager {
             let returningClazz = JClass.load(FragmentFactory.className),
             let global = object.callObjectMethod(name: "getFragmentFactory", returningClass: returningClazz, returning: .object(FragmentFactory.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     // TODO: getFragments
@@ -158,7 +160,7 @@ extension FragmentManager {
             let returningClazz = JClass.load(Fragment.className),
             let global = object.callObjectMethod(name: "getPrimaryNavigationFragment", returningClass: returningClazz, returning: .object(Fragment.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 
     // TODO: getStrictModePolicy?

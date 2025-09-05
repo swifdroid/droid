@@ -4,39 +4,34 @@ extension Resources {
     public final class Theme: JObjectable, Sendable {
         public class var className: JClassName { .init(stringLiteral: "android/content/res/Resources$Theme") }
 
-        /// Context
-        public let context: ActivityContext
-        
         /// Object wrapper
         public let object: JObject
 
-        public convenience init? (_ className: JClassName, _ context: ActivityContext) {
+        public convenience init? (_ className: JClassName) {
             #if os(Android)
             guard let env = JEnv.current() else { return nil }
-            self.init(env, className, context)
+            self.init(env, className)
             #else
             return nil
             #endif
         }
         
-        public init? (_ env: JEnv, _ className: JClassName, _ context: ActivityContext) {
+        public init? (_ env: JEnv, _ className: JClassName) {
             #if os(Android)
             guard
                 let clazz = JClass.load(className),
                 let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
-                let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.object])
+                let global = env.newObject(clazz: clazz, constructor: methodId, args: [AppContext.shared.object])
             else { return nil }
             self.object = global
-            self.context = context
             #else
             return nil
             #endif
         }
         
-        public init? (_ object: JObject, _ context: ActivityContext) {
+        public init? (_ object: JObject) {
             #if os(Android)
             self.object = object
-            self.context = context
             #else
             return nil
             #endif

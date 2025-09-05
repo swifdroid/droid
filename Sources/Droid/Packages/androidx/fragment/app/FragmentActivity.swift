@@ -34,7 +34,7 @@ open class FragmentActivity: ComponentActivity {
             let returningClazz = JClass.load(FragmentManager.className),
             let global = _context.object.callObjectMethod(name: "getSupportFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 }
 

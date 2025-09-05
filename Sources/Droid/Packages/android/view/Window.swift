@@ -352,7 +352,8 @@ extension ActionBar {
             let returningClazz = JClass.load(.android.view.View),
             let global = object.callObjectMethod(name: "getCustomView", returningClass: returningClazz, returning: .object(.android.view.View))
         else { return nil }
-        return .init(id: .nextViewId(), global, context)
+        let id = Int32.nextViewId()
+        return .init(id: id, global, context)
     }
 
     /// The current set of display options.

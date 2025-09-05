@@ -25,12 +25,12 @@ public final class Snackbar: JObjectable, Sendable {
 
     public let object: JObject
     public let view: View
-    public let context: Contextable
+    public let context: ActivityContext
 
     public init (_ object: JObject, _ view: View, _ context: Contextable) {
         self.object = object
         self.view = view
-        self.context = context
+        self.context = context.context
     }
 
     /// Make a Snackbar to display a message

@@ -10,13 +10,18 @@ import AndroidLooper
 #endif
 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentFactory)
-public final class FragmentFactory: JObjectable, Sendable {
+#if canImport(AndroidLooper)
+@UIThreadActor
+#endif
+public final class FragmentFactory: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentFactory") }
 
     public let object: JObject
+    public let context: ActivityContext
 
-    public init (_ object: JObject) {
+    public init (_ object: JObject, _ context: Contextable) {
         self.object = object
+        self.context = context.context
     }
 }
 
@@ -33,6 +38,6 @@ extension FragmentFactory {
             let str = JString(from: className.path),
             let global = object.callObjectMethod(name: "instantiate", args: classLoader.signed(as: JClassLoader.className), str.signedAsString(), returningClass: returningClazz, returning: .object(Fragment.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
     }
 }

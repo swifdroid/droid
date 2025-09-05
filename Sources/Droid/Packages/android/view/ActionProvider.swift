@@ -22,16 +22,14 @@ import AndroidLooper
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-open class ActionProvider: JObjectable, Contextable, @unchecked Sendable {
+open class ActionProvider: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { "android/view/ActionProvider" }
 
     public let object: JObject
-    public let context: ActivityContext
 
-    public init (_ object: JObject, _ context: Contextable) {
+    public init (_ object: JObject) {
         self.object = object
-        self.context = context.context
     }
 
     /// Called to prepare an associated submenu for the menu item backed by this `ActionProvider`.

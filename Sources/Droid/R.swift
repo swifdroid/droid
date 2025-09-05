@@ -39,66 +39,63 @@ public struct InnerR: Sendable {
     public let xml: Resource
     
     public init (_ className: JClassName? = nil) {
-        id = Resource(className, nil, "id")
-        attr = Resource(className, nil, "attr")
-        menu = Resource(className, nil, "menu")
-        drawable = Resource(className, nil, "drawable")
-        string = Resource(className, nil, "string")
-        anim = Resource(className, nil, "anim")
-        animator = Resource(className, nil, "animator")
-        array = Resource(className, nil, "array")
-        bool = Resource(className, nil, "bool")
-        color = Resource(className, nil, "color")
-        dimen = Resource(className, nil, "dimen")
-        fraction = Resource(className, nil, "fraction")
-        integer = Resource(className, nil, "integer")
-        interpolator = Resource(className, nil, "interpolator")
-        layout = Resource(className, nil, "layout")
-        mipmap = Resource(className, nil, "mipmap")
-        plurals = Resource(className, nil, "plurals")
-        raw = Resource(className, nil, "raw")
-        style = Resource(className, nil, "style")
-        transition = Resource(className, nil, "transition")
-        xml = Resource(className, nil, "xml")
+        id = Resource(className, "id")
+        attr = Resource(className, "attr")
+        menu = Resource(className, "menu")
+        drawable = Resource(className, "drawable")
+        string = Resource(className, "string")
+        anim = Resource(className, "anim")
+        animator = Resource(className, "animator")
+        array = Resource(className, "array")
+        bool = Resource(className, "bool")
+        color = Resource(className, "color")
+        dimen = Resource(className, "dimen")
+        fraction = Resource(className, "fraction")
+        integer = Resource(className, "integer")
+        interpolator = Resource(className, "interpolator")
+        layout = Resource(className, "layout")
+        mipmap = Resource(className, "mipmap")
+        plurals = Resource(className, "plurals")
+        raw = Resource(className, "raw")
+        style = Resource(className, "style")
+        transition = Resource(className, "transition")
+        xml = Resource(className, "xml")
     }
 
-    public init (_ context: JClassLoadable) {
-        id = Resource(nil, context, "id")
-        attr = Resource(nil, context, "attr")
-        menu = Resource(nil, context, "menu")
-        drawable = Resource(nil, context, "drawable")
-        string = Resource(nil, context, "string")
-        anim = Resource(nil, context, "anim")
-        animator = Resource(nil, context, "animator")
-        array = Resource(nil, context, "array")
-        bool = Resource(nil, context, "bool")
-        color = Resource(nil, context, "color")
-        dimen = Resource(nil, context, "dimen")
-        fraction = Resource(nil, context, "fraction")
-        integer = Resource(nil, context, "integer")
-        interpolator = Resource(nil, context, "interpolator")
-        layout = Resource(nil, context, "layout")
-        mipmap = Resource(nil, context, "mipmap")
-        plurals = Resource(nil, context, "plurals")
-        raw = Resource(nil, context, "raw")
-        style = Resource(nil, context, "style")
-        transition = Resource(nil, context, "transition")
-        xml = Resource(nil, context, "xml")
+    public init () {
+        id = Resource(nil, "id")
+        attr = Resource(nil, "attr")
+        menu = Resource(nil, "menu")
+        drawable = Resource(nil, "drawable")
+        string = Resource(nil, "string")
+        anim = Resource(nil, "anim")
+        animator = Resource(nil, "animator")
+        array = Resource(nil, "array")
+        bool = Resource(nil, "bool")
+        color = Resource(nil, "color")
+        dimen = Resource(nil, "dimen")
+        fraction = Resource(nil, "fraction")
+        integer = Resource(nil, "integer")
+        interpolator = Resource(nil, "interpolator")
+        layout = Resource(nil, "layout")
+        mipmap = Resource(nil, "mipmap")
+        plurals = Resource(nil, "plurals")
+        raw = Resource(nil, "raw")
+        style = Resource(nil, "style")
+        transition = Resource(nil, "transition")
+        xml = Resource(nil, "xml")
     }
 
     @dynamicMemberLookup
     public struct Resource: Sendable {
         let parentClass: JClassName?
-        let context: JClassLoadable?
         let child: String
 
         init (
             _ parent: JClassName? = nil,
-            _ context: JClassLoadable? = nil,
             _ child: String
         ) {
             self.parentClass = parent
-            self.context = context
             self.child = child
         }
 
