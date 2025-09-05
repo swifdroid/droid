@@ -1193,10 +1193,6 @@ extension TimeInterpolator {
 /// [Lean more](https://developer.android.com/reference/android/view/animation/Interpolator)
 open class Interpolator: TimeInterpolator, @unchecked Sendable {
     public class override var className: JClassName { "android/view/animation/Interpolator" }
-
-    public override init (_ object: JObject) {
-        super.init(object)
-    }
 }
 
 /// An abstract class which is extended by default interpolators.
@@ -1204,10 +1200,6 @@ open class Interpolator: TimeInterpolator, @unchecked Sendable {
 /// [Lean more](https://developer.android.com/reference/android/view/animation/BaseInterpolator)
 open class BaseInterpolator: Interpolator, @unchecked Sendable {
     public class override var className: JClassName { "android/view/animation/BaseInterpolator" }
-
-    public override init (_ object: JObject) {
-        super.init(object)
-    }
 }
 
 /// An interpolator where the rate of change starts and ends slowly but accelerates through the middle.
