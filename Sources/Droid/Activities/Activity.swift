@@ -197,8 +197,7 @@ open class Activity: AnyActivity {
             InnerLog.t("Activity.getTheme 1.2 exit")
             return nil
         }
-        let classLoader = context.getClassLoader()
-        guard let lpClazz = JNICache.shared.getClass(Resources.Theme.className, classLoader) else {
+        guard let lpClazz = JNICache.shared.getClass(Resources.Theme.className) else {
             InnerLog.t("Activity.getTheme 1.3 exit")
             return nil
         }
