@@ -39,7 +39,7 @@ public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
     // TODO: toBuilder
 
     /// Returns a copy of this `ShapeAppearanceModel` with the same edges and corners, but with the corner size for all corners updated.
-    public func withCornerSize(_ cornerSize: Float) -> Self? {
+    public func withCornerSize(_ cornerSize: Float) -> ShapeAppearanceModel? {
         guard
             let returningClazz = JClass.load(ShapeAppearanceModel.className),
             let newObject = object.callObjectMethod(name: "withCornerSize", args: cornerSize, returningClass: returningClazz, returning: .object(ShapeAppearanceModel.className))
