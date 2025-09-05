@@ -1,8 +1,12 @@
 package stream.swift.droid.appkit.activities
 
 import android.app.ComponentCaller
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import stream.swift.droid.appkit.DroidApp
@@ -91,5 +95,45 @@ class DroidFragmentActivity: FragmentActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         val app: DroidApp = applicationContext as DroidApp
         app.activityOnActivityResult2(uniqueId, requestCode, resultCode, data)
+    }
+
+    // MARK: Fragment related
+
+    override fun onCreatePanelMenu(featureId: Int, menu: Menu): Boolean {
+        return super.onCreatePanelMenu(featureId, menu)
+    }
+
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+        return super.onCreateView(name, context, attrs)
+    }
+
+    override fun onCreateView(
+        parent: View?,
+        name: String,
+        context: Context,
+        attrs: AttributeSet
+    ): View? {
+        return super.onCreateView(parent, name, context, attrs)
+    }
+
+    override fun onMenuItemSelected(featureId: Int, item: MenuItem): Boolean {
+        return super.onMenuItemSelected(featureId, item)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+        deviceId: Int
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }
