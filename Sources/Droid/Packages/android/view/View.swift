@@ -335,6 +335,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         setStatusFloating()
     }
 
+    @discardableResult
     func setStatusAsContentView(_ context: ActivityContext) -> ViewInstance? {
         // InnerLog.d("view(id: \(id)) setStatusAsContentView 1")
         switch status {
@@ -356,6 +357,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         return instance
     }
     
+    @discardableResult
     func setStatusInParent(_ parent: View, _ context: ActivityContext) -> ViewInstance? {
         // InnerLog.d("view(id: \(id)) setStatusInParent 1")
         switch status {
