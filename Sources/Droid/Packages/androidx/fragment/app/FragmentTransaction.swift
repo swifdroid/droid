@@ -13,13 +13,15 @@ import AndroidLooper
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
-public final class FragmentTransaction: JObjectable, Sendable {
+public final class FragmentTransaction: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentTransaction") }
 
     public let object: JObject
+    public let context: ActivityContext
 
-    public init (_ object: JObject) {
+    public init (_ object: JObject, _ context: Contextable) {
         self.object = object
+        self.context = context.context
     }
 }
 
@@ -47,7 +49,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
         #else
         return nil
         #endif
@@ -65,7 +67,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "add", args: fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
         #else
         return nil
         #endif
@@ -87,7 +89,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "add", args: container.object.signed(as: ViewGroup.className), fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
         #else
         return nil
         #endif
@@ -101,9 +103,10 @@ extension FragmentTransaction {
     //     args: Bundle
     // ) -> FragmentTransaction! {
     //     guard
-    //         let global = object.callObjectMethod(name: "add", args: containerViewId, fragmentClass., args.signed(as: Bundle.className), returning: .object(FragmentTransaction.className))
+    //         let returningClazz = JClass.load(FragmentTransaction.className),
+    //         let global = object.callObjectMethod(name: "add", args: containerViewId, fragmentClass., args.signed(as: Bundle.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
     //     else { return nil }
-    //     return .init(global)
+    //     return .init(global, self)
     // }
 
     /// Add a fragment to the activity state.
@@ -121,7 +124,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
         #else
         return nil
         #endif
@@ -141,7 +144,7 @@ extension FragmentTransaction {
             let returningClazz = JClass.load(FragmentTransaction.className),
             let global = object.callObjectMethod(name: "addSharedElement", args: sharedElement.signed(as: View.className), name.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
         else { return nil }
-        return .init(global)
+        return .init(global, self)
         #else
         return nil
         #endif
