@@ -84,16 +84,13 @@ class ListenerInstance: @unchecked Sendable {
     }
     
     public init? (_ env: JEnv, _ id: Int32, viewId: Int32? = nil, _ context: ActivityContext, _ className: JClassName) {
-        var args: [any JValuable] = [id]
-        var signature: [JSignatureItem] = [.int]
+        var args: [JSignatureItemable] = [id]
         if let viewId {
             args.append(viewId)
-            signature.append(.int)
         }
         guard
             let clazz = JClass.load(className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(signature, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: args)
+            let global = clazz.newObject(env, args: args)
         else { return nil }
         self.object = global
     }

@@ -90,8 +90,7 @@ open class Behavior: @unchecked Sendable {
             #if os(Android)
             guard
                 let clazz = JClass.load(className),
-                let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
-                let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+                let global = clazz.newObject(env,)
             else { return nil }
             self.object = global
             #else

@@ -35,8 +35,7 @@ final class JavaLangString: Sendable, JObjectable {
         #if os(Android)
         guard
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.java.lang.String), returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: nil)
+            let global = clazz.newObject(env)
         else { return nil }
         self.object = global
         #else

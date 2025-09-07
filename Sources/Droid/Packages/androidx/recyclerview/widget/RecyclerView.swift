@@ -323,8 +323,7 @@ extension RecyclerView {
             #if os(Android)
             guard
                 let clazz = JClass.load(PagerSnapHelper.className),
-                let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
-                let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+                let global = clazz.newObject(env)
             else { return nil }
             self.object = global
             #else
@@ -361,8 +360,7 @@ public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
         #if os(Android)
         guard
             let clazz = JClass.load(PagerSnapHelper.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         self.object = global
         #else
@@ -401,8 +399,7 @@ open class LayoutManager: @unchecked Sendable {
             #if os(Android)
             guard
                 let clazz = JClass.load(className),
-                let methodId = clazz.methodId(env: env, name: "<init>", signature: .init((initWithContext ? [.object(.android.content.Context)] : []) + initializerItems.map { $0.signatureItemWithValue.signatureItem }, returning: .void)),
-                let global = env.newObject(clazz: clazz, constructor: methodId, args: (initWithContext ? [context.object] : []) + initializerItems.map { $0.signatureItemWithValue.value })
+                let global = clazz.newObject(env, args: (initWithContext ? [context.object.signed(as: .android.content.Context)] : []) + initializerItems.map { $0.signatureItemWithValue })
             else { return nil }
             self.object = global
             self.context = context

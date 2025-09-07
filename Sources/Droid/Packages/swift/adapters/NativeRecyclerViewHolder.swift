@@ -109,17 +109,12 @@ public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolde
             return nil
         }
         guard
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, .object(.android.view.View), returning: .void))
-        else {
-            return nil
-        }
-        guard
             let viewInstance = view.setStatusAsContentView(context)
         else {
             return nil
         }
         guard
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [id, viewInstance.object])
+            let global = clazz.newObject(env, args: id, viewInstance.object.signed(as: .android.view.View))
         else {
             return nil
         }

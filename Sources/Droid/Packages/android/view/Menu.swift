@@ -341,8 +341,7 @@ extension AdapterView {
                 let env = JEnv.current(),
                 let targetView = targetView.instance,
                 let clazz = JClass.load(Self.className),
-                let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(View.className), .int, .int, returning: .void)),
-                let global = env.newObject(clazz: clazz, constructor: methodId, args: [targetView.object, Int32(potision), id])
+                let global = clazz.newObject(env, args: targetView.object.signed(as: View.className), Int32(potision), id)
             else { return nil }
             super.init(global)
             #else
@@ -389,8 +388,7 @@ extension ExpandableListView {
                 let env = JEnv.current(),
                 let targetView = targetView.instance,
                 let clazz = JClass.load(Self.className),
-                let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(View.className), .int, .int, returning: .void)),
-                let global = env.newObject(clazz: clazz, constructor: methodId, args: [targetView.object, Int64(packedPosition), Int64(id)])
+                let global = clazz.newObject(env, args: targetView.object.signed(as: View.className), Int64(packedPosition), Int64(id))
             else { return nil }
             super.init(global)
             #else

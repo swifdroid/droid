@@ -176,12 +176,7 @@ final class RecyclerViewAdapterInstance: JObjectable, Sendable {
             return nil
         }
         guard
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, returning: .void))
-        else {
-            return nil
-        }
-        guard
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [id])
+            let global = clazz.newObject(env, args: id)
         else {
             return nil
         }

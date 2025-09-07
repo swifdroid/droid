@@ -26,8 +26,7 @@ public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.context.object])
+            let global = clazz.newObject(env, args: context.context.object.signed(as: .android.content.Context))
         else { return nil }
         self.object = global
         self.context = context.context

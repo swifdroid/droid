@@ -33,8 +33,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
         guard
             let classLoader = context.context.getClassLoader(),
             let clazz = classLoader.loadClass(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [context.context.object])
+            let global = clazz.newObject(env, args: context.context.object.signed(as: .android.content.Context))
         else { return nil }
         self.context = context.context
         self.object = global

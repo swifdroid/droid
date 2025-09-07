@@ -20,8 +20,7 @@ extension Resources {
             #if os(Android)
             guard
                 let clazz = JClass.load(className),
-                let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), returning: .void)),
-                let global = env.newObject(clazz: clazz, constructor: methodId, args: [AppContext.shared.object])
+                let global = clazz.newObject(env, args: AppContext.shared.object.signed(as: .android.content.Context))
             else { return nil }
             self.object = global
             #else

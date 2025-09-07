@@ -369,8 +369,7 @@ public final class AlphaAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [from, to])
+            let global = clazz.newObject(env, args: from, to)
         else { return nil }
         super.init(global)
         #else
@@ -413,8 +412,7 @@ public final class AnimationSet: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.boolean, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [shareInterpolator])
+            let global = clazz.newObject(env, args: shareInterpolator)
         else { return nil }
         super.init(global)
         #else
@@ -458,8 +456,7 @@ public final class RotateAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromDegrees, toDegrees])
+            let global = clazz.newObject(env, args: fromDegrees, toDegrees)
         else { return nil }
         super.init(global)
         #else
@@ -473,8 +470,7 @@ public final class RotateAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .int, .float, .int, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromDegrees, toDegrees, pivotXType.rawValue, pivotX, pivotYType.rawValue, pivotY])
+            let global = clazz.newObject(env, args: fromDegrees, toDegrees, pivotXType.rawValue, pivotX, pivotYType.rawValue, pivotY)
         else { return nil }
         super.init(global)
         #else
@@ -501,8 +497,7 @@ public final class ScaleAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromX, toX, fromY, toY])
+            let global = clazz.newObject(env, args: fromX, toX, fromY, toY)
         else { return nil }
         super.init(global)
         #else
@@ -516,8 +511,7 @@ public final class ScaleAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, .float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromX, toX, fromY, toY, pivotX, pivotY])
+            let global = clazz.newObject(env, args: fromX, toX, fromY, toY, pivotX, pivotY)
         else { return nil }
         super.init(global)
         #else
@@ -531,8 +525,7 @@ public final class ScaleAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, .int, .float, .int, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromX, toX, fromY, toY, pivotXType.rawValue, pivotX, pivotYType.rawValue, pivotY])
+            let global = clazz.newObject(env, args: fromX, toX, fromY, toY, pivotXType.rawValue, pivotX, pivotYType.rawValue, pivotY)
         else { return nil }
         super.init(global)
         #else
@@ -560,8 +553,7 @@ public final class TranslateAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromXDelta, toXDelta, fromYDelta, toYDelta])
+            let global = clazz.newObject(env, args: fromXDelta, toXDelta, fromYDelta, toYDelta)
         else { return nil }
         super.init(global)
         #else
@@ -580,8 +572,7 @@ public final class TranslateAnimation: Animation, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, .float, .int, .float, .int, .float, .int, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [fromXType.rawValue, fromXValue, toXType.rawValue, toXValue, fromYType.rawValue, fromYValue, toYType.rawValue, toYValue])
+            let global = clazz.newObject(env, args: fromXType.rawValue, fromXValue, toXType.rawValue, toXValue, fromYType.rawValue, fromYValue, toYType.rawValue, toYValue)
         else { return nil }
         super.init(global)
         #else
@@ -1218,8 +1209,7 @@ public final class AccelerateDecelerateInterpolator: BaseInterpolator, @unchecke
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1244,8 +1234,7 @@ public final class AccelerateInterpolator: BaseInterpolator, @unchecked Sendable
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1259,8 +1248,7 @@ public final class AccelerateInterpolator: BaseInterpolator, @unchecked Sendable
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [factor])
+            let global = clazz.newObject(env, args: factor)
         else { return nil }
         super.init(global)
         #else
@@ -1285,8 +1273,7 @@ public final class AnticipateInterpolator: BaseInterpolator, @unchecked Sendable
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1300,8 +1287,7 @@ public final class AnticipateInterpolator: BaseInterpolator, @unchecked Sendable
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [tension])
+            let global = clazz.newObject(env, args: tension)
         else { return nil }
         super.init(global)
         #else
@@ -1326,8 +1312,7 @@ public final class AnticipateOvershootInterpolator: BaseInterpolator, @unchecked
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1341,8 +1326,7 @@ public final class AnticipateOvershootInterpolator: BaseInterpolator, @unchecked
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [tension])
+            let global = clazz.newObject(env, args: tension)
         else { return nil }
         super.init(global)
         #else
@@ -1356,8 +1340,7 @@ public final class AnticipateOvershootInterpolator: BaseInterpolator, @unchecked
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [tension, extraTension])
+            let global = clazz.newObject(env, args: tension, extraTension)
         else { return nil }
         super.init(global)
         #else
@@ -1382,8 +1365,7 @@ public final class BounceInterpolator: BaseInterpolator, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1410,8 +1392,7 @@ public final class CycleInterpolator: BaseInterpolator, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [cycles])
+            let global = clazz.newObject(env, args: cycles)
         else { return nil }
         super.init(global)
         #else
@@ -1436,8 +1417,7 @@ public final class DecelerateInterpolator: BaseInterpolator, @unchecked Sendable
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1451,8 +1431,7 @@ public final class DecelerateInterpolator: BaseInterpolator, @unchecked Sendable
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [factor])
+            let global = clazz.newObject(env, args: factor)
         else { return nil }
         super.init(global)
         #else
@@ -1477,8 +1456,7 @@ public final class LinearInterpolator: BaseInterpolator, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1503,8 +1481,7 @@ public final class OvershootInterpolator: BaseInterpolator, @unchecked Sendable 
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         super.init(global)
         #else
@@ -1518,8 +1495,7 @@ public final class OvershootInterpolator: BaseInterpolator, @unchecked Sendable 
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [tension])
+            let global = clazz.newObject(env, args: tension)
         else { return nil }
         super.init(global)
         #else
@@ -1559,8 +1535,7 @@ public final class PathInterpolator: BaseInterpolator, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(Path.className), returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [path.object])
+            let global = clazz.newObject(env, args: path.object.signed(as: Path.className))
         else { return nil }
         super.init(global)
         #else
@@ -1576,8 +1551,7 @@ public final class PathInterpolator: BaseInterpolator, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [controlX, controlY])
+            let global = clazz.newObject(env, args: controlX, controlY)
         else { return nil }
         super.init(global)
         #else
@@ -1593,8 +1567,7 @@ public final class PathInterpolator: BaseInterpolator, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [controlX1, controlY1, controlX2, controlY2])
+            let global = clazz.newObject(env, args: controlX1, controlY1, controlX2, controlY2)
         else { return nil }
         super.init(global)
         #else
@@ -1636,8 +1609,7 @@ public final class Rect: JObjectable, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         self.object = global
         #else
@@ -1659,8 +1631,7 @@ public final class Rect: JObjectable, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, .int, .int, .int, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [unit.toPixels(Int32(left)), unit.toPixels(Int32(top)), unit.toPixels(Int32(right)), unit.toPixels(Int32(bottom))])
+            let global = clazz.newObject(env, args: unit.toPixels(Int32(left)), unit.toPixels(Int32(top)), unit.toPixels(Int32(right)), unit.toPixels(Int32(bottom)))
         else { return nil }
         self.object = global
         #else
@@ -2001,8 +1972,7 @@ public final class RectF: JObjectable, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         self.object = global
         #else
@@ -2024,8 +1994,7 @@ public final class RectF: JObjectable, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.float, .float, .float, .float, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom)])
+            let global = clazz.newObject(env, args: unit.toPixels(left), unit.toPixels(top), unit.toPixels(right), unit.toPixels(bottom))
         else { return nil }
         self.object = global
         #else
@@ -2345,8 +2314,7 @@ public final class Path: JObjectable, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [])
+            let global = clazz.newObject(env)
         else { return nil }
         self.object = global
         #else
@@ -2359,8 +2327,7 @@ public final class Path: JObjectable, @unchecked Sendable {
         guard
             let env = JEnv.current(),
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.object(Path.className), returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [src.object])
+            let global = clazz.newObject(env, args: src.object.signed(as: Path.className))
         else { return nil }
         self.object = global
         #else

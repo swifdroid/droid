@@ -69,12 +69,9 @@ open class NativeObject: JObjectable, @unchecked Sendable {
     public init? (_ env: JEnv, _ className: JClassName) {
         self.id = DroidApp.shared.getNextViewId()
         #if os(Android)
-        let signature: [JSignatureItem] = [.int]
-        let args: [any JValuable] = [id]
         guard
             let clazz = JClass.load(className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(signature, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: args)
+            let global = clazz.newObject(env, args: id)
         else {
             InnerLog.w("⚠️ Unable to initialize NativeObject for className: \(className.path)")
             return nil

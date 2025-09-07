@@ -84,8 +84,7 @@ public final class LayoutParams: Sendable, JObjectable {
         #if os(Android)
         guard
             let clazz = JClass.load(className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: nil)
+            let global = clazz.newObject(env)
         else { return nil }
         self.object = global
         #else
@@ -119,8 +118,7 @@ public final class LayoutParams: Sendable, JObjectable {
         InnerLog.t("💡 2LayoutParams trying to load class: \(className)")
         guard
             let clazz = JClass.load(className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .init(.int, .int, returning: .void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId, args: [correctWidth, correctHeight])
+            let global = clazz.newObject(env, args: correctWidth.value, correctHeight.value)
         else { return nil }
         self.object = global
         #else

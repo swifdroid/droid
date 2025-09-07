@@ -22,8 +22,7 @@ public final class TypedValue: JObjectable, Sendable {
         #if os(Android)
         guard
             let clazz = JClass.load(Self.className),
-            let methodId = clazz.methodId(env: env, name: "<init>", signature: .returning(.void)),
-            let global = env.newObject(clazz: clazz, constructor: methodId)
+            let global = clazz.newObject(env)
         else { return nil }
         self.object = global
         #else
