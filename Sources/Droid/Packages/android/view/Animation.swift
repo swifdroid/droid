@@ -111,7 +111,7 @@ extension Animation {
     public func interpolator() -> TimeInterpolator! {
         guard
             let returningClazz = JClass.load(TimeInterpolator.className),
-            let global = object.callObjectMethod(name: "getInterpolator", returningClass: returningClazz, returning: .object(TimeInterpolator.className))
+            let global = object.callObjectMethod(name: "getInterpolator", returningClass: returningClazz)
         else { return nil }
         return .init(global)
     }
@@ -627,7 +627,7 @@ extension Animator {
     public func clone() -> Animator! {
         guard
             let returningClazz = JClass.load(Animator.className),
-            let global = object.callObjectMethod(name: "clone", returningClass: returningClazz, returning: .object(Animator.className))
+            let global = object.callObjectMethod(name: "clone", returningClass: returningClazz)
         else { return nil }
         return .init(global)
     }
@@ -651,7 +651,7 @@ extension Animator {
     public func interpolator() -> TimeInterpolator! {
         guard
             let returningClazz = JClass.load(TimeInterpolator.className),
-            let global = object.callObjectMethod(name: "getInterpolator", returningClass: returningClazz, returning: .object(TimeInterpolator.className))
+            let global = object.callObjectMethod(name: "getInterpolator", returningClass: returningClazz)
         else { return nil }
         return .init(global)
     }
@@ -727,7 +727,7 @@ extension Animator {
     public func duration(_ duration: Int) -> Animator! {
         guard
             let returningClazz = JClass.load(Animator.className),
-            let global = object.callObjectMethod(name: "setDuration", args: Int32(duration), returningClass: returningClazz, returning: .object(Animator.className))
+            let global = object.callObjectMethod(name: "setDuration", args: Int32(duration), returningClass: returningClazz)
         else { return nil }
         return .init(global)
     }
@@ -911,7 +911,7 @@ extension ValueAnimator {
     public func animatedValue() -> JObject? {
         guard
             let returningClazz = JClass.load("java/lang/Object"),
-            let global = object.callObjectMethod(name: "getAnimatedValue", returningClass: returningClazz, returning: .object("java/lang/Object"))
+            let global = object.callObjectMethod(name: "getAnimatedValue", returningClass: returningClazz)
         else { return nil }
         return global
     }
@@ -927,7 +927,7 @@ extension ValueAnimator {
         guard
             let str = JString(from: propertyName),
             let returningClazz = JClass.load("java/lang/Object"),
-            let global = object.callObjectMethod(name: "getAnimatedValue", args: str.signedAsString(), returningClass: returningClazz, returning: .object("java/lang/Object"))
+            let global = object.callObjectMethod(name: "getAnimatedValue", args: str.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return global
     }
@@ -1075,7 +1075,7 @@ extension ObjectAnimator {
     public func propertyName() -> String! {
         guard
             let returningClazz = JClass.load(JString.className),
-            let str = object.callObjectMethod(name: "getPropertyName", returningClass: returningClazz, returning: .object(JString.className))
+            let str = object.callObjectMethod(name: "getPropertyName", returningClass: returningClazz)
         else { return nil }
         return JString(str).toString()
     }
@@ -1085,7 +1085,7 @@ extension ObjectAnimator {
         guard
             let returningClazz = JClass.load(JString.className)
         else { return nil }
-        return object.callObjectMethod(name: "getTarget", returningClass: returningClazz, returning: .object("java/lang/Object"))
+        return object.callObjectMethod(name: "getTarget", returningClass: returningClazz)
     }
 
     /// `autoCancel` controls whether an `ObjectAnimator` will be canceled automatically
@@ -1756,7 +1756,7 @@ extension Rect {
     public func flattenToString() -> String? {
         guard
             let returningClazz = JClass.load(JString.className),
-            let global = object.callObjectMethod(name: "flattenToString", returningClass: returningClazz, returning: .object(JString.className))
+            let global = object.callObjectMethod(name: "flattenToString", returningClass: returningClazz)
         else { return nil }
         return JString(global).toString()
     }
@@ -2759,7 +2759,8 @@ extension Path {
                 let env = JEnv.current(),
                 let clazz = JClass.load(Direction.className),
                 let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Direction.className))),
-                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
+                let returningClazz = JClass.load(Direction.className.asArray()),
+                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, returningClass: returningClazz),
                 let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
             else { return nil }
             return element
@@ -2800,7 +2801,8 @@ extension Path {
                 let env = JEnv.current(),
                 let clazz = JClass.load(Op.className),
                 let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, Op.className))),
-                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
+                let returningClazz = JClass.load(Op.className.asArray()),
+                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, returningClass: returningClazz),
                 let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
             else { return nil }
             return element
@@ -2858,7 +2860,8 @@ extension Path {
                 let env = JEnv.current(),
                 let clazz = JClass.load(FillType.className),
                 let methodId = env.getStaticMethodId(clazz: clazz, name: "values", sig: .returning(.object(array: true, FillType.className))),
-                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId),
+                let returningClazz = JClass.load(FillType.className.asArray()),
+                let valuesArray = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, returningClass: returningClazz),
                 let element = env.getObjectArrayElement(JObjectArray(valuesArray, length: 2), index: Int32(index))
             else { return nil }
             return element

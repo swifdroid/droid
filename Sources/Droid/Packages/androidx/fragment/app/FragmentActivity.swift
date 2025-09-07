@@ -32,7 +32,7 @@ open class FragmentActivity: ComponentActivity {
     public func supportFragmentManager() -> FragmentManager! {
         guard
             let returningClazz = JClass.load(FragmentManager.className),
-            let global = _context.object.callObjectMethod(name: "getSupportFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
+            let global = _context.object.callObjectMethod(name: "getSupportFragmentManager", returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }

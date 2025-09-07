@@ -94,7 +94,7 @@ extension AppCompatActivity {
     public func supportActionBar() -> ActionBar! {
         guard
             let returningClazz = JClass.load(ActionBar.className),
-            let value = context.object.callObjectMethod(name: "getSupportActionBar", returningClass: returningClazz, returning: .object(ActionBar.className))
+            let value = context.object.callObjectMethod(name: "getSupportActionBar", returningClass: returningClazz)
         else { return nil }
         return .init(value, context)
     }
@@ -104,7 +104,7 @@ extension AppCompatActivity {
     public func supportParentActivityIntent() -> Intent! {
         guard
             let returningClazz = JClass.load(Intent.className),
-            let value = context.object.callObjectMethod(name: "getSupportParentActivityIntent", returningClass: returningClazz, returning: .object(Intent.className))
+            let value = context.object.callObjectMethod(name: "getSupportParentActivityIntent", returningClass: returningClazz)
         else { return nil }
         return .init(value)
     }

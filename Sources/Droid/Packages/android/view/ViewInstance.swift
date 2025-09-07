@@ -105,7 +105,7 @@ extension View {
             guard let lpClazz = JClass.load(lpClassName ?? self.lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
                 return nil
             }
-            guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, clazz: lpClazz) else {
+            guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, returningClass: lpClazz) else {
                 // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
                 return nil
             }

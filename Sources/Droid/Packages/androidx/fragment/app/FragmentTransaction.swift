@@ -47,7 +47,7 @@ extension FragmentTransaction {
         #if os(Android)
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
         #else
@@ -65,7 +65,7 @@ extension FragmentTransaction {
         guard
             let str = JString(from: tag),
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "add", args: fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "add", args: fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
         #else
@@ -87,7 +87,7 @@ extension FragmentTransaction {
             let str = JString(from: tag),
             let container = container.instance,
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "add", args: container.object.signed(as: ViewGroup.className), fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "add", args: container.object.signed(as: ViewGroup.className), fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
         #else
@@ -104,7 +104,7 @@ extension FragmentTransaction {
     // ) -> FragmentTransaction! {
     //     guard
     //         let returningClazz = JClass.load(FragmentTransaction.className),
-    //         let global = object.callObjectMethod(name: "add", args: containerViewId, fragmentClass., args.signed(as: Bundle.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+    //         let global = object.callObjectMethod(name: "add", args: containerViewId, fragmentClass., args.signed(as: Bundle.className), returningClass: returningClazz)
     //     else { return nil }
     //     return .init(global, self)
     // }
@@ -122,7 +122,7 @@ extension FragmentTransaction {
         guard
             let str = JString(from: tag),
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "add", args: containerViewId, fragment.signed(as: Fragment.className), str.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
         #else
@@ -142,7 +142,7 @@ extension FragmentTransaction {
             let name = JString(from: name),
             let sharedElement = sharedElement.instance,
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "addSharedElement", args: sharedElement.signed(as: View.className), name.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "addSharedElement", args: sharedElement.signed(as: View.className), name.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
         #else
@@ -164,7 +164,7 @@ extension FragmentTransaction {
         guard
             let name = JString(from: name),
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "addToBackStack", args: name.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "addToBackStack", args: name.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
         #else
@@ -182,7 +182,7 @@ extension FragmentTransaction {
         #if os(Android)
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "attach", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "attach", args: fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
         #else
@@ -257,7 +257,7 @@ extension FragmentTransaction {
     public func detach(_ fragment: Fragment) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "detach", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "detach", args: fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -269,7 +269,7 @@ extension FragmentTransaction {
     public func disallowAddToBackStack() -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "disallowAddToBackStack", returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "disallowAddToBackStack", returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -280,7 +280,7 @@ extension FragmentTransaction {
     public func hide(_ fragment: Fragment) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "hide", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "hide", args: fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -303,7 +303,7 @@ extension FragmentTransaction {
     public func remove(_ fragment: Fragment) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "remove", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "remove", args: fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -316,7 +316,7 @@ extension FragmentTransaction {
     ) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -334,7 +334,7 @@ extension FragmentTransaction {
         guard
             let tag = JString(from: tag),
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), tag.signedAsString(), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "replace", args: containerViewId, fragment.signed(as: Fragment.className), tag.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -345,7 +345,7 @@ extension FragmentTransaction {
     public func customAnimations(_ enter: Int32, _ exit: Int32) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -356,7 +356,7 @@ extension FragmentTransaction {
     public func customAnimations(_ enter: Int32, _ exit: Int32, _ popEnter: Int32, _ popExit: Int32) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, popEnter, popExit, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "setCustomAnimations", args: enter, exit, popEnter, popExit, returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -375,7 +375,7 @@ extension FragmentTransaction {
     public func primaryNavigationFragment(_ fragment: Fragment) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "setPrimaryNavigationFragment", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "setPrimaryNavigationFragment", args: fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -401,7 +401,7 @@ extension FragmentTransaction {
     public func reorderingAllowed(_ reorderingAllowed: Bool = true) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "setReorderingAllowed", args: reorderingAllowed, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "setReorderingAllowed", args: reorderingAllowed, returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -410,7 +410,7 @@ extension FragmentTransaction {
     public func transition(_ transition: Transit) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "setTransition", args: transition.rawValue, returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "setTransition", args: transition.rawValue, returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -421,7 +421,7 @@ extension FragmentTransaction {
     public func show(_ fragment: Fragment) -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "show", args: fragment.signed(as: Fragment.className), returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "show", args: fragment.signed(as: Fragment.className), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }

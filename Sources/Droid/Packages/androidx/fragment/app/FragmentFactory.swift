@@ -36,7 +36,7 @@ extension FragmentFactory {
         guard
             let returningClazz = classLoader.loadClass(Fragment.className),
             let str = JString(from: className.path),
-            let global = object.callObjectMethod(name: "instantiate", args: classLoader.signed(as: JClassLoader.className), str.signedAsString(), returningClass: returningClazz, returning: .object(Fragment.className))
+            let global = object.callObjectMethod(name: "instantiate", args: classLoader.signed(as: JClassLoader.className), str.signedAsString(), returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }

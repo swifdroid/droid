@@ -394,7 +394,7 @@ extension JObject {
         guard
             let returningClazz = JClass.load(className)
         else { return nil }
-        return callObjectMethod(name: "getContext", returningClass: returningClazz, returning: .object(className))
+        return callObjectMethod(name: "getContext", returningClass: returningClazz)
     }
 }
 

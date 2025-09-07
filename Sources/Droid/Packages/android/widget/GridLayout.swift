@@ -113,62 +113,41 @@ fileprivate extension LayoutParamToApply {
         else { return }
         func getAlignment(_ type: GridLayout.Alignment) -> JObject? {
             guard
-                let fieldId = clazz.staticFieldId(name: type.rawValue, signature: .object(GridLayout.alignmentClassName))
+                let returningClazz = JClass.load(GridLayout.alignmentClassName)
             else { return nil }
-            return env.getStaticObjectField(clazz, fieldId)
+            return clazz.staticObjectField(name: type.rawValue, returningClass: returningClazz)
         }
+        guard
+            let returningClazz = JClass.load(GridLayout.specClassName)
+        else { return }
+        var spec: JObject?
         switch value {
         case .one(let start):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, returning: .object(GridLayout.specClassName))),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start])
-            else { return }
-            lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
+            spec = clazz.staticObjectMethod(name: "spec", args: [start], returningClass: returningClazz)
         case .two(let start, let size):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, .int, returning: .object(GridLayout.specClassName))),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start, size])
-            else { return }
-            lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
+            spec = clazz.staticObjectMethod(name: "spec", args: [start, size], returningClass: returningClazz)
         case .three(let start, let weight):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, .float, returning: .object(GridLayout.specClassName))),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start, weight])
-            else { return }
-            lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
+            spec = clazz.staticObjectMethod(name: "spec", args: [start, weight], returningClass: returningClazz)
         case .four(let start, let alignmentType):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, .object(GridLayout.alignmentClassName), returning: .object(GridLayout.specClassName))),
-                let alignment = getAlignment(alignmentType),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start, alignment.signed(as: GridLayout.alignmentClassName).value])
-            else { return }
-            lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
+            if let alignment = getAlignment(alignmentType) {
+                spec = clazz.staticObjectMethod(name: "spec", args: [start, alignment.signed(as: GridLayout.alignmentClassName)], returningClass: returningClazz)
+            }
         case .five(let start, let size, let weight):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, .int, .float, returning: .object(GridLayout.specClassName))),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start, size, weight])
-            else { return }
-            lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
+            spec = clazz.staticObjectMethod(name: "spec", args: [start, size, weight], returningClass: returningClazz)
         case .six(let start, let size, let alignmentType):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, .int, .object(GridLayout.alignmentClassName), returning: .object(GridLayout.specClassName))),
-                let alignment = getAlignment(alignmentType),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start, size, alignment.signed(as: GridLayout.alignmentClassName).value])
-            else { return }
-            lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
+            if let alignment = getAlignment(alignmentType) {
+                spec = clazz.staticObjectMethod(name: "spec", args: [start, size, alignment.signed(as: GridLayout.alignmentClassName)], returningClass: returningClazz)
+            }
         case .seven(let start, let alignmentType, let weight):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, .object(GridLayout.alignmentClassName), .float, returning: .object(GridLayout.specClassName))),
-                let alignment = getAlignment(alignmentType),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start, alignment.signed(as: GridLayout.alignmentClassName).value, weight])
-            else { return }
-            lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
+            if let alignment = getAlignment(alignmentType) {
+                spec = clazz.staticObjectMethod(name: "spec", args: [start, alignment.signed(as: GridLayout.alignmentClassName), weight], returningClass: returningClazz)
+            }
         case .eight(let start, let size, let alignmentType, let weight):
-            guard
-                let methodId = clazz.staticMethodId(name: "spec", signature: .init(.int, .int, .object(GridLayout.alignmentClassName), .float, returning: .object(GridLayout.specClassName))),
-                let alignment = getAlignment(alignmentType),
-                let spec = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [start, size, alignment.signed(as: GridLayout.alignmentClassName).value, weight])
-            else { return }
+            if let alignment = getAlignment(alignmentType) {
+                spec = clazz.staticObjectMethod(name: "spec", args: [start, size, alignment.signed(as: GridLayout.alignmentClassName), weight], returningClass: returningClazz)
+            }
+        }
+        if let spec {
             lp.setField(env, name: key.rawValue, arg: spec.signed(as: GridLayout.specClassName))
         }
         #endif

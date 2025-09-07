@@ -42,7 +42,7 @@ public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
     public func withCornerSize(_ cornerSize: Float) -> ShapeAppearanceModel? {
         guard
             let returningClazz = JClass.load(ShapeAppearanceModel.className),
-            let newObject = object.callObjectMethod(name: "withCornerSize", args: cornerSize, returningClass: returningClazz, returning: .object(ShapeAppearanceModel.className))
+            let newObject = object.callObjectMethod(name: "withCornerSize", args: cornerSize, returningClass: returningClazz)
         else { return nil }
         return .init(newObject, self)
     }

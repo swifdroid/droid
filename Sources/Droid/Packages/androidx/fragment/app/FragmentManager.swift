@@ -46,7 +46,7 @@ extension FragmentManager {
     public func beginTransaction() -> FragmentTransaction! {
         guard
             let returningClazz = JClass.load(FragmentTransaction.className),
-            let global = object.callObjectMethod(name: "beginTransaction", returningClass: returningClazz, returning: .object(FragmentTransaction.className))
+            let global = object.callObjectMethod(name: "beginTransaction", returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -122,7 +122,7 @@ extension FragmentManager {
     public func findFragmentManager() -> FragmentManager? {
         guard
             let returningClazz = JClass.load(FragmentManager.className),
-            let global = object.callObjectMethod(name: "findFragmentManager", returningClass: returningClazz, returning: .object(FragmentManager.className))
+            let global = object.callObjectMethod(name: "findFragmentManager", returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -143,7 +143,7 @@ extension FragmentManager {
     public func fragmentFactory() -> FragmentFactory! {
         guard
             let returningClazz = JClass.load(FragmentFactory.className),
-            let global = object.callObjectMethod(name: "getFragmentFactory", returningClass: returningClazz, returning: .object(FragmentFactory.className))
+            let global = object.callObjectMethod(name: "getFragmentFactory", returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -158,7 +158,7 @@ extension FragmentManager {
     public func primaryNavigationFragment() -> Fragment? {
         guard
             let returningClazz = JClass.load(Fragment.className),
-            let global = object.callObjectMethod(name: "getPrimaryNavigationFragment", returningClass: returningClazz, returning: .object(Fragment.className))
+            let global = object.callObjectMethod(name: "getPrimaryNavigationFragment", returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }

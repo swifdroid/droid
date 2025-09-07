@@ -207,7 +207,7 @@ open class Activity: AnyActivity {
             InnerLog.t("Activity.getTheme 1.3 exit")
             return nil
         }
-        guard let globalObject = env.callObjectMethod(object: context.object, methodId: methodId, clazz: lpClazz) else {
+        guard let globalObject = env.callObjectMethod(object: context.object, methodId: methodId, returningClass: lpClazz) else {
             InnerLog.t("Activity.getTheme 1.4 exit")
             return nil
         }
@@ -223,7 +223,7 @@ extension Activity {
     public func findViewById(_ id: Int32) -> View? {
         guard
             let returningClazz = JClass.load(.android.view.View),
-            let global = context.object.callObjectMethod(name: "findViewById", args: id, returningClass: returningClazz, returning: .object(.android.view.View))
+            let global = context.object.callObjectMethod(name: "findViewById", args: id, returningClass: returningClazz)
         else { return nil }
         return .init(id: id, global, context)
     }

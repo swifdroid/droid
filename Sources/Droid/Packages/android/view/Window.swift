@@ -350,7 +350,7 @@ extension ActionBar {
     public func customView() -> View! {
         guard
             let returningClazz = JClass.load(.android.view.View),
-            let global = object.callObjectMethod(name: "getCustomView", returningClass: returningClazz, returning: .object(.android.view.View))
+            let global = object.callObjectMethod(name: "getCustomView", returningClass: returningClazz)
         else { return nil }
         let id = Int32.nextViewId()
         return .init(id: id, global, context)
@@ -433,9 +433,9 @@ extension ActionBar {
     public func subtitle() -> String? {
         guard
             let returningClazz = JClass.load(JString.charSequenseClassName),
-            let str = object.callObjectMethod(name: "getSubtitle", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
+            let str = object.callObjectMethod(name: "getSubtitle", returningClass: returningClazz)
         else { return nil }
-        return JString(str).toSwiftString()
+        return JString(str).string()
     }
 
     // TODO: getThemedContext
@@ -443,9 +443,9 @@ extension ActionBar {
     public func title() -> String? {
         guard
             let returningClazz = JClass.load(JString.charSequenseClassName),
-            let str = object.callObjectMethod(name: "getTitle", returningClass: returningClazz, returning: .object(JString.charSequenseClassName))
+            let str = object.callObjectMethod(name: "getTitle", returningClass: returningClazz)
         else { return nil }
-        return JString(str).toSwiftString()
+        return JString(str).string()
     }
 
     /// Hide the `ActionBar` if it is currently showing.
