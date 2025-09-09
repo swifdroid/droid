@@ -86,7 +86,7 @@ extension Animation {
         guard
             let value = object.callIntMethod(name: "getBackdropColor")
         else { return nil }
-        return .init(integerLiteral: Int64(value))
+        return .init(integerLiteral: value)
     }
 
     /// How long this animation should last.
