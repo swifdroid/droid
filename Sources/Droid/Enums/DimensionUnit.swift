@@ -9,13 +9,13 @@
 import Android
 #endif
 
-public enum DimensionUnit: Sendable {
-    case px
-    case dp
-    case sp
-    case pt
-    case inch
-    case mm
+public enum DimensionUnit: Int32, Sendable {
+    case px = 0
+    case dp = 1
+    case sp = 2
+    case pt = 3
+    case inch = 4
+    case mm = 5
     
     public func toPixels(_ value: Float) -> Float {
         switch self {
