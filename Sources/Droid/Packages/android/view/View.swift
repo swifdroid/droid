@@ -767,7 +767,57 @@ extension View {
 
 // MARK: AutofillHints
 
-// TODO:
+public enum AutofillHint: String, Sendable {
+    /// Hint indicating that this view can be autofilled with a credit card expiration date.
+    ///
+    /// It should be used when the credit card expiration date is represented by just one view;
+    /// if it is represented by more than one (for example, one view for the month and another view for the year),
+    /// then each of these views should use the hint specific for the unit (.creditCardExpirationDay, .creditCardExpirationMonth, or .creditCardExpirationYear).
+    ///
+    /// Can be used with either `setAutofillHints([])` or `android:autofillHint` (in which case the value should be .creditCardExpirationDate).
+    ///
+    /// When annotating a view with this hint, it's recommended to use a date autofill value to avoid ambiguity when the autofill service provides a value for it.
+    /// To understand why a value can be ambiguous, consider "April of 2020", which could be represented as either of the following options:
+    /// - "04/2020"
+    /// - "4/2020"
+    /// - "2020/04"
+    /// - "2020/4"
+    /// - "April/2020"
+    /// - "Apr/2020"
+    /// 
+    /// You define a date autofill value for the view by overriding the following methods:
+    /// 
+    /// - `getAutofillType()` to return `.date`.
+    /// - `getAutofillValue()` to return a `date autofillvalue`.
+    /// - `autofill(AutofillValue)` to expect a `data autofillvalue`.
+    case creditCardExpirationDate = "creditCardExpirationDate"
+    /// Hint indicating that this view can be autofilled with a credit card expiration day.
+    case creditCardExpirationDay = "creditCardExpirationDay"
+    /// Hint indicating that this view can be autofilled with a credit card expiration month.
+    case creditCardExpirationMonth = "creditCardExpirationMonth"
+    /// Hint indicating that this view can be autofilled with a credit card expiration year.
+    case creditCardExpirationYear = "creditCardExpirationYear"
+    /// Hint indicating that this view can be autofilled with a credit card number.
+    case creditCardNumber = "creditCardNumber"
+    /// Hint indicating that this view can be autofilled with a credit card security code.
+    case creditCardSecurityCode = "creditCardSecurityCode"
+    /// Hint indicating that this view can be autofilled with an email address.
+    case emailAddress = "emailAddress"
+    /// Hint indicating that this view can be autofilled with a user's real name.
+    case name = "name"
+    /// Hint indicating that this view can be autofilled with a password.
+    case password = "password"
+    /// Hint indicating that this view can be autofilled with a phone number.
+    case phone = "phone"
+    /// Hint indicating that this view can be autofilled with a postal address.
+    case postalAddress = "postalAddress"
+    /// Hint indicating that this view can be autofilled with a postal code.
+    case postalCode = "postalCode"
+    /// Hint indicating that this view can be autofilled with a username.
+    case username = "username"
+}
+
+// TODO: implement `getAutofillType` method
 
 // MARK: AutofillId
 
