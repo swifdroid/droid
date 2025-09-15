@@ -48,6 +48,10 @@ fileprivate struct SetTextViewProperty: ViewPropertyToApply {
             let textState = value.textState
         else { return }
         instance.setText(env, textState.wrappedValue)
+        textState.listen { old, new in
+            guard old != new else { return }
+            instance.setText(env, new)
+        }
         #endif
     }
 }
