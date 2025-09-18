@@ -62,30 +62,6 @@ public struct InnerR: Sendable {
         xml = Resource(className, "xml")
     }
 
-    public init () {
-        id = Resource(nil, "id")
-        attr = Resource(nil, "attr")
-        menu = Resource(nil, "menu")
-        drawable = Resource(nil, "drawable")
-        string = Resource(nil, "string")
-        anim = Resource(nil, "anim")
-        animator = Resource(nil, "animator")
-        array = Resource(nil, "array")
-        bool = Resource(nil, "bool")
-        color = Resource(nil, "color")
-        dimen = Resource(nil, "dimen")
-        fraction = Resource(nil, "fraction")
-        integer = Resource(nil, "integer")
-        interpolator = Resource(nil, "interpolator")
-        layout = Resource(nil, "layout")
-        mipmap = Resource(nil, "mipmap")
-        plurals = Resource(nil, "plurals")
-        raw = Resource(nil, "raw")
-        style = Resource(nil, "style")
-        transition = Resource(nil, "transition")
-        xml = Resource(nil, "xml")
-    }
-
     @dynamicMemberLookup
     public struct Resource: Sendable {
         let parentClass: JClassName?
