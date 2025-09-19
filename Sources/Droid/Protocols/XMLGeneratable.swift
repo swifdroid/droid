@@ -66,6 +66,7 @@ struct ManifestTagParamName: ExpressibleByStringLiteral, Hashable, Equatable {
 	static var androidScreenSize: Self { "android:screenSize" }
 	static var androidScreenDensity: Self { "android:screenDensity" }
 	static var androidDescription: Self { "android:description" }
+	static var androidGlEsVersion: Self { "android:glEsVersion" }
 	static var androidIcon: Self { "android:icon" }
 	static var androidRoundIcon: Self { "android:roundIcon" }
 	static var androidLabel: Self { "android:label" }
@@ -104,6 +105,7 @@ struct ManifestTagParamName: ExpressibleByStringLiteral, Hashable, Equatable {
 	static var androidProcess: Self { "android:process" }
 	static var androidRestoreAnyVersion: Self { "android:restoreAnyVersion" }
 	static var androidRequestLegacyExternalStorage: Self { "android:requestLegacyExternalStorage" }
+	static var androidRequired: Self { "android:required" }
 	static var androidRequiredAccountType: Self { "android:requiredAccountType" }
 	static var androidResizeableActivity: Self { "android:resizeableActivity" }
 	static var androidRestrictedAccountType: Self { "android:restrictedAccountType" }
@@ -148,6 +150,7 @@ struct ManifestTagParamName: ExpressibleByStringLiteral, Hashable, Equatable {
 	static var androidLaunchMode: Self { "android:launchMode" }
 	static var androidLockTaskMode: Self { "android:lockTaskMode" }
 	static var androidMaxRecents: Self { "android:maxRecents" }
+	static var androidMaxSDKVersion: Self { "android:maxSdkVersion" }
 	static var androidMaxAspectRatio: Self { "android:maxAspectRatio" }
 	static var androidNoHistory: Self { "android:noHistory" }
 	static var androidParentActivityName: Self { "android:parentActivityName" }
