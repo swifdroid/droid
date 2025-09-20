@@ -25,6 +25,9 @@ extension Activity: @unchecked Sendable {}
 @UIThreadActor
 #endif
 open class Activity: AnyActivity {
+    public typealias IntentFilter = DroidApp.IntentFilter
+    public typealias MetaData = DroidApp.MetaData
+
 	open class var packageName: String? { nil }
     open class var className: JClassName { .android.app.Activity }
     open class var gradleDependencies: [String] { [] }
@@ -70,8 +73,8 @@ open class Activity: AnyActivity {
 	open class nonisolated var theme: String? { nil }
 	open class nonisolated var uiOptions: ApplicationUIOptions? { nil }
 	open class nonisolated var windowSoftInputMode: [WindowSoftInputMode] { [] }
-	open class nonisolated var intentFilter: DroidApp.IntentFilter? { nil }
-	open class nonisolated var metaData: DroidApp.MetaData? { nil }
+	open class nonisolated var intentFilter: IntentFilter? { nil }
+	open class nonisolated var metaData: MetaData? { nil }
     
     var _context: ActivityContext!
     public var context: ActivityContext {
