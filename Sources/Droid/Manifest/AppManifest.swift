@@ -221,7 +221,7 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// to specific components or features of this or other applications.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element)
-    public func usesPermission(_ name: DroidApp.Permission.PermissionName) -> Self {
+    public func permission(_ name: ManifestPermission) -> Self {
         items.insert(DroidApp.Permission().name(name), at: 0)
 		return self
 	}
@@ -230,8 +230,8 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// to specific components or features of this or other applications.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element)
-	public static func usesPermission(_ name: DroidApp.Permission.PermissionName) -> Self {
-		Self().usesPermission(name)
+	public static func permission(_ name: ManifestPermission) -> Self {
+		Self().permission(name)
 	}
 	
 	// MARK: -
@@ -255,6 +255,36 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element)
 	public static func permissionGroup(_ handler: @escaping () -> DroidApp.PermissionGroup) -> Self {
 		Self().permissionGroup(handler)
+	}
+	
+	// MARK: -
+	
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-permission-element)
+    public func usesPermission(_ name: ManifestPermission) -> Self {
+        let value = DroidApp.UsesPermission().name(name)
+		items.insert(value, at: 0)
+		usesPermission.append(value)
+		return self
+	}
+	
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-permission-element)
+	public static func usesPermission(_ name: ManifestPermission) -> Self {
+		Self().usesPermission(name)
+	}
+	
+	// MARK: -
+	
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
+    public func usesFeature(_ name: ManifestFeature, required: Bool = true) -> Self {
+        let value = DroidApp.UsesFeature().name(name).required(required)
+		items.insert(value, at: 0)
+		usesFeature.append(value)
+		return self
+	}
+	
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
+	public static func usesFeature(_ name: ManifestFeature) -> Self {
+		Self().usesFeature(name)
 	}
 	
 	// MARK: -
