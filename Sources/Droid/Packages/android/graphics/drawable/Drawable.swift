@@ -14,6 +14,12 @@ extension AndroidPackage.GraphicsPackage.DrawablePackage {
     public var Drawable: DrawableClass { .init(parent: self, name: "Drawable") }
 }
 
+/// A Drawable is a general abstraction for "something that can be drawn."
+/// 
+/// Most often you will deal with Drawable as the type of resource retrieved for drawing things to the screen;
+/// the Drawable class provides a generic API for dealing with an underlying visual resource that may take a variety of forms.
+/// 
+/// Unlike a View, a Drawable does not have any facility to receive events or otherwise interact with the user.
 #if canImport(AndroidLooper)
 @UIThreadActor
 #endif
