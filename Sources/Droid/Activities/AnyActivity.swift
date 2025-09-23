@@ -419,9 +419,11 @@ extension AnyActivity {
             InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
             return
         }
+		let activityClassName = context.activityClass(activity)
+		let className = JClassName(stringLiteral: activityClassName)
         guard
             let env = JEnv.current(),
-            let intent = Intent(env, .init(stringLiteral: context.activityClass(activity)))
+            let intent = Intent(env, className)
         else {
             InnerLog.c("Unable to create `Intent` for \(activity).")
             return
