@@ -183,7 +183,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     public init (id: Int32? = nil, _ object: JObject, _ context: ActivityContext) {
         self.id = id ?? .nextViewId()
         if let instance = ViewInstance(object, self, context, self.id, setId: id != nil) {
-            status = .asContentView(instance)
+            self.status = .asContentView(instance)
         }
         #if os(Android)
         InnerLog.d("❤️❤️❤️ INIT View 2 viewInstance: \(object.className.fullName) ref: \(object.ref.ref)")
@@ -366,7 +366,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             instance.lpClassName = Self.layoutParamsClass.className
         }
         // InnerLog.d("view(id: \(id)) setStatusAsContentView 3")
-        status = .asContentView(instance)
+        self.status = .asContentView(instance)
         return instance
     }
     
@@ -387,7 +387,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         if Self.layoutParamsShouldBeLoaded {
             instance.lpClassName = Self.layoutParamsClass.className
         }
-        status = .inParent(parent, instance)
+        self.status = .inParent(parent, instance)
         // InnerLog.d("view(id: \(id)) setStatusInParent 3")
         return instance
     }
@@ -403,7 +403,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             InnerLog.c("🟥 Unable to `setFloating` when its ViewInstance is nil")
             return
         }
-        status = .floating(instance)
+        self.status = .floating(instance)
     }
     
     var _propertiesToApply: [any ViewPropertyToApply] = []
