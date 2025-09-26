@@ -175,6 +175,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     @discardableResult
     public init (id: Int32? = nil) {
         self.id = id ?? .nextViewId()
+        InnerLog.d("❤️❤️❤️ INIT View 1 \(self)")
         _setup()
     }
 
@@ -184,18 +185,22 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         if let instance = ViewInstance(object, self, context, self.id, setId: id != nil) {
             status = .asContentView(instance)
         }
+        #if os(Android)
+        InnerLog.d("❤️❤️❤️ INIT View 2 viewInstance: \(object.className.fullName) ref: \(object.ref.ref)")
+        #endif
         _setup()
     }
     
     @discardableResult
     public init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
         self.id = id ?? .nextViewId()
+        InnerLog.d("❤️❤️❤️ INIT View 3 \(self)")
         _setup()
         body { content() }
     }
 
-    func _setup() {
-
+    deinit {
+        InnerLog.d("🟥🟥🟥 DEINIT view: \(self)")
     }
 
     public var instance: ViewInstance? {
@@ -205,6 +210,10 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             case .floating(let instance), .asContentView(let instance), .inParent(_, let instance):
                 return instance
         }
+    }
+
+    func _setup() {
+
     }
 
     // MARK: - Properties
@@ -223,6 +232,9 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             InnerLog.d("🟨 Attempt to add subview that already present")
             return self
         }
+        #if os(Android)
+        InnerLog.d("🟦 Added subview type: \(subview) ref: \(String(describing: subview.instance?.object.ref.ref))")
+        #endif
         subviews.append(subview)
         if let instance {
             subview.willMoveToParent()
@@ -302,8 +314,9 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     open func didMoveToParent() {
         // InnerLog.d("view(id: \(id)) didMoveToParent 1")
         if let instance {
-            // InnerLog.d("view(id: \(id)) didMoveToParent 2")
+            InnerLog.d("view(id: \(id)) didMoveToParent 2 before setting all properties")
             processProperties([], instance)
+            InnerLog.d("view(id: \(id)) didMoveToParent 2.5 after setting all properties")
             if subviews.count > 0 {
                 // InnerLog.d("view(id: \(id)) didMoveToParent iterating subviews")
                 for (_, subview) in subviews.filter({ v in
@@ -337,7 +350,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
 
     @discardableResult
     func setStatusAsContentView(_ context: ActivityContext) -> ViewInstance? {
-        // InnerLog.d("view(id: \(id)) setStatusAsContentView 1")
+        InnerLog.d("view(id: \(id)) \(self) setStatusAsContentView 1")
         switch status {
             case .new, .floating: break
             default:
@@ -359,7 +372,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     
     @discardableResult
     func setStatusInParent(_ parent: View, _ context: ActivityContext) -> ViewInstance? {
-        // InnerLog.d("view(id: \(id)) setStatusInParent 1")
+        InnerLog.d("view(id: \(id)) \(self) setStatusInParent 1")
         switch status {
             case .new, .floating: break
             default:
