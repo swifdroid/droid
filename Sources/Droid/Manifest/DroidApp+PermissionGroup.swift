@@ -105,8 +105,8 @@ extension DroidApp {
 		/// This is the name that can be assigned to a `<permission>` element's `<permissionGroup>` attribute.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element#nm)
-		public func name(_ value: String) -> Self {
-			params[.androidName] = value
+		public func name(_ value: ManifestPermissionGroup) -> Self {
+			params[.androidName] = value.value
 			return self
 		}
 		
@@ -115,7 +115,7 @@ extension DroidApp {
 		/// This is the name that can be assigned to a `<permission>` element's `<permissionGroup>` attribute.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-group-element#nm)
-		public static func name(_ value: String) -> Self {
+		public static func name(_ value: ManifestPermissionGroup) -> Self {
 			Self().name(value)
 		}
 	}
