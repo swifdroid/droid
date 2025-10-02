@@ -337,4 +337,28 @@ public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>,
     }
     #endif
 }
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRequestPermissionsResult")
+public func activityOnRequestPermissionsResult(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, permissions: jobjectArray, grantResults: jarray, deviceId: jint) {
+    let env = JEnv(envPointer)
+    guard let permissionsBox = permissions.box(env) else { return }
+    guard let permissionsObject = permissionsBox.object() else { return }
+    let permissionsArray = JObjectArray(env, permissionsObject).toArray().compactMap { JString($0).string() }
+    let grantResultsLength = env.getArrayLength(grantResults)
+    InnerLog.c("permissionsArray.count: \(permissionsArray.count)")
+    InnerLog.c("grantResultsLength.count: \(grantResultsLength)")
+    var grantResultsArray = [Int32](repeating: 0, count: Int(grantResultsLength))
+    env.getIntArrayRegion(grantResults, start: 0, length: grantResultsLength, buffer: &grantResultsArray)
+    var results: [ActivityPermissionResult] = []
+    for (index, permission) in permissionsArray.enumerated() {
+        let grantResult = grantResultsArray[index]
+        if let value = ActivityPermissionResult(permission, grantResult) {
+            results.append(value)
+        }
+    }
+    #if canImport(AndroidLooper)
+    Task { @UIThreadActor in
+        DroidApp.shared._activeActivities[Int(activityId)]?.onRequestPermissionsResult(requestCode: Int(requestCode), results: results, deviceId: Int(deviceId))
+    }
+    #endif
+}
 #endif
