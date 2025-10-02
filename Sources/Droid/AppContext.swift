@@ -17,4 +17,8 @@ public final class AppContext: JObjectable, JClassLoadable, @unchecked Sendable 
     public init (_ object: JObject) {
         self.object = object
     }
+
+    deinit {
+        InnerLog.d("AppContext deinitialized")
+    }
 }
