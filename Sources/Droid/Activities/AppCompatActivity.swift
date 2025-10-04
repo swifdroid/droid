@@ -169,4 +169,18 @@ extension AppCompatActivity {
         return false
         #endif
     }
+
+    public func requestPermissions(_ permissions: [ManifestPermission], requestCode: Int) {
+        #if os(Android)
+        for permission in permissions {
+            permission.warnIfNeeded()
+        }
+        let jPermissions = permissions.compactMap { $0.value.wrap() }
+        guard
+            let clazz = JClass.load("androidx/core/app/ActivityCompat"),
+            let array = jPermissions.javaArray(of: JString.className)
+        else { return }
+        clazz.staticVoidMethod(name: "requestPermissions", args: context.signed(as: "android/app/Activity"), array.signed(as: JClassName("java/lang/String").asArray()), Int32(requestCode))
+        #endif
+    }
 }
