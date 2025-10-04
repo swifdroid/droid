@@ -156,4 +156,17 @@ extension AppCompatActivity {
     public func supportShouldUpRecreateTask(_ targetIntent: Intent) -> Bool {
         context.object.callBoolMethod(name: "supportRequestWindowFeature", args: targetIntent.signed(as: Intent.className)) ?? false
     }
+
+    // MARK: - Permissions
+
+    public func checkPermission(_ permission: ManifestPermission) -> Bool {
+        #if os(Android)
+        permission.warnIfNeeded()
+        guard let clazz = JClass.load("androidx/core/content/ContextCompat") else { return false }
+        guard let result = clazz.staticIntMethod(name: "checkSelfPermission", args: context.signed(as: "android/content/Context"), permission.value) else { return false }
+        return result == 0
+        #else
+        return false
+        #endif
+    }
 }
