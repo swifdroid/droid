@@ -99,12 +99,6 @@ open class Activity: AnyActivity {
         _context = .init(object: object)
     }
 
-    deinit {
-        #if os(Android)
-        JEnv.current()?.deleteGlobalRef(_context.object)
-        #endif
-    }
-
     public func attach(to context: JObject) {
         _context = ActivityContext(object: context)
         onCreate(self.context)
