@@ -239,12 +239,23 @@ public final class Intent: JObjectable, @unchecked Sendable {
 
     public init? (_ env: JEnv, _ className: JClassName) {
         #if os(Android)
+        InnerLog.d("Intent init 1")
         guard
-            let intentClazz = JClass.load(.android.content.Intent),
-            let activityClazz = JClass.load(className),
-            let methodId = intentClazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), .object(.java.lang.Class), returning: .void)),
+            let intentClazz = JClass.load(.android.content.Intent)
+        else { return nil }
+        InnerLog.d("Intent init 2 intentClazz: \(intentClazz.ref)")
+        guard
+            let activityClazz = JClass.load(className)
+        else { return nil }
+        InnerLog.d("Intent init 3 activityClazz: \(activityClazz.ref)")
+        guard
+            let methodId = intentClazz.methodId(env: env, name: "<init>", signature: .init(.object(.android.content.Context), .object(.java.lang.Class), returning: .void))
+        else { return nil }
+        InnerLog.d("Intent init 4")
+        guard
             let global = env.newObject(clazz: intentClazz, constructor: methodId, args: [AppContext.shared.object, activityClazz])
         else { return nil }
+        InnerLog.d("Intent init 5")
         self.object = global
         #else
         return nil
