@@ -405,6 +405,14 @@ public protocol AnyActivity: AnyObject, Contextable {
     ///
     /// Override this to handle results from sub-activities (e.g., picking an image or capturing video).
 	func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?)
+public struct ActivityPermissionResult: Sendable {
+	public let permission: ManifestPermission
+	public let granted: Bool
+
+	public init? (_ permission: String, _ granted: Int32) {
+		self.permission = ManifestPermission.extendedPermissions.first(where: { $0.value == permission }) ?? ManifestPermission(stringLiteral: permission)
+		self.granted = granted == 0
+	}
 }
 
 extension AnyActivity {
