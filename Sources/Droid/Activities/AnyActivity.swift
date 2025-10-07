@@ -405,6 +405,18 @@ public protocol AnyActivity: AnyObject, Contextable {
     ///
     /// Override this to handle results from sub-activities (e.g., picking an image or capturing video).
 	func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?)
+
+	/// Called when the user responds to a permission request.
+	/// 
+	/// - Parameters:
+	///   - requestCode: The integer request code originally supplied to `requestPermissions()`.
+	///   - results: An array of `ActivityPermissionResult` indicating the permissions requested and whether they were granted.
+	///   - deviceId: The ID of the device for which the permissions were requested.
+	///
+	/// Override this to handle the user's response to permission requests.
+	func onRequestPermissionsResult(requestCode: Int, results: [ActivityPermissionResult], deviceId: Int)
+}
+
 public struct ActivityPermissionResult: Sendable {
 	public let permission: ManifestPermission
 	public let granted: Bool
