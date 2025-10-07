@@ -186,6 +186,7 @@ open class Activity: AnyActivity {
 	open func onAttachedToWindow() {}
 	open func onBackPressed() {}
 	open func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?) {}
+    open func onRequestPermissionsResult(requestCode: Int, results: [ActivityPermissionResult], deviceId: Int) {}
 
     // MARK: Methods
 
