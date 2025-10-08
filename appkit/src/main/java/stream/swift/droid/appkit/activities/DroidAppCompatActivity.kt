@@ -87,9 +87,17 @@ open class DroidAppCompatActivity: AppCompatActivity() {
         app.activityOnActivityResult1(uniqueId, requestCode, resultCode, data, caller)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val app: DroidApp = applicationContext as DroidApp
         app.activityOnActivityResult2(uniqueId, requestCode, resultCode, data)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode)
+        val app: DroidApp = applicationContext as DroidApp
+        app.activityOnMultiWindowModeChanged(uniqueId, isInMultiWindowMode)
     }
 }

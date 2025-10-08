@@ -337,6 +337,14 @@ public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>,
     }
     #endif
 }
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnMultiWindowModeChanged")
+public func activityOnMultiWindowModeChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, isInMultiWindowMode: jboolean) {
+    #if canImport(AndroidLooper)
+    Task { @UIThreadActor in
+        DroidApp.shared._activeActivities[Int(activityId)]?.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode != 0)
+    }
+    #endif
+}
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRequestPermissionsResult")
 public func activityOnRequestPermissionsResult(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, permissions: jobjectArray, grantResults: jarray, deviceId: jint) {
     let env = JEnv(envPointer)

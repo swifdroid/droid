@@ -109,4 +109,5 @@ class DroidApp : Application() {
         caller: ComponentCaller
     )
     external fun activityOnActivityResult2(activityId: Int, requestCode: Int, resultCode: Int, data: Intent?)
+    external fun activityOnMultiWindowModeChanged(uniqueId: Int, isInMultiWindowMode: Boolean)
 }

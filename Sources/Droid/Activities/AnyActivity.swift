@@ -406,6 +406,13 @@ public protocol AnyActivity: AnyObject, Contextable {
     /// Override this to handle results from sub-activities (e.g., picking an image or capturing video).
 	func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?)
 
+	/// Called when the activity's multi-window mode changes.
+	///
+	/// - Parameter isInMultiWindowMode: `true` if the activity is now in multi-window mode, `false` otherwise.
+	/// 
+	/// Override this to adjust your UI or behavior based on whether the activity is in multi-window mode.
+	func onMultiWindowModeChanged(isInMultiWindowMode: Bool)
+
 	/// Called when the user responds to a permission request.
 	/// 
 	/// - Parameters:
