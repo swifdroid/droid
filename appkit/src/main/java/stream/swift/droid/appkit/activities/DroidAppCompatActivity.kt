@@ -100,4 +100,10 @@ open class DroidAppCompatActivity: AppCompatActivity() {
         val app: DroidApp = applicationContext as DroidApp
         app.activityOnMultiWindowModeChanged(uniqueId, isInMultiWindowMode)
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray, deviceId: Int) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
+        val app: DroidApp = applicationContext as DroidApp
+        app.activityOnRequestPermissionsResult(uniqueId, requestCode, permissions, grantResults, deviceId)
+    }
 }

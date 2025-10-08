@@ -110,4 +110,5 @@ class DroidApp : Application() {
     )
     external fun activityOnActivityResult2(activityId: Int, requestCode: Int, resultCode: Int, data: Intent?)
     external fun activityOnMultiWindowModeChanged(uniqueId: Int, isInMultiWindowMode: Boolean)
+    external fun activityOnRequestPermissionsResult(uniqueId: Int, requestCode: Int, permissions: Array<out String>, grantResults: IntArray, deviceId: Int)
 }
