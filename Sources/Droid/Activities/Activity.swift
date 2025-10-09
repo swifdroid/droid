@@ -108,7 +108,9 @@ open class Activity: AnyActivity {
 
     open func onCreate(_ context: ActivityContext) {}
 
-    public func contentView(_ view: View) {
+    public func contentView(_ view: View, _ proceed: ((View) -> Void)? = nil) {
+        contentView = view
+        proceed?(contentView!)
         view.willMoveToParent()
         guard let viewInstance = view.setStatusAsContentView(context) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setContentView`")
@@ -133,10 +135,7 @@ open class Activity: AnyActivity {
             let item = block().bodyBuilderItem
             func setDefaultFrameLayout(_ item: BodyBuilderItem) {
                 InnerLog.d("activity body setDefaultFrameLayout")
-                let view = FrameLayout()
-                view.addItem(item)
-                contentView(view)
-                contentView = view
+                contentView(FrameLayout()) { $0.addItem(item) }
             }
             func proceedItem(_ item: BodyBuilderItem) {
                 switch item {
