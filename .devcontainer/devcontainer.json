@@ -6,12 +6,13 @@
 	},
 	"containerEnv": {
 		"S_MODE": "PURE",
-		"S_TOOLCHAIN_URL_X86": "https://download.swift.org/swift-6.1.2-release/ubuntu2404/swift-6.1.2-RELEASE/swift-6.1.2-RELEASE-ubuntu24.04.tar.gz",
-		"S_TOOLCHAIN_URL_ARM": "https://download.swift.org/swift-6.1.2-release/ubuntu2404-aarch64/swift-6.1.2-RELEASE/swift-6.1.2-RELEASE-ubuntu24.04-aarch64.tar.gz",
+		"S_TOOLCHAIN_URL_X86": "https://download.swift.org/swift-6.2-release/ubuntu2404/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04.tar.gz",
+		"S_TOOLCHAIN_URL_ARM": "https://download.swift.org/swift-6.2-release/ubuntu2404-aarch64/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04-aarch64.tar.gz",
 		"S_VERSION_MAJOR": "6",
-		"S_VERSION_MINOR": "1",
-		"S_VERSION_PATCH": "2",
-		"S_ARTIFACT_ANDROID_URL": "https://github.com/finagolfin/swift-android-sdk/releases/download/6.1.2/swift-6.1.2-RELEASE-android-24-0.1.artifactbundle.tar.gz",
+		"S_VERSION_MINOR": "2",
+		"S_VERSION_PATCH": "0",
+		"S_ARTIFACT_ANDROID_URL": "https://github.com/swift-android-sdk/swift-android-sdk/releases/download/6.2/swift-6.2-RELEASE-android-0.1.artifactbundle.tar.gz",
+		"S_ARTIFACT_STATIC_LINUX_URL": "https://download.swift.org/swift-6.2-release/static-sdk/swift-6.2-RELEASE/swift-6.2-RELEASE_static-linux-0.0.1.artifactbundle.tar.gz"
 	},
 	"appPort": [],
 	"otherPortsAttributes": {},
@@ -26,11 +27,11 @@
 			"settings": {
 				"extensions.ignoreRecommendations": true,
 				"remote.autoForwardPorts": false,
-				"swift.path": "/swift/toolchains/6.1.2-RELEASE/usr/bin",
+				"swift.path": "/swift/toolchains/6.2-RELEASE/usr/bin",
 				"swift.swiftEnvironmentVariables": {
 					"DEVELOPER_DIR": "public"
 				},
-				"lldb.library": "/swift/toolchains/6.1.2-RELEASE/usr/lib/liblldb.so",
+				"lldb.library": "/swift/toolchains/6.2-RELEASE/usr/lib/liblldb.so",
 				"lldb.launch.expressions": "native",
 				"swift.autoGenerateLaunchConfigurations": true,
 				"swift.backgroundCompilation": false,
