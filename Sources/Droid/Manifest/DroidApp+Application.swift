@@ -968,8 +968,8 @@ extension DroidApp {
 		/// For more information, see the [Styles and Themes](https://developer.android.com/guide/topics/ui/themes) developer guide.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#theme)
-		public func theme(_ value: String) -> Self {
-			params[.androidTheme] = value
+		public func theme(_ value: RStyle) -> Self {
+			params[.androidTheme] = value.value
 			return self
 		}
 		
@@ -981,7 +981,7 @@ extension DroidApp {
 		/// For more information, see the [Styles and Themes](https://developer.android.com/guide/topics/ui/themes) developer guide.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#theme)
-		public static func theme(_ value: String) -> Self {
+		public static func theme(_ value: RStyle) -> Self {
 			Self().theme(value)
 		}
 		
@@ -1189,7 +1189,7 @@ extension DroidApp {
 				manifestTag.param(.androidTaskAffinity, value)
 			}
 			if let value = activity.theme {
-				manifestTag.param(.androidTheme, value)
+				manifestTag.param(.androidTheme, value.value)
 			}
 			if let value = activity.uiOptions {
 				manifestTag.param(.androidUIOptions, ManifestTagParamValue(value).value)

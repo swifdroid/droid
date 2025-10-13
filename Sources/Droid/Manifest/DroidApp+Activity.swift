@@ -457,8 +457,8 @@ extension DroidApp {
 		/// A reference to a style resource defining an overall theme for the activity.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#theme)
-		public func theme(_ value: String) -> Self { // TODO: resource or theme
-			params[.androidTheme] = value
+		public func theme(_ value: RStyle) -> Self { // TODO: resource or theme
+			params[.androidTheme] = value.value
 			return self
 		}
 		

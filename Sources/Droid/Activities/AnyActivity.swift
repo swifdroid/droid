@@ -267,7 +267,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	/// A reference to a style resource defining an overall theme for the activity.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#theme)
-	static nonisolated var theme: String? { get } // TODO: resource or theme
+	static nonisolated var theme: RStyle? { get }
 	
 	/// Extra options for an activity's UI.
 	///

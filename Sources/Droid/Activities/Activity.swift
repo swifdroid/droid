@@ -25,6 +25,7 @@ extension Activity: @unchecked Sendable {}
 @UIThreadActor
 #endif
 open class Activity: AnyActivity {
+    public typealias Style = RStyle
     public typealias IntentFilter = DroidApp.IntentFilter
     public typealias MetaData = DroidApp.MetaData
 
@@ -70,7 +71,7 @@ open class Activity: AnyActivity {
 	open class nonisolated var stateNotNeeded: Bool? { nil }
 	open class nonisolated var supportsPictureInPicture: Bool? { nil }
 	open class nonisolated var taskAffinity: String? { nil }
-	open class nonisolated var theme: String? { nil }
+	open class nonisolated var theme: Style? { nil }
 	open class nonisolated var uiOptions: ApplicationUIOptions? { nil }
 	open class nonisolated var windowSoftInputMode: [WindowSoftInputMode] { [] }
 	open class nonisolated var intentFilter: IntentFilter? { nil }
