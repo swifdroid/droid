@@ -170,6 +170,9 @@ public final class LayoutParams: Sendable, JObjectable {
                 env.setDoubleField(object, fieldId, value)
             case .object(let value, _):
                 env.setObjectField(object, fieldId, value)
+            case .objectNil:
+                env.setObjectField(object, fieldId, nil)
+            default: break // would prefer it to be specific though
         }
         #endif
     }
