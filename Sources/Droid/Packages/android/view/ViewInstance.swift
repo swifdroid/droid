@@ -170,7 +170,7 @@ extension View {
         //     guard
         //         let env = JEnv.current(),
         //         let methodId = clazz.methodId(env: env, name: "getParent", signature: .returning(.object(.android.view.ViewParent))),
-        //         let object = env.callObjectMethod(object: .init(ref, clazz), methodId: methodId, args: []),
+        //         let object = env.callObjectMethod(object: self.object, methodId: methodId, args: []),
         //         let parent = ViewParent(object, context)
         //     else { return nil }
         //     return parent
@@ -195,7 +195,7 @@ extension View {
                 let env = env ?? JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: name, signature: .init(signatureItems, returning: .void))
             else { return }
-            env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
+            env.callVoidMethod(object: object, methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
             #endif
         }
 
@@ -205,7 +205,7 @@ extension View {
                 let env = env ?? JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: name, signature: .init(args.map { $0.signatureItemWithValue.signatureItem }, returning: .void))
             else { return }
-            env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
+            env.callVoidMethod(object: object, methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
             #endif
         }
     }

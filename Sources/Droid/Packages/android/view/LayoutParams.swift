@@ -135,7 +135,7 @@ public final class LayoutParams: Sendable, JObjectable {
             let env = env ?? JEnv.current(),
             let methodId = clazz.methodId(env: env, name: name, signature: .init(args.map { $0.signatureItemWithValue.signatureItem }, returning: .void))
         else { return }
-        env.callVoidMethod(object: .init(ref, clazz), methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
+        env.callVoidMethod(object: self.object, methodId: methodId, args: args.map { $0.signatureItemWithValue.value })
         #endif
     }
 
