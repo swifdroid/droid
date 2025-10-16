@@ -158,7 +158,7 @@ open class DroidApp: @unchecked Sendable {
             let jvm = envPointer.jvm()
             JNIKit.shared.initialize(with: jvm)
             let env = JEnv(envPointer)
-            if let appObject =  localCallerObjectRef.box(env)?.object() {
+            if let appObject =  localCallerObjectRef.box(env)?.object(debuggingNote: "DroidApp.start appObject") {
                 let context = AppContext(appObject)
                 shared = Self(context)
                 if let classLoaderObj = context.getClassLoader() {
