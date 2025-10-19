@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 24.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 /// An ActionProvider defines rich menu interaction in a single component.
 /// 
 /// ActionProvider can generate action views for use in the action bar, dynamically populate submenus of a MenuItem,
@@ -19,8 +15,8 @@ import AndroidLooper
 /// that does not allow custom action views, (e.g. in an overflow menu,) the ActionProvider can perform a default action.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/ActionProvider)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class ActionProvider: JObjectable, @unchecked Sendable {
     /// The JNI class name

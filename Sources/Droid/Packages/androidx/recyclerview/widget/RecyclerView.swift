@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 extension AndroidXPackage.RecyclerViewPackage.WidgetPackage {
     public class RecyclerViewClass: JClassName, @unchecked Sendable {}
     public var RecyclerView: RecyclerViewClass { .init(parent: self, name: "RecyclerView") }
@@ -305,8 +301,8 @@ extension RecyclerView {
 // MARK: - Adapter
 
 extension RecyclerView {
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     public final class Adapter: JObjectable, @unchecked Sendable {
         /// The JNI class name
@@ -342,8 +338,8 @@ extension RecyclerView {
 
 // MARK: - PagerSnapHelper
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
     /// The JNI class name
@@ -378,15 +374,15 @@ public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
 
 // MARK: - LayoutManager
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class LayoutManager: @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .androidx.recyclerview.widget.RecyclerView.LayoutManager }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     public final class LayoutManagerInstance: JObjectable, @unchecked Sendable {
         /// Context
@@ -441,12 +437,12 @@ open class LayoutManager: @unchecked Sendable {
 
     public protocol ParamToApply {
         var key: ParamKey { get }
-        #if canImport(AndroidLooper)
-        @UIThreadActor
+        #if os(Android)
+        @MainActor
         #endif
         func apply(_ env: JEnv?, _ layoutManager: LayoutManager.LayoutManagerInstance)
-        #if canImport(AndroidLooper)
-        @UIThreadActor
+        #if os(Android)
+        @MainActor
         #endif
         func applyOrAppend<T: LayoutManager>(_ layoutManager: T) -> T
     }
@@ -470,8 +466,8 @@ open class LayoutManager: @unchecked Sendable {
 }
 
 extension LayoutManager.ParamToApply {
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func applyOrAppend<T: LayoutManager>(_ layoutManager: T) -> T {

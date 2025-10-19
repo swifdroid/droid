@@ -4,13 +4,10 @@ import Android
 #if canImport(Logging)
 import Logging
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension View {
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     public final class ViewInstance: JObjectable, @unchecked Sendable {
         /// Unique identifier

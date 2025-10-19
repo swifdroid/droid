@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 27.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 #if os(Android)
 extension ComponentActivity: Sendable {}
 #else
@@ -21,8 +17,8 @@ extension ComponentActivity: @unchecked Sendable {}
 /// Higher level components can then be used as needed without enforcing a deep `Activity` class hierarchy or strong coupling between components.
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/activity/ComponentActivity)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class ComponentActivity: Activity {
     open class override var className: JClassName { "androidx/activity/ComponentActivity" }

@@ -1,13 +1,10 @@
 import Droid
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 /// This class models the edges and corners of a shape,
 /// which are used by `MaterialShapeDrawable` to generate
 /// and render the shape for a view's background.
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
     /// The JNI class name

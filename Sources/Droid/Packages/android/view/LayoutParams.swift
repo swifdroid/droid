@@ -11,12 +11,9 @@ import Android
 #if canImport(Logging)
 import Logging
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class LayoutParams: Sendable, JObjectable {
     public struct Class: Sendable, CustomStringConvertible, ExpressibleByStringLiteral {

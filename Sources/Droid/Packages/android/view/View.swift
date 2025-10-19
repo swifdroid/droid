@@ -8,9 +8,6 @@
 #if os(Android)
 import Android
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #if canImport(Logging)
 import Logging
 #endif
@@ -53,8 +50,8 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnTouchListener: OnTouchListenerClass { .init(parent: self, name: "View$OnTouchListener") }
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public protocol AnyView: AnyObject, ViewInstanceable {
     static var gradleDependencies: [String] { get }
@@ -70,8 +67,8 @@ enum ViewStatus: Sendable {
     case inParent(View, View.ViewInstance)
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public protocol JClassNameable: AnyObject {
     static var className: JClassName { get }
@@ -511,8 +508,8 @@ extension View: Equatable, Hashable {
     }
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 extension Array where Element == View {
     func removeFromSuperview(at indexes: [Int]) {
@@ -1902,9 +1899,9 @@ struct OnApplyWindowInsetsListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias ApplyWindowInsetsListenerHandler = @UIThreadActor () -> Void
-    public typealias ApplyWindowInsetsListenerEventHandler = @UIThreadActor (NativeOnApplyWindowInsetsListenerEvent) -> Void
+    #if os(Android)
+    public typealias ApplyWindowInsetsListenerHandler = @MainActor () -> Void
+    public typealias ApplyWindowInsetsListenerEventHandler = @MainActor (NativeOnApplyWindowInsetsListenerEvent) -> Void
     #else
     public typealias ApplyWindowInsetsListenerHandler = () -> Void
     public typealias ApplyWindowInsetsListenerEventHandler = (NativeOnApplyWindowInsetsListenerEvent) -> Void
@@ -1922,7 +1919,7 @@ extension View {
     @discardableResult
     public func onApplyWindowInsets(_ handler: @escaping ApplyWindowInsetsListenerEventHandler) -> Self {
         #if os(Android)
-        return OnApplyWindowInsetsListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnApplyWindowInsetsListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return }
             handler($0)
         }).applyOrAppend(nil, self)
@@ -1948,9 +1945,9 @@ struct OnCapturedPointerListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias CapturedPointerListenerHandler = @UIThreadActor () -> Bool
-    public typealias CapturedPointerListenerEventHandler = @UIThreadActor (NativeOnCapturedPointerListenerEvent) -> Bool
+    #if os(Android)
+    public typealias CapturedPointerListenerHandler = @MainActor () -> Bool
+    public typealias CapturedPointerListenerEventHandler = @MainActor (NativeOnCapturedPointerListenerEvent) -> Bool
     #else
     public typealias CapturedPointerListenerHandler = () -> Bool
     public typealias CapturedPointerListenerEventHandler = (NativeOnCapturedPointerListenerEvent) -> Bool
@@ -1968,7 +1965,7 @@ extension View {
     @discardableResult
     public func onCapturedPointer(_ handler: @escaping CapturedPointerListenerEventHandler) -> Self {
         #if os(Android)
-        return OnCapturedPointerListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnCapturedPointerListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor[weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -1994,9 +1991,9 @@ struct OnClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias ClickListenerHandler = @UIThreadActor () -> Void
-    public typealias ClickListenerEventHandler = @UIThreadActor (NativeOnClickListenerEvent) -> Void
+    #if os(Android)
+    public typealias ClickListenerHandler = @MainActor () -> Void
+    public typealias ClickListenerEventHandler = @MainActor (NativeOnClickListenerEvent) -> Void
     #else
     public typealias ClickListenerHandler = () -> Void
     public typealias ClickListenerEventHandler = (NativeOnClickListenerEvent) -> Void
@@ -2014,7 +2011,7 @@ extension View {
     @discardableResult
     public func onClick(_ handler: @escaping ClickListenerEventHandler) -> Self {
         #if os(Android)
-        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return }
             handler($0)
         }).applyOrAppend(nil, self)
@@ -2040,9 +2037,9 @@ struct OnContextClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias ContextClickListenerHandler = @UIThreadActor () -> Bool
-    public typealias ContextClickListenerEventHandler = @UIThreadActor (NativeOnContextClickListenerEvent) -> Bool
+    #if os(Android)
+    public typealias ContextClickListenerHandler = @MainActor () -> Bool
+    public typealias ContextClickListenerEventHandler = @MainActor (NativeOnContextClickListenerEvent) -> Bool
     #else
     public typealias ContextClickListenerHandler = () -> Bool
     public typealias ContextClickListenerEventHandler = (NativeOnContextClickListenerEvent) -> Bool
@@ -2060,7 +2057,7 @@ extension View {
     @discardableResult
     public func onContextClick(_ handler: @escaping ContextClickListenerEventHandler) -> Self {
         #if os(Android)
-        return OnContextClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnContextClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2086,9 +2083,9 @@ extension View {
 // }
 // #endif
 // extension View {
-//     #if canImport(AndroidLooper)
-//     public typealias CreateContextMenuListenerHandler = @UIThreadActor () -> Void
-//     public typealias CreateContextMenuListenerEventHandler = @UIThreadActor (NativeOnCreateContextMenuListenerEvent) -> Void
+//     #if os(Android)
+//     public typealias CreateContextMenuListenerHandler = @MainActor () -> Void
+//     public typealias CreateContextMenuListenerEventHandler = @MainActor (NativeOnCreateContextMenuListenerEvent) -> Void
 //     #else
 //     public typealias CreateContextMenuListenerHandler = () -> Void
 //     public typealias CreateContextMenuListenerEventHandler = (NativeOnCreateContextMenuListenerEvent) -> Void
@@ -2106,7 +2103,7 @@ extension View {
 //     @discardableResult
 //     public func onCreateContextMenu(_ handler: @escaping CreateContextMenuListenerHandler) -> Self {
 //         #if os(Android)
-//         return OnCreateContextMenuListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+//         return OnCreateContextMenuListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
 //             guard let self else { return false }
 //             return handler($0)
 //         }).applyOrAppend(nil, self)
@@ -2132,9 +2129,9 @@ struct OnDragListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias DragListenerHandler = @UIThreadActor () -> Bool
-    public typealias DragListenerEventHandler = @UIThreadActor (NativeOnDragListenerEvent) -> Bool
+    #if os(Android)
+    public typealias DragListenerHandler = @MainActor () -> Bool
+    public typealias DragListenerEventHandler = @MainActor (NativeOnDragListenerEvent) -> Bool
     #else
     public typealias DragListenerHandler = () -> Bool
     public typealias DragListenerEventHandler = (NativeOnDragListenerEvent) -> Bool
@@ -2152,7 +2149,7 @@ extension View {
     @discardableResult
     public func onDrag(_ handler: @escaping DragListenerEventHandler) -> Self {
         #if os(Android)
-        return OnDragListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnDragListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2178,9 +2175,9 @@ struct OnFocusChangeListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias FocusChangeListenerHandler = @UIThreadActor () -> Void
-    public typealias FocusChangeListenerEventHandler = @UIThreadActor (NativeOnFocusChangeListenerEvent) -> Void
+    #if os(Android)
+    public typealias FocusChangeListenerHandler = @MainActor () -> Void
+    public typealias FocusChangeListenerEventHandler = @MainActor (NativeOnFocusChangeListenerEvent) -> Void
     #else
     public typealias FocusChangeListenerHandler = () -> Void
     public typealias FocusChangeListenerEventHandler = (NativeOnFocusChangeListenerEvent) -> Void
@@ -2198,7 +2195,7 @@ extension View {
     @discardableResult
     public func onFocusChange(_ handler: @escaping FocusChangeListenerEventHandler) -> Self {
         #if os(Android)
-        return OnFocusChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnFocusChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2224,9 +2221,9 @@ struct OnGenericMotionListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias GenericMotionListenerHandler = @UIThreadActor () -> Bool
-    public typealias GenericMotionListenerEventHandler = @UIThreadActor (NativeOnGenericMotionListenerEvent) -> Bool
+    #if os(Android)
+    public typealias GenericMotionListenerHandler = @MainActor () -> Bool
+    public typealias GenericMotionListenerEventHandler = @MainActor (NativeOnGenericMotionListenerEvent) -> Bool
     #else
     public typealias GenericMotionListenerHandler = () -> Bool
     public typealias GenericMotionListenerEventHandler = (NativeOnGenericMotionListenerEvent) -> Bool
@@ -2244,7 +2241,7 @@ extension View {
     @discardableResult
     public func onGenericMotion(_ handler: @escaping GenericMotionListenerEventHandler) -> Self {
         #if os(Android)
-        return OnGenericMotionListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnGenericMotionListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2270,9 +2267,9 @@ struct OnHoverListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias HoverListenerHandler = @UIThreadActor () -> Bool
-    public typealias HoverListenerEventHandler = @UIThreadActor (NativeOnHoverListenerEvent) -> Bool
+    #if os(Android)
+    public typealias HoverListenerHandler = @MainActor () -> Bool
+    public typealias HoverListenerEventHandler = @MainActor (NativeOnHoverListenerEvent) -> Bool
     #else
     public typealias HoverListenerHandler = () -> Bool
     public typealias HoverListenerEventHandler = (NativeOnHoverListenerEvent) -> Bool
@@ -2290,7 +2287,7 @@ extension View {
     @discardableResult
     public func onHover(_ handler: @escaping HoverListenerEventHandler) -> Self {
         #if os(Android)
-        return OnHoverListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnHoverListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2316,9 +2313,9 @@ struct OnKeyListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias KeyListenerHandler = @UIThreadActor () -> Bool
-    public typealias KeyListenerEventHandler = @UIThreadActor (NativeOnKeyListenerEvent) -> Bool
+    #if os(Android)
+    public typealias KeyListenerHandler = @MainActor () -> Bool
+    public typealias KeyListenerEventHandler = @MainActor (NativeOnKeyListenerEvent) -> Bool
     #else
     public typealias KeyListenerHandler = () -> Bool
     public typealias KeyListenerEventHandler = (NativeOnKeyListenerEvent) -> Bool
@@ -2336,7 +2333,7 @@ extension View {
     @discardableResult
     public func onKey(_ handler: @escaping KeyListenerEventHandler) -> Self {
         #if os(Android)
-        return OnKeyListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnKeyListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2362,11 +2359,11 @@ struct OnLongClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias LongClickListenerBoolHandler = @UIThreadActor () -> Bool
-    public typealias LongClickListenerHandler = @UIThreadActor () -> Void
-    public typealias LongClickListenerEventBoolHandler = @UIThreadActor (NativeOnLongClickListenerEvent) -> Bool
-    public typealias LongClickListenerEventHandler = @UIThreadActor (NativeOnLongClickListenerEvent) -> Void
+    #if os(Android)
+    public typealias LongClickListenerBoolHandler = @MainActor () -> Bool
+    public typealias LongClickListenerHandler = @MainActor () -> Void
+    public typealias LongClickListenerEventBoolHandler = @MainActor (NativeOnLongClickListenerEvent) -> Bool
+    public typealias LongClickListenerEventHandler = @MainActor (NativeOnLongClickListenerEvent) -> Void
     #else
     public typealias LongClickListenerBoolHandler = () -> Bool
     public typealias LongClickListenerHandler = () -> Void
@@ -2395,7 +2392,7 @@ extension View {
     @discardableResult
     public func onLongClick(_ handler: @escaping LongClickListenerEventBoolHandler) -> Self {
         #if os(Android)
-        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnLongClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2429,9 +2426,9 @@ struct OnReceiveContentListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias ReceiveContentListenerHandler = @UIThreadActor () -> ContentInfo?
-    public typealias ReceiveContentListenerEventHandler = @UIThreadActor (NativeOnReceiveContentListenerEvent) -> ContentInfo?
+    #if os(Android)
+    public typealias ReceiveContentListenerHandler = @MainActor () -> ContentInfo?
+    public typealias ReceiveContentListenerEventHandler = @MainActor (NativeOnReceiveContentListenerEvent) -> ContentInfo?
     #else
     public typealias ReceiveContentListenerHandler = () -> ContentInfo?
     public typealias ReceiveContentListenerEventHandler = (NativeOnReceiveContentListenerEvent) -> ContentInfo?
@@ -2449,7 +2446,7 @@ extension View {
     @discardableResult
     public func onReceiveContent(_ handler: @escaping ReceiveContentListenerEventHandler) -> Self {
         #if os(Android)
-        return OnReceiveContentListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnReceiveContentListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return nil }
             return handler($0)
         }).applyOrAppend(nil, self)
@@ -2475,9 +2472,9 @@ struct OnScrollChangeListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias ScrollChangeListenerHandler = @UIThreadActor () -> Void
-    public typealias ScrollChangeListenerEventHandler = @UIThreadActor (NativeOnScrollChangeListenerEvent) -> Void
+    #if os(Android)
+    public typealias ScrollChangeListenerHandler = @MainActor () -> Void
+    public typealias ScrollChangeListenerEventHandler = @MainActor (NativeOnScrollChangeListenerEvent) -> Void
     #else
     public typealias ScrollChangeListenerHandler = () -> Void
     public typealias ScrollChangeListenerEventHandler = (NativeOnScrollChangeListenerEvent) -> Void
@@ -2495,7 +2492,7 @@ extension View {
     @discardableResult
     public func onScrollChange(_ handler: @escaping ScrollChangeListenerEventHandler) -> Self {
         #if os(Android)
-        return OnScrollChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnScrollChangeListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return }
             handler($0)
         }).applyOrAppend(nil, self)
@@ -2521,8 +2518,8 @@ struct OnSystemUiVisibilityChangeListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias SystemUiVisibilityChangeListenerHandler = @UIThreadActor (_ visibility: Int) -> Void
+    #if os(Android)
+    public typealias SystemUiVisibilityChangeListenerHandler = @MainActor (_ visibility: Int) -> Void
     #else
     public typealias SystemUiVisibilityChangeListenerHandler = (_ visibility: Int) -> Void
     #endif
@@ -2553,9 +2550,9 @@ struct OnTouchListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if canImport(AndroidLooper)
-    public typealias TouchListenerHandler = @UIThreadActor () -> Bool
-    public typealias TouchListenerEventHandler = @UIThreadActor (NativeOnTouchListenerEvent) -> Bool
+    #if os(Android)
+    public typealias TouchListenerHandler = @MainActor () -> Bool
+    public typealias TouchListenerEventHandler = @MainActor (NativeOnTouchListenerEvent) -> Bool
     #else
     public typealias TouchListenerHandler = () -> Bool
     public typealias TouchListenerEventHandler = (NativeOnTouchListenerEvent) -> Bool
@@ -2573,7 +2570,7 @@ extension View {
     @discardableResult
     public func onTouch(_ handler: @escaping TouchListenerEventHandler) -> Self {
         #if os(Android)
-        return OnTouchListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @UIThreadActor [weak self] in
+        return OnTouchListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return false }
             return handler($0)
         }).applyOrAppend(nil, self)

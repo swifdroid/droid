@@ -5,12 +5,8 @@
 //  Created by Mihael Isaev on 13.01.2022.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public struct android: ~Copyable {
     public static let R = InnerR(JClassName.android)

@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 15.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 // MARK: SetTextable
 
 fileprivate extension ViewPropertyKey {
@@ -17,8 +13,8 @@ fileprivate extension ViewPropertyKey {
 protocol _SetTextable: SetTextable, _AnyView {
     var textState: State<String>? { get set }
 }
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public protocol SetTextable {}
 extension SetTextable {

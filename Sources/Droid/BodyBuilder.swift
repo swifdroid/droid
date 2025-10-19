@@ -1,14 +1,10 @@
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 @resultBuilder public struct BodyBuilder {
     public typealias Result = BodyBuilderItemable
-    #if canImport(AndroidLooper)
-    public typealias SingleView = @UIThreadActor @Sendable () -> Result
+    #if os(Android)
+    public typealias SingleView = @MainActor @Sendable () -> Result
     #else
     public typealias SingleView = @Sendable () -> Result
     #endif

@@ -1,9 +1,5 @@
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public protocol AnyForEach: Sendable {
     var orientation: LinearLayout.Orientation? { get }
@@ -17,10 +13,10 @@ public protocol AnyForEach: Sendable {
 }
 
 open class ForEach<Item: Sendable>: @unchecked Sendable where Item: Hashable {
-    #if canImport(AndroidLooper)
-    public typealias BuildViewHandler = @UIThreadActor @Sendable (Int, Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerValue = @UIThreadActor @Sendable (Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerSimple = @UIThreadActor @Sendable () -> BodyBuilder.Result
+    #if os(Android)
+    public typealias BuildViewHandler = @MainActor @Sendable (Int, Item) -> BodyBuilder.Result
+    public typealias BuildViewHandlerValue = @MainActor @Sendable (Item) -> BodyBuilder.Result
+    public typealias BuildViewHandlerSimple = @MainActor @Sendable () -> BodyBuilder.Result
     #else
     public typealias BuildViewHandler = @Sendable (Int, Item) -> BodyBuilder.Result
     public typealias BuildViewHandlerValue = @Sendable (Item) -> BodyBuilder.Result

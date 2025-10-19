@@ -5,17 +5,13 @@
 //  Created by Mihael Isaev on 05.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 extension AndroidPackage.WidgetPackage {
     public class ToastClass: JClassName, @unchecked Sendable {}
     public var Toast: ToastClass { .init(parent: self, name: "Toast") }
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class Toast: JObjectable, @unchecked Sendable {
     public static var className: JClassName { .android.widget.Toast }

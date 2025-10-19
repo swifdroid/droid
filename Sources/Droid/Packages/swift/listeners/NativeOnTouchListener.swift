@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnTouchListenerClass: JClassName, @unchecked Sendable {}
@@ -22,8 +19,8 @@ final class NativeOnTouchListener: NativeListener, AnyNativeListener, @unchecked
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Bool)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnTouchListenerEvent) -> Bool)
+    typealias Handler = (@MainActor () -> Bool)
+    typealias HandlerWithEvent = (@MainActor (NativeOnTouchListenerEvent) -> Bool)
 
     /// View
     var view: View?
@@ -44,8 +41,7 @@ final class NativeOnTouchListener: NativeListener, AnyNativeListener, @unchecked
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView?, _ motionEvent: MotionEvent?) -> Bool {
         if let view {
             return handlerWithEvent?(.init(view, isSameView, triggerView, motionEvent)) ?? handler?() ?? false
@@ -53,7 +49,6 @@ final class NativeOnTouchListener: NativeListener, AnyNativeListener, @unchecked
             return handler?() ?? false
         }
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnTouchListener_onTouch")
@@ -61,7 +56,7 @@ public func nativeListenerOnTouch(env: UnsafeMutablePointer<JNIEnv?>, callerClas
     guard
         let listener: NativeOnTouchListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         listener.handle(true, nil, nil)
     }
     return result ? 1 : 0
@@ -77,7 +72,7 @@ public func nativeListenerOnTouchView(env: UnsafeMutablePointer<JNIEnv?>, caller
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         listener.handle(bool, triggerView, nil)
     }
     return result ? 1 : 0
@@ -89,7 +84,7 @@ public func nativeListenerOnTouchEvent(env: UnsafeMutablePointer<JNIEnv?>, calle
         let listener: NativeOnTouchListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
     let box = event.box(JEnv(env))
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         if let object = box?.object() {
             return listener.handle(true, nil, .init(object))
         }
@@ -109,7 +104,7 @@ public func nativeListenerOnTouchViewEvent(env: UnsafeMutablePointer<JNIEnv?>, c
         triggerView = .init(id: vId, object: object)
     }
     let box = event.box(JEnv(env))
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         if let object = box?.object() {
             return listener.handle(bool, triggerView, .init(object))
         }

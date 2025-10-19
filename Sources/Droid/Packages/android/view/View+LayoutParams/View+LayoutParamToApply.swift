@@ -1,22 +1,18 @@
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 public protocol LayoutParamToApply {
     var key: LayoutParamKey { get }
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams)
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     func applyOrAppend<T: View>(_ view: T) -> T
 }
 
 extension LayoutParamToApply {
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func applyOrAppend<T: View>(_ view: T) -> T {

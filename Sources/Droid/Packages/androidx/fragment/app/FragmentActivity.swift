@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 27.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 #if os(Android)
 extension FragmentActivity: Sendable {}
 #else
@@ -18,8 +14,8 @@ extension FragmentActivity: @unchecked Sendable {}
 /// Base class for activities that want to use the support-based Fragments.
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentActivity)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class FragmentActivity: ComponentActivity {
     open class override var className: JClassName { "androidx/fragment/app/FragmentActivity" }

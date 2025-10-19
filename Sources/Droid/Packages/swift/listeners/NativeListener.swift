@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 protocol AnyNativeListener: AnyObject {
     static var className: JClassName { get }
@@ -28,7 +25,7 @@ extension AnyNativeListener {
         ListenerStore.shared.add(self)
     }
 
-    @UIThreadActor
+    @MainActor
     func instantiate(_ context: Contextable) -> ListenerInstance? {
         instance = .init(
             id,

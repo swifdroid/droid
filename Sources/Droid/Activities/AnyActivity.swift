@@ -5,19 +5,15 @@
 //  Created by Mihael Isaev on 25.02.2023.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 public protocol Contextable: Sendable {
-	#if canImport(AndroidLooper)
-	@UIThreadActor
+	#if os(Android)
+	@MainActor
 	#endif
 	var context: ActivityContext { get }
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public protocol AnyActivity: AnyObject, Contextable {
     static nonisolated var packageName: String? { get }

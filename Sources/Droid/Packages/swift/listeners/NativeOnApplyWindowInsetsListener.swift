@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnApplyWindowInsetsListenerClass: JClassName, @unchecked Sendable {}
@@ -22,8 +19,8 @@ final class NativeOnApplyWindowInsetsListener: NativeListener, AnyNativeListener
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Void)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnApplyWindowInsetsListenerEvent) -> Void)
+    typealias Handler = (@MainActor () -> Void)
+    typealias HandlerWithEvent = (@MainActor (NativeOnApplyWindowInsetsListenerEvent) -> Void)
 
     /// View
     var view: View?
@@ -44,15 +41,13 @@ final class NativeOnApplyWindowInsetsListener: NativeListener, AnyNativeListener
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) {
         handler?()
         if let view {
             handlerWithEvent?(.init(view, isSameView, triggerView))
         }
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnApplyWindowInsetsListener_onApplyWindowInsets")
@@ -65,11 +60,9 @@ public func nativeListenerOnApplyWindowInsets(env: UnsafeMutablePointer<JNIEnv?>
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.handle(bool, triggerView)
     }
-    #endif
 }
 #endif
 

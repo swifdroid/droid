@@ -1,7 +1,3 @@
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 // MARK: ViewGroup - Layout Params
 extension View {
     /// Sets the width of the view with flexible sizing options.
@@ -25,8 +21,8 @@ extension View {
     /// - CoordinatorLayout: Affects anchored view dimensions
     /// - PercentFrameLayout: Percentage-based width calculation
     /// - PercentRelativeLayout: Percentage width relative to parent
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func width(_ value: LayoutParams.LayoutSize, _ unit: DimensionUnit = .dp) -> Self {
@@ -54,16 +50,16 @@ extension View {
     /// - CoordinatorLayout: Affects anchored view dimensions
     /// - PercentFrameLayout: Percentage-based width calculation
     /// - PercentRelativeLayout: Percentage width relative to parent
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func width(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         width(.init(value), unit)
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func width(_ value: State<Int>, _ unit: DimensionUnit = .dp) -> Self {
@@ -95,8 +91,8 @@ extension View {
     /// - CoordinatorLayout: Affects anchored view dimensions
     /// - PercentFrameLayout: Percentage-based height calculation
     /// - PercentRelativeLayout: Percentage height relative to parent
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func height(_ value: LayoutParams.LayoutSize, _ unit: DimensionUnit = .dp) -> Self {
@@ -124,16 +120,16 @@ extension View {
     /// - CoordinatorLayout: Affects anchored view dimensions
     /// - PercentFrameLayout: Percentage-based height calculation
     /// - PercentRelativeLayout: Percentage height relative to parent
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func height(_ value: Int, _ unit: DimensionUnit = .dp) -> Self {
         height(.init(value), unit)
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func height(_ value: State<Int>, _ unit: DimensionUnit = .dp) -> Self {

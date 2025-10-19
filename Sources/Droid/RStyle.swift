@@ -5,21 +5,17 @@
 //  Created by Mihael Isaev on 30.09.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 public struct RStyle: Sendable {
     let value: String
     let resourseId: Int32
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     public init(stringLiteral value: String) {
         if value.hasPrefix("@style/") {
             self.value = value
-            #if os(Android) && canImport(AndroidLooper)
+            #if os(Android)
             self.resourseId = R().style[dynamicMember: value.components(separatedBy: "@style/").joined(separator: "").components(separatedBy: ".").joined(separator: "_")]
             #else
             self.resourseId = 0
@@ -33,7 +29,7 @@ public struct RStyle: Sendable {
             }
             if value.hasPrefix("R.style.") {
                 self.value = "@style/" + cleanupXMLValue(value)
-                #if os(Android) && canImport(AndroidLooper)
+                #if os(Android)
                 self.resourseId = R().style.resolveAttrResId(cleanupRValue(value))
                 #else
                 self.resourseId = 0
@@ -47,7 +43,7 @@ public struct RStyle: Sendable {
                 {
                     let styleAttribute = String(rightPart)
                     self.value = "@style/" + cleanupXMLValue(styleAttribute)
-                    #if os(Android) && canImport(AndroidLooper)
+                    #if os(Android)
                     self.resourseId = R(JClassName(stringLiteral: className)).style.resolveAttrResId(styleAttribute)
                     #else
                     self.resourseId = 0
@@ -62,8 +58,8 @@ public struct RStyle: Sendable {
     }
 }
 
-#if canImport(AndroidLooper)
-extension RStyle: @UIThreadActor ExpressibleByStringLiteral {}
+#if os(Android)
+extension RStyle: @MainActor ExpressibleByStringLiteral {}
 #else
 extension RStyle: ExpressibleByStringLiteral {}
 #endif

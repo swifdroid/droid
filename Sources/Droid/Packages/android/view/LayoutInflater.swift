@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 27.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 /// Instantiates a layout XML file into its corresponding View objects.
 /// 
 /// It is never used directly. Instead, use Activity.getLayoutInflater() or Context.getSystemService
@@ -26,8 +22,8 @@ import AndroidLooper
 /// Note: This class is not thread-safe and a given instance should only be accessed by a single thread.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/LayoutInflater)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class LayoutInflater: JObjectable, @unchecked Sendable {
     /// The JNI class name

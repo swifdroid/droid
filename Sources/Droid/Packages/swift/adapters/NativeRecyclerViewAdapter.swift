@@ -12,9 +12,6 @@ import Android
 import Glibc
 #endif
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #if canImport(Logging)
 import Logging
 #endif
@@ -70,8 +67,8 @@ final class RecyclerViewAdapterStore: @unchecked Sendable {
     #endif
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 protocol AnyRecyclerViewAdapter: AnyObject, Sendable {
     nonisolated var id: Int32 { get }
@@ -197,7 +194,7 @@ public func NativeRecyclerViewAdapterItemsCount(env: UnsafeMutablePointer<JNIEnv
     guard
         let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId)
     else { return 0 }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         Int32(adapter.itemsCountHandler())
     }
     return jint(result)
@@ -210,7 +207,7 @@ public func NativeRecyclerViewAdapterOnCreateViewHolder(env: UnsafeMutablePointe
     else {
         return nil
     }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         adapter.createViewHolder(Int(viewType))
     }
     if let result {
@@ -225,9 +222,11 @@ public func NativeRecyclerViewAdapterOnBindViewHolder(env: UnsafeMutablePointer<
         let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId),
         let viewHolder = RecyclerViewHolderStore.shared.find(id: holderId)
     else { return }
-    Task { @UIThreadActor in
+    #if os(Android)
+    Task { @MainActor in
         adapter.bindViewHolder(viewHolder, Int(position))
     }
+    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_adapters_NativeRecyclerViewAdapter_nativeGetItemViewType")
@@ -236,26 +235,9 @@ public func NativeRecyclerViewAdapterGetItemViewType(env: UnsafeMutablePointer<J
     guard
         let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId)
     else { return 0 }
-    result = UIThreadActor.assumeIsolated {
+    result = MainActor.assumeIsolated {
         Int32(adapter.getItemViewTypeHandler(Int(position)))
     }
     return jint(result)
-}
-
-extension UIThreadActor {
-    static func assumeIsolated<T : Sendable>(
-      _ operation: @UIThreadActor () throws -> T,
-      file: StaticString = #fileID, line: UInt = #line
-  ) rethrows -> T {
-    typealias YesActor = @UIThreadActor () throws -> T
-    typealias NoActor = () throws -> T
-
-    // To do the unsafe cast, we have to pretend it's @escaping.
-    return try withoutActuallyEscaping(operation) {
-      (_ fn: @escaping YesActor) throws -> T in
-      let rawFn = unsafeBitCast(fn, to: NoActor.self)
-      return try rawFn()
-    }
-  }
 }
 #endif

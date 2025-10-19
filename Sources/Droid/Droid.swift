@@ -3,9 +3,6 @@ import Android
 #if canImport(AndroidLogging)
 import AndroidLogging
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #endif
 #if canImport(Logging)
 import Logging
@@ -202,22 +199,18 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
     if let context = globalCallerObj?.object() {
         if let pendingActivity = DroidApp.shared._pendingActivities.last {
             DroidApp.shared._pendingActivities.remove(at: DroidApp.shared._pendingActivities.count - 1)
-            #if canImport(AndroidLooper)
-            Task { @UIThreadActor in
+            Task { @MainActor in
                 #if os(Android)
                 pendingActivity.attach(to: context)
                 DroidApp.shared._activeActivities[Int(activityId)] = pendingActivity
                 #endif
             }
-            #endif
         } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
-            #if canImport(AndroidLooper)
-            Task { @UIThreadActor in
+            Task { @MainActor in
                 let activity = activityType.init()
                 activity.attach(to: context)
                 DroidApp.shared._activeActivities[Int(activityId)] = activity
             }
-            #endif
         }
     } else {
         InnerLog.c("💧 Unable to wrap activity context")
@@ -226,84 +219,66 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnPause")
 public func activityOnPause(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onPause()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStateNotSaved")
 public func activityOnStateNotSaved(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onStateNotSaved()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnResume")
 public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onResume()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRestart")
 public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onRestart()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStart")
 public func activityOnStart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onStart()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStop")
 public func activityOnStop(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onStop()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnDestroy")
 public func activityOnDestroy(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onDestroy()
         DroidApp.shared._activeActivities.removeValue(forKey: Int(activityId))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnAttachedToWindow")
 public func activityOnAttachedToWindow(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onAttachedToWindow()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnBackPressed")
 public func activityOnBackPressed(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onBackPressed()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult1")
@@ -317,11 +292,9 @@ public func activityOnActivityResult1(envPointer: UnsafeMutablePointer<JNIEnv?>,
     if let object = componentCallerRef?.box(env)?.object() {
         componentCaller = .init(object)
     }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onActivityResult(requestCode: Int(requestCode), resultCode: Int(resultCode), intent: intent, componentCaller: componentCaller)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult2")
@@ -331,19 +304,15 @@ public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>,
     if let object = intentRef?.box(env)?.object() {
         intent = .init(object)
     }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onActivityResult(requestCode: Int(requestCode), resultCode: Int(resultCode), intent: intent, componentCaller: nil)
     }
-    #endif
 }
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnMultiWindowModeChanged")
 public func activityOnMultiWindowModeChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, isInMultiWindowMode: jboolean) {
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode != 0)
     }
-    #endif
 }
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRequestPermissionsResult")
 public func activityOnRequestPermissionsResult(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, permissions: jobjectArray, grantResults: jarray, deviceId: jint) {
@@ -363,10 +332,8 @@ public func activityOnRequestPermissionsResult(envPointer: UnsafeMutablePointer<
             results.append(value)
         }
     }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onRequestPermissionsResult(requestCode: Int(requestCode), results: results, deviceId: Int(deviceId))
     }
-    #endif
 }
 #endif

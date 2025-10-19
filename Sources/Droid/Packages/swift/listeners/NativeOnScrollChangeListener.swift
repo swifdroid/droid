@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnScrollChangeListenerClass: JClassName, @unchecked Sendable {}
@@ -22,8 +19,8 @@ final class NativeOnScrollChangeListener: NativeListener, AnyNativeListener, @un
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Void)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnScrollChangeListenerEvent) -> Void)
+    typealias Handler = (@MainActor () -> Void)
+    typealias HandlerWithEvent = (@MainActor (NativeOnScrollChangeListenerEvent) -> Void)
 
     /// View
     var view: View?
@@ -44,8 +41,7 @@ final class NativeOnScrollChangeListener: NativeListener, AnyNativeListener, @un
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(
         _ isSameView: Bool,
         _ triggerView: NativeListenerTriggerView? = nil,
@@ -68,7 +64,6 @@ final class NativeOnScrollChangeListener: NativeListener, AnyNativeListener, @un
             handler?()
         }
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnScrollChangeListener_onScrollChange")
@@ -76,7 +71,7 @@ public func nativeListenerOnScrollChange(env: UnsafeMutablePointer<JNIEnv?>, cal
     guard
         let listener: NativeOnScrollChangeListener = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.handle(true, nil, Int(scrollX), Int(scrollY), Int(oldScrollX), Int(oldScrollY))
     }
 }
@@ -91,7 +86,7 @@ public func nativeListenerOnScrollChangeExtended(env: UnsafeMutablePointer<JNIEn
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.handle(bool, triggerView, Int(scrollX), Int(scrollY), Int(oldScrollX), Int(oldScrollY))
     }
 }

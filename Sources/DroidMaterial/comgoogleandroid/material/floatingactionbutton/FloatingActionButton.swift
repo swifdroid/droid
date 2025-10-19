@@ -6,9 +6,6 @@
 //
 
 import Droid
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension ComGoogleAndroidPackage.MaterialPackage.FloatingActionButtonPackage {
     public class FloatingActionButtonClass: JClassName, @unchecked Sendable {}
@@ -30,8 +27,8 @@ extension ComGoogleAndroidPackage.MaterialPackage.FloatingActionButtonPackage {
 /// If you wish to change this at runtime then you can do so via `setBackgroundTintList(ColorStateList)`.
 /// 
 /// For more information, see the [component developer guidance](https://github.com/material-components/material-components-android/blob/master/docs/components/FloatingActionButton.md) and [design guidelines](https://material.io/components/floating-action-button/overview).
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class FloatingActionButton: ImageButton, @unchecked Sendable {
     /// The JNI class name

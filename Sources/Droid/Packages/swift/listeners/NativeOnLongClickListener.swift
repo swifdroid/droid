@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnLongClickListenerClass: JClassName, @unchecked Sendable {}
@@ -22,8 +19,8 @@ final class NativeOnLongClickListener: NativeListener, AnyNativeListener, @unche
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Bool)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnLongClickListenerEvent) -> Bool)
+    typealias Handler = (@MainActor () -> Bool)
+    typealias HandlerWithEvent = (@MainActor (NativeOnLongClickListenerEvent) -> Bool)
 
     /// View
     var view: View?
@@ -44,8 +41,7 @@ final class NativeOnLongClickListener: NativeListener, AnyNativeListener, @unche
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) -> Bool {
         if let view {
             return handlerWithEvent?(.init(view, isSameView, triggerView)) ?? handler?() ?? false
@@ -53,7 +49,6 @@ final class NativeOnLongClickListener: NativeListener, AnyNativeListener, @unche
             return handler?() ?? false
         }
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnLongClickListener_onLongClick")
@@ -61,7 +56,7 @@ public func nativeListenerOnLongClick(env: UnsafeMutablePointer<JNIEnv?>, caller
     guard
         let listener: NativeOnLongClickListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         listener.handle(true, nil)
     }
     return result ? 1 : 0
@@ -77,7 +72,7 @@ public func nativeListenerOnLongClickExtended(env: UnsafeMutablePointer<JNIEnv?>
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         listener.handle(bool, triggerView)
     }
     return result ? 1 : 0

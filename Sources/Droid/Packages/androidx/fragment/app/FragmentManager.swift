@@ -5,13 +5,9 @@
 //  Created by Mihael Isaev on 26.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentManager)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class FragmentManager: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentManager") }

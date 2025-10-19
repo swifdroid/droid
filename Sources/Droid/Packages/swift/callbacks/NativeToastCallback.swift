@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.CallbacksPackage {
     public class ToastCallbackClass: JClassName, @unchecked Sendable {}
@@ -40,9 +37,11 @@ public func nativeToastCallbackOnToastShown(env: UnsafeMutablePointer<JNIEnv?>, 
     guard
         let listener: NativeToastCallback = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    Task { @UIThreadActor in
+    #if os(Android)
+    Task { @MainActor in
         await listener.shownHandler?()
     }
+    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_callbacks_NativeToastCallback_onToastHidden")
@@ -50,8 +49,10 @@ public func nativeToastCallbackOnToastHidden(env: UnsafeMutablePointer<JNIEnv?>,
     guard
         let listener: NativeToastCallback = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    Task { @UIThreadActor in
+    #if os(Android)
+    Task { @MainActor in
         await listener.hiddenHandler?()
     }
+    #endif
 }
 #endif

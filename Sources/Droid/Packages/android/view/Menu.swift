@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 24.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 /// Interface for managing the items in a menu.
 ///
 /// By default, every `Activity` supports an options menu of actions or options.
@@ -21,8 +17,8 @@ import AndroidLooper
 /// and `Activity.onContextItemSelected(MenuItem)`.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/Menu)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class Menu: JObjectable, @unchecked Sendable {
     /// The JNI class name
@@ -303,13 +299,13 @@ extension ContextMenu {
 }
 
 extension ContextMenu {
-/// Additional information regarding the creation of the context menu.
-/// 
-/// For example, AdapterViews use this to pass the exact item position within the adapter that initiated the context menu.
-///
-/// [Learn more](https://developer.android.com/reference/android/view/ContextMenu.ContextMenuInfo)
-#if canImport(AndroidLooper)
-    @UIThreadActor
+    /// Additional information regarding the creation of the context menu.
+    /// 
+    /// For example, AdapterViews use this to pass the exact item position within the adapter that initiated the context menu.
+    ///
+    /// [Learn more](https://developer.android.com/reference/android/view/ContextMenu.ContextMenuInfo)
+    #if os(Android)
+    @MainActor
     #endif
     open class ContextMenuInfo: JObjectable, @unchecked Sendable {
         /// The JNI class name
@@ -424,8 +420,8 @@ extension ExpandableListView {
 /// Sub menus do not support item icons, or nested sub menus.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/SubMenu)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class SubMenu: JObjectable, Sendable {
     /// The JNI class name
@@ -530,8 +526,8 @@ extension SubMenu {
 /// For a feature set of specific menu types, see `Menu`.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/MenuItem)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class MenuItem: JObjectable, @unchecked Sendable {
     /// The JNI class name

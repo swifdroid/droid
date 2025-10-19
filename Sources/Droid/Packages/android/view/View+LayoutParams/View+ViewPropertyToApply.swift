@@ -1,24 +1,20 @@
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 public protocol ViewPropertyToApply {
     associatedtype Value
     var key: ViewPropertyKey { get }
     var value: Value { get }
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance)
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     func applyOrAppend<T: View>(_ env: JEnv?, _ view: T) -> T
 }
 
 extension ViewPropertyToApply {
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func applyOrAppend<T: AnyView>(_ env: JEnv?, _ view: T) -> T {

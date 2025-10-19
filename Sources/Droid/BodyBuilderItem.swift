@@ -1,7 +1,3 @@
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 public enum BodyBuilderItem: Sendable {
     case none
     case single(View)
@@ -9,8 +5,8 @@ public enum BodyBuilderItem: Sendable {
     case nested([BodyBuilderItemable])
     case forEach(AnyForEach)
 }
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public protocol BodyBuilderItemable: Sendable {
     var bodyBuilderItem: BodyBuilderItem { get }

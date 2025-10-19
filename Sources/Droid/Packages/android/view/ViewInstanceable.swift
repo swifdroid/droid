@@ -5,12 +5,8 @@
 //  Created by Mihael Isaev on 05.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public protocol ViewInstanceable {
     var instance: View.ViewInstance? { get }

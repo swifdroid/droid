@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 extension AndroidPackage.WidgetPackage {
     public class GridLayoutClass: JClassName, @unchecked Sendable {}
     public var GridLayout: GridLayoutClass { .init(parent: self, name: "GridLayout") }
@@ -102,8 +98,8 @@ extension LayoutParamKey {
 // MARK: ColumnSpec
 
 fileprivate extension LayoutParamToApply {
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     func apply(_ env: JEnv?, _ instance: View.ViewInstance, _ lp: LayoutParams, _ key: LayoutParamKey, _ value: GridLayout.SpecType) {
         #if os(Android)

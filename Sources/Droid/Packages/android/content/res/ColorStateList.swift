@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 19.09.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 public enum ColorState: Sendable {
     case pressed
     case focused
@@ -19,8 +15,8 @@ public enum ColorState: Sendable {
     case hovered
     case windowFocused
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     public var resourceId: Int32 {
         switch self {
@@ -76,8 +72,8 @@ public struct ColorStateListItem: Sendable {
     }
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class ColorStateList: JObjectable, @unchecked Sendable {
     /// The JNI class name

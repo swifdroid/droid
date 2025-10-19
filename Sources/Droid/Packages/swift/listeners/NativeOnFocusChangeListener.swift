@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnFocusChangeListenerClass: JClassName, @unchecked Sendable {}
@@ -22,8 +19,8 @@ final class NativeOnFocusChangeListener: NativeListener, AnyNativeListener, @unc
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Void)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnFocusChangeListenerEvent) -> Void)
+    typealias Handler = (@MainActor () -> Void)
+    typealias HandlerWithEvent = (@MainActor (NativeOnFocusChangeListenerEvent) -> Void)
 
     /// View
     var view: View?
@@ -44,8 +41,7 @@ final class NativeOnFocusChangeListener: NativeListener, AnyNativeListener, @unc
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView?, _ hasFocus: Bool) {
         if let view {
             handlerWithEvent?(.init(view, isSameView, triggerView, hasFocus)) ?? handler?()
@@ -53,7 +49,6 @@ final class NativeOnFocusChangeListener: NativeListener, AnyNativeListener, @unc
             handler?()
         }
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnFocusChangeListener_onFocusChange")
@@ -61,7 +56,7 @@ public func nativeListenerOnFocusChange(env: UnsafeMutablePointer<JNIEnv?>, call
     guard
         let listener: NativeOnFocusChangeListener = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.handle(true, nil, hasFocus == 1)
     }
 }
@@ -76,7 +71,7 @@ public func nativeListenerOnFocusChangeExtended(env: UnsafeMutablePointer<JNIEnv
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.handle(bool, triggerView, hasFocus == 1)
     }
 }

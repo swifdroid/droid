@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #endif
 
 protocol AnyNativeObject: AnyObject {
@@ -28,8 +25,8 @@ extension AnyNativeObject {
     }
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class NativeUIObject: NativeObject, Contextable, @unchecked Sendable {
     public unowned let context: ActivityContext

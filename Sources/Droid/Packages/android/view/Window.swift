@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 25.08.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 /// Abstract base class for a top-level window look and behavior policy.
 /// An instance of this class should be used as the top-level view added to the window manager.
 /// It provides standard UI policies such as a background, title area, default key processing, etc.
@@ -16,8 +12,8 @@ import AndroidLooper
 /// The framework will instantiate an implementation of this class on behalf of the application.
 ///
 /// [Learn more](https://developer.android.com/reference/android/view/Window)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class Window: JObjectable, Sendable {
     public static var className: JClassName { "android/view/Window" }
@@ -233,8 +229,8 @@ extension Window {
 /// The framework will instantiate an implementation of this class on behalf of the application.
 ///
 /// [Learn more](https://developer.android.com/reference/androidx/core/view/WindowCompat)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class WindowCompat: JObjectable, Sendable {
     public static var className: JClassName { "androidx/appcompat/app/AppCompatDelegate" }
@@ -260,8 +256,8 @@ extension WindowCompat {
 /// This class represents a delegate which you can use to extend AppCompat's support to any `android.app.Activity`.
 ///
 /// [Learn more](https://developer.android.com/reference/androidx/appcompat/app/AppCompatDelegate#FEATURE_ACTION_MODE_OVERLAY())
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class AppCompatDelegate: JObjectable, Sendable {
     public static var className: JClassName { "androidx/core/view/WindowCompat" }
@@ -326,8 +322,8 @@ extension AppCompatDelegate {
 /// application-level navigation affordances, and other interactive items.
 ///
 /// [Learn more](https://developer.android.com/reference/androidx/appcompat/app/ActionBar)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class ActionBar: JObjectable, Sendable {
     public static var className: JClassName { "androidx/appcompat/app/ActionBar" }

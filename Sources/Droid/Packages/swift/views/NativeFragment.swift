@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #endif
 
 open class NativeFragment: NativeUIObject, AnyNativeObject, @unchecked Sendable {
@@ -229,11 +226,9 @@ public func nativeFragmentOnAttach(env: UnsafeMutablePointer<JNIEnv?>, callerCla
     else { return }
     if let object = context.box(JEnv(env))?.object() {
         let context = ActivityContext(object: object)
-        #if canImport(AndroidLooper)
-        Task { @UIThreadActor in
+        Task { @MainActor in
             listener.onAttach(context)
         }
-        #endif
     } else {
         InnerLog.c("⚠️ nativeFragmentOnAttach unable to unwrap Context")
     }
@@ -253,15 +248,11 @@ public func nativeFragmentOnContextItemSelected(env: UnsafeMutablePointer<JNIEnv
     //     InnerLog.c("⚠️ nativeFragmentOnContextItemSelected unable to unwrap MenuItem's Context")
     //     return 0
     // }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         let item = MenuItem(object)
         return listener.onContextItemSelected(item)
     }
     return result ? 1 : 0
-    #else
-    return 0
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreate")
@@ -270,11 +261,9 @@ public func nativeFragmentOnCreate(env: UnsafeMutablePointer<JNIEnv?>, callerCla
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onCreate(nil)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateSavedInstanceState")
@@ -285,11 +274,9 @@ public func nativeFragmentOnCreateSavedInstanceState(env: UnsafeMutablePointer<J
     else { return }
     if let object = savedInstanceState.box(JEnv(env))?.object() {
         let bundle = Bundle(object)
-        #if canImport(AndroidLooper)
-        Task { @UIThreadActor in
+        Task { @MainActor in
             listener.onCreate(bundle)
         }
-        #endif
     } else {
         InnerLog.c("⚠️ nativeFragmentOnCreate unable to unwrap Bundle")
     }
@@ -301,14 +288,10 @@ public func nativeFragmentOnCreateAnimation(env: UnsafeMutablePointer<JNIEnv?>, 
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return nil }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         return listener.onCreateAnimator(transit, enter == 1, nextAnim)?.object.ref
     }
     return result?.ref
-    #else
-    return 0
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateAnimator")
@@ -317,14 +300,10 @@ public func nativeFragmentOnCreateAnimator(env: UnsafeMutablePointer<JNIEnv?>, c
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return nil }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         return listener.onCreateAnimator(transit, enter == 1, nextAnim)?.object.ref
     }
     return result?.ref
-    #else
-    return 0
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateContextMenu")
@@ -341,13 +320,11 @@ public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>
         InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap View")
         return
     }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         let menu = ContextMenu(menuObject)
         let view = View(viewObject, .init(object: context))
         listener.onCreateContextMenu(menu, view, nil)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateContextMenuWithInfo")
@@ -369,14 +346,12 @@ public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<
         return
     }
     let activityContext = ActivityContext(object: context)
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         let menu = ContextMenu(menuObject)
         let view = View(viewObject, activityContext)
         let info = ContextMenu.ContextMenuInfo(infoObject)
         listener.onCreateContextMenu(menu, view, info)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateView")
@@ -391,15 +366,11 @@ public func nativeFragmentOnCreateView(env: UnsafeMutablePointer<JNIEnv?>, calle
         InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap LayoutInflater")
         return nil
     }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         let inflater = LayoutInflater(inflaterObject)
         return listener.onCreateView(inflater, nil, nil)?.instance?.object.ref
     }
     return result?.ref
-    #else
-    return 0
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateViewContainer")
@@ -418,16 +389,12 @@ public func nativeFragmentOnCreateViewContainer(env: UnsafeMutablePointer<JNIEnv
         InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap ViewGroup")
         return nil
     }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         let inflater = LayoutInflater(inflaterObject)
         let container = ViewGroup(containerObject, .init(object: context))
         return listener.onCreateView(inflater, container, nil)?.instance?.object.ref
     }
     return result?.ref
-    #else
-    return 0
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateViewSavedInstanceState")
@@ -447,16 +414,12 @@ public func nativeFragmentOnCreateViewSavedInstanceState(env: UnsafeMutablePoint
         InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap Bundle")
         return nil
     }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         let inflater = LayoutInflater(inflaterObject)
         let savedInstanceState = Bundle(savedInstanceStateObject)
         return listener.onCreateView(inflater, nil, savedInstanceState)?.instance?.object.ref
     }
     return result?.ref
-    #else
-    return 0
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateViewContainerSavedInstanceState")
@@ -477,17 +440,13 @@ public func nativeFragmentOnCreateViewContainerSavedInstanceState(env: UnsafeMut
         InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap Bundle")
         return nil
     }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         let inflater = LayoutInflater(inflaterObject)
         let container = ViewGroup(containerObject, .init(object: context))
         let savedInstanceState = Bundle(savedInstanceStateObject)
         return listener.onCreateView(inflater, container, savedInstanceState)?.instance?.object.ref
     }
     return result?.ref
-    #else
-    return 0
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onDestroy")
@@ -496,11 +455,9 @@ public func nativeFragmentOnDestroy(env: UnsafeMutablePointer<JNIEnv?>, callerCl
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onDestroy()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onDestroyView")
@@ -509,11 +466,9 @@ public func nativeFragmentOnDestroyView(env: UnsafeMutablePointer<JNIEnv?>, call
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onDestroyView()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onDetach")
@@ -522,12 +477,10 @@ public func nativeFragmentOnDetach(env: UnsafeMutablePointer<JNIEnv?>, callerCla
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onDetach()
     }
     ObjectStore.shared.remove(listener)
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onHiddenChanged")
@@ -537,11 +490,9 @@ public func nativeFragmentOnHiddenChanged(env: UnsafeMutablePointer<JNIEnv?>, ca
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let hidden = hidden == 1
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onHiddenChanged(hidden: hidden)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onMultiWindowModeChanged")
@@ -551,11 +502,9 @@ public func nativeFragmentOnMultiWindowModeChanged(env: UnsafeMutablePointer<JNI
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let isInMultiWindowMode = isInMultiWindowMode == 1
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onPause")
@@ -564,11 +513,9 @@ public func nativeFragmentOnPause(env: UnsafeMutablePointer<JNIEnv?>, callerClas
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onPause()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onPictureInPictureModeChanged")
@@ -578,11 +525,9 @@ public func nativeFragmentOnPictureInPictureModeChanged(env: UnsafeMutablePointe
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let isInPictureInPictureMode = isInPictureInPictureMode == 1
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onPictureInPictureModeChanged(isInPictureInPictureMode: isInPictureInPictureMode)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onPrimaryNavigationFragmentChanged")
@@ -592,11 +537,9 @@ public func nativeFragmentOnPrimaryNavigationFragmentChanged(env: UnsafeMutableP
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let isPrimaryNavigationFragment = isPrimaryNavigationFragment == 1
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment: isPrimaryNavigationFragment)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onResume")
@@ -605,11 +548,9 @@ public func nativeFragmentOnResume(env: UnsafeMutablePointer<JNIEnv?>, callerCla
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onResume()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onSaveInstanceState")
@@ -622,11 +563,9 @@ public func nativeFragmentOnSaveInstanceState(env: UnsafeMutablePointer<JNIEnv?>
         InnerLog.c("⚠️ nativeFragmentOnSaveInstanceState unable to unwrap Bundle")
         return
     }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onSaveInstanceState(outState: .init(object))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onStart")
@@ -635,11 +574,9 @@ public func nativeFragmentOnStart(env: UnsafeMutablePointer<JNIEnv?>, callerClas
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onStart()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onStop")
@@ -648,11 +585,9 @@ public func nativeFragmentOnStop(env: UnsafeMutablePointer<JNIEnv?>, callerClass
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onStop()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewCreated")
@@ -666,11 +601,9 @@ public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, call
         return
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onViewCreated(view: .init(id: viewId, viewObject, .init(object: context)), savedInstanceState: nil)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewCreatedSavedInstanceState")
@@ -688,11 +621,9 @@ public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePoin
         return
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onViewCreated(view: .init(id: viewId, viewObject, .init(object: context)), savedInstanceState: .init(bundleObject))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewStateRestored")
@@ -701,11 +632,9 @@ public func nativeFragmentOnViewStateRestored(env: UnsafeMutablePointer<JNIEnv?>
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onViewStateRestored(savedInstanceState: nil)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewStateRestoredSavedInstanceState")
@@ -718,10 +647,8 @@ public func nativeFragmentOnViewStateRestoredSavedInstanceState(env: UnsafeMutab
         InnerLog.c("⚠️ nativeFragmentOnViewStateRestored unable to unwrap Bundle")
         return
     }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.onViewStateRestored(savedInstanceState: .init(object))
     }
-    #endif
 }
 #endif

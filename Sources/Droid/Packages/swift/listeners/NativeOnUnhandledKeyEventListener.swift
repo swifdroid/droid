@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnUnhandledKeyEventListenerClass: JClassName, @unchecked Sendable {}
@@ -22,8 +19,8 @@ final class NativeOnUnhandledKeyEventListener: NativeListener, AnyNativeListener
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> Bool)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnUnhandledKeyEventListenerEvent) -> Bool)
+    typealias Handler = (@MainActor () -> Bool)
+    typealias HandlerWithEvent = (@MainActor (NativeOnUnhandledKeyEventListenerEvent) -> Bool)
 
     /// View
     var view: View?
@@ -44,8 +41,7 @@ final class NativeOnUnhandledKeyEventListener: NativeListener, AnyNativeListener
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView?, _ keyEvent: KeyEvent?) -> Bool {
         if let view {
             return handlerWithEvent?(.init(view, isSameView, triggerView, keyEvent)) ?? handler?() ?? false
@@ -53,7 +49,6 @@ final class NativeOnUnhandledKeyEventListener: NativeListener, AnyNativeListener
             return handler?() ?? false
         }
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnUnhandledKeyEventListener_onUnhandledKeyEvent")
@@ -61,7 +56,7 @@ public func nativeListenerOnUnhandledKeyEvent(env: UnsafeMutablePointer<JNIEnv?>
     guard
         let listener: NativeOnUnhandledKeyEventListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         listener.handle(true, nil, nil)
     }
     return result ? 1 : 0
@@ -77,7 +72,7 @@ public func nativeListenerOnUnhandledKeyEventView(env: UnsafeMutablePointer<JNIE
     if let object = v.box(JEnv(env))?.object() {
         triggerView = .init(id: vId, object: object)
     }
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         listener.handle(bool, triggerView, nil)
     }
     return result ? 1 : 0
@@ -89,7 +84,7 @@ public func nativeListenerOnUnhandledKeyEventEvent(env: UnsafeMutablePointer<JNI
         let listener: NativeOnUnhandledKeyEventListener = ListenerStore.shared.find(id: uniqueId)
     else { return 0 }
     let box = event.box(JEnv(env))
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         if let object = box?.object() {
             return listener.handle(true, nil, .init(object))
         }
@@ -109,7 +104,7 @@ public func nativeListenerOnUnhandledKeyEventViewEvent(env: UnsafeMutablePointer
         triggerView = .init(id: vId, object: object)
     }
     let box = event.box(JEnv(env))
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         if let object = box?.object() {
         return listener.handle(bool, triggerView, .init(object))
         }

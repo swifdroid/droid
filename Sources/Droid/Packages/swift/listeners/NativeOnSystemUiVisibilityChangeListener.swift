@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnSystemUiVisibilityChangeListenerClass: JClassName, @unchecked Sendable {}
@@ -22,7 +19,7 @@ final class NativeOnSystemUiVisibilityChangeListener: NativeListener, AnyNativeL
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor (_ visibility: Int) -> Void)
+    typealias Handler = (@MainActor (_ visibility: Int) -> Void)
 
     /// View
     var view: View?
@@ -36,12 +33,10 @@ final class NativeOnSystemUiVisibilityChangeListener: NativeListener, AnyNativeL
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(_ visibility: Int) {
         handler?(visibility)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnSystemUiVisibilityChangeListener_onSystemUiVisibilityChange")
@@ -50,10 +45,8 @@ public func nativeListenerOnSystemUiVisibilityChange(env: UnsafeMutablePointer<J
         let listener: NativeOnSystemUiVisibilityChangeListener = ListenerStore.shared.find(id: uniqueId)
     else { return }
     let visibility = Int(visibility)
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         listener.handle(visibility)
     }
-    #endif
 }
 #endif

@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 15.01.2022.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 extension AndroidXPackage.CoordinatorLayoutPackage.WidgetPackage {
     public class CoordinatorLayoutClass: JClassName, @unchecked Sendable {}
     public var CoordinatorLayout: CoordinatorLayoutClass { .init(parent: self, name: "CoordinatorLayout") }
@@ -72,15 +68,15 @@ extension LayoutParamKey {
 
 // MARK: Behavior
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class Behavior: @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     public final class BehaviorInstance: JObjectable, @unchecked Sendable {
         /// Object
@@ -126,20 +122,20 @@ open class Behavior: @unchecked Sendable {
 
     public protocol ParamToApply {
         var key: ParamKey { get }
-        #if canImport(AndroidLooper)
-        @UIThreadActor
+        #if os(Android)
+        @MainActor
         #endif
         func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance)
-        #if canImport(AndroidLooper)
-        @UIThreadActor
+        #if os(Android)
+        @MainActor
         #endif
         func applyOrAppend<T: Behavior>(_ behavior: T) -> T
     }
 }
 
 extension Behavior.ParamToApply {
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    #if os(Android)
+    @MainActor
     #endif
     @discardableResult
     public func applyOrAppend<T: Behavior>(_ behavior: T) -> T {

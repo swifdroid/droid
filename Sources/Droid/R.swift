@@ -6,14 +6,11 @@ import Glibc
 #endif
 #endif
 import JNIKit
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 public typealias R = InnerR
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public struct InnerR: Sendable {
     public let id: Resource

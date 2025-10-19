@@ -9,9 +9,6 @@ import Droid
 #if os(Android)
 import Android
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
     public class MaterialButtonClass: JClassName, @unchecked Sendable {}
@@ -40,8 +37,8 @@ extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
 /// Specify the radius of all four corners of the button using the app:cornerRadius attribute.
 /// 
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/button/MaterialButton)
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class MaterialButton: AppCompatButton, @unchecked Sendable {
     /// The JNI class name

@@ -5,10 +5,6 @@
 //  Created by Mihael Isaev on 25.06.2025.
 //
 
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
-
 extension AndroidPackage.AppPackage {
     public class ActivityPackage: JClassName, @unchecked Sendable {}
     
@@ -21,8 +17,8 @@ extension Activity: Sendable {}
 extension Activity: @unchecked Sendable {}
 #endif
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 open class Activity: AnyActivity {
     public typealias Style = RStyle
@@ -286,9 +282,9 @@ public final class ActivityContext: Contextable, JObjectable, JClassLoadable, @u
     init (object: JObject) {
         self.object = object
     }
-
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    
+    #if os(Android)
+    @MainActor
     #endif
     public var R: InnerR { .init() }
 

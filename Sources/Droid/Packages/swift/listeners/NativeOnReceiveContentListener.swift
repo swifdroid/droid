@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage.ListenersPackage {
     public class OnReceiveContentListenerClass: JClassName, @unchecked Sendable {}
@@ -22,8 +19,8 @@ final class NativeOnReceiveContentListener: NativeListener, AnyNativeListener, @
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@UIThreadActor () -> ContentInfo?)
-    typealias HandlerWithEvent = (@UIThreadActor (NativeOnReceiveContentListenerEvent) -> ContentInfo?)
+    typealias Handler = (@MainActor () -> ContentInfo?)
+    typealias HandlerWithEvent = (@MainActor (NativeOnReceiveContentListenerEvent) -> ContentInfo?)
 
     /// View
     var view: View?
@@ -44,15 +41,13 @@ final class NativeOnReceiveContentListener: NativeListener, AnyNativeListener, @
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView?, _ payload: ContentInfo?) -> ContentInfo? {
         if let view {
             return handlerWithEvent?(.init(view, isSameView, triggerView, payload))
         }
         return handler?()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_listeners_NativeOnReceiveContentListener_onReceiveContent")
@@ -69,12 +64,10 @@ public func nativeListenerOnReceiveContent(env: UnsafeMutablePointer<JNIEnv?>, c
     if let object = p.box(JEnv(env))?.object() {
         payload = .init(object)
     }
-    #if canImport(AndroidLooper)
-    let result = UIThreadActor.assumeIsolated {
+    let result = MainActor.assumeIsolated {
         listener.handle(bool, triggerView, payload)
     }
     return result?.object.ref.ref
-    #endif
 }
 #endif
 

@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #endif
 
 extension AndroidPackage.WidgetPackage {
@@ -103,10 +100,10 @@ struct TextChangedListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension TextView {
-    #if canImport(AndroidLooper)
-    public typealias BeforeTextChangedEventHandler = @UIThreadActor (NativeTextWatcherBeforeTextChangedEvent) -> Void
-    public typealias OnTextChangedEventHandler = @UIThreadActor (NativeTextWatcherOnTextChangedEvent) -> Void
-    public typealias AfterTextChangedEventHandler = @UIThreadActor (NativeTextWatcherAfterTextChangedEvent) -> Void
+    #if os(Android)
+    public typealias BeforeTextChangedEventHandler = @MainActor (NativeTextWatcherBeforeTextChangedEvent) -> Void
+    public typealias OnTextChangedEventHandler = @MainActor (NativeTextWatcherOnTextChangedEvent) -> Void
+    public typealias AfterTextChangedEventHandler = @MainActor (NativeTextWatcherAfterTextChangedEvent) -> Void
     #else
     public typealias BeforeTextChangedEventHandler = (NativeTextWatcherBeforeTextChangedEvent) -> Void
     public typealias OnTextChangedEventHandler = (NativeTextWatcherOnTextChangedEvent) -> Void

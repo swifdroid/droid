@@ -7,9 +7,6 @@
 
 #if os(Android)
 import Android
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 
 extension AppKitPackage {
     public class TextWatcherClass: JClassName, @unchecked Sendable {}
@@ -23,9 +20,9 @@ final class NativeTextWatcher: NativeListener, AnyNativeListener, @unchecked Sen
 
     var shouldInitWithViewId: Bool { false }
 
-    typealias HandlerBeforeTextChangedEvent = (@UIThreadActor (NativeTextWatcherBeforeTextChangedEvent) -> Void)
-    typealias HandlerOnTextChangedEvent = (@UIThreadActor (NativeTextWatcherOnTextChangedEvent) -> Void)
-    typealias HandlerAfterTextChangedEvent = (@UIThreadActor (NativeTextWatcherAfterTextChangedEvent) -> Void)
+    typealias HandlerBeforeTextChangedEvent = (@MainActor (NativeTextWatcherBeforeTextChangedEvent) -> Void)
+    typealias HandlerOnTextChangedEvent = (@MainActor (NativeTextWatcherOnTextChangedEvent) -> Void)
+    typealias HandlerAfterTextChangedEvent = (@MainActor (NativeTextWatcherAfterTextChangedEvent) -> Void)
 
     /// View
     var view: View?
@@ -48,25 +45,23 @@ final class NativeTextWatcher: NativeListener, AnyNativeListener, @unchecked Sen
         return self
     }
 
-    #if canImport(AndroidLooper)
-    @UIThreadActor
+    @MainActor
     func handleBeforeTextChanged(_ p0: String?, _ p1: Int, _ p2: Int, _ p3: Int) {
         guard let view else { return }
         handlerBeforeTextChangedEvent?(.init(view, p0, p1, p2, p3))
     }
 
-    @UIThreadActor
+    @MainActor
     func handleOnTextChanged(_ p0: String?, _ p1: Int, _ p2: Int, _ p3: Int) {
         guard let view else { return }
         handlerOnTextChangedEvent?(.init(view, p0, p1, p2, p3))
     }
 
-    @UIThreadActor
+    @MainActor
     func handleAfterTextChanged(_ p0: String?) {
         guard let view else { return }
         handlerAfterTextChangedEvent?(.init(view, p0))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_watchers_NativeTextWatcher_beforeTextChanged")
@@ -74,11 +69,9 @@ public func nativeTextWatcherBeforeTextChanged(env: UnsafeMutablePointer<JNIEnv?
     guard
         let watcher: NativeTextWatcher = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         watcher.handleBeforeTextChanged(nil, Int(p1), Int(p2), Int(p3))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_watchers_NativeTextWatcher_beforeTextChangedExtended")
@@ -87,11 +80,9 @@ public func nativeTextWatcherBeforeTextChangedExtended(env: UnsafeMutablePointer
         let watcher: NativeTextWatcher = ListenerStore.shared.find(id: uniqueId)
     else { return }
     let p0 = JString(from: p0)?.string()
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         watcher.handleBeforeTextChanged(p0, Int(p1), Int(p2), Int(p3))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_watchers_NativeTextWatcher_onTextChanged")
@@ -99,11 +90,9 @@ public func nativeTextWatcherOnTextChanged(env: UnsafeMutablePointer<JNIEnv?>, c
     guard
         let watcher: NativeTextWatcher = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         watcher.handleOnTextChanged(nil, Int(p1), Int(p2), Int(p3))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_watchers_NativeTextWatcher_onTextChangedExtended")
@@ -112,11 +101,9 @@ public func nativeTextWatcherOnTextChangedExtended(env: UnsafeMutablePointer<JNI
         let watcher: NativeTextWatcher = ListenerStore.shared.find(id: uniqueId)
     else { return }
     let p0 = JString(from: p0)?.string()
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         watcher.handleOnTextChanged(p0, Int(p1), Int(p2), Int(p3))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_watchers_NativeTextWatcher_afterTextChanged")
@@ -124,11 +111,9 @@ public func nativeTextWatcherAfterTextChanged(env: UnsafeMutablePointer<JNIEnv?>
     guard
         let watcher: NativeTextWatcher = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         watcher.handleAfterTextChanged(nil)
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_watchers_NativeTextWatcher_afterTextChangedExtended")
@@ -137,11 +122,9 @@ public func nativeTextWatcherAfterTextChangedExtended(env: UnsafeMutablePointer<
         let watcher: NativeTextWatcher = ListenerStore.shared.find(id: uniqueId)
     else { return }
     let p0 = JString(from: p0)?.string()
-    #if canImport(AndroidLooper)
-    Task { @UIThreadActor in
+    Task { @MainActor in
         watcher.handleAfterTextChanged(p0)
     }
-    #endif
 }
 #endif
 

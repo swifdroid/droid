@@ -12,9 +12,6 @@ import Android
 import Glibc
 #endif
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #if canImport(Logging)
 import Logging
 #endif
@@ -74,8 +71,8 @@ protocol AnyNativeRecyclerViewHolder: AnyObject, Sendable {
     var id: Int32 { get }
 }
 
-#if canImport(AndroidLooper)
-@UIThreadActor
+#if os(Android)
+@MainActor
 #endif
 public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolder, JObjectable, @unchecked Sendable {
     /// The JNI class name
