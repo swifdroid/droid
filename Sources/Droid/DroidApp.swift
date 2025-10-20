@@ -12,6 +12,9 @@ import Android
 import Glibc
 #endif
 #endif
+#if canImport(CAndroidLooper)
+import CAndroidLooper
+#endif
 #if canImport(AndroidLogging)
 import AndroidLogging
 #endif

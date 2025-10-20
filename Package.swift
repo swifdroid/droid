@@ -20,8 +20,13 @@ let package = Package(
             .product(name: "JNIKit", package: "jni-kit"),
             .target(name: "Manifest"),
             .product(name: "AndroidLogging", package: "AndroidLogging", condition: .when(platforms: [.android])),
+            .target(name: "CAndroidLooper", condition: .when(platforms: [.android])),
         ]),
         .target(name: "Manifest"),
+        .target(
+            name: "CAndroidLooper",
+            linkerSettings: [.linkedLibrary("android")]
+        ),
         .testTarget(name: "DroidTests", dependencies: ["Droid"]),
     ]
 )

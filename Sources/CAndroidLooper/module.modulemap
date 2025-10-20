@@ -1,0 +1,3 @@
+module CAndroidLooper {
+    header "CAndroidLooper.h"
+}
