@@ -12,9 +12,6 @@ import Android
 import Glibc
 #endif
 #endif
-#if canImport(AndroidLooper)
-import AndroidLooper
-#endif
 #if canImport(AndroidLogging)
 import AndroidLogging
 #endif
@@ -149,9 +146,6 @@ open class DroidApp: @unchecked Sendable {
         _ localCallerObjectRef: jobject
     ) {
         if shared == nil {
-            #if canImport(AndroidLooper)
-            AndroidLooper.AndroidLooper_initialize(envPointer)
-            #endif
             #if canImport(AndroidLogging)
             LoggingSystem.bootstrap(AndroidLogHandler.taggedBySource)
             #endif
