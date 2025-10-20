@@ -149,6 +149,20 @@ open class DroidApp: @unchecked Sendable {
         _ localCallerObjectRef: jobject
     ) {
         if shared == nil {
+            // Connects @MainActor to Android's main Looper
+            #if canImport(CAndroidLooper)
+            let looper: OpaquePointer = ALooper_forThread()
+            let callback: ALooper_callbackFunc = { port, _, _ in
+                _dispatch_main_queue_callback_4CF(nil)
+                let capacity = 8
+                let length = withUnsafeTemporaryAllocation(of: UInt8.self, capacity: capacity, {
+                    read(port, $0.baseAddress, capacity)
+                })
+                return length != -1 ? 1 : 0
+            }
+            let port = _dispatch_get_main_queue_port_4CF()
+            ALooper_addFd(looper, port, 0, CInt(ALOOPER_EVENT_INPUT), callback, nil)
+            #endif
             #if canImport(AndroidLogging)
             LoggingSystem.bootstrap(AndroidLogHandler.taggedBySource)
             #endif
@@ -395,9 +409,16 @@ extension JObject {
     }
 }
 
+// Required definitions for @MainActor support on Android
 #if canImport(Android)
-import Android
+@_silgen_name("_dispatch_main_queue_callback_4CF")
+private func _dispatch_main_queue_callback_4CF(_ msg: UnsafeMutableRawPointer?)
 
+@_silgen_name("_dispatch_get_main_queue_port_4CF")
+private func _dispatch_get_main_queue_port_4CF() -> CInt
+#endif
+
+#if canImport(Android)
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_onCreate")
 /// Called when the app initalized and setup completed on the Java side
 public func onCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, app: jobject) {
