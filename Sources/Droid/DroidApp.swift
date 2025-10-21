@@ -163,8 +163,13 @@ open class DroidApp: @unchecked Sendable {
             let port = _dispatch_get_main_queue_port_4CF()
             ALooper_addFd(looper, port, 0, CInt(ALOOPER_EVENT_INPUT), callback, nil)
             #endif
+            // Enable AndroidLogging
             #if canImport(AndroidLogging)
             LoggingSystem.bootstrap(AndroidLogHandler.taggedBySource)
+            #endif
+            // Enable `print` redirect into LogCat
+            #if os(Android)
+            try? PrintRedirector.shared.redirectPrint()
             #endif
             let jvm = envPointer.jvm()
             JNIKit.shared.initialize(with: jvm)
