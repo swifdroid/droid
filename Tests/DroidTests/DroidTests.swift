@@ -1,12 +1,6 @@
-import XCTest
+import Testing
 @testable import Droid
 
-final class DroidTests: XCTestCase {
-    func testExample() {
-        
-    }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
+@Test func example() async throws {
+    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
 }
