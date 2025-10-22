@@ -8,6 +8,8 @@ import AndroidLogging
 import Logging
 #endif
 
+// MARK: - Log
+
 public struct InnerLog {
     static var logger: Logger { DroidApp.shared.innerLogger }
 
@@ -190,6 +192,8 @@ public struct Log {
         Log.logger.warning(message(), metadata: metadata(), file: file, function: function, line: line)
     }
 }
+
+// MARK: - JNI methods
 
 #if os(Android)
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnCreate")
