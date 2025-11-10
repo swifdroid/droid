@@ -21,10 +21,7 @@ open class ConstraintLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .androidx.constraintlayout.widget.ConstraintLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .constraintLayout }
-    open override class var gradleDependencies: [String] { [
-        #"implementation("androidx.constraintlayout:constraintlayout:2.2.1")"#,
-        #"implementation("androidx.constraintlayout:constraintlayout-core:1.1.1")"#
-    ] }
+    open override class var gradleDependencies: [AppGradleDependency] { [.constraintlayout, .constraintlayoutCore] }
 
     @discardableResult
     public override init (id: Int32? = nil) {

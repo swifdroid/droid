@@ -21,9 +21,7 @@ open class FlexboxLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.FlexboxLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .flexboxLayout }
-    open override class var gradleDependencies: [String] { [
-        #"implementation("com.google.android.flexbox:flexbox:3.0.0")"#
-    ] }
+    open override class var gradleDependencies: [AppGradleDependency] { [.flexbox] }
 
     @discardableResult
     public override init (id: Int32? = nil) {

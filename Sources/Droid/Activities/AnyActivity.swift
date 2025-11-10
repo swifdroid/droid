@@ -18,7 +18,7 @@ public protocol Contextable: Sendable {
 public protocol AnyActivity: AnyObject, Contextable {
     static nonisolated var packageName: String? { get }
 	static nonisolated var className: String { get }
-    static nonisolated var gradleDependencies: [String] { get }
+    static nonisolated var gradleDependencies: [AppGradleDependency] { get }
 	static nonisolated var javaImports: [String] { get }
     static nonisolated var parentClass: String { get }
 

@@ -19,9 +19,7 @@ extension FragmentActivity: @unchecked Sendable {}
 #endif
 open class FragmentActivity: ComponentActivity {
     open class override var className: JClassName { "androidx/fragment/app/FragmentActivity" }
-    open class override var gradleDependencies: [String] { [
-        #"implementation(platform("androidx.compose:compose-bom:2025.07.00"))"#
-    ] }
+    open class override var gradleDependencies: [AppGradleDependency] { [.composeBOM] }
     open class override var parentClass: String { "DroidFragmentActivity()" }
 
     /// Return the `FragmentManager` for interacting with fragments associated with this activity.

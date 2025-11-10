@@ -24,9 +24,7 @@ open class CoordinatorLayout: ViewGroup, @unchecked Sendable {
     open override class var className: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .coordinatorLayout }
     open class var behaviorClassName: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior }
-    open override class var gradleDependencies: [String] { [
-        #"implementation("androidx.coordinatorlayout:coordinatorlayout:1.3.0")"#
-    ] }
+    open override class var gradleDependencies: [AppGradleDependency] { [.coordinatorlayout] }
 
     open override func layoutParamsForSubviews() -> LayoutParams? {
         let lp = super.layoutParamsForSubviews()

@@ -27,7 +27,7 @@ open class Activity: AnyActivity {
 
 	open class var packageName: String? { nil }
     open class var className: JClassName { .android.app.Activity }
-    open class var gradleDependencies: [String] { [] }
+    open class var gradleDependencies: [AppGradleDependency] { [] }
     open class var javaImports: [String] { ["stream.swift.droid.appkit.activities.*"] }
     open class var parentClass: String { "DroidActivity()" }
 

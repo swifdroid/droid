@@ -35,9 +35,7 @@ public final class RecyclerView: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     public override class var className: JClassName { .androidx.recyclerview.widget.RecyclerView }
     public override class var layoutParamsClass: LayoutParams.Class { .recyclerLayout }
-    public override class var gradleDependencies: [String] { [
-        #"implementation "androidx.recyclerview:recyclerview:1.3.2""#
-    ] }
+    public override class var gradleDependencies: [AppGradleDependency] { [.recyclerview] }
 
     var adapterInstance: RecyclerViewAdapterInstance?
 

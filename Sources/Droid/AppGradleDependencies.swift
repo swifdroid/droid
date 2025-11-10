@@ -92,3 +92,47 @@ public final class AppGradleDependencies {
         }
     }
 }
+
+public struct AppGradleDependency: Sendable, ExpressibleByStringLiteral, CustomStringConvertible {
+    let value: String
+
+    public init(stringLiteral value: StringLiteralType) {
+        self.value = value
+    }
+
+    public var description: String { value }
+
+    /// Add a custom dependency.
+    public static func implementation(_ `package`: String) -> Self {
+        .init(stringLiteral: #"implementation("\(`package`)")"#)
+    }
+
+    /// Add a custom debug dependency.
+    public static func debugImplementation(_ `package`: String) -> Self {
+        .init(stringLiteral: #"debugImplementation("\(`package`)")"#)
+    }
+
+    /// Add a custom release dependency.
+    public static func releaseImplementation(_ `package`: String) -> Self {
+        .init(stringLiteral: #"releaseImplementation("\(`package`)")"#)
+    }
+
+    /// Add a custom test dependency.
+    public static func testImplementation(_ `package`: String) -> Self {
+        .init(stringLiteral: #"testImplementation("\(`package`)")"#)
+    }
+
+    /// Add a custom android test dependency.
+    public static func androidTestImplementation(_ `package`: String) -> Self {
+        .init(stringLiteral: #"androidTestImplementation("\(`package`)")"#)
+    }
+
+    public static let appCompat: Self = #"implementation("androidx.appcompat:appcompat:1.7.1")"#
+    public static let composeBOM: Self = #"implementation(platform("androidx.compose:compose-bom:2025.07.00"))"#
+    public static let flexbox: Self = #"implementation("com.google.android.flexbox:flexbox:3.0.0")"#
+    public static let constraintlayout: Self = #"implementation("androidx.constraintlayout:constraintlayout:2.2.1")"#
+    public static let constraintlayoutCore: Self = #"implementation("androidx.constraintlayout:constraintlayout-core:1.1.1")"#
+    public static let coordinatorlayout: Self = #"implementation("androidx.coordinatorlayout:coordinatorlayout:1.3.0")"#
+    public static let recyclerview: Self = #"implementation "androidx.recyclerview:recyclerview:1.3.2""#
+    public static let material: Self = #"implementation("com.google.android.material:material:1.14.0-alpha06")"#
+}

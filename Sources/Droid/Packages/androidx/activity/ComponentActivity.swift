@@ -22,9 +22,7 @@ extension ComponentActivity: @unchecked Sendable {}
 #endif
 open class ComponentActivity: Activity {
     open class override var className: JClassName { "androidx/activity/ComponentActivity" }
-    open class override var gradleDependencies: [String] { [
-        #"implementation(platform("androidx.compose:compose-bom:2025.07.00"))"#
-    ] }
+    open class override var gradleDependencies: [AppGradleDependency] { [.composeBOM] }
     open class override var parentClass: String { "DroidComponentActivity()" }
 }
 

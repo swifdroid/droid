@@ -54,7 +54,7 @@ extension AndroidPackage.ViewPackage {
 @MainActor
 #endif
 public protocol AnyView: AnyObject, ViewInstanceable {
-    static var gradleDependencies: [String] { get }
+    static var gradleDependencies: [AppGradleDependency] { get }
 }
 protocol _AnyView: AnyView {
     var _propertiesToApply: [any ViewPropertyToApply] { get set }
@@ -83,7 +83,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .android.view.View }
 
-    open class var gradleDependencies: [String] { [] }
+    open class var gradleDependencies: [AppGradleDependency] { [] }
     
     /// Unique identifier
     public nonisolated let id: Int32
