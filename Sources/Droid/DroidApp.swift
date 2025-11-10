@@ -296,7 +296,7 @@ open class DroidApp: @unchecked Sendable {
                     _ = activity.init()
                     #endif
                     for dep in activity.gradleDependencies {
-                        dependencies.insert(dep)
+                        dependencies.insert(dep.value)
                     }
                 }
             }
