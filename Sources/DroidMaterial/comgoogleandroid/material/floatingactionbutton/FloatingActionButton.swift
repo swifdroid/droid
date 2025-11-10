@@ -33,6 +33,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.FloatingActionButtonPackage {
 open class FloatingActionButton: ImageButton, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.floatingactionbutton.FloatingActionButton }
+    open override class var gradleDependencies: [AppGradleDependency] { [.material] }
 
     var textState: State<String>?
 

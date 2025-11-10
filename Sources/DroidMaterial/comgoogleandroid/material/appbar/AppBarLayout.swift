@@ -25,9 +25,7 @@ open class AppBarLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.appbar.AppBarLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .materialAppBarLayout }
-    open override class var gradleDependencies: [String] { [
-        #"implementation("com.google.android.material:material:1.12.0")"#
-    ] }
+    open override class var gradleDependencies: [AppGradleDependency] { [.material] }
 
     @discardableResult
     public override init (id: Int32? = nil) {
