@@ -71,9 +71,7 @@ protocol AnyNativeRecyclerViewHolder: AnyObject, Sendable {
     var id: Int32 { get }
 }
 
-#if os(Android)
 @MainActor
-#endif
 public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolder, JObjectable, @unchecked Sendable {
     /// The JNI class name
     static var className: JClassName { "stream/swift/droid/appkit/adapters/NativeRecyclerViewHolder" }

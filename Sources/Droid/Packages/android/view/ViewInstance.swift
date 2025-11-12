@@ -6,9 +6,7 @@ import Logging
 #endif
 
 extension View {
-    #if os(Android)
     @MainActor
-    #endif
     public final class ViewInstance: JObjectable, @unchecked Sendable {
         /// Unique identifier
         public let id: Int32

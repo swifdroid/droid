@@ -5,9 +5,7 @@ public enum BodyBuilderItem: Sendable {
     case nested([BodyBuilderItemable])
     case forEach(AnyForEach)
 }
-#if os(Android)
 @MainActor
-#endif
 public protocol BodyBuilderItemable: Sendable {
     var bodyBuilderItem: BodyBuilderItem { get }
 }

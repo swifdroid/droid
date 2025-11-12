@@ -12,9 +12,7 @@ import Android
 import Logging
 #endif
 
-#if os(Android)
 @MainActor
-#endif
 public final class LayoutParams: Sendable, JObjectable {
     public struct Class: Sendable, CustomStringConvertible, ExpressibleByStringLiteral {
         public let className: JClassName

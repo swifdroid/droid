@@ -225,8 +225,8 @@ public func nativeFragmentOnAttach(env: UnsafeMutablePointer<JNIEnv?>, callerCla
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     if let object = context.box(JEnv(env))?.object() {
-        let context = ActivityContext(object: object)
-        Task { @MainActor in
+        MainActor.assumeIsolated {
+            let context = ActivityContext(object: object)
             listener.onAttach(context)
         }
     } else {
@@ -345,8 +345,8 @@ public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<
         InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap ContextMenu.Contextnfo")
         return
     }
-    let activityContext = ActivityContext(object: context)
-    Task { @MainActor in
+    MainActor.assumeIsolated {
+        let activityContext = ActivityContext(object: context)
         let menu = ContextMenu(menuObject)
         let view = View(viewObject, activityContext)
         let info = ContextMenu.ContextMenuInfo(infoObject)

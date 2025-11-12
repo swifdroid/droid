@@ -10,9 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Toast: ToastClass { .init(parent: self, name: "Toast") }
 }
 
-#if os(Android)
 @MainActor
-#endif
 public final class Toast: JObjectable, @unchecked Sendable {
     public static var className: JClassName { .android.widget.Toast }
 

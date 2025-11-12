@@ -5,9 +5,7 @@
 //  Created by Mihael Isaev on 13.01.2022.
 //
 
-#if os(Android)
 @MainActor
-#endif
 public struct android: ~Copyable {
     public static let R = InnerR(JClassName.android)
 }

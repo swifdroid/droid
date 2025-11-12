@@ -16,9 +16,7 @@ extension AndroidPackage.GraphicsPackage.DrawablePackage {
 /// the Drawable class provides a generic API for dealing with an underlying visual resource that may take a variety of forms.
 /// 
 /// Unlike a View, a Drawable does not have any facility to receive events or otherwise interact with the user.
-#if os(Android)
 @MainActor
-#endif
 open class Drawable: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .android.graphics.drawable.Drawable }

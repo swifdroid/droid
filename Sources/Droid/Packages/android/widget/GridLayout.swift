@@ -98,9 +98,7 @@ extension LayoutParamKey {
 // MARK: ColumnSpec
 
 fileprivate extension LayoutParamToApply {
-    #if os(Android)
     @MainActor
-    #endif
     func apply(_ env: JEnv?, _ instance: View.ViewInstance, _ lp: LayoutParams, _ key: LayoutParamKey, _ value: GridLayout.SpecType) {
         #if os(Android)
         guard

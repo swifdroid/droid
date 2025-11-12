@@ -25,9 +25,7 @@ extension AnyNativeObject {
     }
 }
 
-#if os(Android)
 @MainActor
-#endif
 open class NativeUIObject: NativeObject, Contextable, @unchecked Sendable {
     public unowned let context: ActivityContext
 

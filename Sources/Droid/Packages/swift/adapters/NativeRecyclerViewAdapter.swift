@@ -67,9 +67,7 @@ final class RecyclerViewAdapterStore: @unchecked Sendable {
     #endif
 }
 
-#if os(Android)
 @MainActor
-#endif
 protocol AnyRecyclerViewAdapter: AnyObject, Sendable {
     nonisolated var id: Int32 { get }
     var itemsCountHandler: (() -> Int) { get }
@@ -222,11 +220,9 @@ public func NativeRecyclerViewAdapterOnBindViewHolder(env: UnsafeMutablePointer<
         let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId),
         let viewHolder = RecyclerViewHolderStore.shared.find(id: holderId)
     else { return }
-    #if os(Android)
     Task { @MainActor in
         adapter.bindViewHolder(viewHolder, Int(position))
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_adapters_NativeRecyclerViewAdapter_nativeGetItemViewType")

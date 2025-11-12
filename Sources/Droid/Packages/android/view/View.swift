@@ -50,9 +50,7 @@ extension AndroidPackage.ViewPackage {
     public var ViewOnTouchListener: OnTouchListenerClass { .init(parent: self, name: "View$OnTouchListener") }
 }
 
-#if os(Android)
 @MainActor
-#endif
 public protocol AnyView: AnyObject, ViewInstanceable {
     static var gradleDependencies: [AppGradleDependency] { get }
 }
@@ -60,16 +58,15 @@ protocol _AnyView: AnyView {
     var _propertiesToApply: [any ViewPropertyToApply] { get set }
 }
 
-enum ViewStatus: Sendable {
+@MainActor
+enum ViewStatus {
     case new
     case floating(View.ViewInstance)
     case asContentView(View.ViewInstance)
     case inParent(View, View.ViewInstance)
 }
 
-#if os(Android)
 @MainActor
-#endif
 public protocol JClassNameable: AnyObject {
     static var className: JClassName { get }
     var className: JClassName { get }
@@ -508,9 +505,7 @@ extension View: Equatable, Hashable {
     }
 }
 
-#if os(Android)
 @MainActor
-#endif
 extension Array where Element == View {
     func removeFromSuperview(at indexes: [Int]) {
         guard indexes.count > 0 else { return }
@@ -1899,13 +1894,8 @@ struct OnApplyWindowInsetsListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias ApplyWindowInsetsListenerHandler = @MainActor () -> Void
     public typealias ApplyWindowInsetsListenerEventHandler = @MainActor (NativeOnApplyWindowInsetsListenerEvent) -> Void
-    #else
-    public typealias ApplyWindowInsetsListenerHandler = () -> Void
-    public typealias ApplyWindowInsetsListenerEventHandler = (NativeOnApplyWindowInsetsListenerEvent) -> Void
-    #endif
     /// Set an OnApplyWindowInsetsListener to take over the policy for applying window insets to this view.
     @discardableResult
     public func onApplyWindowInsets(_ handler: @escaping ApplyWindowInsetsListenerHandler) -> Self {
@@ -1945,13 +1935,8 @@ struct OnCapturedPointerListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias CapturedPointerListenerHandler = @MainActor () -> Bool
     public typealias CapturedPointerListenerEventHandler = @MainActor (NativeOnCapturedPointerListenerEvent) -> Bool
-    #else
-    public typealias CapturedPointerListenerHandler = () -> Bool
-    public typealias CapturedPointerListenerEventHandler = (NativeOnCapturedPointerListenerEvent) -> Bool
-    #endif
     /// Set a listener to receive callbacks when the pointer capture state of a view changes.
     @discardableResult
     public func onCapturedPointer(_ handler: @escaping CapturedPointerListenerHandler) -> Self {
@@ -1991,13 +1976,8 @@ struct OnClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias ClickListenerHandler = @MainActor () -> Void
     public typealias ClickListenerEventHandler = @MainActor (NativeOnClickListenerEvent) -> Void
-    #else
-    public typealias ClickListenerHandler = () -> Void
-    public typealias ClickListenerEventHandler = (NativeOnClickListenerEvent) -> Void
-    #endif
     /// Register a callback to be invoked when this view is clicked.
     @discardableResult
     public func onClick(_ handler: @escaping ClickListenerHandler) -> Self {
@@ -2037,13 +2017,8 @@ struct OnContextClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias ContextClickListenerHandler = @MainActor () -> Bool
     public typealias ContextClickListenerEventHandler = @MainActor (NativeOnContextClickListenerEvent) -> Bool
-    #else
-    public typealias ContextClickListenerHandler = () -> Bool
-    public typealias ContextClickListenerEventHandler = (NativeOnContextClickListenerEvent) -> Bool
-    #endif
     /// Register a callback to be invoked when this view is context clicked. If the view is not context clickable, it becomes context clickable.
     @discardableResult
     public func onContextClick(_ handler: @escaping ContextClickListenerHandler) -> Self {
@@ -2129,13 +2104,8 @@ struct OnDragListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias DragListenerHandler = @MainActor () -> Bool
     public typealias DragListenerEventHandler = @MainActor (NativeOnDragListenerEvent) -> Bool
-    #else
-    public typealias DragListenerHandler = () -> Bool
-    public typealias DragListenerEventHandler = (NativeOnDragListenerEvent) -> Bool
-    #endif
     /// Register a drag event listener callback object for this View.
     @discardableResult
     public func onDrag(_ handler: @escaping DragListenerHandler) -> Self {
@@ -2175,13 +2145,8 @@ struct OnFocusChangeListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias FocusChangeListenerHandler = @MainActor () -> Void
     public typealias FocusChangeListenerEventHandler = @MainActor (NativeOnFocusChangeListenerEvent) -> Void
-    #else
-    public typealias FocusChangeListenerHandler = () -> Void
-    public typealias FocusChangeListenerEventHandler = (NativeOnFocusChangeListenerEvent) -> Void
-    #endif
     /// OnFocusChangeListener
     @discardableResult
     public func onFocusChange(_ handler: @escaping FocusChangeListenerHandler) -> Self {
@@ -2221,13 +2186,8 @@ struct OnGenericMotionListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias GenericMotionListenerHandler = @MainActor () -> Bool
     public typealias GenericMotionListenerEventHandler = @MainActor (NativeOnGenericMotionListenerEvent) -> Bool
-    #else
-    public typealias GenericMotionListenerHandler = () -> Bool
-    public typealias GenericMotionListenerEventHandler = (NativeOnGenericMotionListenerEvent) -> Bool
-    #endif
     /// Register a callback to be invoked when a generic motion event is sent to this view.
     @discardableResult
     public func onGenericMotion(_ handler: @escaping GenericMotionListenerHandler) -> Self {
@@ -2267,13 +2227,8 @@ struct OnHoverListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias HoverListenerHandler = @MainActor () -> Bool
     public typealias HoverListenerEventHandler = @MainActor (NativeOnHoverListenerEvent) -> Bool
-    #else
-    public typealias HoverListenerHandler = () -> Bool
-    public typealias HoverListenerEventHandler = (NativeOnHoverListenerEvent) -> Bool
-    #endif
     /// Register a callback to be invoked when a hover event is sent to this view.
     @discardableResult
     public func onHover(_ handler: @escaping HoverListenerHandler) -> Self {
@@ -2313,13 +2268,8 @@ struct OnKeyListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias KeyListenerHandler = @MainActor () -> Bool
     public typealias KeyListenerEventHandler = @MainActor (NativeOnKeyListenerEvent) -> Bool
-    #else
-    public typealias KeyListenerHandler = () -> Bool
-    public typealias KeyListenerEventHandler = (NativeOnKeyListenerEvent) -> Bool
-    #endif
     /// Register a callback to be invoked when a hardware key is pressed in this view. Key presses in software input methods will generally not trigger the methods of this listener.
     @discardableResult
     public func onKey(_ handler: @escaping KeyListenerHandler) -> Self {
@@ -2359,18 +2309,11 @@ struct OnLongClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias LongClickListenerBoolHandler = @MainActor () -> Bool
     public typealias LongClickListenerHandler = @MainActor () -> Void
     public typealias LongClickListenerEventBoolHandler = @MainActor (NativeOnLongClickListenerEvent) -> Bool
     public typealias LongClickListenerEventHandler = @MainActor (NativeOnLongClickListenerEvent) -> Void
-    #else
-    public typealias LongClickListenerBoolHandler = () -> Bool
-    public typealias LongClickListenerHandler = () -> Void
-    public typealias LongClickListenerEventBoolHandler = (NativeOnLongClickListenerEvent) -> Bool
-    public typealias LongClickListenerEventHandler = (NativeOnLongClickListenerEvent) -> Void
-    #endif
-
+    
     /// Register a callback to be invoked when this view is clicked and held. Return `true` if you catch the event. Returns `true` by default.
     @discardableResult
     public func onLongClick(_ handler: @escaping LongClickListenerBoolHandler) -> Self {
@@ -2426,13 +2369,8 @@ struct OnReceiveContentListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias ReceiveContentListenerHandler = @MainActor () -> ContentInfo?
     public typealias ReceiveContentListenerEventHandler = @MainActor (NativeOnReceiveContentListenerEvent) -> ContentInfo?
-    #else
-    public typealias ReceiveContentListenerHandler = () -> ContentInfo?
-    public typealias ReceiveContentListenerEventHandler = (NativeOnReceiveContentListenerEvent) -> ContentInfo?
-    #endif
     /// Sets the listener to be used to handle insertion of content into this view.
     @discardableResult
     public func onReceiveContent(_ handler: @escaping ReceiveContentListenerHandler) -> Self {
@@ -2472,13 +2410,8 @@ struct OnScrollChangeListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias ScrollChangeListenerHandler = @MainActor () -> Void
     public typealias ScrollChangeListenerEventHandler = @MainActor (NativeOnScrollChangeListenerEvent) -> Void
-    #else
-    public typealias ScrollChangeListenerHandler = () -> Void
-    public typealias ScrollChangeListenerEventHandler = (NativeOnScrollChangeListenerEvent) -> Void
-    #endif
     /// Register a callback to be invoked when the scroll X or Y positions of this view change.
     @discardableResult
     public func onScrollChange(_ handler: @escaping ScrollChangeListenerHandler) -> Self {
@@ -2518,11 +2451,7 @@ struct OnSystemUiVisibilityChangeListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias SystemUiVisibilityChangeListenerHandler = @MainActor (_ visibility: Int) -> Void
-    #else
-    public typealias SystemUiVisibilityChangeListenerHandler = (_ visibility: Int) -> Void
-    #endif
     /// Set a listener to receive callbacks when the visibility of the system bar changes.
     @discardableResult
     public func onSystemUIVisibilityChange(_ handler: @escaping SystemUiVisibilityChangeListenerHandler) -> Self {
@@ -2550,13 +2479,8 @@ struct OnTouchListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    #if os(Android)
     public typealias TouchListenerHandler = @MainActor () -> Bool
     public typealias TouchListenerEventHandler = @MainActor (NativeOnTouchListenerEvent) -> Bool
-    #else
-    public typealias TouchListenerHandler = () -> Bool
-    public typealias TouchListenerEventHandler = (NativeOnTouchListenerEvent) -> Bool
-    #endif
     /// Register a callback to be invoked when a touch event is sent to this view.
     @discardableResult
     public func onTouch(_ handler: @escaping TouchListenerHandler) -> Self {

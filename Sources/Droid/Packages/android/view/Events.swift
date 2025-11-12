@@ -18,9 +18,7 @@
 /// to describe motion events. Refer to the comments on the input source constants for the appropriate interpretation.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/InputDevice)
-#if os(Android)
 @MainActor
-#endif
 public final class InputDevice: JObjectable, Sendable {
     public class var className: JClassName { "android/view/InputDevice" }
 
@@ -48,9 +46,7 @@ extension InputDevice {
 /// Common base class for input events.
 ///
 /// [Learn more](https://developer.android.com/reference/android/view/InputEvent)
-#if os(Android)
 @MainActor
-#endif
 open class InputEvent: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/view/InputEvent" }
     
@@ -665,9 +661,7 @@ extension MotionEvent {
 /// For display to the user, it also has a label.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/content/ClipData)
-#if os(Android)
 @MainActor
-#endif
 open class ClipData: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/content/ClipData" }
     // TODO: Move to appropriate place
@@ -684,9 +678,7 @@ open class ClipData: JObjectable, @unchecked Sendable {
 /// Meta-data describing the contents of a ClipData. Provides enough information to know if you can handle the ClipData, but not the data itself.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/content/ClipDescription)
-#if os(Android)
 @MainActor
-#endif
 open class ClipDescription: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/content/ClipDescription" }
     // TODO: Move to appropriate place
@@ -740,9 +732,7 @@ open class Parcel: JObjectable, @unchecked Sendable {
 /// several important pieces of data about the operation and the underlying data.
 ///
 /// [Learn more](https://developer.android.com/reference/android/view/DragEvent)
-#if os(Android)
 @MainActor
-#endif
 open class DragEvent: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/view/DragEvent" }
     
@@ -847,9 +837,7 @@ extension DragEvent {
 /// Describes the keys provided by a keyboard device and their associated labels.
 ///
 /// [Learn more](https://developer.android.com/reference/android/view/KeyCharacterMap)
-#if os(Android)
 @MainActor
-#endif
 public final class KeyCharacterMap: JObjectable, @unchecked Sendable {
     public class var className: JClassName { "android/view/KeyCharacterMap" }
     
@@ -871,9 +859,7 @@ public final class KeyCharacterMap: JObjectable, @unchecked Sendable {
 // the key up event will have the `FLAG_CANCELED` flag set.
 ///
 /// [Learn more](https://developer.android.com/reference/android/view/KeyEvent)
-#if os(Android)
 @MainActor
-#endif
 open class KeyEvent: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/view/KeyEvent" }
     

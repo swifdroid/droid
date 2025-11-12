@@ -6,15 +6,11 @@
 //
 
 public protocol Contextable: Sendable {
-	#if os(Android)
 	@MainActor
-	#endif
 	var context: ActivityContext { get }
 }
 
-#if os(Android)
 @MainActor
-#endif
 public protocol AnyActivity: AnyObject, Contextable {
     static nonisolated var packageName: String? { get }
 	static nonisolated var className: String { get }

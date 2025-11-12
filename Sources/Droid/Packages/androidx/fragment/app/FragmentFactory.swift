@@ -6,9 +6,7 @@
 //
 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentFactory)
-#if os(Android)
 @MainActor
-#endif
 public final class FragmentFactory: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentFactory") }
 
@@ -25,9 +23,7 @@ extension FragmentFactory {
     /// Create a new instance of a `Fragment` with the given class name.
     ///
     /// This uses `loadFragmentClass` and the empty constructor of the resulting `Class` by default.
-    #if os(Android)
     @MainActor
-    #endif
     public func instantiate(_ classLoader: JClassLoader, _ className: JClassName) -> Fragment? {
         guard
             let returningClazz = classLoader.loadClass(Fragment.className),

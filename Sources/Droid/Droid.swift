@@ -290,7 +290,9 @@ public func activityOnActivityResult1(envPointer: UnsafeMutablePointer<JNIEnv?>,
     let env = JEnv(envPointer)
     var intent: Intent?
     if let object = intentRef?.box(env)?.object() {
-        intent = .init(object)
+        MainActor.assumeIsolated {
+            intent = .init(object)
+        }
     }
     var componentCaller: ComponentCaller?
     if let object = componentCallerRef?.box(env)?.object() {
@@ -306,7 +308,9 @@ public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>,
     let env = JEnv(envPointer)
     var intent: Intent?
     if let object = intentRef?.box(env)?.object() {
-        intent = .init(object)
+        MainActor.assumeIsolated {
+            intent = .init(object)
+        }
     }
     Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onActivityResult(requestCode: Int(requestCode), resultCode: Int(resultCode), intent: intent, componentCaller: nil)

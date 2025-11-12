@@ -37,11 +37,9 @@ public func nativeToastCallbackOnToastShown(env: UnsafeMutablePointer<JNIEnv?>, 
     guard
         let listener: NativeToastCallback = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    #if os(Android)
     Task { @MainActor in
         await listener.shownHandler?()
     }
-    #endif
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_callbacks_NativeToastCallback_onToastHidden")
@@ -49,10 +47,8 @@ public func nativeToastCallbackOnToastHidden(env: UnsafeMutablePointer<JNIEnv?>,
     guard
         let listener: NativeToastCallback = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    #if os(Android)
     Task { @MainActor in
         await listener.hiddenHandler?()
     }
-    #endif
 }
 #endif

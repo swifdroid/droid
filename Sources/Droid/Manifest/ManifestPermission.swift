@@ -42,13 +42,15 @@ public struct ManifestPermission: ExpressibleByStringLiteral, StringValuable, Se
     ]
 
     public func warnIfNeeded() {
-        if (!DroidApp.shared._manifest.usesPermission.contains(where: { $0.params[.androidName] == value })) {
-            Log.c("⚠️ You forgot to add `.usesPermission(.\(value))` to your `DroidApp` manifest!")
-        }
-        if (requiredFeatures.count > 0) {
-            for requiredFeature in requiredFeatures {
-                if (!DroidApp.shared._manifest.usesFeature.contains(where: { $0.params[.androidName] == requiredFeature.value })) {
-                    Log.c("⚠️ You forgot to add `.usesFeature(.\(requiredFeature.value))` to your `DroidApp` manifest!")
+        Task { @MainActor in
+            if (!DroidApp.shared._manifest.usesPermission.contains(where: { $0.params[.androidName] == value })) {
+                Log.c("⚠️ You forgot to add `.usesPermission(.\(value))` to your `DroidApp` manifest!")
+            }
+            if (requiredFeatures.count > 0) {
+                for requiredFeature in requiredFeatures {
+                    if (!DroidApp.shared._manifest.usesFeature.contains(where: { $0.params[.androidName] == requiredFeature.value })) {
+                        Log.c("⚠️ You forgot to add `.usesFeature(.\(requiredFeature.value))` to your `DroidApp` manifest!")
+                    }
                 }
             }
         }

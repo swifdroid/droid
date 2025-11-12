@@ -100,15 +100,9 @@ struct TextChangedListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension TextView {
-    #if os(Android)
     public typealias BeforeTextChangedEventHandler = @MainActor (NativeTextWatcherBeforeTextChangedEvent) -> Void
     public typealias OnTextChangedEventHandler = @MainActor (NativeTextWatcherOnTextChangedEvent) -> Void
     public typealias AfterTextChangedEventHandler = @MainActor (NativeTextWatcherAfterTextChangedEvent) -> Void
-    #else
-    public typealias BeforeTextChangedEventHandler = (NativeTextWatcherBeforeTextChangedEvent) -> Void
-    public typealias OnTextChangedEventHandler = (NativeTextWatcherOnTextChangedEvent) -> Void
-    public typealias AfterTextChangedEventHandler = (NativeTextWatcherAfterTextChangedEvent) -> Void
-    #endif
     /// Register a callback to be invoked when the text is changed.
     @discardableResult
     public func textChangedListener(

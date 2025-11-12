@@ -17,9 +17,7 @@
 /// and `Activity.onContextItemSelected(MenuItem)`.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/Menu)
-#if os(Android)
 @MainActor
-#endif
 open class Menu: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { "android/view/Menu" }
@@ -304,9 +302,7 @@ extension ContextMenu {
     /// For example, AdapterViews use this to pass the exact item position within the adapter that initiated the context menu.
     ///
     /// [Learn more](https://developer.android.com/reference/android/view/ContextMenu.ContextMenuInfo)
-    #if os(Android)
     @MainActor
-    #endif
     open class ContextMenuInfo: JObjectable, @unchecked Sendable {
         /// The JNI class name
         open class var className: JClassName { "android/view/ContextMenu$ContextMenuInfo" }
@@ -420,9 +416,7 @@ extension ExpandableListView {
 /// Sub menus do not support item icons, or nested sub menus.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/SubMenu)
-#if os(Android)
 @MainActor
-#endif
 public final class SubMenu: JObjectable, Sendable {
     /// The JNI class name
     public class var className: JClassName { "android/view/SubMenu" }
@@ -526,9 +520,7 @@ extension SubMenu {
 /// For a feature set of specific menu types, see `Menu`.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/MenuItem)
-#if os(Android)
 @MainActor
-#endif
 public final class MenuItem: JObjectable, @unchecked Sendable {
     /// The JNI class name
     public class var className: JClassName { "android/view/MenuItem" }

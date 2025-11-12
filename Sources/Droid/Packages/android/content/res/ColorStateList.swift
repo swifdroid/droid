@@ -15,9 +15,7 @@ public enum ColorState: Sendable {
     case hovered
     case windowFocused
 
-    #if os(Android)
     @MainActor
-    #endif
     public var resourceId: Int32 {
         switch self {
         case .pressed: return android.R.attr.state_pressed
@@ -72,9 +70,7 @@ public struct ColorStateListItem: Sendable {
     }
 }
 
-#if os(Android)
 @MainActor
-#endif
 public final class ColorStateList: JObjectable, @unchecked Sendable {
     /// The JNI class name
     public static let className: JClassName = "android/content/res/ColorStateList"

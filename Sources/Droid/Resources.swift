@@ -1,6 +1,8 @@
+@MainActor
 public final class Resources {}
 
 extension Resources {
+    @MainActor
     public final class Theme: JObjectable, Sendable {
         public class var className: JClassName { .init(stringLiteral: "android/content/res/Resources$Theme") }
 

@@ -66,16 +66,12 @@ extension LayoutParamKey {
 
 // MARK: Behavior
 
-#if os(Android)
 @MainActor
-#endif
 open class Behavior: @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior }
 
-    #if os(Android)
     @MainActor
-    #endif
     public final class BehaviorInstance: JObjectable, @unchecked Sendable {
         /// Object
         public let object: JObject
@@ -120,21 +116,15 @@ open class Behavior: @unchecked Sendable {
 
     public protocol ParamToApply {
         var key: ParamKey { get }
-        #if os(Android)
         @MainActor
-        #endif
         func apply(_ env: JEnv?, _ behavior: Behavior.BehaviorInstance)
-        #if os(Android)
         @MainActor
-        #endif
         func applyOrAppend<T: Behavior>(_ behavior: T) -> T
     }
 }
 
 extension Behavior.ParamToApply {
-    #if os(Android)
     @MainActor
-    #endif
     @discardableResult
     public func applyOrAppend<T: Behavior>(_ behavior: T) -> T {
         if let instance = behavior.instance {

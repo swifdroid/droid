@@ -299,9 +299,7 @@ extension RecyclerView {
 // MARK: - Adapter
 
 extension RecyclerView {
-    #if os(Android)
     @MainActor
-    #endif
     public final class Adapter: JObjectable, @unchecked Sendable {
         /// The JNI class name
         public class var className: JClassName { .androidx.recyclerview.widget.RecyclerView.Adapter }
@@ -336,9 +334,7 @@ extension RecyclerView {
 
 // MARK: - PagerSnapHelper
 
-#if os(Android)
 @MainActor
-#endif
 public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
     /// The JNI class name
     public class var className: JClassName { .androidx.recyclerview.widget.PagerSnapHelper }
@@ -372,16 +368,12 @@ public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
 
 // MARK: - LayoutManager
 
-#if os(Android)
 @MainActor
-#endif
 open class LayoutManager: @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .androidx.recyclerview.widget.RecyclerView.LayoutManager }
 
-    #if os(Android)
     @MainActor
-    #endif
     public final class LayoutManagerInstance: JObjectable, @unchecked Sendable {
         /// Context
         public unowned let context: ActivityContext
@@ -435,13 +427,9 @@ open class LayoutManager: @unchecked Sendable {
 
     public protocol ParamToApply {
         var key: ParamKey { get }
-        #if os(Android)
         @MainActor
-        #endif
         func apply(_ env: JEnv?, _ layoutManager: LayoutManager.LayoutManagerInstance)
-        #if os(Android)
         @MainActor
-        #endif
         func applyOrAppend<T: LayoutManager>(_ layoutManager: T) -> T
     }
 
@@ -464,9 +452,7 @@ open class LayoutManager: @unchecked Sendable {
 }
 
 extension LayoutManager.ParamToApply {
-    #if os(Android)
     @MainActor
-    #endif
     @discardableResult
     public func applyOrAppend<T: LayoutManager>(_ layoutManager: T) -> T {
         if let instance = layoutManager.instance {

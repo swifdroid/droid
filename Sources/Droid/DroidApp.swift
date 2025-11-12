@@ -41,7 +41,9 @@ open class DroidApp: @unchecked Sendable {
             shared = Self()
         }
         #endif
-        Self.start()
+        Task { @MainActor in
+            Self.start()
+        }
     }
     
     var isStarted = false
@@ -175,17 +177,22 @@ open class DroidApp: @unchecked Sendable {
             JNIKit.shared.initialize(with: jvm)
             let env = JEnv(envPointer)
             if let appObject =  localCallerObjectRef.box(env)?.object(debuggingNote: "DroidApp.start appObject") {
-                let context = AppContext(appObject)
-                shared = Self(context)
-                if let classLoaderObj = context.getClassLoader() {
-                    JNICache.shared.setClassLoader(classLoaderObj)
+                MainActor.assumeIsolated {
+                    let context = AppContext(appObject)
+                    shared = Self(context)
+                    if let classLoaderObj = context.getClassLoader() {
+                        JNICache.shared.setClassLoader(classLoaderObj)
+                    }
                 }
             }
         }
-        start()
+        Task { @MainActor in
+            start()
+        }
     }
     #endif
     
+    @MainActor
     @discardableResult
     private static func start() -> DroidApp {
         guard !shared.isStarted else { return shared }
@@ -267,6 +274,7 @@ open class DroidApp: @unchecked Sendable {
         case generateAllActivities
     }
     
+    @MainActor
     private func parseAndroidBuildingArguments() {
         var args = CommandLine.arguments
         
@@ -285,6 +293,7 @@ open class DroidApp: @unchecked Sendable {
         exit(1)
     }
     
+    @MainActor
     private func proceedAndroidBuildingAction(_ action: _AndroidBuildingAction, _ args: [String]) {
         switch action {
         case .gradleDependencies:
@@ -400,6 +409,7 @@ var androidBuildingArguments: AndroidBuildingArguments {
     // return v
 }
 extension Int32 {
+    @MainActor
     public static func nextViewId() -> Int32 {
         DroidApp.getNextViewId()
     }
@@ -439,13 +449,15 @@ public func configurationChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appO
     env.getIntArrayRegion(newValues, start: 0, length: length, buffer: &swiftArray)
     if let shared = DroidApp.shared {
         InnerLog.d("update config 5.1")
-        if shared.isStarted {
-            InnerLog.d("update config 5.2")
-        } else {
-            InnerLog.d("update config 5.3")
+        Task { @MainActor in
+            if shared.isStarted {
+                InnerLog.d("update config 5.2")
+            } else {
+                InnerLog.d("update config 5.3")
+            }
+            shared.updateConfiguration(swiftArray)
+            InnerLog.d("update config 5.4")
         }
-        shared.updateConfiguration(swiftArray)
-        InnerLog.d("update config 5.4")
     } else {
         InnerLog.d("update config failed, shared app is nil")
     }

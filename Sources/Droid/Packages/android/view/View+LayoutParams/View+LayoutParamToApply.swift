@@ -1,19 +1,13 @@
 public protocol LayoutParamToApply {
     var key: LayoutParamKey { get }
-    #if os(Android)
     @MainActor
-    #endif
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams)
-    #if os(Android)
     @MainActor
-    #endif
     func applyOrAppend<T: View>(_ view: T) -> T
 }
 
 extension LayoutParamToApply {
-    #if os(Android)
     @MainActor
-    #endif
     @discardableResult
     public func applyOrAppend<T: View>(_ view: T) -> T {
         if let instance = view.instance, let lp = instance.layoutParams() {

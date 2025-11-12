@@ -13,9 +13,7 @@ fileprivate extension ViewPropertyKey {
 protocol _SetTextable: SetTextable, _AnyView {
     var textState: State<String>? { get set }
 }
-#if os(Android)
 @MainActor
-#endif
 public protocol SetTextable {}
 extension SetTextable {
     @discardableResult

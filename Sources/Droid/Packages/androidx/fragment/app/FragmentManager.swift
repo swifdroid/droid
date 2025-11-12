@@ -6,9 +6,7 @@
 //
 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentManager)
-#if os(Android)
 @MainActor
-#endif
 public final class FragmentManager: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentManager") }
 

@@ -15,9 +15,7 @@
 /// that does not allow custom action views, (e.g. in an overflow menu,) the ActionProvider can perform a default action.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/ActionProvider)
-#if os(Android)
 @MainActor
-#endif
 open class ActionProvider: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { "android/view/ActionProvider" }

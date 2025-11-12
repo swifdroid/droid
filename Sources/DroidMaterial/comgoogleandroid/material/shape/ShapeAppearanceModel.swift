@@ -3,9 +3,7 @@ import Droid
 /// This class models the edges and corners of a shape,
 /// which are used by `MaterialShapeDrawable` to generate
 /// and render the shape for a view's background.
-#if os(Android)
 @MainActor
-#endif
 public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
     /// The JNI class name
     public class var className: JClassName { "com/google/android/material/shape/ShapeAppearanceModel" }

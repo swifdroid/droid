@@ -11,9 +11,7 @@ extension AppCompatActivity: Sendable {}
 extension AppCompatActivity: @unchecked Sendable {}
 #endif
 
-#if os(Android)
 @MainActor
-#endif
 open class AppCompatActivity: FragmentActivity {
     open class override var className: JClassName { "androidx/appcompat/app/AppCompatActivity" }
     open class override var gradleDependencies: [AppGradleDependency] { [.appCompat, .composeBOM] }

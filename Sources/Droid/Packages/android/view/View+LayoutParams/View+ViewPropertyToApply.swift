@@ -2,20 +2,14 @@ public protocol ViewPropertyToApply {
     associatedtype Value
     var key: ViewPropertyKey { get }
     var value: Value { get }
-    #if os(Android)
     @MainActor
-    #endif
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance)
-    #if os(Android)
     @MainActor
-    #endif
     func applyOrAppend<T: View>(_ env: JEnv?, _ view: T) -> T
 }
 
 extension ViewPropertyToApply {
-    #if os(Android)
     @MainActor
-    #endif
     @discardableResult
     public func applyOrAppend<T: AnyView>(_ env: JEnv?, _ view: T) -> T {
         guard let v = view as? _AnyView else { return view }

@@ -5,9 +5,7 @@
 //  Created by Mihael Isaev on 05.08.2025.
 //
 
-#if os(Android)
 @MainActor
-#endif
 public protocol Checkable: ViewInstanceable {
     func checked(_ checked: Bool)
     func isChecked() -> Bool

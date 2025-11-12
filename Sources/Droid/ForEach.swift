@@ -1,6 +1,4 @@
-#if os(Android)
 @MainActor
-#endif
 public protocol AnyForEach: Sendable {
     var orientation: LinearLayout.Orientation? { get }
     var gravity: Gravity? { get }
@@ -12,16 +10,11 @@ public protocol AnyForEach: Sendable {
     func gravity(_ gravity: Gravity) -> Self
 }
 
-open class ForEach<Item: Sendable>: @unchecked Sendable where Item: Hashable {
-    #if os(Android)
+@MainActor
+open class ForEach<Item: Sendable>: @unchecked Sendable, StatesHolder where Item: Hashable {
     public typealias BuildViewHandler = @MainActor @Sendable (Int, Item) -> BodyBuilder.Result
     public typealias BuildViewHandlerValue = @MainActor @Sendable (Item) -> BodyBuilder.Result
     public typealias BuildViewHandlerSimple = @MainActor @Sendable () -> BodyBuilder.Result
-    #else
-    public typealias BuildViewHandler = @Sendable (Int, Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerValue = @Sendable (Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerSimple = @Sendable () -> BodyBuilder.Result
-    #endif
     
     let items: State<[Item]>
     let block: BuildViewHandler

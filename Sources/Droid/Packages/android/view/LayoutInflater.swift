@@ -22,9 +22,7 @@
 /// Note: This class is not thread-safe and a given instance should only be accessed by a single thread.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/LayoutInflater)
-#if os(Android)
 @MainActor
-#endif
 open class LayoutInflater: JObjectable, @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { "android/view/LayoutInflater" }

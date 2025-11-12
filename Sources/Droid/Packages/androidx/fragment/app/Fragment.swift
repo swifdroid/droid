@@ -10,9 +10,7 @@
 /// Interaction with fragments is done through `FragmentManager`, which can be obtained via Activity.getFragmentManager() and Fragment.getFragmentManager().
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/Fragment)
-#if os(Android)
 @MainActor
-#endif
 open class Fragment: NativeFragment, @unchecked Sendable {
     /// The JNI class name
     public static let className: JClassName = "androidx/fragment/app/Fragment"

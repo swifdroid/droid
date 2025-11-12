@@ -6,9 +6,7 @@
 //
 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentTransaction)
-#if os(Android)
 @MainActor
-#endif
 public final class FragmentTransaction: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentTransaction") }
 

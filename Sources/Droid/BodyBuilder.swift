@@ -1,14 +1,8 @@
-#if os(Android)
 @MainActor
-#endif
 @resultBuilder public struct BodyBuilder {
     public typealias Result = BodyBuilderItemable
-    #if os(Android)
     public typealias SingleView = @MainActor @Sendable () -> Result
-    #else
-    public typealias SingleView = @Sendable () -> Result
-    #endif
-    
+
     /// Empty block support
     public static func buildPartialBlock(first: Void) -> Result {
         EmptyBodyBuilderItem()

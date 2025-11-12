@@ -10,9 +10,7 @@
 /// See the [animation package description file](https://developer.android.com/reference/android/view/animation/package-summary).
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/animation/Animation)
-#if os(Android)
 @MainActor
-#endif
 open class Animation: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/view/animation/Animation" }
 
@@ -580,9 +578,7 @@ public final class TranslateAnimation: Animation, @unchecked Sendable {
 /// This is the superclass for classes which provide basic support for animations which can be started, ended, and have AnimatorListeners added to them.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/animation/Animator)
-#if os(Android)
 @MainActor
-#endif
 open class Animator: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/view/animation/Animator" }
 
@@ -1149,9 +1145,7 @@ extension TimeAnimator {
 }
 
 /// [Learn more](https://developer.android.com/reference/android/view/animation/TimeInterpolator)
-#if os(Android)
 @MainActor
-#endif
 open class TimeInterpolator: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/view/animation/TimeInterpolator" }
 
@@ -1587,9 +1581,7 @@ public final class PathInterpolator: BaseInterpolator, @unchecked Sendable {
 /// and row described by its left and top coordinates, but not those of its bottom and right.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/graphics/Rect)
-#if os(Android)
 @MainActor
-#endif
 public final class Rect: JObjectable, @unchecked Sendable {
     public static var className: JClassName { "android/graphics/Rect" }
 
@@ -1950,9 +1942,7 @@ extension Rect {
 /// Note: most methods do not check to see that the coordinates are sorted correctly (i.e. left <= right and top <= bottom).
 /// 
 /// [Learn more](https://developer.android.com/reference/android/graphics/RectF)
-#if os(Android)
 @MainActor
-#endif
 public final class RectF: JObjectable, @unchecked Sendable {
     public static var className: JClassName { "android/graphics/RectF" }
 
@@ -2293,9 +2283,7 @@ extension RectF {
 /// either filled or stroked (based on the paint's Style), or it can be used for clipping or to draw text on a path.
 ///
 /// [Learn more](https://developer.android.com/reference/android/graphics/Path)
-#if os(Android)
 @MainActor
-#endif
 public final class Path: JObjectable, @unchecked Sendable {
     public static var className: JClassName { "android/graphics/Path" }
 
@@ -2704,9 +2692,7 @@ extension Path {
     /// Specifies how closed shapes (e.g. rects, ovals) are oriented when they are added to a path.
     /// 
     /// [Learn more](https://developer.android.com/reference/android/graphics/Path.Direction)
-    #if os(Android)
     @MainActor
-    #endif
     public final class Direction: JObjectable, Sendable {
         public static var className: JClassName { "android/graphics/Path$Direction" }
 
@@ -2746,9 +2732,7 @@ extension Path {
     /// The logical operations that can be performed when combining two paths.
     /// 
     /// [Learn more](https://developer.android.com/reference/android/graphics/Path.Op)
-    #if os(Android)
     @MainActor
-    #endif
     public final class Op: JObjectable, @unchecked Sendable {
         public static var className: JClassName { "android/graphics/Path$Op" }
 
@@ -2805,9 +2789,7 @@ extension Path {
     /// Enum for the ways a path may be filled.
     /// 
     /// [Learn more](https://developer.android.com/reference/android/graphics/Path.FillType)
-    #if os(Android)
     @MainActor
-    #endif
     public final class FillType: JObjectable, @unchecked Sendable {
         public static var className: JClassName { "android/graphics/Path$FillType" }
 

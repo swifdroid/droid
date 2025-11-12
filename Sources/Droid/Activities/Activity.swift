@@ -17,9 +17,7 @@ extension Activity: Sendable {}
 extension Activity: @unchecked Sendable {}
 #endif
 
-#if os(Android)
 @MainActor
-#endif
 open class Activity: AnyActivity {
     public typealias Style = RStyle
     public typealias IntentFilter = DroidApp.IntentFilter
@@ -283,9 +281,7 @@ public final class ActivityContext: Contextable, JObjectable, JClassLoadable, @u
         self.object = object
     }
     
-    #if os(Android)
     @MainActor
-    #endif
     public var R: InnerR { .init() }
 
     /// Helper method that returns the full path to an activity class.

@@ -10,9 +10,7 @@
 /// Snackbars appear above all other elements on screen and only one can be displayed at a time.
 ///
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/snackbar/Snackbar)
-#if os(Android)
 @MainActor
-#endif
 public final class Snackbar: JObjectable, Sendable {
     /// The JNI class name
     public class var className: JClassName { "com/google/android/material/snackbar/Snackbar" }

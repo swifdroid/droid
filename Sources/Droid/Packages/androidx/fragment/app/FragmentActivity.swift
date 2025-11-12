@@ -14,9 +14,7 @@ extension FragmentActivity: @unchecked Sendable {}
 /// Base class for activities that want to use the support-based Fragments.
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentActivity)
-#if os(Android)
 @MainActor
-#endif
 open class FragmentActivity: ComponentActivity {
     open class override var className: JClassName { "androidx/fragment/app/FragmentActivity" }
     open class override var gradleDependencies: [AppGradleDependency] { [.composeBOM] }

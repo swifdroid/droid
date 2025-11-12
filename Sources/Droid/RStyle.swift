@@ -9,9 +9,7 @@ public struct RStyle: Sendable {
     let value: String
     let resourseId: Int32
 
-    #if os(Android)
     @MainActor
-    #endif
     public init(stringLiteral value: String) {
         if value.hasPrefix("@style/") {
             self.value = value
@@ -58,11 +56,7 @@ public struct RStyle: Sendable {
     }
 }
 
-#if os(Android)
 extension RStyle: @MainActor ExpressibleByStringLiteral {}
-#else
-extension RStyle: ExpressibleByStringLiteral {}
-#endif
 
 extension RStyle {
     // MARK: - Custom Application Theme

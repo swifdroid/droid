@@ -9,9 +9,7 @@ import JNIKit
 
 public typealias R = InnerR
 
-#if os(Android)
 @MainActor
-#endif
 public struct InnerR: Sendable {
     public let id: Resource
     public let attr: Resource

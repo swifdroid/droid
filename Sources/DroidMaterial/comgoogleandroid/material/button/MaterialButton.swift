@@ -37,9 +37,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
 /// Specify the radius of all four corners of the button using the app:cornerRadius attribute.
 /// 
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/button/MaterialButton)
-#if os(Android)
 @MainActor
-#endif
 open class MaterialButton: AppCompatButton, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.button.MaterialButton }
