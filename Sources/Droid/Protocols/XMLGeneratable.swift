@@ -68,6 +68,7 @@ struct ManifestTagParamName: ExpressibleByStringLiteral, Hashable, Equatable {
 	static var androidDescription: Self { "android:description" }
 	static var androidGlEsVersion: Self { "android:glEsVersion" }
 	static var androidIcon: Self { "android:icon" }
+	static var androidIsMonitoringTool: Self { "android:isMonitoringTool" }
 	static var androidRoundIcon: Self { "android:roundIcon" }
 	static var androidLabel: Self { "android:label" }
 	static var androidName: Self { "android:name" }

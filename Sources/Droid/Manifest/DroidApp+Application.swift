@@ -507,6 +507,29 @@ extension DroidApp {
 		public static func icon(_ value: String) -> Self {
 			Self().icon(value)
 		}
+
+		// MARK: -
+
+		/// Indicates that this application is designed to monitor other individuals.
+		///
+		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#isMonitoringTool)
+		/// 
+		/// [Learn even more](https://support.google.com/googleplay/android-developer/answer/12955211?hl=en)
+		public func isMonitoringTool(_ value: IsMonitoringTool) -> Self {
+			metaData {
+				.name("isMonitoringTool")
+				.value(value.value)
+			}
+		}
+
+		/// Indicates that this application is designed to monitor other individuals.
+		///
+		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#isMonitoringTool)
+		/// 
+		/// [Learn even more](https://support.google.com/googleplay/android-developer/answer/12955211?hl=en)
+		public static func isMonitoringTool(_ value: IsMonitoringTool) -> Self {
+			Self().isMonitoringTool(value)
+		}
 		
 		// MARK: -
 		
