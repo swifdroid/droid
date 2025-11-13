@@ -82,6 +82,7 @@ struct ManifestTagParamName: ExpressibleByStringLiteral, Hashable, Equatable {
 	static var androidAllowBackup: Self { "android:allowBackup" }
 	static var androidAllowClearUserData: Self { "android:allowClearUserData" }
 	static var androidAllowNativeHeapPointerTagging: Self { "android:allowNativeHeapPointerTagging" }
+	static var androidAppCategory: Self { "android:appCategory" }
 	static var androidBackupAgent: Self { "android:backupAgent" }
 	static var androidBackupInForeground: Self { "android:backupInForeground" }
 	static var androidBanner: Self { "android:banner" }

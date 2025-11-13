@@ -111,6 +111,33 @@ extension DroidApp {
 		public static func allowNativeHeapPointerTagging(_ value: Bool = true) -> Self {
 			Self().allowNativeHeapPointerTagging(value)
 		}
+
+		// MARK: -
+
+		/// Declares the category of this app.
+		/// 
+		/// Categories are used to cluster multiple apps together into meaningful groups,
+		/// such as when summarizing battery, network, or disk usage.
+		///
+		/// Only define this value for apps that fit well into one of the specific categories.
+		///
+		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#appCategory)
+		public func appCategory(_ value: AppCategory) -> Self {
+			params[.androidAppCategory] = ManifestTagParamValue(value).value
+			return self
+		}
+
+		/// Declares the category of this app.
+		/// 
+		/// Categories are used to cluster multiple apps together into meaningful groups,
+		/// such as when summarizing battery, network, or disk usage.
+		///
+		/// Only define this value for apps that fit well into one of the specific categories.
+		///
+		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#appCategory)
+		public static func appCategory(_ value: AppCategory) -> Self {
+			Self().appCategory(value)
+		}
 		
 		// MARK: -
 		
