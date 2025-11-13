@@ -446,7 +446,7 @@ extension AnyActivity {
 		InnerLog.d("Starting activity 2.2 \(activity)")
         guard
             let env = JEnv.current(),
-            let intent = Intent(env, className)
+            let intent = Intent(env, className: className)
         else {
             InnerLog.c("Unable to create `Intent` for \(activity).")
             return
@@ -471,7 +471,7 @@ extension AnyActivity {
         }
         guard
             let env = JEnv.current(),
-            let intent = Intent(env, .init(stringLiteral: context.activityClass(activity)))
+            let intent = Intent(env, className: JClassName(stringLiteral: context.activityClass(activity)))
         else {
             InnerLog.c("Unable to create `Intent` for \(activity).")
             return
@@ -499,7 +499,7 @@ extension AnyActivity {
             let env = JEnv.current()
 		else { return }
 		let intents: [Intent] = activities.compactMap({
-			Intent(env, .init(stringLiteral: context.activityClass($0)))
+			Intent(env, className: JClassName(stringLiteral: context.activityClass($0)))
 		})
         guard
             intents.count == activities.count,

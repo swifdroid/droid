@@ -5,13 +5,16 @@
 //  Created by Mihael Isaev on 23.04.2022.
 //
 
-public struct IntentActionType: ExpressibleByStringLiteral {
-	let value: String
-	
-	public init(stringLiteral value: StringLiteralType) {
-		self.value = value
-	}
-	
+/// [Learn more](https://developer.android.com/reference/android/content/Intent#ACTION_MAIN)
+public struct IntentActionType: ExpressibleByStringLiteral, StringValuable, Sendable, CustomStringConvertible {
+    public let value: String
+    
+    public init(stringLiteral value: StringLiteralType) {
+        self.value = value
+    }
+
+    public var description: String { value }
+
 	/// Broadcast Action: The user has switched the phone into or out of Airplane Mode.
 	/// One or more radios have been turned off or on.
 	///

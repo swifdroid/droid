@@ -5,12 +5,14 @@
 //  Created by Mihael Isaev on 23.04.2022.
 //
 
-public struct IntentCategoryType: ExpressibleByStringLiteral {
-	let value: String
-	
-	public init(stringLiteral value: StringLiteralType) {
-		self.value = value
-	}
+public struct IntentCategoryType: ExpressibleByStringLiteral, StringValuable, Sendable, CustomStringConvertible {
+    public let value: String
+    
+    public init(stringLiteral value: StringLiteralType) {
+        self.value = value
+    }
+
+    public var description: String { value }
 	
 	/// The accessibility shortcut is a global gesture for users with disabilities to trigger an important
 	/// for them accessibility feature to help developers determine whether they want to make their activity a shortcut target.
