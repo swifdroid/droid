@@ -116,8 +116,8 @@ extension DroidApp {
 		/// Requests the activity to be displayed in wide color gamut mode on compatible devices.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#colormode)
-		public func colorMode(_ value: String) -> Self {
-			params[.androidColorMode] = value
+		public func colorMode(_ value: ActivityColorMode) -> Self {
+			params[.androidColorMode] = ManifestTagParamValue(value.rawValue).value
 			return self
 		}
 		

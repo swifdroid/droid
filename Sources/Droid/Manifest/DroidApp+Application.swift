@@ -1149,7 +1149,7 @@ extension DroidApp {
 				manifestTag.param(.androidClearTaskOnLaunch, ManifestTagParamValue(value).value)
 			}
 			if let value = activity.colorMode {
-				manifestTag.param(.androidColorMode, value)
+				manifestTag.param(.androidColorMode, ManifestTagParamValue(value.rawValue).value)
 			}
 			if activity.configChanges.count > 0 {
 				manifestTag.param(.androidConfigChanges, ManifestTagParamValue(values: activity.configChanges).value)

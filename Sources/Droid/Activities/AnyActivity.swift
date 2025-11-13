@@ -73,7 +73,7 @@ public protocol AnyActivity: AnyObject, Contextable {
     /// Requests the activity to be displayed in wide color gamut mode on compatible devices.
     ///
     /// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#colormode)
-    static nonisolated var colorMode: String? { get }
+    static nonisolated var colorMode: ActivityColorMode? { get }
 
     /// Lists configuration changes that the activity will handle itself. For the rest activity will be simply restarted.
     ///
@@ -414,6 +414,12 @@ public protocol AnyActivity: AnyObject, Contextable {
 	///
 	/// Override this to handle the user's response to permission requests.
 	func onRequestPermissionsResult(requestCode: Int, results: [ActivityPermissionResult], deviceId: Int)
+}
+
+public enum ActivityColorMode: Int32, Sendable {
+	case `default` = 0
+	case wideGamut = 1
+	case hdr = 2
 }
 
 public struct ActivityPermissionResult: Sendable {
