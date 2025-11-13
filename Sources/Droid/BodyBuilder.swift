@@ -107,7 +107,7 @@
     }
 
     private static func parseViewForAndroidBuilding(_ view: View) {
-        DroidApp.shared._gradleDependencies.append(type(of: view).gradleDependencies)
+        DroidApp.shared._gradleDependencies.append(type(of: view).gradleDependencies.map { $0.value })
     }
     #endif
 }
