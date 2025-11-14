@@ -35,7 +35,7 @@ open class Activity: AnyActivity {
 	open class nonisolated var autoRemoveFromRecents: Bool? { nil }
 	open class nonisolated var banner: String? { nil }
 	open class nonisolated var clearTaskOnLaunch: Bool? { nil }
-	open class nonisolated var colorMode: String? { nil }
+	open class nonisolated var colorMode: ActivityColorMode? { nil }
 	open class nonisolated var configChanges: [ConfigChangeType] { [] }
 	open class nonisolated var directBootAware: Bool? { nil }
 	open class nonisolated var documentLaunchMode: DocumentLaunchMode? { nil }
