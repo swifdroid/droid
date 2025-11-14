@@ -173,6 +173,8 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         self.id = id ?? .nextViewId()
         InnerLog.d("❤️❤️❤️ INIT View 1 \(self)")
         _setup()
+        body { body }
+        buildUI()
     }
 
     @discardableResult
@@ -185,6 +187,8 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         InnerLog.d("❤️❤️❤️ INIT View 2 viewInstance: \(object.className.fullName) ref: \(object.ref.ref)")
         #endif
         _setup()
+        body { body }
+        buildUI()
     }
     
     @discardableResult
@@ -193,6 +197,8 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         InnerLog.d("❤️❤️❤️ INIT View 3 \(self)")
         _setup()
         body { content() }
+        body { body }
+        buildUI()
     }
 
     deinit {
@@ -425,11 +431,15 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     
     // public func background(Object) -> Self {}
 
+    @BodyBuilder open var body: Body { EmptyBodyBuilderItem() }
+
     @discardableResult
     open func body(@BodyBuilder block: BodyBuilder.SingleView) -> Self {
         addItem(block())
         return self
     }
+
+    open func buildUI() {}
     
     func addItem(_ item: BodyBuilderItemable, at index: Int? = nil) {
         addItem(item.bodyBuilderItem, at: index)
