@@ -18,7 +18,7 @@ public struct PersistableMode: ExpressibleByStringLiteral, StringValuable {
 	/// When the system restarts, the activity task is preserved, but only the root activity's launching intent is used.
 	///
 	/// Default value.
-	public static var persistRootOnly: Self { "persistRootOnly" }
+	public static var rootOnly: Self { "persistRootOnly" }
 	
 	/// This activity's state is preserved, along with the state of each activity higher up
 	/// the back stack that has its own persistableMode attribute set to persistAcrossReboots.
@@ -26,8 +26,8 @@ public struct PersistableMode: ExpressibleByStringLiteral, StringValuable {
 	/// If an activity doesn't have a persistableMode attribute that is set to persistAcrossReboots,
 	/// or if it's launched using the Intent. **FLAG_ACTIVITY_NEW_DOCUMENT** flag,
 	/// then that activity, along with all activities higher up the back stack, aren't preserved.
-	public static var persistAcrossReboots: Self { "persistAcrossReboots" }
+	public static var acrossReboots: Self { "persistAcrossReboots" }
 	
 	/// The activity's state isn't preserved.
-	public static var persistNever: Self { "persistNever" }
+	public static var never: Self { "persistNever" }
 }
