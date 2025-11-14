@@ -27,7 +27,7 @@ public struct LockTaskMode: ExpressibleByStringLiteral, StringValuable {
 	/// then this mode is identical to always, except that the activity needs to call `stopLockTask()`
 	/// before being able to finish if it is the last locked task.
 	/// If the DPC does not authorize this package then this mode is identical to normal.
-	public static var if_whitelisted: Self { "if_whitelisted" }
+	public static var ifWhitelisted: Self { "if_whitelisted" }
 	
 	/// Tasks rooted at this activity always launch into lock task mode.
 	///
