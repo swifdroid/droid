@@ -12,7 +12,7 @@ extension DroidApp {
 	public class IntentFilter: ManifestTag {
         override class var name: String { "intent-filter" }
 		
-		public static var mainLauncher: IntentFilter { .init().action(.MAIN).category(.LAUNCHER) }
+		public static var mainLauncher: IntentFilter { .init().action(.main).category(.launcher) }
 
 		public required override init() {
             super.init()
