@@ -19,6 +19,8 @@ extension Activity: @unchecked Sendable {}
 
 @MainActor
 open class Activity: AnyActivity {
+    /// The body of the view hierarchy.
+    public typealias Body = BodyBuilderItemable
     public typealias Style = RStyle
     public typealias IntentFilter = DroidApp.IntentFilter
     public typealias MetaData = DroidApp.MetaData
