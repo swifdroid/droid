@@ -77,6 +77,8 @@ extension JClassNameable {
 }
 
 open class View: _AnyView, JClassNameable, @unchecked Sendable {
+    public typealias Body = BodyBuilder.Result
+
     /// The JNI class name
     open class var className: JClassName { .android.view.View }
 
