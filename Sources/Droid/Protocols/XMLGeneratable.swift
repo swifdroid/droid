@@ -179,6 +179,10 @@ struct ManifestTagParamValue {
 	init (_ value: Int) {
 		self.value = "\(value)"
 	}
+
+	init (_ value: Int32) {
+		self.value = "\(value)"
+	}
 	
 	init (_ value: Double) {
 		self.value = "\(value)"
