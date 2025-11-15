@@ -194,7 +194,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	/// The name here must match the class name given to the corresponding `<activity>` element's `android:name` attribute.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#parent)
-	static nonisolated var parentActivityName: String? { get }
+	static nonisolated var parentActivityName: AnyActivity.Type? { get }
 	
 	/// Defines how an instance of an activity is preserved within a containing task across device restarts.
 	///

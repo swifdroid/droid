@@ -337,8 +337,8 @@ extension DroidApp {
 		/// The name here must match the class name given to the corresponding `<activity>` element's `android:name` attribute.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#parent)
-		public func parentActivityName(_ value: String) -> Self {
-			params[.androidParentActivityName] = value
+		public func parentActivityName(_ value: AnyActivity.Type) -> Self {
+			params[.androidParentActivityName] = ".\(value)"
 			return self
 		}
 		

@@ -56,7 +56,7 @@ open class Activity: AnyActivity {
 	open class nonisolated var maxAspectRatio: Double? { nil }
 	open class nonisolated var multiprocess: Bool? { nil }
 	open class nonisolated var noHistory: Bool? { nil }
-	open class nonisolated var parentActivityName: String? { nil }
+	open class nonisolated var parentActivityName: AnyActivity.Type? { nil }
 	open class nonisolated var persistableMode: PersistableMode? { nil }
 	open class nonisolated var permission: String? { nil }
 	open class nonisolated var process: String? { nil }
