@@ -221,8 +221,8 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// to specific components or features of this or other applications.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element)
-    public func permission(_ name: ManifestPermission) -> Self {
-        items.insert(DroidApp.Permission().name(name), at: 0)
+    public func permission(_ handler: () -> DroidApp.Permission) -> Self {
+        items.append(handler())
 		return self
 	}
 	
@@ -230,8 +230,8 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// to specific components or features of this or other applications.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element)
-	public static func permission(_ name: ManifestPermission) -> Self {
-		Self().permission(name)
+	public static func permission(_ handler: () -> DroidApp.Permission) -> Self {
+		Self().permission(handler)
 	}
 	
 	// MARK: -
