@@ -117,8 +117,8 @@ extension DroidApp {
 		/// If this attribute is not set, the permission does not belong to a group.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#pgroup)
-		public func permissionGroup(_ value: String) -> Self {
-			params[.androidPermissionGroup] = value
+		public func permissionGroup(_ value: ManifestPermissionGroup) -> Self {
+			params[.androidPermissionGroup] = value.value
 			return self
 		}
 		
@@ -130,7 +130,7 @@ extension DroidApp {
 		/// If this attribute is not set, the permission does not belong to a group.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/permission-element#pgroup)
-		public static func permissionGroup(_ value: String) -> Self {
+		public static func permissionGroup(_ value: ManifestPermissionGroup) -> Self {
 			Self().permissionGroup(value)
 		}
 		
