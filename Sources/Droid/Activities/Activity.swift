@@ -70,8 +70,8 @@ open class Activity: AnyActivity {
 	open class nonisolated var theme: Style? { nil }
 	open class nonisolated var uiOptions: ApplicationUIOptions? { nil }
 	open class nonisolated var windowSoftInputMode: [WindowSoftInputMode] { [] }
-	open class nonisolated var intentFilter: IntentFilter? { nil }
 	open class nonisolated var metaData: MetaData? { nil }
+	open class nonisolated var intentFilters: [IntentFilter] { [] }
     
     var _context: ActivityContext!
     public var context: ActivityContext {

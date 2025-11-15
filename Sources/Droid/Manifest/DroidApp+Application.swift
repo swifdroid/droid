@@ -1271,7 +1271,7 @@ extension DroidApp {
 			if activity.windowSoftInputMode.count > 0 {
 				manifestTag.param(.androidWindowSoftInputMode, ManifestTagParamValue(values: activity.windowSoftInputMode).value)
 			}
-			if let value = activity.intentFilter {
+			for value in activity.intentFilters {
 				manifestTag.items.append(value)
 			}
 			if let value = activity.metaData {

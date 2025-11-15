@@ -274,7 +274,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	/// Specifies the types of intents that an activity, service, or broadcast receiver can respond to.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/intent-filter-element)
-	static nonisolated var intentFilter: DroidApp.IntentFilter? { get }
+	static nonisolated var intentFilters: [IntentFilter] { get }
 	
 	/// A name-value pair for an item of additional, arbitrary data that can be supplied to the parent component.
 	///
@@ -414,6 +414,10 @@ public protocol AnyActivity: AnyObject, Contextable {
 	///
 	/// Override this to handle the user's response to permission requests.
 	func onRequestPermissionsResult(requestCode: Int, results: [ActivityPermissionResult], deviceId: Int)
+}
+
+extension AnyActivity {
+	public typealias IntentFilter = DroidApp.IntentFilter
 }
 
 public enum ActivityColorMode: Int32, Sendable {
