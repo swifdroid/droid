@@ -437,7 +437,20 @@ extension AnyActivity {
 }
 
 extension AnyActivity {
-	/// Starts activity the classic way
+	/// Starts activity the classic way with intent
+	public func startActivity(_ intent: Intent, bundle: Bundle? = nil) {
+		#if os(Android)
+		if let bundle {
+			InnerLog.t("Starting activity with intent and bundle 1")
+        	context.callVoidMethod(nil, name: "startActivity", args: intent.object.signed(as: .android.content.Intent), bundle.object.signed(as: Bundle.className))
+		} else {
+			InnerLog.t("Starting activity with intent 1")
+        	context.callVoidMethod(nil, name: "startActivity", args: intent.object.signed(as: .android.content.Intent))
+		}
+        #endif
+	}
+
+	/// Starts activity the classic way simplified
     public func startActivity(_ activity: AnyActivity.Type) {
         #if os(Android)
 		InnerLog.d("Starting activity 1 \(activity)")
@@ -468,7 +481,14 @@ extension AnyActivity {
         startActivity(T.self)
     }
 
-	/// Starts activity the classic way
+	/// Starts activity with result the classic way with intent
+    public func startActivityForResult(_ intent: Intent, requestCode: Int) {
+        #if os(Android)
+        context.callVoidMethod(nil, name: "startActivityForResult", args: intent.object.signed(as: .android.content.Intent), Int32(requestCode))
+        #endif
+    }
+
+	/// Starts activity with result the classic way simplified
     public func startActivityForResult(_ activity: AnyActivity.Type, requestCode: Int) {
         #if os(Android)
         guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
@@ -492,7 +512,39 @@ extension AnyActivity {
         startActivityForResult(T.self, requestCode: requestCode)
     }
 
-	/// Starts multiple activities the classic way
+	/// Starts multiple activities the classic way with intents
+    public func startActivities(_ intents: Intent...) {
+		startActivities(intents)
+	}
+	
+	/// Starts multiple activities the classic way with intents
+    public func startActivities(_ intents: [Intent]) {
+        #if os(Android)
+        InnerLog.t("startActivities with intents init 1")
+		guard
+			let intentClazz = JClass.load(.android.content.Intent)
+        else {
+            InnerLog.e("startActivities with intents init 1.1 exit")
+            return
+        }
+		InnerLog.t("startActivities with intents init 2")
+		guard
+			let env = JEnv.current(),
+			let objectArray = env.newObjectArray(length: Int32(intents.count), clazz: intentClazz)
+		else {
+			InnerLog.e("Unable to instantiate JObjectArray for the Intents.")
+			return
+		}
+		InnerLog.t("startActivities with intents init 3")
+		for (index, intent) in intents.enumerated() {
+			env.setObjectArrayElement(objectArray, index: Int32(index), value: intent.object)
+		}
+		InnerLog.t("startActivities with intents init 4")
+		context.callVoidMethod(nil, name: "startActivities", args: [(objectArray.object, .object(array: true, .android.content.Intent))])
+        #endif
+    }
+	
+	/// Starts multiple activities the classic way simplified
     public func startActivities(_ activities: [AnyActivity.Type]) {
         #if os(Android)
         for activity in activities {
