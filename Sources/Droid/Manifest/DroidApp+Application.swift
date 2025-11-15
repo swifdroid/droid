@@ -1274,7 +1274,7 @@ extension DroidApp {
 			for value in activity.intentFilters {
 				manifestTag.items.append(value)
 			}
-			if let value = activity.metaData {
+			for value in activity.metaData {
 				manifestTag.items.append(value)
 			}
 			items.append(manifestTag)

@@ -279,7 +279,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	/// A name-value pair for an item of additional, arbitrary data that can be supplied to the parent component.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/meta-data-element)
-	static nonisolated var metaData: DroidApp.MetaData? { get }
+	static nonisolated var metaData: [MetaData] { get }
 
 	// MARK: Start Activity
 
@@ -418,6 +418,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 
 extension AnyActivity {
 	public typealias IntentFilter = DroidApp.IntentFilter
+	public typealias MetaData = DroidApp.MetaData
 }
 
 public enum ActivityColorMode: Int32, Sendable {
