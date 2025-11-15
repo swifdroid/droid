@@ -1236,7 +1236,7 @@ extension DroidApp {
 				manifestTag.param(.androidPersistableMode, ManifestTagParamValue(value).value)
 			}
 			if let value = activity.permission {
-				manifestTag.param(.androidPermission, value)
+				manifestTag.param(.androidPermission, value.value)
 			}
 			if let value = activity.process {
 				manifestTag.param(.androidProcess, value)

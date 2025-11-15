@@ -137,8 +137,8 @@ extension DroidApp {
 		/// the target activity or get it to do something via the alias.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#prmsn)
-		public func permission(_ value: String) -> Self {
-			params[.androidPermission] = value
+		public func permission(_ value: ManifestPermission) -> Self {
+			params[.androidPermission] = value.value
 			return self
 		}
 		
@@ -146,7 +146,7 @@ extension DroidApp {
 		/// the target activity or get it to do something via the alias.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#prmsn)
-		public static func permission(_ value: String) -> Self {
+		public static func permission(_ value: ManifestPermission) -> Self {
 			Self().permission(value)
 		}
 		

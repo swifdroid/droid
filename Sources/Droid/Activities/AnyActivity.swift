@@ -205,7 +205,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	/// the activity or otherwise get it to respond to an intent.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#prmsn)
-	static nonisolated var permission: String? { get }
+	static nonisolated var permission: ManifestPermission? { get }
 	
 	/// The name of the process in which the activity should run.
 	///

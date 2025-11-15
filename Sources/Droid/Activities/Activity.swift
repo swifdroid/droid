@@ -58,7 +58,7 @@ open class Activity: AnyActivity {
 	open class nonisolated var noHistory: Bool? { nil }
 	open class nonisolated var parentActivityName: AnyActivity.Type? { nil }
 	open class nonisolated var persistableMode: PersistableMode? { nil }
-	open class nonisolated var permission: String? { nil }
+	open class nonisolated var permission: ManifestPermission? { nil }
 	open class nonisolated var process: String? { nil }
 	open class nonisolated var relinquishTaskIdentity: Bool? { nil }
 	open class nonisolated var resizeableActivity: Bool? { nil }

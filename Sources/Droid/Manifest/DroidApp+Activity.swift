@@ -358,8 +358,8 @@ extension DroidApp {
 		/// the activity or otherwise get it to respond to an intent.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#prmsn)
-		public func permission(_ value: String) -> Self {
-			params[.androidPermission] = value
+		public func permission(_ value: ManifestPermission) -> Self {
+			params[.androidPermission] = value.value
 			return self
 		}
 		
