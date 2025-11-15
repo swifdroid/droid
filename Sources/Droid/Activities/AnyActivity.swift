@@ -322,7 +322,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	/// Params:
 	///   - requestCode: The request code of the activity that you had given
 	/// to `startActivityForResult()`. If there are multiple activities started with this request code, they will all be finished.
-	func finishActivity(requiestCode: Int)
+	func finishActivity(requestCode: Int)
 
 	// MARK: Lifecycle
 
@@ -540,20 +540,25 @@ extension AnyActivity {
 }
 
 extension AnyActivity {
+	/// Call this when your activity is done and should be closed.
 	public func finish() {
 		context.callVoidMethod(nil, name: "finish")
 	}
 
+	/// Finish this activity as well as all activities immediately below
+	/// it in the current task that have the same affinity.
 	public func finishAffinity() {
 		context.callVoidMethod(nil, name: "finishAffinity")
 	}
 
+	/// Call this to finish the activity after completing any ongoing transitions.
 	public func finishAfterTransition() {
 		context.callVoidMethod(nil, name: "finishAfterTransition")
 	}
 
-	public func finishActivity(requiestCode: Int) {
-		context.callVoidMethod(nil, name: "finishActivity", args: Int32(requiestCode))
+	/// Force finish another activity that you had previously started with `startActivityForResult`.
+	public func finishActivity(requestCode: Int) {
+		context.callVoidMethod(nil, name: "finishActivity", args: Int32(requestCode))
 	}
 }
 
