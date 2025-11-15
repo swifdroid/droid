@@ -311,6 +311,30 @@ extension DroidApp {
 		public static func enabled(_ value: Bool = true) -> Self {
 			Self().enabled(value)
 		}
+
+		// MARK: -
+
+		/// This flag lets you opt out of predictive system animations at the app level.
+		/// 
+		/// Set `enableOnBackInvokedCallback(false)` to turn off predictive back animations
+		/// at the app level and instruct the system to ignore calls to the `OnBackInvokedCallback` platform API.
+		///
+		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#enableOnBackInvokedCallback)
+		public func enableOnBackInvokedCallback(_ value: Bool = true) -> Self {
+			params[.androidEnableOnBackInvokedCallback] = ManifestTagParamValue(value).value
+			return self
+		}
+		// TODO: add it to activity as well according to https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture
+
+		/// This flag lets you opt out of predictive system animations at the app level.
+		/// 
+		/// Set `enableOnBackInvokedCallback(false)` to turn off predictive back animations
+		/// at the app level and instruct the system to ignore calls to the `OnBackInvokedCallback` platform API.
+		///
+		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#enableOnBackInvokedCallback)
+		public static func enableOnBackInvokedCallback(_ value: Bool = true) -> Self {
+			Self().enableOnBackInvokedCallback(value)
+		}
 		
 		// MARK: -
 		

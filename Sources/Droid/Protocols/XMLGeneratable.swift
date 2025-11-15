@@ -90,6 +90,7 @@ struct ManifestTagParamName: ExpressibleByStringLiteral, Hashable, Equatable {
 	static var androidDataExtractionRules: Self { "android:dataExtractionRules" }
 	static var androidDebuggable: Self { "android:debuggable" }
 	static var androidEnabled: Self { "android:enabled" }
+	static var androidEnableOnBackInvokedCallback: Self { "android:enableOnBackInvokedCallback" }
 	static var androidExtractNativeLibs: Self { "android:extractNativeLibs" }
 	static var androidFullBackupContent: Self { "android:fullBackupContent" }
 	static var androidFullBackupOnly: Self { "android:fullBackupOnly" }
