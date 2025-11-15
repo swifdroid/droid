@@ -178,7 +178,9 @@ open class Activity: AnyActivity {
 	open func onRestart() {}
 	open func onStart() {}
 	open func onStop() {}
-	open func onDestroy() {}
+	open func onDestroy() {
+        contentView?.removeFromParent()
+    }
 	open func onAttachedToWindow() {}
 	open func onBackPressed() {}
 	open func onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?, componentCaller: ComponentCaller?) {}
