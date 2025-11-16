@@ -155,15 +155,15 @@ extension DroidApp {
 		/// The name of the activity that can be activated through the alias.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#trgt)
-		public func targetActivity(_ value: String) -> Self {
-			params[.androidTargetActivity] = value
+		public func targetActivity(_ value: AnyActivity.Type) -> Self {
+			params[.androidTargetActivity] = ".\(value.className)"
 			return self
 		}
 		
 		/// The name of the activity that can be activated through the alias.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-alias-element#trgt)
-		public static func targetActivity(_ value: String) -> Self {
+		public static func targetActivity(_ value: AnyActivity.Type) -> Self {
 			Self().targetActivity(value)
 		}
 		
