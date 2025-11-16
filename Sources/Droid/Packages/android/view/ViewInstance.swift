@@ -15,7 +15,7 @@ extension View {
         public unowned let context: ActivityContext
 
         /// View
-        public let view: View
+        public private(set) weak var view: View?
 
         /// Object wrapper
         public let object: JObject
@@ -72,7 +72,7 @@ extension View {
 
         public func setLayoutParams(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) {
             #if os(Android)
-            if let lp = view.layoutParamsForSubviews(width: width, height: height, unit: unit) {
+            if let lp = view?.layoutParamsForSubviews(width: width, height: height, unit: unit) {
                 setLayoutParams(lp)
             }
             #endif
