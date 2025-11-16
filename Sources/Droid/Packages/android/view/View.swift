@@ -63,7 +63,14 @@ enum ViewStatus {
     case new
     case floating(View.ViewInstance)
     case asContentView(View.ViewInstance)
-    case inParent(View, View.ViewInstance)
+    case inParent(WeakView, View.ViewInstance)
+}
+@MainActor
+final class WeakView {
+    weak var view: View?
+    init (_ view: View) {
+        self.view = view
+    }
 }
 
 @MainActor
@@ -162,7 +169,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
             case .new: return nil
             case .floating: return nil
             case .asContentView: return nil
-            case .inParent(let parent, _): return parent
+            case .inParent(let parent, _): return parent.view
         }
     }
 
@@ -389,7 +396,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
         if Self.layoutParamsShouldBeLoaded {
             instance.lpClassName = Self.layoutParamsClass.className
         }
-        self.status = .inParent(parent, instance)
+        self.status = .inParent(.init(self), instance)
         // InnerLog.d("view(id: \(id)) setStatusInParent 3")
         return instance
     }
