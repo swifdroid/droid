@@ -692,8 +692,8 @@ extension DroidApp {
 		/// The activity should also be declared with an `<activity>` element.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#space)
-		public func manageSpaceActivity(_ value: String) -> Self {
-			params[.androidManageSpaceActivity] = value
+		public func manageSpaceActivity(_ value: AnyActivity.Type) -> Self {
+			params[.androidManageSpaceActivity] = value.className
 			return self
 		}
 		
@@ -703,7 +703,7 @@ extension DroidApp {
 		/// The activity should also be declared with an `<activity>` element.
 		///
 		/// [Learn more](https://developer.android.com/guide/topics/manifest/application-element#space)
-		public static func manageSpaceActivity(_ value: String) -> Self {
+		public static func manageSpaceActivity(_ value: AnyActivity.Type) -> Self {
 			Self().manageSpaceActivity(value)
 		}
 		
