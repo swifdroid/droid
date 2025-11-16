@@ -748,6 +748,7 @@ extension DroidApp {
 			params[.androidNetworkSecurityConfig] = value
 			return self
 		}
+		// TODO: build this kind of XML configs also from Swift
 		
 		/// Specifies the name of the XML file that contains your application's
 		/// [Network Security Configuration](https://developer.android.com/training/articles/security-config).
