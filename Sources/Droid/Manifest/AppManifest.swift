@@ -200,17 +200,21 @@ public class AppManifest: DroidApp.ManifestTag {
 	
 	// MARK: -
 	
-	/// Specifies each screen configuration with which the application is compatible.
+	/// Declares an **Instrumentation** class that lets you monitor an application's interaction with the system.
+	/// 
+	/// The `Instrumentation` object is instantiated before any of the application's components.
 	///
-	/// [Learn more](https://developer.android.com/guide/topics/manifest/compatible-screens-element)
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/instrumentation-element)
 	public func instrumentation(_ handler: () -> DroidApp.Instrumentation) -> Self {
 		items.append(handler())
 		return self
 	}
 	
-	/// Specifies each screen configuration with which the application is compatible.
+	/// Declares an **Instrumentation** class that lets you monitor an application's interaction with the system.
+	/// 
+	/// The `Instrumentation` object is instantiated before any of the application's components.
 	///
-	/// [Learn more](https://developer.android.com/guide/topics/manifest/compatible-screens-element)
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/instrumentation-element)
 	public static func instrumentation(_ handler: @escaping () -> DroidApp.Instrumentation) -> Self {
 		Self().instrumentation(handler)
 	}
@@ -259,6 +263,8 @@ public class AppManifest: DroidApp.ManifestTag {
 	
 	// MARK: -
 	
+	/// Declares a permission that the application must have in order to access a particular feature or API.
+	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-permission-element)
     public func usesPermission(_ name: ManifestPermission) -> Self {
         let value = DroidApp.UsesPermission().name(name)
@@ -267,6 +273,8 @@ public class AppManifest: DroidApp.ManifestTag {
 		return self
 	}
 	
+	/// Declares a permission that the application must have in order to access a particular feature or API.
+	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-permission-element)
 	public static func usesPermission(_ name: ManifestPermission) -> Self {
 		Self().usesPermission(name)
@@ -274,6 +282,8 @@ public class AppManifest: DroidApp.ManifestTag {
 	
 	// MARK: -
 	
+	/// Declares a hardware or software feature that the application requires or can use.
+	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
     public func usesFeature(_ name: ManifestFeature, required: Bool = true) -> Self {
         let value = DroidApp.UsesFeature().name(name).required(required)
@@ -282,6 +292,8 @@ public class AppManifest: DroidApp.ManifestTag {
 		return self
 	}
 	
+	/// Declares a hardware or software feature that the application requires or can use.
+	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
 	public static func usesFeature(_ name: ManifestFeature) -> Self {
 		Self().usesFeature(name)

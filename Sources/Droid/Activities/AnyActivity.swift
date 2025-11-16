@@ -231,7 +231,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	
 	/// Whether or not the activity is shown when the device's current user is different
 	/// than the user who launched the activity. You can set this attribute
-	/// to a literal value—"true" or "false"—or you can set the attribute
+	/// to a literal value – "true" or "false" – or you can set the attribute
 	/// to a resource or theme attribute that contains a boolean value.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/activity-element#showForAllUsers)
@@ -355,7 +355,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 
 	/// Called when the activity is becoming visible to the user.
     ///
-    /// Happens after `onCreate()` (for a new instance) or `onRestart()` (for a restarted one).
+    /// Happens after `init()` (for a new instance) or `onRestart()` (for a restarted one).
     /// Use this for UI setup, registering receivers, or refreshing views.
 	func onStart()
 
