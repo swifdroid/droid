@@ -186,7 +186,7 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// Specifies each screen configuration with which the application is compatible.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/compatible-screens-element)
-	public func compatibleScreen(_ handler: () -> DroidApp.Screen) -> Self {
+	public func compatibleScreens(_ handler: () -> DroidApp.CompatibleScreens) -> Self {
 		items.append(handler())
 		return self
 	}
@@ -194,8 +194,8 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// Specifies each screen configuration with which the application is compatible.
 	///
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/compatible-screens-element)
-	public static func compatibleScreen(_ handler: @escaping () -> DroidApp.Screen) -> Self {
-		Self().compatibleScreen(handler)
+	public static func compatibleScreens(_ handler: @escaping () -> DroidApp.CompatibleScreens) -> Self {
+		Self().compatibleScreens(handler)
 	}
 	
 	// MARK: -

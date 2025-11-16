@@ -6,18 +6,31 @@
 //
 
 extension DroidApp {
+	/// Specifies a single screen configuration with which the application is compatible.
+	///
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/compatible-screens-element#screen)
 	public class Screen: ManifestTag {
         override class var name: String { "screen" }
 		
-		var screenSizes: [ScreenSize] = []
-		var screenDensities: [ScreenDensity] = []
+		public init (_ size: ScreenSize, _ density: ScreenDensity) {
+			super.init()
+			params[.androidScreenSize] = ManifestTagParamValue(size).value
+			params[.androidScreenDensity] = ManifestTagParamValue(density).value
+		}
 		
-        override func missingParams() -> [String] {
+		required override init() {
+			super.init()
+		}
+
+		override func missingParams() -> [String] {
             guard params.keys.contains(.androidScreenSize), params.keys.contains(.androidScreenDensity) else { return ["screenSizes", "screenDensities"] }
 			return []
 		}
 	}
 	
+	/// Specifies each screen configuration with which the application is compatible.
+	///
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/compatible-screens-element)
 	public class CompatibleScreens: ManifestTag {
         override class var name: String { "compatible-screens" }
 		
@@ -25,9 +38,15 @@ extension DroidApp {
             super.init()
         }
 		
-		public func screen(_ screen: Screen) -> Self {
-			items.append(screen)
+		/// Single screen configuration with which the application is compatible.
+		public func screen(_ size: ScreenSize, _ density: ScreenDensity) -> CompatibleScreens {
+			items.append(Screen(size, density))
 			return self
+		}
+
+		/// Single screen configuration with which the application is compatible.
+		public static func screen(_ size: ScreenSize, _ density: ScreenDensity) -> CompatibleScreens {
+			CompatibleScreens().screen(size, density)
 		}
 		
         override func missingItems() -> [String] {
