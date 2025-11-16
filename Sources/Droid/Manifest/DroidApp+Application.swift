@@ -1230,7 +1230,7 @@ extension DroidApp {
 				manifestTag.param(.androidNoHistory, ManifestTagParamValue(value).value)
 			}
 			if let value = activity.parentActivityName {
-				manifestTag.param(.androidParentActivityName, value)
+				manifestTag.param(.androidParentActivityName, ".\(value)")
 			}
 			if let value = activity.persistableMode {
 				manifestTag.param(.androidPersistableMode, ManifestTagParamValue(value).value)
