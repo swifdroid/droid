@@ -1,7 +1,5 @@
 public protocol ViewPropertyToApply {
-    associatedtype Value
     var key: ViewPropertyKey { get }
-    var value: Value { get }
     @MainActor
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance)
     @MainActor

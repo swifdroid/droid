@@ -55,9 +55,10 @@ public final class RecyclerView: ViewGroup, @unchecked Sendable {
 extension ViewPropertyKey {
     static let setLayoutManager: Self = "setLayoutManager"
 }
-struct SetLayoutManagerViewProperty: ViewPropertyToApply {
+final class SetLayoutManagerViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setLayoutManager
     let value: LayoutManager
+    init (_ value: LayoutManager) { self.value = value }
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
         guard
             let lmInstance = value.instantiate(env, instance.context)
@@ -71,7 +72,7 @@ extension RecyclerView {
     /// Set the `RecyclerView.LayoutManager` that this `RecyclerView` will use.
     @discardableResult
     public func layoutManager(_ layoutManager: LayoutManager) -> Self {
-        SetLayoutManagerViewProperty(value: layoutManager).applyOrAppend(nil, self)
+        SetLayoutManagerViewProperty(layoutManager).applyOrAppend(nil, self)
     }
 }
 
@@ -80,14 +81,19 @@ extension RecyclerView {
 extension ViewPropertyKey {
     static let setAdapter: Self = "setAdapter"
 }
-struct SetAdapterViewProperty: ViewPropertyToApply {
+final class SetAdapterViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setAdapter
-    let value: (RecyclerView, AnyRecyclerViewAdapter)
+    weak var recyclerView: RecyclerView?
+    let adapter: AnyRecyclerViewAdapter
+    init (_ recyclerView: RecyclerView, _ adapter: AnyRecyclerViewAdapter) {
+        self.recyclerView = recyclerView
+        self.adapter = adapter
+    }
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
         guard
-            let adapterInstance = value.1.instantiate(instance)
+            let adapterInstance = adapter.instantiate(instance)
         else { return }
-        value.0.adapterInstance = adapterInstance
+        recyclerView?.adapterInstance = adapterInstance
         instance.callVoidMethod(env, name: key.rawValue, args: adapterInstance.object.signed(as: .androidx.recyclerview.widget.RecyclerView.Adapter))
     }
 }
@@ -95,7 +101,7 @@ extension RecyclerView {
     /// Set a new adapter to provide child views on demand.
     @discardableResult
     public func adapter<V: View>(_ adapter: RecyclerViewAdapter<V>) -> Self {
-        SetAdapterViewProperty(value: (self, adapter)).applyOrAppend(nil, self)
+        SetAdapterViewProperty(self, adapter).applyOrAppend(nil, self)
     }
 
     /// Set a new adapter to provide child views on demand.
@@ -106,12 +112,12 @@ extension RecyclerView {
         bindView: @escaping (_ view: V, _ index: Int) -> Void,
         viewType: @escaping ((_ index: Int) -> Int) = { _ in return 0 }
     ) -> Self {
-        SetAdapterViewProperty(value: (self, RecyclerViewAdapter(
+        SetAdapterViewProperty(self, RecyclerViewAdapter(
             count: count,
             createView: createView,
             bindView: bindView,
             viewType: viewType
-        ))).applyOrAppend(nil, self)
+        )).applyOrAppend(nil, self)
     }
 
     /// Set a new adapter to provide child views on demand.
@@ -122,7 +128,7 @@ extension RecyclerView {
         bindView: @escaping (_ view: V, _ item: I, _ index: Int) -> Void,
         viewType: @escaping ((_ item: I, _ index: Int) -> Int) = { _, _ in return 0 }
     ) -> Self {
-        SetAdapterViewProperty(value: (self, RecyclerViewAdapter(
+        SetAdapterViewProperty(self, RecyclerViewAdapter(
             count: { items().count },
             createView: { i in
                 createView(items()[i], i)
@@ -133,7 +139,7 @@ extension RecyclerView {
             viewType: { i in
                 viewType(items()[i], i)
             }
-        ))).applyOrAppend(nil, self)
+        )).applyOrAppend(nil, self)
     }
 
     /// Set a new adapter to provide child views on demand.
@@ -221,8 +227,8 @@ extension RecyclerView {
             if let range = currentModificationRange {
                 self?.notifyItemRangeChanged(startAt: range.start, count: range.count)
             }
-        }
-        return SetAdapterViewProperty(value: (self, adapter)).applyOrAppend(nil, self)
+        }.hold(in: self)
+        return SetAdapterViewProperty(self, adapter).applyOrAppend(nil, self)
     }
 }
 
