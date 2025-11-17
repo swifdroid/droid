@@ -21,7 +21,7 @@ extension SetTextable {
         guard let s = self as? _SetTextable else { return self }
         s.textState?.removeAllListeners()
         s.textState = .init(wrappedValue: value)
-        SetTextViewProperty(value: s).applyOrAppend(nil, s)
+        SetTextViewProperty(s).applyOrAppend(nil, s)
         return self
     }
     @discardableResult
@@ -29,23 +29,24 @@ extension SetTextable {
         guard let s = self as? _SetTextable else { return self }
         s.textState?.removeAllListeners()
         s.textState = value
-        SetTextViewProperty(value: s).applyOrAppend(nil, s)
+        SetTextViewProperty(s).applyOrAppend(nil, s)
         return self
     }
 }
-fileprivate struct SetTextViewProperty: ViewPropertyToApply {
+fileprivate final class SetTextViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setText
-    let value: _SetTextable
+    weak var value: _SetTextable?
+    init (_ value: _SetTextable) { self.value = value }
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
         #if os(Android)
         guard
-            let textState = value.textState
+            let textState = value?.textState
         else { return }
         instance.setText(env, textState.wrappedValue)
-        textState.listen { old, new in
+        textState.listen { [weak instance] old, new in
             guard old != new else { return }
-            instance.setText(env, new)
-        }
+            instance?.setText(env, new)
+        }.hold(in: instance)
         #endif
     }
 }
