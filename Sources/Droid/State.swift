@@ -1,161 +1,203 @@
+import FoundationEssentials
+
 public protocol Stateable: AnyState {
     associatedtype Value
     
     var wrappedValue: Value { get set }
     
-    func beginTrigger(_ trigger: @escaping () -> Void)
-    func endTrigger(_ trigger: @escaping () -> Void)
-    func listen(_ listener: @escaping (_ old: Value, _ new: Value) -> Void)
-    func listen(_ listener: @escaping (_ value: Value) -> Void)
-    func listen(_ listener: @escaping () -> Void)
+    func beginTrigger(_ trigger: @escaping () -> Void) -> HeldState
+    func endTrigger(_ trigger: @escaping () -> Void) -> HeldState
+    func listen(_ listener: @escaping (_ old: Value, _ new: Value) -> Void) -> HeldState
+    func listen(_ listener: @escaping (_ value: Value) -> Void) -> HeldState
+    func listen(_ listener: @escaping () -> Void) -> HeldState
 }
 
+fileprivate final class StateValueBox<Value: Sendable>: @unchecked Sendable {
+    var value: Value
+    init(value: Value) {
+        self.value = value
+    }
+}
+
+@MainActor
 @propertyWrapper
-open class State<Value: Sendable>: Stateable, @unchecked Sendable {
-    private var _originalValue: Value
-    private var _wrappedValue: Value
+public final class State<Value: Sendable>: @MainActor Stateable, StatesHolder, Sendable {
+    private let _originalValue: Value
+    private let _wrappedValue: StateValueBox<Value>
     public var wrappedValue: Value {
-        get { _wrappedValue }
+        get { _wrappedValue.value }
         set {
-            let oldValue = _wrappedValue
-            _wrappedValue = newValue
-            for trigger in beginTriggers {
-                trigger()
+            let oldValue = _wrappedValue.value
+            _wrappedValue.value = newValue
+            for trigger in values.beginTriggers {
+                trigger.value()
             }
-            for listener in listeners {
-                listener(oldValue, newValue)
+            for listener in values.listeners {
+                listener.value(oldValue, newValue)
             }
-            for trigger in endTriggers {
-                trigger()
+            for trigger in values.endTriggers {
+                trigger.value()
             }
         }
     }
     
     public var projectedValue: State<Value> { self }
+    public let statesValues: StatesHolderValuesBox = StatesHolderValuesBox()
 
     init (_ stateA: AnyState, _ stateB: AnyState, _ expression: @escaping () -> Value) {
         let value = expression()
         _originalValue = value
-        _wrappedValue = value
-        stateA.listen {
-            self.wrappedValue = expression()
-        }
-        stateB.listen {
-            self.wrappedValue = expression()
-        }
+        _wrappedValue = StateValueBox(value: value)
+        stateA.listen { [weak self] in
+            self?.wrappedValue = expression()
+        }.hold(in: self)
+        stateB.listen { [weak self] in
+            self?.wrappedValue = expression()
+        }.hold(in: self)
     }
     
     init <A, B>(_ stateA: State<A>, _ stateB: State<B>, _ expression: @escaping (A, B) -> Value) {
         let value = expression(stateA.wrappedValue, stateB.wrappedValue)
         _originalValue = value
-        _wrappedValue = value
-        stateA.listen {
-            self.wrappedValue = expression(stateA.wrappedValue, stateB.wrappedValue)
-        }
-        stateB.listen {
-            self.wrappedValue = expression(stateA.wrappedValue, stateB.wrappedValue)
-        }
+        _wrappedValue = StateValueBox(value: value)
+        stateA.listen { [weak self, weak stateA, weak stateB] in
+            guard let stateA = stateA, let stateB = stateB else { return }
+            self?.wrappedValue = expression(stateA.wrappedValue, stateB.wrappedValue)
+        }.hold(in: self)
+        stateB.listen { [weak self, weak stateA, weak stateB] in
+            guard let stateA = stateA, let stateB = stateB else { return }
+            self?.wrappedValue = expression(stateA.wrappedValue, stateB.wrappedValue)
+        }.hold(in: self)
     }
     
     init <A, B>(_ stateA: State<A>, _ stateB: State<B>, _ expression: @escaping (CombinedDeprecatedResult<A, B>) -> Value) {
         let value = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
         _originalValue = value
-        _wrappedValue = value
-        stateA.listen {
-            self.wrappedValue = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
-        }
-        stateB.listen {
-            self.wrappedValue = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
-        }
+        _wrappedValue = StateValueBox(value: value)
+        stateA.listen { [weak self, weak stateA, weak stateB] in
+            guard let stateA = stateA, let stateB = stateB else { return }
+            self?.wrappedValue = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
+        }.hold(in: self)
+        stateB.listen { [weak self, weak stateA, weak stateB] in
+            guard let stateA = stateA, let stateB = stateB else { return }
+            self?.wrappedValue = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
+        }.hold(in: self)
     }
     
     public init(wrappedValue value: Value) {
         _originalValue = value
-        _wrappedValue = value
+        _wrappedValue = StateValueBox(value: value)
     }
     
     public init (_ stateA: AnyState, _ expression: @escaping () -> Value) {
         let value = expression()
         _originalValue = value
-        _wrappedValue = value
-        stateA.listen {
-            self.wrappedValue = expression()
-        }
+        _wrappedValue = StateValueBox(value: value)
+        stateA.listen { [weak self] in
+            self?.wrappedValue = expression()
+        }.hold(in: self)
     }
     
     public init <A>(_ stateA: State<A>, _ expression: @escaping (A) -> Value) {
         let value = expression(stateA.wrappedValue)
         _originalValue = value
-        _wrappedValue = value
-        stateA.listen {
-            self.wrappedValue = expression(stateA.wrappedValue)
-        }
+        _wrappedValue = StateValueBox(value: value)
+        stateA.listen { [weak self, weak stateA] in
+        guard let value = stateA?.wrappedValue else { return }
+            self?.wrappedValue = expression(value)
+        }.hold(in: self)
     }
     
     public init <A>(_ stateA: State<A>, _ expressionTo: @escaping (A) -> Value, _ expressionFrom: @escaping (Value) -> A) {
         let value = expressionTo(stateA.wrappedValue)
         _originalValue = value
-        _wrappedValue = value
+        _wrappedValue = StateValueBox(value: value)
         var backwardChanged = false
-        stateA.listen {
+        stateA.listen { [weak self, weak stateA] in
             guard !backwardChanged else {
                 backwardChanged = false
                 return
             }
-            self.wrappedValue = expressionTo(stateA.wrappedValue)
-        }
-        self.listen { old, new in
+            guard let value = stateA?.wrappedValue else { return }
+            self?.wrappedValue = expressionTo(value)
+        }.hold(in: self)
+        self.listen { [weak stateA] old, new in
             backwardChanged = true
-            stateA.wrappedValue = expressionFrom(new)
-        }
+            stateA?.wrappedValue = expressionFrom(new)
+        }.hold(in: self)
+    }
+
+    deinit {
+        InnerLog.t("🟠🟠🟠 State deinit: \(_originalValue)")
+        releaseStates()
     }
     
     public func reset() {
-        let oldValue = _wrappedValue
-        _wrappedValue = _originalValue
-        for trigger in beginTriggers {
-            trigger()
+        let oldValue = _wrappedValue.value
+        _wrappedValue.value = _originalValue
+        for trigger in values.beginTriggers {
+            trigger.value()
         }
-        for listener in listeners {
-            listener(oldValue, _wrappedValue)
+        for listener in values.listeners {
+            listener.value(oldValue, _wrappedValue.value)
         }
-        for trigger in endTriggers {
-            trigger()
+        for trigger in values.endTriggers {
+            trigger.value()
         }
+    }
+
+    public func removeListener(id: UUID) {
+        values.beginTriggers.removeValue(forKey: id)
+        values.endTriggers.removeValue(forKey: id)
+        values.listeners.removeValue(forKey: id)
     }
     
     public func removeAllListeners() {
-        beginTriggers.removeAll()
-        endTriggers.removeAll()
-        listeners.removeAll()
+        values.beginTriggers.removeAll()
+        values.endTriggers.removeAll()
+        values.listeners.removeAll()
     }
     
     public typealias Trigger = () -> Void
     public typealias Listener = (_ old: Value, _ new: Value) -> Void
     public typealias SimpleListener = (_ value: Value) -> Void
     
-    private var beginTriggers: [Trigger] = []
-    private var endTriggers: [Trigger] = []
-    private var listeners: [Listener] = []
+    private final class ValuesBox: @unchecked Sendable {
+        var beginTriggers: [UUID: Trigger] = [:]
+        var endTriggers: [UUID: Trigger] = [:]
+        var listeners: [UUID: Listener] = [:]
+    }
+
+    private let values: ValuesBox = ValuesBox()
     
-    public func beginTrigger(_ trigger: @escaping Trigger) {
-        beginTriggers.append(trigger)
+    public func beginTrigger(_ trigger: @escaping Trigger) -> HeldState {
+        let id = UUID()
+        values.beginTriggers[id] = trigger
+        return HeldState(id, self)
     }
     
-    public func endTrigger(_ trigger: @escaping Trigger) {
-        endTriggers.append(trigger)
+    public func endTrigger(_ trigger: @escaping Trigger) -> HeldState {
+        let id = UUID()
+        values.endTriggers[id] = trigger
+        return HeldState(id, self)
     }
     
-    public func listen(_ listener: @escaping Listener) {
-        listeners.append(listener)
+    public func listen(_ listener: @escaping Listener) -> HeldState {
+        let id = UUID()
+        values.listeners[id] = listener
+        return HeldState(id, self)
     }
     
-    public func listen(_ listener: @escaping SimpleListener) {
-        listeners.append({ _, new in listener(new) })
+    public func listen(_ listener: @escaping SimpleListener) -> HeldState {
+        let id = UUID()
+        values.listeners[id] = { _, new in listener(new) }
+        return HeldState(id, self)
     }
     
-    public func listen(_ listener: @escaping () -> Void) {
-        listeners.append({ _,_ in listener() })
+    public func listen(_ listener: @escaping () -> Void) -> HeldState {
+        let id = UUID()
+        values.listeners[id] = { _,_ in listener() }
+        return HeldState(id, self)
     }
     
     public func merge(with state: State<Value>) {
@@ -167,20 +209,29 @@ open class State<Value: Sendable>: Stateable, @unchecked Sendable {
             justSetExternal = true
             self?.wrappedValue = new
             justSetExternal = false
-        }
+        }.hold(in: self)
         self.listen { [weak state] new in
             guard !justSetExternal else { return }
             justSetInternal = true
             state?.wrappedValue = new
             justSetInternal = false
-        }
+        }.hold(in: self)
     }
     
     public func and<V>(_ state: State<V>) -> CombinedState<Value, V> {
         CombinedState(left: projectedValue, right: state)
     }
+
+    public func release(with holder: StatesHolder) {
+        holder.awaitRelease { [weak self] in
+            self?.releaseStates()
+        }
+    }
 }
 
+// MARK: - CombinedState
+
+@MainActor
 public class CombinedState<A: Sendable, B: Sendable>: @unchecked Sendable {
     let _left: State<A>
     let _right: State<B>
@@ -199,14 +250,100 @@ public class CombinedState<A: Sendable, B: Sendable>: @unchecked Sendable {
     public func map<Result>(_ expression: @escaping (A, B) -> Result) -> State<Result> {
         .init(_left, _right, expression)
     }
-    
-    @available(*, deprecated, message: "🧨 This method will be removed soon. Please switch to `.map { left, right in }`.")
-    public func map<Result>(_ expression: @escaping (CombinedDeprecatedResult<A, B>) -> Result) -> State<Result> {
-        .init(_left, _right, expression)
-    }
 }
 
 public struct CombinedDeprecatedResult<A, B> {
     public let left: A
     public let right: B
+}
+
+public final class StatesHolderValuesBox: @unchecked Sendable {
+    var heldStates: [UUID : WeakStateBox] = [:]
+    var callbacks: [() -> Void] = []
+}
+
+// MARK: - StatesHolder
+
+public protocol StatesHolder: AnyObject {
+    var statesValues: StatesHolderValuesBox { get }
+    
+    func awaitRelease(_ callback: @escaping () -> Void)
+}
+extension StatesHolder {
+    public func releaseStates(
+        file: String = #fileID,
+        function: String = #function,
+        line: UInt = #line
+    ) {
+        for (id, box) in statesValues.heldStates {
+            box.state?.removeListener(id: id)
+        }
+        statesValues.heldStates.removeAll()
+        for callback in statesValues.callbacks {
+            callback()
+        }
+        statesValues.callbacks.removeAll()
+        InnerLog.t("🟠🟠🟠 StatesHolder.releaseStates file:\(file) function:\(function) line: \(line)")
+    }
+
+    public func awaitRelease(_ callback: @escaping () -> Void) {
+        statesValues.callbacks.append(callback)
+    }
+}
+
+// MARK: - HeldState
+
+public final class WeakStateBox {
+    private(set) weak var state: AnyState?
+    init(state: AnyState) { self.state = state }
+}
+
+public struct HeldState {
+    let id: UUID
+    let state: WeakStateBox
+
+    init (_ id: UUID, _ state: AnyState) {
+        self.id = id
+        self.state = WeakStateBox(state: state)
+    }
+
+    public func hold(in holder: StatesHolder) {
+        holder.statesValues.heldStates[id] = state
+    }
+}
+
+// MARK: - Expressable
+
+extension State {
+    public func map<Result>(_ expression: @escaping () -> Result) -> State<Result> {
+        .init(self, expression)
+    }
+    
+    public func map<Result>(_ expression: @escaping (Value) -> Result) -> State<Result> {
+        .init(self, expression)
+    }
+    
+    public func map<Result>(_ expressionTo: @escaping (Value) -> Result, _ expressionFrom: @escaping (Result) -> Value) -> State<Result> {
+        .init(self, expressionTo, expressionFrom)
+    }
+}
+
+// MARK: Any States to Expressable
+
+public protocol AnyState: AnyObject {
+    func listen(_ listener: @escaping () -> Void) -> HeldState
+    func removeListener(id: UUID)
+}
+
+extension Array where Element == AnyState {
+    @MainActor
+    public func map<Result>(_ expression: @escaping () -> Result) -> State<Result> {
+        let state = State<Result>.init(wrappedValue: expression())
+        for s in self {
+            s.listen { [weak state] in
+                state?.wrappedValue = expression()
+            }.hold(in: state)
+        }
+        return state
+    }
 }
