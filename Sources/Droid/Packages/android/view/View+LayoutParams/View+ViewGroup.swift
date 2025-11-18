@@ -60,7 +60,7 @@ extension View {
         value.listen { [weak self] old, new in
             guard old != new else { return }
             self?.width(.init(value.wrappedValue), unit)
-        }
+        }.hold(in: self)
         return width(.init(value.wrappedValue), unit)
     }
 
@@ -124,7 +124,7 @@ extension View {
         value.listen { [weak self] old, new in
             guard old != new else { return }
             self?.height(.init(value.wrappedValue), unit)
-        }
+        }.hold(in: self)
         return height(.init(value.wrappedValue), unit)
     }
 }

@@ -19,6 +19,8 @@ open class ForEach<Item: Sendable>: @unchecked Sendable, StatesHolder where Item
     let items: State<[Item]>
     let block: BuildViewHandler
     
+    public let statesValues: StatesHolderValuesBox = StatesHolderValuesBox()
+    
     public var orientation: LinearLayout.Orientation? { nil }
     public var gravity: Gravity?
     
@@ -59,6 +61,10 @@ open class ForEach<Item: Sendable>: @unchecked Sendable, StatesHolder where Item
             block()
         }
     }
+
+    deinit {
+        releaseStates()
+    }
     
     // Mask: Gravity
     
@@ -84,7 +90,7 @@ extension ForEach: AnyForEach {
     }
     
     public func subscribeToChanges(_ begin: @escaping () -> Void, _ handler: @escaping ([Int], [Int], [Int]) -> Void, _ end: @escaping () -> Void) {
-        items.beginTrigger(begin)
+        items.beginTrigger(begin).hold(in: self)
         items.listen { old, new in
             let diff = old.difference(new)
             let deletions = diff.removed.compactMap { $0.index }
@@ -92,8 +98,8 @@ extension ForEach: AnyForEach {
             let modifications = diff.modified.compactMap { $0.index }
             guard deletions.count > 0 || insertions.count > 0 || modifications.count > 0 else { return }
             handler(deletions, insertions, modifications)
-        }
-        items.endTrigger(end)
+        }.hold(in: self)
+        items.endTrigger(end).hold(in: self)
     }
 }
 

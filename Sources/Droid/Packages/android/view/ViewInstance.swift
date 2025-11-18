@@ -7,7 +7,7 @@ import Logging
 
 extension View {
     @MainActor
-    public final class ViewInstance: JObjectable, @unchecked Sendable {
+    public final class ViewInstance: JObjectable, StatesHolder, @unchecked Sendable {
         /// Unique identifier
         public let id: Int32
 
@@ -19,6 +19,9 @@ extension View {
 
         /// Object wrapper
         public let object: JObject
+
+        /// States holder
+        public let statesValues: StatesHolderValuesBox = StatesHolderValuesBox()
 
         /// Layout Params Class name
         var lpClassName: JClassName?
@@ -68,6 +71,7 @@ extension View {
 
         deinit {
             InnerLog.d("💔💔💔 DEINIT view(id: \(id)) viewInstance: \(self.className.fullName)")
+            releaseStates()
         }
 
         public func setLayoutParams(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) {

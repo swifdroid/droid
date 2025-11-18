@@ -83,7 +83,7 @@ extension JClassNameable {
     public var className: JClassName { type(of: self).className }
 }
 
-open class View: _AnyView, JClassNameable, @unchecked Sendable {
+open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     public typealias Body = BodyBuilder.Result
 
     /// The JNI class name
@@ -93,6 +93,9 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
     
     /// Unique identifier
     public nonisolated let id: Int32
+
+    /// States holder
+    public let statesValues: StatesHolderValuesBox = StatesHolderValuesBox()
 
     /// Layout Params class
     /// 
@@ -210,6 +213,7 @@ open class View: _AnyView, JClassNameable, @unchecked Sendable {
 
     deinit {
         InnerLog.d("🟥🟥🟥 DEINIT view: \(self)")
+        releaseStates()
     }
 
     public var instance: ViewInstance? {
