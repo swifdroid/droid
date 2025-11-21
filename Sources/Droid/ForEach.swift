@@ -12,50 +12,50 @@ public protocol AnyForEach: Sendable {
 
 @MainActor
 open class ForEach<Item: Sendable>: @unchecked Sendable, StatesHolder where Item: Hashable {
-    public typealias BuildViewHandler = @MainActor @Sendable (Int, Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerValue = @MainActor @Sendable (Item) -> BodyBuilder.Result
-    public typealias BuildViewHandlerSimple = @MainActor @Sendable () -> BodyBuilder.Result
+    public typealias Handler = @MainActor @Sendable (Int, Item) -> BodyBuilder.Result
+    public typealias HandlerValue = @MainActor @Sendable (Item) -> BodyBuilder.Result
+    public typealias HandlerSimple = @MainActor @Sendable () -> BodyBuilder.Result
     
     let items: State<[Item]>
-    let block: BuildViewHandler
+    let block: Handler
     
     public let statesValues: StatesHolderValuesBox = StatesHolderValuesBox()
     
     public var orientation: LinearLayout.Orientation? { nil }
     public var gravity: Gravity?
     
-    public init (_ items: [Item], @BodyBuilder block: @escaping BuildViewHandler) {
+    public init (_ items: [Item], @BodyBuilder block: @escaping Handler) {
         self.items = State(wrappedValue: items)
         self.block = block
     }
     
-    public init (_ items: [Item], @BodyBuilder block: @escaping BuildViewHandlerValue) {
+    public init (_ items: [Item], @BodyBuilder block: @escaping HandlerValue) {
         self.items = State(wrappedValue: items)
         self.block = { _, v in
             block(v)
         }
     }
     
-    public init (_ items: [Item], @BodyBuilder block: @escaping BuildViewHandlerSimple) {
+    public init (_ items: [Item], @BodyBuilder block: @escaping HandlerSimple) {
         self.items = State(wrappedValue: items)
         self.block = { _,_ in
             block()
         }
     }
     
-    public init (_ items: State<[Item]>, @BodyBuilder block: @escaping BuildViewHandler) {
+    public init (_ items: State<[Item]>, @BodyBuilder block: @escaping Handler) {
         self.items = items
         self.block = block
     }
     
-    public init (_ items: State<[Item]>, @BodyBuilder block: @escaping BuildViewHandlerValue) {
+    public init (_ items: State<[Item]>, @BodyBuilder block: @escaping HandlerValue) {
         self.items = items
         self.block = { _, v in
             block(v)
         }
     }
     
-    public init (_ items: State<[Item]>, @BodyBuilder block: @escaping BuildViewHandlerSimple) {
+    public init (_ items: State<[Item]>, @BodyBuilder block: @escaping HandlerSimple) {
         self.items = items
         self.block = { _,_ in
             block()
@@ -110,15 +110,15 @@ extension ForEach: BodyBuilderItemable {
 }
 
 extension ForEach where Item == Int {
-    public convenience init (_ items: ClosedRange<Item>, @BodyBuilder block: @escaping BuildViewHandler) {
+    public convenience init (_ items: ClosedRange<Item>, @BodyBuilder block: @escaping Handler) {
         self.init(items.map { $0 }, block: block)
     }
     
-    public convenience init (_ items: ClosedRange<Item>, @BodyBuilder block: @escaping BuildViewHandlerValue) {
+    public convenience init (_ items: ClosedRange<Item>, @BodyBuilder block: @escaping HandlerValue) {
         self.init(items.map { $0 }, block: block)
     }
     
-    public convenience init (_ items: ClosedRange<Item>, @BodyBuilder block: @escaping BuildViewHandlerSimple) {
+    public convenience init (_ items: ClosedRange<Item>, @BodyBuilder block: @escaping HandlerSimple) {
         self.init(items.map { $0 }, block: block)
     }
 }
