@@ -10,11 +10,17 @@ import Android
 #endif
 
 public enum DimensionUnit: Int32, Sendable {
+    /// Pixels
     case px = 0
+    /// Density-independent Pixels
     case dp = 1
+    /// Scale-independent Pixels
     case sp = 2
+    /// Points
     case pt = 3
-    case inch = 4
+    /// Inches
+    case `in` = 4
+    /// Millimeters
     case mm = 5
     
     public func toPixels(_ value: Float) -> Float {
@@ -27,7 +33,7 @@ public enum DimensionUnit: Int32, Sendable {
             return value * DroidApp.shared.configuration.displayMetricsScaledDensity
         case .pt:
             return value * DroidApp.shared.configuration.displayMetricsXdpi * (1.0 / 72)
-        case .inch:
+        case .in:
             return value * DroidApp.shared.configuration.displayMetricsXdpi
         case .mm:
             return value * DroidApp.shared.configuration.displayMetricsXdpi * (1.0 / 25.4)
@@ -43,7 +49,7 @@ public enum DimensionUnit: Int32, Sendable {
     }
     
     /// Converts a pixel value into the current dimension unit.
-    public func from(_ pixels: Float) -> Float {
+    public func fromPixels(_ pixels: Float) -> Float {
         switch self {
         case .px:
             return pixels
@@ -53,7 +59,7 @@ public enum DimensionUnit: Int32, Sendable {
             return pixels / DroidApp.shared.configuration.displayMetricsScaledDensity
         case .pt:
             return pixels / (DroidApp.shared.configuration.displayMetricsXdpi * (1.0 / 72))
-        case .inch:
+        case .in:
             return pixels / DroidApp.shared.configuration.displayMetricsXdpi
         case .mm:
             return pixels / (DroidApp.shared.configuration.displayMetricsXdpi * (1.0 / 25.4))
@@ -61,11 +67,11 @@ public enum DimensionUnit: Int32, Sendable {
     }
     
     /// Converts a pixel value into the current dimension unit.
-    public func from(_ pixels: Int32) -> Int {
+    public func fromPixels(_ pixels: Int32) -> Int {
         #if canImport(Android)
-        return Int(round(from(Float(pixels))))
+        return Int(round(fromPixels(Float(pixels))))
         #else
-        return Int(from(Float(pixels)))
+        return Int(fromPixels(Float(pixels)))
         #endif
     }
 }

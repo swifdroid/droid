@@ -113,7 +113,7 @@ extension MaterialButton {
     /// Gets the padding between the button icon and the button text, if icon is present.
     public func iconPadding(_ unit: DimensionUnit = .dp) -> Int {
         let value = instance?.callIntMethod(name: "getIconPadding") ?? 0
-        return unit.from(value)
+        return unit.fromPixels(value)
     }
 }
 
@@ -123,7 +123,7 @@ extension MaterialButton {
     /// Returns the size of the icon if it was set in pixels, 0 otherwise.
     public func iconSize(_ unit: DimensionUnit = .dp) -> Int {
         let value = instance?.callIntMethod(name: "getIconSize") ?? 0
-        return unit.from(value)
+        return unit.fromPixels(value)
     }
 }
 
@@ -136,7 +136,7 @@ extension MaterialButton {
     /// Gets the bottom inset for this button
     public func insetBottom(_ unit: DimensionUnit = .dp) -> Int {
         let value = instance?.callIntMethod(name: "getInsetBottom") ?? 0
-        return unit.from(value)
+        return unit.fromPixels(value)
     }
 }
 
@@ -146,7 +146,7 @@ extension MaterialButton {
     /// Gets the top inset for this button
     public func insetTop(_ unit: DimensionUnit = .dp) -> Int {
         let value = instance?.callIntMethod(name: "getInsetTop") ?? 0
-        return unit.from(value)
+        return unit.fromPixels(value)
     }
 }
 

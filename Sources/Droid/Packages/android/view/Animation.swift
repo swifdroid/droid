@@ -1630,33 +1630,33 @@ public final class Rect: JObjectable, @unchecked Sendable {
 
 extension Rect {
     public func bottom(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.intField(name: "bottom") ?? 0))
+        Int(unit.fromPixels(object.intField(name: "bottom") ?? 0))
     }
 
     public func left(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.intField(name: "left") ?? 0))
+        Int(unit.fromPixels(object.intField(name: "left") ?? 0))
     }
 
     public func right(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.intField(name: "right") ?? 0))
+        Int(unit.fromPixels(object.intField(name: "right") ?? 0))
     }
 
     public func top(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.intField(name: "top") ?? 0))
+        Int(unit.fromPixels(object.intField(name: "top") ?? 0))
     }
 
     /// The horizontal center of the rectangle.
     /// 
     /// If the computed value is fractional, this method returns the largest integer that is less than the computed value.
     public func centerX(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.callIntMethod(name: "centerX") ?? 0))
+        Int(unit.fromPixels(object.callIntMethod(name: "centerX") ?? 0))
     }
 
     /// The vertical center of the rectangle.
     /// 
     /// If the computed value is fractional, this method returns the largest integer that is less than the computed value.
     public func centerY(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.callIntMethod(name: "centerY") ?? 0))
+        Int(unit.fromPixels(object.callIntMethod(name: "centerY") ?? 0))
     }
 
     /// Returns true iff the 4 specified sides of a rectangle are inside or equal to this rectangle.
@@ -1703,12 +1703,12 @@ extension Rect {
 
     /// The exact horizontal center of the rectangle as a float.
     public func exactCenterX(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.callFloatMethod(name: "exactCenterX") ?? 0)
+        unit.fromPixels(object.callFloatMethod(name: "exactCenterX") ?? 0)
     }
 
     /// The exact vertical center of the rectangle as a float.
     public func exactCenterY(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.callFloatMethod(name: "exactCenterY") ?? 0)
+        unit.fromPixels(object.callFloatMethod(name: "exactCenterY") ?? 0)
     }
 
     /// Return a string representation of the rectangle in a well-defined format.
@@ -1731,7 +1731,7 @@ extension Rect {
     /// 
     /// This does not check for a valid rectangle (i.e. top <= bottom) so the result may be negative.
     public func height(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.callIntMethod(name: "height") ?? 0))
+        Int(unit.fromPixels(object.callIntMethod(name: "height") ?? 0))
     }
 
     /// Insets the rectangle on all sides specified by the dimensions of `insets`.
@@ -1925,7 +1925,7 @@ extension Rect {
     /// 
     /// This does not check for a valid rectangle (i.e. left <= right) so the result may be negative.
     public func width(_ unit: DimensionUnit = .dp) -> Int {
-        Int(unit.from(object.callIntMethod(name: "width") ?? 0))
+        Int(unit.fromPixels(object.callIntMethod(name: "width") ?? 0))
     }
 
     // TODO: writeToParcel
@@ -1991,33 +1991,33 @@ public final class RectF: JObjectable, @unchecked Sendable {
 
 extension RectF {
     public func bottom(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.floatField(name: "bottom") ?? 0)
+        unit.fromPixels(object.floatField(name: "bottom") ?? 0)
     }
 
     public func left(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.floatField(name: "left") ?? 0)
+        unit.fromPixels(object.floatField(name: "left") ?? 0)
     }
 
     public func right(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.floatField(name: "right") ?? 0)
+        unit.fromPixels(object.floatField(name: "right") ?? 0)
     }
 
     public func top(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.floatField(name: "top") ?? 0)
+        unit.fromPixels(object.floatField(name: "top") ?? 0)
     }
 
     /// The horizontal center of the rectangle.
     /// 
     /// If the computed value is fractional, this method returns the largest integer that is less than the computed value.
     public func centerX(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.callFloatMethod(name: "centerX") ?? 0)
+        unit.fromPixels(object.callFloatMethod(name: "centerX") ?? 0)
     }
 
     /// The vertical center of the rectangle.
     /// 
     /// If the computed value is fractional, this method returns the largest integer that is less than the computed value.
     public func centerY(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.callFloatMethod(name: "centerY") ?? 0)
+        unit.fromPixels(object.callFloatMethod(name: "centerY") ?? 0)
     }
 
     /// Returns true iff the 4 specified sides of a rectangle are inside or equal to this rectangle.
@@ -2064,7 +2064,7 @@ extension RectF {
 
     /// The exact horizontal center of the rectangle as a float.
     public func exactCenterX(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.callFloatMethod(name: "exactCenterX") ?? 0)
+        unit.fromPixels(object.callFloatMethod(name: "exactCenterX") ?? 0)
     }
 
     /// Returns a hash code value for the object.
@@ -2078,7 +2078,7 @@ extension RectF {
     /// 
     /// This does not check for a valid rectangle (i.e. top <= bottom) so the result may be negative.
     public func height(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.callFloatMethod(name: "height") ?? 0)
+        unit.fromPixels(object.callFloatMethod(name: "height") ?? 0)
     }
 
     /// Inset the rectangle by `(dx,dy)`.
@@ -2272,7 +2272,7 @@ extension RectF {
     /// 
     /// This does not check for a valid rectangle (i.e. left <= right) so the result may be negative.
     public func width(_ unit: DimensionUnit = .dp) -> Float {
-        unit.from(object.callFloatMethod(name: "width") ?? 0)
+        unit.fromPixels(object.callFloatMethod(name: "width") ?? 0)
     }
 
     // TODO: writeToParcel
