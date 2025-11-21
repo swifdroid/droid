@@ -105,13 +105,108 @@ func testCombined() {
     let a = State(wrappedValue: 2)
     let b = State(wrappedValue: 3)
 
-    let combined = CombinedState(left: a, right: b)
+    let combined = CombinedState(a, b)
     let sum = combined.map { $0 + $1 }
 
     #expect(sum.wrappedValue == 5)
 
     a.wrappedValue = 10
     #expect(sum.wrappedValue == 13)
+}
+
+@Test("CombinedState3 maps three values")
+@MainActor
+func testCombined3() {
+    DroidApp.main()
+    let a = State(wrappedValue: 1)
+    let b = State(wrappedValue: 2)
+    let c = State(wrappedValue: 3)
+
+    let combined = CombinedState(a, b).and(c)
+    let sum = combined.map { $0 + $1 + $2 }
+
+    #expect(sum.wrappedValue == 6)
+
+    a.wrappedValue = 10
+    #expect(sum.wrappedValue == 15)
+}
+
+@Test("CombinedState4 maps four values")
+@MainActor
+func testCombined4() {
+    DroidApp.main()
+    let a = State(wrappedValue: 1)
+    let b = State(wrappedValue: 2)
+    let c = State(wrappedValue: 3)
+    let d = State(wrappedValue: 4)
+    
+    let combined = CombinedState(a, b).and(c).and(d)
+    let sum = combined.map { $0 + $1 + $2 + $3 }
+
+    #expect(sum.wrappedValue == 10)
+
+    a.wrappedValue = 10
+    #expect(sum.wrappedValue == 19)
+}
+
+@Test("CombinedState5 maps five values")
+@MainActor
+func testCombined5() {
+    DroidApp.main()
+    let a = State(wrappedValue: 1)
+    let b = State(wrappedValue: 2)
+    let c = State(wrappedValue: 3)
+    let d = State(wrappedValue: 4)
+    let e = State(wrappedValue: 5)
+
+    let combined = CombinedState(a, b).and(c).and(d).and(e)
+    let sum = combined.map { $0 + $1 + $2 + $3 + $4 }
+
+    #expect(sum.wrappedValue == 15)
+
+    a.wrappedValue = 10
+    #expect(sum.wrappedValue == 24)
+}
+
+@Test("CombinedState6 maps six values")
+@MainActor
+func testCombined6() {
+    DroidApp.main()
+    let a = State(wrappedValue: 1)
+    let b = State(wrappedValue: 2)
+    let c = State(wrappedValue: 3)
+    let d = State(wrappedValue: 4)
+    let e = State(wrappedValue: 5)
+    let f = State(wrappedValue: 6)
+
+    let combined = CombinedState(a, b).and(c).and(d).and(e).and(f)
+    let sum = combined.map { $0 + $1 + $2 + $3 + $4 + $5 }
+
+    #expect(sum.wrappedValue == 21)
+
+    a.wrappedValue = 10
+    #expect(sum.wrappedValue == 30)
+}
+
+@Test("CombinedState7 maps seven values")
+@MainActor
+func testCombined7() {
+    DroidApp.main()
+    let a = State(wrappedValue: 1)
+    let b = State(wrappedValue: 2)
+    let c = State(wrappedValue: 3)
+    let d = State(wrappedValue: 4)
+    let e = State(wrappedValue: 5)
+    let f = State(wrappedValue: 6)
+    let g = State(wrappedValue: 7)
+
+    let combined = CombinedState(a, b).and(c).and(d).and(e).and(f).and(g)
+    let sum = combined.map { $0 + $1 + $2 + $3 + $4 + $5 + $6 }
+
+    #expect(sum.wrappedValue == 28)
+
+    a.wrappedValue = 10
+    #expect(sum.wrappedValue == 37)
 }
 
 // MARK: - Holding and releasing
