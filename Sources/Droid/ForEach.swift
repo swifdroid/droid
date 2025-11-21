@@ -123,6 +123,24 @@ extension ForEach where Item == Int {
     }
 }
 
+@MainActor
+extension Int {
+    public func times(@BodyBuilder block: @escaping ForEach<Int>.Handler, file: StaticString = #fileID, line: UInt = #line) -> ForEach<Int> {
+        assert(self >= 2, "Should be 2 times and more", file: file, line: line)
+        return .init(0...(self - 1), block: block)
+    }
+    
+    public func times(@BodyBuilder block: @escaping ForEach<Int>.HandlerValue, file: StaticString = #fileID, line: UInt = #line) -> ForEach<Int> {
+        assert(self >= 2, "Should be 2 times and more", file: file, line: line)
+        return .init(0...(self - 1), block: block)
+    }
+    
+    public func times(@BodyBuilder block: @escaping ForEach<Int>.HandlerSimple, file: StaticString = #fileID, line: UInt = #line) -> ForEach<Int> {
+        assert(self >= 2, "Should be 2 times and more", file: file, line: line)
+        return .init(0...(self - 1), block: block)
+    }
+}
+
 public class VForEach<Item>: ForEach<Item>, @unchecked Sendable where Item: Hashable {
     public override var orientation: LinearLayout.Orientation? { .vertical }
 }
