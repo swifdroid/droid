@@ -5,11 +5,11 @@ public protocol Stateable: AnyState {
     
     var wrappedValue: Value { get set }
     
-    func beginTrigger(_ trigger: @escaping () -> Void) -> HeldState
-    func endTrigger(_ trigger: @escaping () -> Void) -> HeldState
-    func listen(_ listener: @escaping (_ old: Value, _ new: Value) -> Void) -> HeldState
-    func listen(_ listener: @escaping (_ value: Value) -> Void) -> HeldState
-    func listen(_ listener: @escaping () -> Void) -> HeldState
+    func beginTrigger(_ trigger: @escaping () -> Void) -> StateListener
+    func endTrigger(_ trigger: @escaping () -> Void) -> StateListener
+    func listen(_ listener: @escaping (_ old: Value, _ new: Value) -> Void) -> StateListener
+    func listen(_ listener: @escaping (_ value: Value) -> Void) -> StateListener
+    func listen(_ listener: @escaping () -> Void) -> StateListener
 }
 
 fileprivate final class StateValueBox<Value: Sendable>: @unchecked Sendable {
@@ -22,6 +22,7 @@ fileprivate final class StateValueBox<Value: Sendable>: @unchecked Sendable {
 @MainActor
 @propertyWrapper
 public final class State<Value: Sendable>: @MainActor Stateable, StatesHolder, Sendable {
+    public let id: UUID = UUID()
     private let _originalValue: Value
     private let _wrappedValue: StateValueBox<Value>
     public var wrappedValue: Value {
@@ -57,31 +58,114 @@ public final class State<Value: Sendable>: @MainActor Stateable, StatesHolder, S
     }
     
     init <A, B>(_ stateA: State<A>, _ stateB: State<B>, _ expression: @escaping (A, B) -> Value) {
-        let value = expression(stateA.wrappedValue, stateB.wrappedValue)
+        let valueExpression: () -> Value? = { [weak stateA, weak stateB] in
+            guard let stateA, let stateB else { return nil }
+            return expression(stateA.wrappedValue, stateB.wrappedValue)
+        }
+        let value = valueExpression()!
         _originalValue = value
         _wrappedValue = StateValueBox(value: value)
-        stateA.listen { [weak self, weak stateA, weak stateB] in
-            guard let stateA = stateA, let stateB = stateB else { return }
-            self?.wrappedValue = expression(stateA.wrappedValue, stateB.wrappedValue)
-        }.hold(in: self)
-        stateB.listen { [weak self, weak stateA, weak stateB] in
-            guard let stateA = stateA, let stateB = stateB else { return }
-            self?.wrappedValue = expression(stateA.wrappedValue, stateB.wrappedValue)
-        }.hold(in: self)
+        let closure: () -> Void = { [weak self] in
+            guard let value = valueExpression() else { return }
+            self?.wrappedValue = value
+        }
+        stateA.listen(closure).hold(in: self)
+        stateB.listen(closure).hold(in: self)
     }
     
-    init <A, B>(_ stateA: State<A>, _ stateB: State<B>, _ expression: @escaping (CombinedDeprecatedResult<A, B>) -> Value) {
-        let value = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
+    init <A, B, C>(_ stateA: State<A>, _ stateB: State<B>, _ stateC: State<C>, _ expression: @escaping (A, B, C) -> Value) {
+        let valueExpression: () -> Value? = { [weak stateA, weak stateB, weak stateC] in
+            guard let stateA, let stateB, let stateC else { return nil }
+            return expression(stateA.wrappedValue, stateB.wrappedValue, stateC.wrappedValue)
+        }
+        let value = valueExpression()!
         _originalValue = value
         _wrappedValue = StateValueBox(value: value)
-        stateA.listen { [weak self, weak stateA, weak stateB] in
-            guard let stateA = stateA, let stateB = stateB else { return }
-            self?.wrappedValue = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
-        }.hold(in: self)
-        stateB.listen { [weak self, weak stateA, weak stateB] in
-            guard let stateA = stateA, let stateB = stateB else { return }
-            self?.wrappedValue = expression(.init(left: stateA.wrappedValue, right: stateB.wrappedValue))
-        }.hold(in: self)
+        let closure: () -> Void = { [weak self] in
+            guard let value = valueExpression() else { return }
+            self?.wrappedValue = value
+        }
+        stateA.listen(closure).hold(in: self)
+        stateB.listen(closure).hold(in: self)
+        stateC.listen(closure).hold(in: self)
+    }
+
+    init <A, B, C, D>(_ stateA: State<A>, _ stateB: State<B>, _ stateC: State<C>, _ stateD: State<D>, _ expression: @escaping (A, B, C, D) -> Value) {
+        let valueExpression: () -> Value? = { [weak stateA, weak stateB, weak stateC, weak stateD] in
+            guard let stateA, let stateB, let stateC, let stateD else { return nil }
+            return expression(stateA.wrappedValue, stateB.wrappedValue, stateC.wrappedValue, stateD.wrappedValue)
+        }
+        let value = valueExpression()!
+        _originalValue = value
+        _wrappedValue = StateValueBox(value: value)
+        let closure: () -> Void = { [weak self] in
+            guard let value = valueExpression() else { return }
+            self?.wrappedValue = value
+        }
+        stateA.listen(closure).hold(in: self)
+        stateB.listen(closure).hold(in: self)
+        stateC.listen(closure).hold(in: self)
+        stateD.listen(closure).hold(in: self)
+    }
+
+    init <A, B, C, D, E>(_ stateA: State<A>, _ stateB: State<B>, _ stateC: State<C>, _ stateD: State<D>, _ stateE: State<E>, _ expression: @escaping (A, B, C, D, E) -> Value) {
+        let valueExpression: () -> Value? = { [weak stateA, weak stateB, weak stateC, weak stateD, weak stateE] in
+            guard let stateA, let stateB, let stateC, let stateD, let stateE else { return nil }
+            return expression(stateA.wrappedValue, stateB.wrappedValue, stateC.wrappedValue, stateD.wrappedValue, stateE.wrappedValue)
+        }
+        let value = valueExpression()!
+        _originalValue = value
+        _wrappedValue = StateValueBox(value: value)
+        let closure: () -> Void = { [weak self] in
+            guard let value = valueExpression() else { return }
+            self?.wrappedValue = value
+        }
+        stateA.listen(closure).hold(in: self)
+        stateB.listen(closure).hold(in: self)
+        stateC.listen(closure).hold(in: self)
+        stateD.listen(closure).hold(in: self)
+        stateE.listen(closure).hold(in: self)
+    }
+
+    init <A, B, C, D, E, F>(_ stateA: State<A>, _ stateB: State<B>, _ stateC: State<C>, _ stateD: State<D>, _ stateE: State<E>, _ stateF: State<F>, _ expression: @escaping (A, B, C, D, E, F) -> Value) {
+        let valueExpression: () -> Value? = { [weak stateA, weak stateB, weak stateC, weak stateD, weak stateE, weak stateF] in
+            guard let stateA, let stateB, let stateC, let stateD, let stateE, let stateF else { return nil }
+            return expression(stateA.wrappedValue, stateB.wrappedValue, stateC.wrappedValue, stateD.wrappedValue, stateE.wrappedValue, stateF.wrappedValue)
+        }
+        let value = valueExpression()!
+        _originalValue = value
+        _wrappedValue = StateValueBox(value: value)
+        let closure: () -> Void = { [weak self] in
+            guard let value = valueExpression() else { return }
+            self?.wrappedValue = value
+        }
+        stateA.listen(closure).hold(in: self)
+        stateB.listen(closure).hold(in: self)
+        stateC.listen(closure).hold(in: self)
+        stateD.listen(closure).hold(in: self)
+        stateE.listen(closure).hold(in: self)
+        stateF.listen(closure).hold(in: self)
+    }
+
+    init <A, B, C, D, E, F, G>(_ stateA: State<A>, _ stateB: State<B>, _ stateC: State<C>, _ stateD: State<D>, _ stateE: State<E>, _ stateF: State<F>, _ stateG: State<G>, _ expression: @escaping (A, B, C, D, E, F, G) -> Value) {
+        let valueExpression: () -> Value? = { [weak stateA, weak stateB, weak stateC, weak stateD, weak stateE, weak stateF, weak stateG] in
+            guard let stateA, let stateB, let stateC, let stateD, let stateE, let stateF, let stateG else { return nil }
+            return expression(stateA.wrappedValue, stateB.wrappedValue, stateC.wrappedValue, stateD.wrappedValue, stateE.wrappedValue, stateF.wrappedValue, stateG.wrappedValue)
+        }
+        let value = valueExpression()!
+        _originalValue = value
+        _wrappedValue = StateValueBox(value: value)
+        let closure: () -> Void = { [weak self] in
+            guard let value = valueExpression() else { return }
+            self?.wrappedValue = value
+        }
+        stateA.listen(closure).hold(in: self)
+        stateB.listen(closure).hold(in: self)
+        stateC.listen(closure).hold(in: self)
+        stateD.listen(closure).hold(in: self)
+        stateE.listen(closure).hold(in: self)
+        stateF.listen(closure).hold(in: self)
+        stateG.listen(closure).hold(in: self)
     }
     
     public init(wrappedValue value: Value) {
@@ -170,56 +254,59 @@ public final class State<Value: Sendable>: @MainActor Stateable, StatesHolder, S
 
     private let values: ValuesBox = ValuesBox()
     
-    public func beginTrigger(_ trigger: @escaping Trigger) -> HeldState {
+    public func beginTrigger(_ trigger: @escaping Trigger) -> StateListener {
         let id = UUID()
         values.beginTriggers[id] = trigger
-        return HeldState(id, self)
+        return StateListener(id, self)
     }
     
-    public func endTrigger(_ trigger: @escaping Trigger) -> HeldState {
+    public func endTrigger(_ trigger: @escaping Trigger) -> StateListener {
         let id = UUID()
         values.endTriggers[id] = trigger
-        return HeldState(id, self)
+        return StateListener(id, self)
     }
     
-    public func listen(_ listener: @escaping Listener) -> HeldState {
+    public func listen(_ listener: @escaping Listener) -> StateListener {
         let id = UUID()
         values.listeners[id] = listener
-        return HeldState(id, self)
+        return StateListener(id, self)
     }
     
-    public func listen(_ listener: @escaping SimpleListener) -> HeldState {
+    public func listen(_ listener: @escaping SimpleListener) -> StateListener {
         let id = UUID()
         values.listeners[id] = { _, new in listener(new) }
-        return HeldState(id, self)
+        return StateListener(id, self)
     }
     
-    public func listen(_ listener: @escaping () -> Void) -> HeldState {
+    public func listen(_ listener: @escaping () -> Void) -> StateListener {
         let id = UUID()
         values.listeners[id] = { _,_ in listener() }
-        return HeldState(id, self)
+        return StateListener(id, self)
     }
     
-    public func merge(with state: State<Value>) {
+    /// Merges this state with another state so that they stay in sync.
+    public func merge(with state: State<Value>) -> [StateListener] {
         self.wrappedValue = state.wrappedValue
         var justSetExternal = false
         var justSetInternal = false
-        state.listen { [weak self] new in
+        let listener1 = state.listen { [weak self] new in
             guard !justSetInternal else { return }
             justSetExternal = true
             self?.wrappedValue = new
             justSetExternal = false
-        }.hold(in: self)
-        self.listen { [weak state] new in
+        }
+        let listener2 = self.listen { [weak state] new in
             guard !justSetExternal else { return }
             justSetInternal = true
             state?.wrappedValue = new
             justSetInternal = false
-        }.hold(in: self)
+        }
+        return [listener1, listener2]
     }
     
+    /// Combines this state with another state into a `CombinedState` where then you can `map` the values.
     public func and<V>(_ state: State<V>) -> CombinedState<Value, V> {
-        CombinedState(left: projectedValue, right: state)
+        CombinedState(projectedValue, state)
     }
 
     public func release(with holder: StatesHolder) {
@@ -229,36 +316,171 @@ public final class State<Value: Sendable>: @MainActor Stateable, StatesHolder, S
     }
 }
 
-// MARK: - CombinedState
+extension State: @MainActor Equatable, @MainActor Hashable {
+    public static func == (lhs: State<Value>, rhs: State<Value>) -> Bool {
+        lhs.id == rhs.id
+    }
 
-@MainActor
-public class CombinedState<A: Sendable, B: Sendable>: @unchecked Sendable {
-    let _left: State<A>
-    let _right: State<B>
-    public var left: A { _left.wrappedValue }
-    public var right: B { _right.wrappedValue }
-    
-    init (left: State<A>, right: State<B>) {
-        self._left = left
-        self._right = right
-    }
-    
-    public func map<Result>(_ expression: @escaping () -> Result) -> State<Result> {
-        .init(_left, _right, expression)
-    }
-    
-    public func map<Result>(_ expression: @escaping (A, B) -> Result) -> State<Result> {
-        .init(_left, _right, expression)
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
-public struct CombinedDeprecatedResult<A, B> {
-    public let left: A
-    public let right: B
+extension State where Value: Equatable {
+    /// Adds a listener that is only called when the value actually changes (i.e., old and new values are not equal).
+    /// - Parameter listener: A closure called with the old and new values when a change occurs.
+    /// - Returns: A `StateListener` handle for the listener.
+    public func listenDistinct(_ listener: @escaping Listener) -> StateListener {
+        listen { old, new in
+            guard old != new else { return }
+            listener(old, new)
+        }
+    }
+    
+    /// Adds a listener that is only called when the value actually changes (i.e., old and new values are not equal).
+    /// - Parameter listener: A closure called with the new value when a change occurs.
+    /// - Returns: A `StateListener` handle for the listener.
+    public func listenDistinct(_ listener: @escaping SimpleListener) -> StateListener {
+        listen { old, new in
+            guard old != new else { return }
+            listener(new)
+        }
+    }
+}
+
+// MARK: - CombinedState
+
+/// Combines two states into one where you can `map` the values or combine with more states using `and`.
+@MainActor
+public class CombinedState<A: Sendable, B: Sendable>: @unchecked Sendable {
+    let _a: State<A>
+    let _b: State<B>
+    
+    init (_ a: State<A>, _ b: State<B>) {
+        self._a = a
+        self._b = b
+    }
+    
+    /// Allows to convert values of the combined states into a value in a new `State`.
+    public func map<Result>(_ expression: @escaping (A, B) -> Result) -> State<Result> {
+        .init(_a, _b, expression)
+    }
+    
+    /// Combines this state with another state where then you can `map` the values.
+    public func and<V>(_ state: State<V>) -> CombinedState3<A, B, V> {
+        CombinedState3(self, state)
+    }
+}
+
+/// Service struct to combine three states into one where you can `map` the values or combine with more states using `and`.
+@MainActor
+public class CombinedState3<A: Sendable, B: Sendable, C: Sendable>: @unchecked Sendable {
+    let _box: CombinedState<A, B>
+    let _c: State<C>
+    
+    init (_ box: CombinedState<A, B>, _ c: State<C>) {
+        self._box = box
+        self._c = c
+    }
+    
+    /// Allows to convert values of the combined states into a value in a new `State`.
+    public func map<Result>(_ expression: @escaping (A, B, C) -> Result) -> State<Result> {
+        .init(_box._a, _box._b, _c, expression)
+    }
+    
+    /// Combines this state with another state where then you can `map` the values.
+    public func and<V>(_ state: State<V>) -> CombinedState4<A, B, C, V> {
+        CombinedState4(self, state)
+    }
+}
+
+/// Service struct to combine four states into one where you can `map` the values or combine with more states using `and`.
+@MainActor
+public class CombinedState4<A: Sendable, B: Sendable, C: Sendable, D: Sendable>: @unchecked Sendable {
+    let _box: CombinedState3<A, B, C>
+    let _d: State<D>
+    
+    init (_ box: CombinedState3<A, B, C>, _ d: State<D>) {
+        self._box = box
+        self._d = d
+    }
+    
+    /// Allows to convert values of the combined states into a value in a new `State`.
+    public func map<Result>(_ expression: @escaping (A, B, C, D) -> Result) -> State<Result> {
+        .init(_box._box._a, _box._box._b, _box._c, _d, expression)
+    }
+    
+    /// Combines this state with another state where then you can `map` the values.
+    public func and<V>(_ state: State<V>) -> CombinedState5<A, B, C, D, V> {
+        CombinedState5(self, state)
+    }
+}
+
+/// Service struct to combine five states into one where you can `map` the values or combine with more states using `and`.
+@MainActor
+public class CombinedState5<A: Sendable, B: Sendable, C: Sendable, D: Sendable, E: Sendable>: @unchecked Sendable {
+    let _box: CombinedState4<A, B, C, D>
+    let _e: State<E>
+    
+    init (_ box: CombinedState4<A, B, C, D>, _ e: State<E>) {
+        self._box = box
+        self._e = e
+    }
+    
+    /// Allows to convert values of the combined states into a value in a new `State`.
+    public func map<Result>(_ expression: @escaping (A, B, C, D, E) -> Result) -> State<Result> {
+        .init(_box._box._box._a, _box._box._box._b, _box._box._c, _box._d, _e, expression)
+    }
+    
+    /// Combines this state with another state where then you can `map` the values.
+    public func and<V>(_ state: State<V>) -> CombinedState6<A, B, C, D, E, V> {
+        CombinedState6(self, state)
+    }
+}
+
+/// Service struct to combine six states into one where you can `map` the values or combine with more states using `and`.
+@MainActor
+public class CombinedState6<A: Sendable, B: Sendable, C: Sendable, D: Sendable, E: Sendable, F: Sendable>: @unchecked Sendable {
+    let _box: CombinedState5<A, B, C, D, E>
+    let _f: State<F>
+    
+    init (_ box: CombinedState5<A, B, C, D, E>, _ f: State<F>) {
+        self._box = box
+        self._f = f
+    }
+    
+    /// Allows to convert values of the combined states into a value in a new `State`.
+    public func map<Result>(_ expression: @escaping (A, B, C, D, E, F) -> Result) -> State<Result> {
+        .init(_box._box._box._box._a, _box._box._box._box._b, _box._box._box._c, _box._box._d, _box._e, _f, expression)
+    }
+    
+    /// Combines this state with another state where then you can `map` the values.
+    public func and<V>(_ state: State<V>) -> CombinedState7<A, B, C, D, E, F, V> {
+        CombinedState7(self, state)
+    }
+}
+
+/// Service struct to combine seven states into one where you can `map` the values or combine with more states using `and`.
+@MainActor
+public class CombinedState7<A: Sendable, B: Sendable, C: Sendable, D: Sendable, E: Sendable, F: Sendable, G: Sendable>: @unchecked Sendable {
+    let _box: CombinedState6<A, B, C, D, E, F>
+    let _g: State<G>
+    
+    init (_ box: CombinedState6<A, B, C, D, E, F>, _ g: State<G>) {
+        self._box = box
+        self._g = g
+    }
+    
+    /// Allows to convert values of the combined states into a value in a new `State`.
+    public func map<Result>(_ expression: @escaping (A, B, C, D, E, F, G) -> Result) -> State<Result> {
+        .init(_box._box._box._box._box._a, _box._box._box._box._box._b, _box._box._box._box._c, _box._box._box._d, _box._box._e, _box._f, _g, expression)
+    }
 }
 
 public final class StatesHolderValuesBox: @unchecked Sendable {
+    /// Holds the states and their associated weak references to manage their lifecycle.
     var heldStates: [UUID : WeakStateBox] = [:]
+    /// Callbacks to be executed upon release of states.
     var callbacks: [() -> Void] = []
 }
 
@@ -270,6 +492,7 @@ public protocol StatesHolder: AnyObject {
     func awaitRelease(_ callback: @escaping () -> Void)
 }
 extension StatesHolder {
+    /// Releases all held states and invokes any registered callbacks.
     public func releaseStates(
         file: String = #fileID,
         function: String = #function,
@@ -286,20 +509,41 @@ extension StatesHolder {
         InnerLog.t("🟠🟠🟠 StatesHolder.releaseStates file:\(file) function:\(function) line: \(line)")
     }
 
+    /// Releases listeners associated with the specified state.
+    public func releaseState(_ state: AnyState) {
+        let listeners = statesValues.heldStates.filter { $0.value.state?.id == state.id }
+        for (id, _) in listeners {
+            state.removeListener(id: id)
+        }
+    }
+
     public func awaitRelease(_ callback: @escaping () -> Void) {
         statesValues.callbacks.append(callback)
     }
 }
 
-// MARK: - HeldState
+// MARK: - TempStatesHolder
+
+/// A temporary states holder that releases its states upon deinitialization.
+@MainActor
+public final class TempStatesHolder: StatesHolder, @unchecked Sendable {
+    public let statesValues: StatesHolderValuesBox = StatesHolderValuesBox()
+    init() {}
+    deinit { releaseStates() }
+}
+
+// MARK: - StateListener
 
 public final class WeakStateBox {
     private(set) weak var state: AnyState?
     init(state: AnyState) { self.state = state }
 }
 
-public struct HeldState {
+/// A handle to a state listener that can be used to release the listener when no longer needed.
+public struct StateListener {
+    /// Unique identifier for the state listener.
     let id: UUID
+    /// Weak reference to the state associated with the listener.
     let state: WeakStateBox
 
     init (_ id: UUID, _ state: AnyState) {
@@ -307,8 +551,27 @@ public struct HeldState {
         self.state = WeakStateBox(state: state)
     }
 
+    /// Holds the state listener in the specified states holder.
+    /// **The holder will manage the lifecycle of the listener.**
     public func hold(in holder: StatesHolder) {
         holder.statesValues.heldStates[id] = state
+    }
+
+    /// Releases the state listener, removing it from the associated state.
+    /// **This is for manual management of the listener's lifecycle.**
+    public func cancel() {
+        state.state?.removeListener(id: id)
+    }
+}
+
+extension Array where Element == StateListener {
+    /// Holds all state listeners in the specified states holder.
+    /// 
+    /// **The holder will manage the lifecycle of the listeners.**
+    public func hold(in holder: StatesHolder) {
+        for listener in self {
+            listener.hold(in: holder)
+        }
     }
 }
 
@@ -331,7 +594,9 @@ extension State {
 // MARK: Any States to Expressable
 
 public protocol AnyState: AnyObject {
-    func listen(_ listener: @escaping () -> Void) -> HeldState
+    var id: UUID { get }
+
+    func listen(_ listener: @escaping () -> Void) -> StateListener
     func removeListener(id: UUID)
 }
 
@@ -346,4 +611,41 @@ extension Array where Element == AnyState {
         }
         return state
     }
+}
+
+// MARK: - Universal Value Holder
+
+/// Universal value holder, could be a simple(plain) value or a State value.
+/// Used to simplify APIs that can accept both static and dynamic values.
+@MainActor
+public protocol StateValuable {
+    associatedtype Value: Sendable
+    
+    var simpleValue: Value { get }
+    var stateValue: State<Value>? { get }
+}
+
+extension State: StateValuable {
+    public var simpleValue: Value { wrappedValue }
+    public var stateValue: State<Value>? { self }
+}
+
+extension String: StateValuable {
+    public var simpleValue: String { self }
+    public var stateValue: State<String>? { nil }
+}
+
+extension Int: StateValuable {
+    public var simpleValue: Int { self }
+    public var stateValue: State<Int>? { nil }
+}
+
+extension Double: StateValuable {
+    public var simpleValue: Double { self }
+    public var stateValue: State<Double>? { nil }
+}
+
+extension Bool: StateValuable {
+    public var simpleValue: Bool { self }
+    public var stateValue: State<Bool>? { nil }
 }
