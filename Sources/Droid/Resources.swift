@@ -54,5 +54,12 @@ extension Resources {
             return false
             #endif
         }
+
+        /// Retrieves the value of the `android.R.attr.actionBarSize`.
+        public func actionBarSize() -> Int {
+            guard let typedValue = TypedValue() else { return 0 }
+            guard resolveAttribute(android.R.attr.actionBarSize, typedValue, true) else { return 0 }
+            return Int(TypedValue.complexToDimensionPixelSize(typedValue.data))
+        }
     }
 }
