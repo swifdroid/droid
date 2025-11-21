@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 01.09.2025.
 //
 
-@MainActor
 public final class AppContext: JObjectable, JClassLoadable, @unchecked Sendable {
     static var shared: AppContext { DroidApp.shared.context }
     
