@@ -41,9 +41,15 @@ open class DroidApp: @unchecked Sendable {
             shared = Self()
         }
         #endif
+        #if os(Android)
         Task { @MainActor in
             Self.start()
         }
+        #else
+        MainActor.assumeIsolated {
+            Self.start()
+        }
+        #endif
     }
     
     var isStarted = false
