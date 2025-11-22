@@ -21,7 +21,9 @@ public struct InnerLog {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         InnerLog.logger.critical(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Debug
@@ -32,7 +34,9 @@ public struct InnerLog {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         InnerLog.logger.debug(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Error
@@ -43,7 +47,9 @@ public struct InnerLog {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         InnerLog.logger.error(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Info
@@ -54,7 +60,9 @@ public struct InnerLog {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         InnerLog.logger.info(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Notice
@@ -65,7 +73,9 @@ public struct InnerLog {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         InnerLog.logger.notice(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Trace
@@ -76,7 +86,9 @@ public struct InnerLog {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         InnerLog.logger.trace(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Warning
@@ -87,7 +99,9 @@ public struct InnerLog {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         InnerLog.logger.warning(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 }
 
@@ -105,7 +119,9 @@ public struct Log {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         Log.logger.critical(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Logs a debug-level message.
@@ -119,7 +135,9 @@ public struct Log {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         Log.logger.debug(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Logs an error-level message.
@@ -133,7 +151,9 @@ public struct Log {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         Log.logger.error(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Logs an info-level message.
@@ -147,7 +167,9 @@ public struct Log {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         Log.logger.info(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Logs a notice-level message.
@@ -161,7 +183,9 @@ public struct Log {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         Log.logger.notice(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Logs a trace-level message.
@@ -175,7 +199,9 @@ public struct Log {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         Log.logger.trace(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 
     /// Logs a warning-level message.
@@ -189,7 +215,9 @@ public struct Log {
         function: String = #function,
         line: UInt = #line
     ) {
+        #if os(Android)
         Log.logger.warning(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
     }
 }
 
