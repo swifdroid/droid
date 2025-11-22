@@ -201,10 +201,6 @@ open class DroidApp: @unchecked Sendable {
         shared.parseAppBuilderItem(shared.body.appBuilderContent)
         shared.parseAndroidBuildingArguments()
         #endif
-        #if ANDROIDJSONDETAILS
-        shared.parseAppBuilderItem(shared.body.appBuilderContent)
-        shared.parseAndroidJsonDetailsArguments()
-        #endif
         #if ANDROIDPREVIEW
         shared.previewStart()
         #else
@@ -220,53 +216,6 @@ open class DroidApp: @unchecked Sendable {
     }
     
     #if !os(Android)
-    private enum _AndroidJsonDetailsAction: String {
-        case manifest
-    }
-    
-    private func parseAndroidJsonDetailsArguments() {
-        var args = CommandLine.arguments
-        
-        if let index = args.firstIndex(of: "--action"), args.count >= index + 1  {
-            let raw = args[index + 1]
-            guard let action = _AndroidJsonDetailsAction(rawValue: raw) else {
-                print("Unknown --action argument: \(raw)")
-                print("Possible values: manifest")
-                exit(1)
-            }
-            args.removeFirst(index + 2)
-            return proceedAndroidJsonDetailsAction(action, args)
-        }
-        
-        print("No action had been provided")
-        exit(1)
-    }
-    
-    private func proceedAndroidJsonDetailsAction(_ action: _AndroidJsonDetailsAction, _ args: [String]) {
-        switch action {
-        case .manifest:
-            struct Result: Encodable {
-                let package, androidVersionCode, androidVersionName: String?
-            }
-            let resultModel = Result(
-                package: _manifest.params[.package],
-                androidVersionCode: _manifest.params[.androidVersionCode],
-                androidVersionName: _manifest.params[.androidVersionName]
-            )
-            do {
-                let data = try JSONEncoder().encode(resultModel)
-                if let string = String(data: data, encoding: .utf8) {
-                    print(string)
-                } else {
-                    print("Unable to generate JSON string")
-                }
-            } catch {
-                print("Error has occured during JSON generation: \(error)")
-            }
-        }
-        exit(0)
-    }
-    
     private enum _AndroidBuildingAction: String {
         case manifest
         case gradleDependencies
