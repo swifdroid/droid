@@ -266,18 +266,32 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// Declares a permission that the application must have in order to access a particular feature or API.
 	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-permission-element)
-    public func usesPermission(_ name: ManifestPermission) -> Self {
-        let value = DroidApp.UsesPermission().name(name)
-		items.insert(value, at: 0)
-		usesPermission.append(value)
+    @discardableResult
+	public func usesPermissions(_ permissions: [ManifestPermission]) -> Self {
+        #if os(Android)
+		print("manifest sets uses-permissions: \(permissions.map { $0.value })")
+		#endif
+		for permission in permissions {
+			let value = DroidApp.UsesPermission().name(permission)
+			items.insert(value, at: 0)
+		}
 		return self
+	}
+
+	/// Declares a permission that the application must have in order to access a particular feature or API.
+	/// 
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-permission-element)
+	@discardableResult
+	public static func usesPermissions(_ permissions: ManifestPermission...) -> Self {
+		usesPermissions(permissions)
 	}
 	
 	/// Declares a permission that the application must have in order to access a particular feature or API.
 	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-permission-element)
-	public static func usesPermission(_ name: ManifestPermission) -> Self {
-		Self().usesPermission(name)
+	@discardableResult
+	public static func usesPermissions(_ permissions: [ManifestPermission]) -> Self {
+		Self().usesPermissions(permissions)
 	}
 	
 	// MARK: -
@@ -285,18 +299,33 @@ public class AppManifest: DroidApp.ManifestTag {
 	/// Declares a hardware or software feature that the application requires or can use.
 	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
-    public func usesFeature(_ name: ManifestFeature, required: Bool = true) -> Self {
-        let value = DroidApp.UsesFeature().name(name).required(required)
-		items.insert(value, at: 0)
-		usesFeature.append(value)
+    public func usesFeatures(_ features: ManifestFeature..., required: Bool = true) -> Self {
+        usesFeatures(features, required: required)
+	}
+	
+	/// Declares a hardware or software feature that the application requires or can use.
+	/// 
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
+    public func usesFeatures(_ features: [ManifestFeature], required: Bool = true) -> Self {
+        for feature in features {
+			let value = DroidApp.UsesFeature().name(feature).required(required)
+			items.insert(value, at: 0)
+		}
 		return self
 	}
 	
 	/// Declares a hardware or software feature that the application requires or can use.
 	/// 
 	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
-	public static func usesFeature(_ name: ManifestFeature) -> Self {
-		Self().usesFeature(name)
+	public static func usesFeatures(_ features: ManifestFeature..., required: Bool = true) -> Self {
+		usesFeatures(features, required: required)
+	}
+	
+	/// Declares a hardware or software feature that the application requires or can use.
+	/// 
+	/// [Learn more](https://developer.android.com/guide/topics/manifest/uses-feature-element)
+	public static func usesFeatures(_ features: [ManifestFeature], required: Bool = true) -> Self {
+		Self().usesFeatures(features, required: required)
 	}
 	
 	// MARK: -

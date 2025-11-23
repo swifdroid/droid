@@ -218,8 +218,6 @@ extension DroidApp {
         
         var params: [ManifestTagParamName: String] = [:]
         var items: [ManifestTag] = []
-		var usesPermission: [UsesPermission] = []
-		var usesFeature: [UsesFeature] = []
         
         func uniqueParams() -> [ManifestTagParamName] { [] }
         func missingParams() -> [String] { [] }

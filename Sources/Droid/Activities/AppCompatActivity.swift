@@ -17,6 +17,8 @@ open class AppCompatActivity: FragmentActivity {
     open class override var gradleDependencies: [AppGradleDependency] { [.appCompat, .composeBOM] }
     open class override var parentClass: String { "DroidAppCompatActivity()" }
 
+    var permissionRequests: [Int: (_ results: [ActivityPermissionResult]) -> Void] = [:]
+
     open func onConfigurationChanged() {} // TODO: implement Configuration https://developer.android.com/reference/android/content/res/Configuration.html
 
     open func onContentChanged() {}
@@ -65,6 +67,11 @@ open class AppCompatActivity: FragmentActivity {
     }
 
     // TODO: implement onWindowStartingSupportActionMode
+
+    open override func onRequestPermissionsResult(requestCode: Int, results: [ActivityPermissionResult], deviceId: Int) {
+        super.onRequestPermissionsResult(requestCode: requestCode, results: results, deviceId: deviceId)
+        permissionRequests[requestCode]?(results)
+    }
 }
 
 extension AppCompatActivity {
@@ -150,9 +157,13 @@ extension AppCompatActivity {
 
     // MARK: - Permissions
 
+    /// Check if a particular permission is granted.
+    ///
+    /// - Parameter permission: ManifestPermission to check
+    /// - Returns: true if permission is granted, false otherwise
     public func checkPermission(_ permission: ManifestPermission) -> Bool {
         #if os(Android)
-        permission.warnIfNeeded()
+        permission.warnIfMissing()
         guard let clazz = JClass.load("androidx/core/content/ContextCompat") else { return false }
         guard let result = clazz.staticIntMethod(name: "checkSelfPermission", args: context.signed(as: "android/content/Context"), permission.value) else { return false }
         return result == 0
@@ -161,17 +172,87 @@ extension AppCompatActivity {
         #endif
     }
 
+    /// Request permissions at runtime.
+    ///
+    /// - Parameters:
+    ///   - permissions: ManifestPermission(s) to request
+    ///   - requestCode: Request code to identify the permission request result
+    public func requestPermissions(_ permissions: ManifestPermission..., requestCode: Int) {
+        self.requestPermissions(permissions, requestCode: requestCode)
+    }
+    
+    /// Request permissions at runtime.
+    ///
+    /// - Parameters:
+    ///   - permissions: Array of ManifestPermission to request
+    ///   - requestCode: Request code to identify the permission request result
     public func requestPermissions(_ permissions: [ManifestPermission], requestCode: Int) {
         #if os(Android)
-        for permission in permissions {
-            permission.warnIfNeeded()
-        }
         let jPermissions = permissions.compactMap { $0.value.wrap() }
         guard
-            let clazz = JClass.load("androidx/core/app/ActivityCompat"),
+            let clazz = JClass.load("androidx/core/app/ActivityCompat")
+        else { return }
+        guard
             let array = jPermissions.javaArray(of: JString.className)
         else { return }
-        clazz.staticVoidMethod(name: "requestPermissions", args: context.signed(as: "android/app/Activity"), array.signed(as: JClassName("java/lang/String").asArray()), Int32(requestCode))
+        clazz.staticVoidMethod(name: "requestPermissions", args: context.signed(as: "android/app/Activity"), array.signed(as: JString.className.asArray()), Int32(requestCode))
         #endif
+    }
+
+    public func requestPermissions(_ permissions: ManifestPermission..., requestCode: Int = Int.random(in: 1000...1100), _ result: @escaping (_ results: [ActivityPermissionResult]) -> Void) {
+        self.requestPermissions(permissions, requestCode: requestCode, result)
+    }
+
+    /// Request permissions at runtime with a completion handler.
+    ///
+    /// - Parameters:
+    ///   - permissions: Array of ManifestPermission to request
+    ///   - requestCode: Request code to identify the permission request result, randomized by default
+    ///   - result: Completion handler with array of `ActivityPermissionResult` and deviceId
+    public func requestPermissions(_ permissions: [ManifestPermission], requestCode: Int = Int.random(in: 1000...1100), _ result: @escaping (_ results: [ActivityPermissionResult]) -> Void) {
+        var results: [ActivityPermissionResult] = []
+        var toRequest: [ManifestPermission] = []
+        for p in permissions {
+            if checkPermission(p) {
+                print("appending checked permission \(p.value)")
+                results.append(.init(p, true))
+            } else {
+                toRequest.append(p)
+            }
+        }
+        if toRequest.isEmpty {
+            result(results)
+        } else {
+            permissionRequests[requestCode] = { [weak self] r in
+                results.append(contentsOf: r)
+                result(results)
+                self?.permissionRequests.removeValue(forKey: requestCode)
+            }
+            requestPermissions(toRequest, requestCode: requestCode)
+        }
+    }
+
+    /// Request permissions at runtime.
+    ///
+    /// - Parameters:
+    ///   - permissions: Array of ManifestPermission to request
+    ///   - requestCode: Request code to identify the permission request result, randomized by default
+    /// - Returns: Array of permission results
+    public func requestPermissions(_ permissions: ManifestPermission..., requestCode: Int = Int.random(in: 1000...1100)) async -> [ActivityPermissionResult] {
+        await requestPermissions(permissions, requestCode: requestCode)
+    }
+    
+    /// Request permissions at runtime.
+    ///
+    /// - Parameters:
+    ///   - permissions: Array of ManifestPermission to request
+    ///   - requestCode: Request code to identify the permission request result, randomized by default
+    /// - Returns: Array of permission results
+    public func requestPermissions(_ permissions: [ManifestPermission], requestCode: Int = Int.random(in: 1000...1100)) async -> [ActivityPermissionResult] {
+        await withCheckedContinuation { continuation in
+            self.requestPermissions(permissions, requestCode: requestCode) { results in
+                continuation.resume(with: .success(results))
+            }
+        }
     }
 }

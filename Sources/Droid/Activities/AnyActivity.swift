@@ -435,6 +435,11 @@ public struct ActivityPermissionResult: Sendable {
 		self.permission = ManifestPermission.extendedPermissions.first(where: { $0.value == permission }) ?? ManifestPermission(stringLiteral: permission)
 		self.granted = granted == 0
 	}
+
+	public init (_ permission: ManifestPermission, _ granted: Bool) {
+		self.permission = permission
+		self.granted = granted
+	}
 }
 
 extension AnyActivity {

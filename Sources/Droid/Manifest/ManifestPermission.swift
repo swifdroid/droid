@@ -41,16 +41,21 @@ public struct ManifestPermission: ExpressibleByStringLiteral, StringValuable, Se
         .writeApnSettings
     ]
 
-    public func warnIfNeeded() {
-        Task { @MainActor in
-            if (!DroidApp.shared._manifest.usesPermission.contains(where: { $0.params[.androidName] == value })) {
-                Log.c("⚠️ You forgot to add `.usesPermission(.\(value))` to your `DroidApp` manifest!")
-            }
-            if (requiredFeatures.count > 0) {
-                for requiredFeature in requiredFeatures {
-                    if (!DroidApp.shared._manifest.usesFeature.contains(where: { $0.params[.androidName] == requiredFeature.value })) {
-                        Log.c("⚠️ You forgot to add `.usesFeature(.\(requiredFeature.value))` to your `DroidApp` manifest!")
-                    }
+    @MainActor
+    public func warnIfMissing() {
+        let presentPermissions = DroidApp.shared._manifest.items
+            .filter({ $0.name == DroidApp.UsesPermission.name })
+            .compactMap({ $0.params[.androidName] })
+        let presentFeatures = DroidApp.shared._manifest.items
+            .filter({ $0.name == DroidApp.UsesFeature.name })
+            .compactMap({ $0.params[.androidName] })
+        if (!presentPermissions.contains(value)) {
+            Log.c("⚠️ You forgot to add `.usesPermissions(.\(swiftName))` to your `DroidApp` manifest!")
+        }
+        if (requiredFeatures.count > 0) {
+            for requiredFeature in requiredFeatures {
+                if (!presentFeatures.contains(requiredFeature.value)) {
+                    Log.c("⚠️ You forgot to add `.usesFeatures(.\(requiredFeature.swiftName))` to your `DroidApp` manifest!")
                 }
             }
         }
