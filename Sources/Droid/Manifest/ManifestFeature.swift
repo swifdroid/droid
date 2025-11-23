@@ -14,6 +14,23 @@ public struct ManifestFeature: ExpressibleByStringLiteral, StringValuable, Senda
     }
 
     public var description: String { value }
+    public var swiftName: String {
+        let dotParts = value.split(separator: ".").map { String($0) }
+        guard dotParts.count >= 2 else { return value }
+        let root = dotParts[1]
+        // The rest parts (from index 2+) may be snake_case
+        let tailParts = dotParts.dropFirst(2)
+        // Convert each remaining dot-part, which may contain underscores
+        let processed = tailParts
+            .flatMap { part in part.split(separator: "_").map { String($0) } }
+            .map { $0.lowercased() }
+        // Combine into camelCase: root + CamelCase(tail)
+        let camelTail = processed.enumerated().map { index, part in
+            index == 0 ? part : part.capitalized
+        }
+        .joined()
+        return root + camelTail.capitalized
+    }
 
     // MARK: - Hardware features
 
@@ -245,47 +262,47 @@ public struct ManifestFeature: ExpressibleByStringLiteral, StringValuable, Senda
     // MARK: Communication software features 
 
     /// The app uses Session Initiation Protocol (SIP) services. By using SIP, the app can support internet telephony operations, such as video conferencing and instant messaging.
-    public static let hardwareSip: ManifestFeature = "android.software.sip"
+    public static let softwareSip: ManifestFeature = "android.software.sip"
     /// The app uses SIP-based Voice Over Internet Protocol (VoIP) services. By using VoIP, the app can support real-time internet telephony operations, such as two-way video conferencing.
     /// 
     /// By using this feature, an app implies that it also uses the android.software.sip feature, unless this parent feature is declared with android:required="false".
-    public static let hardwareSipVoip: ManifestFeature = "android.software.sip.voip"
+    public static let softwareSipVoip: ManifestFeature = "android.software.sip.voip"
     /// The app displays content from the internet.
-    public static let hardwareWebview: ManifestFeature = "android.software.webview"
+    public static let softwareWebview: ManifestFeature = "android.software.webview"
 
     // MARK: Custom input software features 
 
     /// The app uses a new input method, which the developer defines in an InputMethodService.
     /// Device management software features 
-    public static let hardwareInputMethods: ManifestFeature = "android.software.input_methods"
+    public static let softwareInputMethods: ManifestFeature = "android.software.input_methods"
     /// The app includes logic to handle a backup and restore operation.
-    public static let hardwareBackup: ManifestFeature = "android.software.backup"
+    public static let softwareBackup: ManifestFeature = "android.software.backup"
     /// The app uses device administrators to enforce a device policy.
-    public static let hardwareDeviceAdmin: ManifestFeature = "android.software.device_admin"
+    public static let softwareDeviceAdmin: ManifestFeature = "android.software.device_admin"
     /// The app supports secondary users and managed profiles.
-    public static let hardwareManagedUsers: ManifestFeature = "android.software.managed_users"
+    public static let softwareManagedUsers: ManifestFeature = "android.software.managed_users"
     /// The app can permanently remove users and their associated data.
-    public static let hardwareSecurelyRemovesUsers: ManifestFeature = "android.software.securely_removes_users"
+    public static let softwareSecurelyRemovesUsers: ManifestFeature = "android.software.securely_removes_users"
     /// The app includes logic to handle results from the device's verified boot feature, which detects whether the device's configuration changes during a restart operation.
-    public static let hardwareVerifiedBoot: ManifestFeature = "android.software.verified_boot"
+    public static let softwareVerifiedBoot: ManifestFeature = "android.software.verified_boot"
 
     // MARK: Media software features 
 
     /// The app connects to musical instruments or outputs sound using the Musical Instrument Digital Interface (MIDI) protocol.
-    public static let hardwareMidi: ManifestFeature = "android.software.midi"
+    public static let softwareMidi: ManifestFeature = "android.software.midi"
     /// The app includes commands for printing documents displayed on the device.
-    public static let hardwarePrint: ManifestFeature = "android.software.print"
+    public static let softwarePrint: ManifestFeature = "android.software.print"
     /// The app is designed to run on Android TV devices.
-    public static let hardwareLeanback: ManifestFeature = "android.software.leanback"
+    public static let softwareLeanback: ManifestFeature = "android.software.leanback"
     /// The app streams live television programs.
-    public static let hardwareLiveTv: ManifestFeature = "android.software.live_tv"
+    public static let softwareLiveTv: ManifestFeature = "android.software.live_tv"
 
     // MARK: Screen interface software features 
 
     /// The app uses or provides App Widgets and is intended only for devices that include a Home screen or similar location where users can embed App Widgets.
-    public static let hardwareAppWidgets: ManifestFeature = "android.software.app_widgets"
+    public static let softwareAppWidgets: ManifestFeature = "android.software.app_widgets"
     /// The app behaves as a replacement to the device's Home screen.
-    public static let hardwareHomeScreen: ManifestFeature = "android.software.home_screen"
+    public static let softwareHomeScreen: ManifestFeature = "android.software.home_screen"
     /// The app uses or provides wallpapers that include animation.
-    public static let hardwareLiveWallpaper: ManifestFeature = "android.software.live_wallpaper"
+    public static let softwareLiveWallpaper: ManifestFeature = "android.software.live_wallpaper"
 }

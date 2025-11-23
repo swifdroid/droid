@@ -20,6 +20,16 @@ public struct ManifestPermission: ExpressibleByStringLiteral, StringValuable, Se
     }
 
     public var description: String { value }
+    public var swiftName: String {
+        let parts = value.split(separator: ".").map(String.init)
+        guard parts.count == 3 else { return "" }
+        let raw = parts[2]
+        let words = raw.split(separator: "_")
+        let lower = words.map { $0.lowercased() }
+        return lower.enumerated().map { index, word in
+            index == 0 ? word : word.capitalized
+        }.joined()
+    }
 
     static let extendedPermissions: [ManifestPermission] = [
         .accessCoarseLocation,
