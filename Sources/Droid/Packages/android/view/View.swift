@@ -2652,16 +2652,16 @@ extension View {
 
 struct PivotXProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setPivotX
-    let value: Float
+    let value: (Float, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 extension View {
     /// Sets the `x` location of the point around which the view is rotated and scaled.
     @discardableResult
-    public func pivotX(_ value: Float) -> Self {
-        PivotXProperty(value: value).applyOrAppend(nil, self)
+    public func pivotX(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        PivotXProperty(value: (value, unit)).applyOrAppend(nil, self)
     }
 }
 
@@ -2669,16 +2669,16 @@ extension View {
 
 struct PivotYProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setPivotY
-    let value: Float
+    let value: (Float, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 extension View {
     /// Sets the `y` location of the point around which the view is rotated and scaled.
     @discardableResult
-    public func pivotY(_ value: Float) -> Self {
-        PivotYProperty(value: value).applyOrAppend(nil, self)
+    public func pivotY(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        PivotYProperty(value: (value, unit)).applyOrAppend(nil, self)
     }
 }
 
@@ -3441,16 +3441,16 @@ extension View {
 
 struct TranslationXProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setTranslationX
-    let value: Float
+    let value: (Float, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 extension View {
     /// Sets the horizontal location of this view relative to its left position.
     @discardableResult
-    public func translationX(_ value: Float) -> Self {
-        TranslationXProperty(value: value).applyOrAppend(nil, self)
+    public func translationX(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        TranslationXProperty(value: (value, unit)).applyOrAppend(nil, self)
     }
 }
 
@@ -3458,16 +3458,16 @@ extension View {
 
 struct TranslationYProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setTranslationY
-    let value: Float
+    let value: (Float, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 extension View {
     /// Sets the vertical location of this view relative to its top position.
     @discardableResult
-    public func translationY(_ value: Float) -> Self {
-        TranslationYProperty(value: value).applyOrAppend(nil, self)
+    public func translationY(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        TranslationYProperty(value: (value, unit)).applyOrAppend(nil, self)
     }
 }
 
@@ -3475,16 +3475,16 @@ extension View {
 
 struct TranslationZProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setTranslationZ
-    let value: Float
+    let value: (Float, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.1.toPixels(Int32(value.0)))
     }
 }
 extension View {
     /// Sets the depth location of this view relative to its elevation.
     @discardableResult
-    public func translationZ(_ value: Float) -> Self {
-        TranslationZProperty(value: value).applyOrAppend(nil, self)
+    public func translationZ(_ value: Float, _ unit: DimensionUnit = .dp) -> Self {
+        TranslationZProperty(value: (value, unit)).applyOrAppend(nil, self)
     }
 }
 
