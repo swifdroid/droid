@@ -2868,6 +2868,7 @@ private struct TextColorViewProperty: ViewPropertyToApply {
 }
 extension TextView {
     /// Sets the text color for all the states (normal, selected, focused) to be this color.
+    @discardableResult
     public func textColor(_ color: GraphicsColor) -> Self {
         TextColorViewProperty(value: color).applyOrAppend(nil, self)
     }
@@ -3103,6 +3104,7 @@ private struct TextSizeViewProperty: ViewPropertyToApply {
 }
 extension TextView {
     /// Set the default text size to a given unit and value.
+    @discardableResult
     public func textSize(_ size: Float, _ dimension: DimensionUnit = .sp) -> Self {
         TextSizeViewProperty(value: (size, dimension)).applyOrAppend(nil, self)
     }
