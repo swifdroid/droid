@@ -1191,7 +1191,7 @@ struct EnabledViewProperty: ViewPropertyToApply {
 extension View {
     /// Set the enabled state of this view.
     @discardableResult
-    public func Enabled(_ value: Bool = true) -> Self {
+    public func enabled(_ value: Bool = true) -> Self {
         EnabledViewProperty(value: value).applyOrAppend(nil, self)
     }
 }
