@@ -359,7 +359,7 @@ extension ActionBar {
         guard
             let value = object.callFloatMethod(name: "getElevation")
         else { return nil }
-        return unit.from(value)
+        return unit.fromPixels(value)
     }
 
     /// Retrieve the current height of the ActionBar.
@@ -367,7 +367,7 @@ extension ActionBar {
         guard
             let value = object.callIntMethod(name: "getHeight")
         else { return nil }
-        return unit.from(value)
+        return unit.fromPixels(value)
     }
 
     /// Return the current vertical offset of the action bar.
@@ -378,7 +378,7 @@ extension ActionBar {
         guard
             let value = object.callIntMethod(name: "getHideOffset")
         else { return nil }
-        return unit.from(value)
+        return unit.fromPixels(value)
     }
 }
 
