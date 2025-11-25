@@ -21,6 +21,24 @@ extension LayoutParams.Class {
     static let materialAppBarLayout: Self = .init(.comGoogleAndroid.material.appbar.AppBarLayout.LayoutParams)
 }
 
+/// AppBarLayout is a vertical LinearLayout which implements
+/// many of the features of material designs app bar concept,
+/// namely scrolling gestures.
+/// 
+/// Children should provide their desired scrolling behavior
+/// through setScrollFlags and the associated layout
+/// xml attribute: `app:layout_scrollFlags`.
+/// 
+/// This view depends heavily on being used as a direct child within a `CoordinatorLayout`.
+/// If you use `AppBarLayout` within a different `ViewGroup`, most of its functionality will not work.
+/// 
+/// `AppBarLayout` also requires a separate scrolling sibling in order to know when to scroll.
+/// The binding is done through the `ScrollingViewBehavior` behavior class,
+/// meaning that you should set your scrolling view's behavior
+/// to be an instance of `ScrollingViewBehavior`.
+/// A string resource containing the full class name is available.
+///
+/// [Learn more](https://developer.android.com/reference/com/google/android/material/appbar/AppBarLayout)
 open class AppBarLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.appbar.AppBarLayout }

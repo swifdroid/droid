@@ -66,6 +66,12 @@ extension LayoutParamKey {
 
 // MARK: Behavior
 
+/// Interaction behavior plugin for child views of `CoordinatorLayout`.
+/// 
+/// A Behavior implements one or more interactions that a user can take on a child view.
+/// These interactions may include drags, swipes, flings, or any other gestures.
+///
+/// [Learn more](https://developer.android.com/reference/androidx/coordinatorlayout/widget/CoordinatorLayout.Behavior)
 @MainActor
 open class Behavior: @unchecked Sendable {
     /// The JNI class name

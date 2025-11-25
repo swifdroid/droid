@@ -13,8 +13,8 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
 
 /// A standard toolbar for use within application content.
 /// 
-/// [Learn more](https://developer.android.com/reference/androidx/appcompat/widget/Toolbar#hasExpandedActionView())
 public final class Toolbar: ViewGroup, @unchecked Sendable {
+/// [Learn more](https://developer.android.com/reference/androidx/appcompat/widget/Toolbar)
     /// The JNI class name
     public override class var className: JClassName { .androidx.appcompat.widget.Toolbar }
 

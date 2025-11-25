@@ -16,6 +16,7 @@ protocol _SetTextable: SetTextable, _AnyView {
 @MainActor
 public protocol SetTextable {}
 extension SetTextable {
+    /// Set the text, you can use `String` and `State<String>`
     @discardableResult
     public func text(_ value: String) -> Self {
         guard let s = self as? _SetTextable else { return self }

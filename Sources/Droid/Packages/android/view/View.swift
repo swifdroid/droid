@@ -239,6 +239,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
         return self
     }
     
+    /// Adds a subview to this view.
     @discardableResult
     public func addSubview(_ subview: View) -> Self {
         guard subviews.firstIndex(of: subview) == nil else {
@@ -262,12 +263,14 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
         return self
     }
 
+    /// Adds multiple subviews to this view.
     @discardableResult
     public func addSubviews(_ views: [View]) -> Self {
         views.forEach { self.addSubview($0) }
         return self
     }
     
+    /// Adds multiple subviews to this view.        
     @discardableResult
     public func addSubviews(_ views: View...) -> Self {
         addSubviews(views)
@@ -275,6 +278,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
 
     var _removedFromParentHandlers: [() -> Void] = []
 
+    /// Adds a handler that will be called when view is removed from its parent.
     @discardableResult
     public func onRemovedFromParent(_ handler: @escaping () -> Void) -> Self {
         _removedFromParentHandlers.append(handler)
@@ -1564,7 +1568,7 @@ struct ImportantForContentCaptureProperty: ViewPropertyToApply {
     }
 }
 extension View {
-    /// Sets the mode for determining whether this view is considered important for content capture.
+    /// 
     @discardableResult
     public func importantForContentCapture(_ value: ImportantForContentCaptureMode) -> Self {
         ImportantForContentCaptureProperty(value: value).applyOrAppend(nil, self)
@@ -2170,7 +2174,7 @@ struct OnFocusChangeListenerViewProperty: ViewPropertyToApply {
 extension View {
     public typealias FocusChangeListenerHandler = @MainActor () -> Void
     public typealias FocusChangeListenerEventHandler = @MainActor (NativeOnFocusChangeListenerEvent) -> Void
-    /// OnFocusChangeListener
+    /// Register a callback to be invoked when the focus state of this view changes.
     @discardableResult
     public func onFocusChange(_ handler: @escaping FocusChangeListenerHandler) -> Self {
         #if os(Android)
@@ -2179,7 +2183,7 @@ extension View {
         return self
         #endif
     }
-    /// OnFocusChangeListener
+    /// Register a callback to be invoked when the focus state of this view changes.
     @discardableResult
     public func onFocusChange(_ handler: @escaping FocusChangeListenerEventHandler) -> Self {
         #if os(Android)
@@ -2698,7 +2702,12 @@ struct PreferKeepClearViewProperty: ViewPropertyToApply {
     }
 }
 extension View {
-    /// Sets the pressed state for this view.
+    /// Set a preference to keep the bounds of this view clear from floating windows above this view's window.
+    /// 
+    /// This informs the system that the view is considered a vital area for the user and that ideally it should not be covered.
+    /// Setting this is only appropriate for UI where the user would likely take action to uncover it.
+    /// 
+    /// The system will try to respect this preference, but when not possible will ignore it.
     @discardableResult
     public func preferKeepClear(_ value: Bool = true) -> Self {
         PreferKeepClearViewProperty(value: value).applyOrAppend(nil, self)
@@ -2944,7 +2953,7 @@ struct ScrollBarDefaultDelayBeforeFadeProperty: ViewPropertyToApply {
     }
 }
 extension View {
-    /// Define the delay before scrollbars fade.
+    /// Define the delay before scrollbars fade (in seconds).
     @discardableResult
     public func scrollBarDefaultDelayBeforeFade(_ value: Int) -> Self {
         ScrollBarDefaultDelayBeforeFadeProperty(value: value).applyOrAppend(nil, self)
@@ -2961,7 +2970,7 @@ struct ScrollBarFadeDurationProperty: ViewPropertyToApply {
     }
 }
 extension View {
-    /// Define the scrollbar fade duration.
+    /// Define the scrollbar fade duration (in seconds).
     @discardableResult
     public func scrollBarFadeDuration(_ value: Int) -> Self {
         ScrollBarFadeDurationProperty(value: value).applyOrAppend(nil, self)

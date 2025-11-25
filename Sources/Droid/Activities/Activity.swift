@@ -189,6 +189,7 @@ open class Activity: AnyActivity {
 
     // MARK: Methods
 
+    /// Retrieves the current theme associated with the activity.
     public func theme() -> Resources.Theme? {
         #if os(Android)
         InnerLog.t("Activity.getTheme 1")

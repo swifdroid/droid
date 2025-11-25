@@ -10,6 +10,8 @@ extension AndroidXPackage.FragmentPackage.AppPackage {
     
     public var FragmentContainerView: FragmentContainerViewClass { .init(parent: self, name: "FragmentContainerView") }
 }
+// androidx.fragment.app.FragmentContainerView
+// https://developer.android.com/reference/androidx/fragment/app/FragmentContainerView
 
 // class FragmentContainerView: View, @unchecked Sendable {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
