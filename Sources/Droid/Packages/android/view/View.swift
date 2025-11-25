@@ -2479,7 +2479,7 @@ struct OnSystemUiVisibilityChangeListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    public typealias SystemUiVisibilityChangeListenerHandler = @MainActor (_ visibility: Int) -> Void
+    public typealias SystemUiVisibilityChangeListenerHandler = @MainActor (_ visibility: SystemUIFlag) -> Void
     /// Set a listener to receive callbacks when the visibility of the system bar changes.
     @discardableResult
     public func onSystemUIVisibilityChange(_ handler: @escaping SystemUiVisibilityChangeListenerHandler) -> Self {

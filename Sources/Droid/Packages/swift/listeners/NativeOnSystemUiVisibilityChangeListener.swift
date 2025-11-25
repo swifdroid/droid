@@ -19,7 +19,7 @@ final class NativeOnSystemUiVisibilityChangeListener: NativeListener, AnyNativeL
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@MainActor (_ visibility: Int) -> Void)
+    typealias Handler = (@MainActor (_ visibility: SystemUIFlag) -> Void)
 
     /// View
     var view: View?
@@ -34,7 +34,7 @@ final class NativeOnSystemUiVisibilityChangeListener: NativeListener, AnyNativeL
     }
 
     @MainActor
-    func handle(_ visibility: Int) {
+    func handle(_ visibility: SystemUIFlag) {
         handler?(visibility)
     }
 }
@@ -44,7 +44,10 @@ public func nativeListenerOnSystemUiVisibilityChange(env: UnsafeMutablePointer<J
     guard
         let listener: NativeOnSystemUiVisibilityChangeListener = ListenerStore.shared.find(id: uniqueId)
     else { return }
-    let visibility = Int(visibility)
+    guard let visibility = SystemUIFlag(rawValue: visibility) else {
+        InnerLog.c("Unable to parse SystemUIFlag with \(visibility) raw value")
+        return
+    }
     Task { @MainActor in
         listener.handle(visibility)
     }
