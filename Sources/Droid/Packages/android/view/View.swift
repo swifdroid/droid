@@ -312,6 +312,10 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     }
 
     public func removeFromParent() {
+        InnerLog.t("Removing (\(Self.className.name))view(id: \(id)) from parent")
+        for subview in subviews {
+            subview.removeFromParent()
+        }
         parent?.removeSubview(self)
     }
 
