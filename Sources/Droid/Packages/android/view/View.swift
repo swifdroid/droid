@@ -2007,8 +2007,8 @@ struct OnClickListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    public typealias ClickListenerHandler = @MainActor () -> Void
-    public typealias ClickListenerEventHandler = @MainActor (NativeOnClickListenerEvent) -> Void
+    public typealias ClickListenerHandler = @MainActor () async -> Void
+    public typealias ClickListenerEventHandler = @MainActor (NativeOnClickListenerEvent) async -> Void
     /// Register a callback to be invoked when this view is clicked.
     @discardableResult
     public func onClick(_ handler: @escaping ClickListenerHandler) -> Self {
@@ -2022,10 +2022,7 @@ extension View {
     @discardableResult
     public func onClick(_ handler: @escaping ClickListenerEventHandler) -> Self {
         #if os(Android)
-        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
-            guard let self else { return }
-            handler($0)
-        }).applyOrAppend(nil, self)
+        return OnClickListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
         #else
         return self
         #endif

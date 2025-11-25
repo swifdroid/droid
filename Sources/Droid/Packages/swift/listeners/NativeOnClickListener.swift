@@ -19,8 +19,8 @@ final class NativeOnClickListener: NativeListener, AnyNativeListener, @unchecked
 
     var shouldInitWithViewId: Bool { true }
 
-    typealias Handler = (@MainActor () -> Void)
-    typealias HandlerWithEvent = (@MainActor (NativeOnClickListenerEvent) -> Void)
+    typealias Handler = (@MainActor () async -> Void)
+    typealias HandlerWithEvent = (@MainActor (NativeOnClickListenerEvent) async -> Void)
 
     /// View
     var view: View?
@@ -42,10 +42,10 @@ final class NativeOnClickListener: NativeListener, AnyNativeListener, @unchecked
     }
 
     @MainActor
-    func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) {
-        handler?()
+    func handle(_ isSameView: Bool, _ triggerView: NativeListenerTriggerView? = nil) async {
+        await handler?()
         if let view {
-            handlerWithEvent?(.init(view, isSameView, triggerView))
+            await handlerWithEvent?(.init(view, isSameView, triggerView))
         }
     }
 }
@@ -61,7 +61,7 @@ public func nativeListenerOnClick(env: UnsafeMutablePointer<JNIEnv?>, callerClas
         triggerView = .init(id: vId, object: object)
     }
     Task { @MainActor in
-        listener.handle(bool, triggerView)
+        await listener.handle(bool, triggerView)
     }
 }
 #endif
