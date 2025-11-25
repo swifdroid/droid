@@ -29,13 +29,7 @@ open class TextView: View, @unchecked Sendable {
     }
 
     @discardableResult
-    public init (id: Int32? = nil, _ text: String) {
-        super.init(id: id)
-        self.text(text)
-    }
-
-    @discardableResult
-    public init (id: Int32? = nil, _ state: State<String>) {
+    public init<S>(id: Int32? = nil, _ state: S) where S: StateValuable, S.Value == String {
         super.init(id: id)
         self.text(state)
     }

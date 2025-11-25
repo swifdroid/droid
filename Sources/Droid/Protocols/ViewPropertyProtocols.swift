@@ -18,18 +18,16 @@ public protocol SetTextable {}
 extension SetTextable {
     /// Set the text, you can use `String` and `State<String>`
     @discardableResult
-    public func text(_ value: String) -> Self {
+    public func text<S>(_ value: S) -> Self where S: StateValuable, S.Value == String {
         guard let s = self as? _SetTextable else { return self }
-        s.textState?.removeAllListeners()
-        s.textState = .init(wrappedValue: value)
-        SetTextViewProperty(s).applyOrAppend(nil, s)
-        return self
-    }
-    @discardableResult
-    public func text(_ value: State<String>) -> Self {
-        guard let s = self as? _SetTextable else { return self }
-        s.textState?.removeAllListeners()
-        s.textState = value
+        if let state = s.textState, let s = self as? StatesHolder {
+            s.releaseState(state) // Release previous state listeners
+        }
+        if let state = value.stateValue {
+            s.textState = state
+        } else {
+            s.textState = .init(wrappedValue: value.simpleValue)
+        }
         SetTextViewProperty(s).applyOrAppend(nil, s)
         return self
     }
