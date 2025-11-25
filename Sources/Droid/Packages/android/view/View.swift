@@ -3085,7 +3085,7 @@ struct ScrollIndicatorsProperty: ViewPropertyToApply {
 extension View {
     /// Sets the state of all scroll indicators.
     @discardableResult
-    public func scrollIndicators(_ indicators: ScrollIndicator, _ mask: ScrollIndicator? = nil) -> Self {
+    public func scrollIndicators(_ indicators: ScrollIndicator, _ mask: ScrollIndicator? = nil) -> Self { // TODO: add bitwise mask
         ScrollIndicatorsProperty(value: (indicators, mask)).applyOrAppend(nil, self)
     }
 }
@@ -3257,7 +3257,7 @@ extension View {
     /// SystemUiVisibility flags are deprecated.
     /// Use `WindowInsetsController` instead.
     @discardableResult
-    public func systemUiVisibility(_ value: SystemUIFlag) -> Self {
+    public func systemUiVisibility(_ value: SystemUIFlag) -> Self { // TODO: add bitwise mask
         SystemUiVisibilityProperty(value: value).applyOrAppend(nil, self)
     }
 }
