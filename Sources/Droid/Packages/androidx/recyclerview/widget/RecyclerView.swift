@@ -488,7 +488,7 @@ struct ItemPrefetchEnabledLayoutManagerProperty: LayoutManager.ParamToApply {
 // MARK: MeasurementCacheEnabled
 
 struct MeasurementCacheEnabledLayoutManagerProperty: LayoutManager.ParamToApply {
-    let key: LayoutManager.ParamKey = .setMeasurementCacheEnabled
+    let key: LayoutManager.ParamKey = "setItemPrefetchEnabled"
     let value: Bool
     func apply(_ env: JEnv?, _ layoutManager: LayoutManager.LayoutManagerInstance) {
         layoutManager.callVoidMethod(env, name: key.rawValue, args: value)
