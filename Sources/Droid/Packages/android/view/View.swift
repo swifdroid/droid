@@ -2745,28 +2745,23 @@ extension View {
 
 // MARK: RequestedFrameRate
 
-public enum RequestedFrameRate {
-    case high
-    case low
-    case normal
-    case noPreference
-    case custom(Float)
+public struct RequestedFrameRate: ExpressibleByIntegerLiteral, Sendable {
+    public let value: Int32
 
-    var rawValue: Float {
-        switch self {
-            case .high: return -4
-            case .low: return -2
-            case .normal: return -3
-            case .noPreference: return -1
-            case .custom(let value): return value
-        }
+    public init (integerLiteral value: Int32) {
+        self.value = value
     }
+    
+    public static let high: Self = -4
+    public static let low: Self = -2
+    public static let normal: Self = -3
+    public static let noPreference: Self = -1
 }
 struct RequestedFrameRateProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setRequestedFrameRate
     let value: RequestedFrameRate
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.value)
     }
 }
 extension View {
