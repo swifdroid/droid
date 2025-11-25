@@ -84,6 +84,7 @@ public final class NativeOnReceiveContentListenerEvent {
     }
 }
 
+/// [Learn more](https://developer.android.com/reference/android/view/ContentInfo)
 public final class ContentInfo: JObjectable, Sendable {
     /// The JNI class name
     class var className: JClassName { "android/view/ContentInfo" }    
