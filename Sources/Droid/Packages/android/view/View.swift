@@ -2963,15 +2963,15 @@ extension View {
 
 struct ScrollBarFadeDurationProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setScrollBarFadeDuration
-    let value: Int
+    let value: Double
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value))
+        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value * 1000))
     }
 }
 extension View {
     /// Define the scrollbar fade duration (in seconds).
     @discardableResult
-    public func scrollBarFadeDuration(_ value: Int) -> Self {
+    public func scrollBarFadeDuration(_ value: Double) -> Self {
         ScrollBarFadeDurationProperty(value: value).applyOrAppend(nil, self)
     }
 }
