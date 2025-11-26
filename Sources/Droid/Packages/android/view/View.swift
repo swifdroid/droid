@@ -1925,24 +1925,45 @@ struct OnApplyWindowInsetsListenerViewProperty: ViewPropertyToApply {
 }
 #endif
 extension View {
-    public typealias ApplyWindowInsetsListenerHandler = @MainActor () -> Void
-    public typealias ApplyWindowInsetsListenerEventHandler = @MainActor (NativeOnApplyWindowInsetsListenerEvent) -> Void
-    /// Set an OnApplyWindowInsetsListener to take over the policy for applying window insets to this view.
-    @discardableResult
-    public func onApplyWindowInsets(_ handler: @escaping ApplyWindowInsetsListenerHandler) -> Self {
-        #if os(Android)
-        return OnApplyWindowInsetsListenerViewProperty(value: .init(id, viewId: id).setHandler(self, handler)).applyOrAppend(nil, self)
-        #else
-        return self
-        #endif
-    }
+    public typealias ApplyWindowInsetsListenerEventHandler = @MainActor (NativeOnApplyWindowInsetsListenerEvent) -> WindowInsets
     /// Set an OnApplyWindowInsetsListener to take over the policy for applying window insets to this view.
     @discardableResult
     public func onApplyWindowInsets(_ handler: @escaping ApplyWindowInsetsListenerEventHandler) -> Self {
         #if os(Android)
         return OnApplyWindowInsetsListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
-            guard let self else { return }
-            handler($0)
+            guard let self else { return $0.insets }
+            return handler($0)
+        }).applyOrAppend(nil, self)
+        #else
+        return self
+        #endif
+    }
+}
+
+// MARK: OnApplyWindowInsetsCompatListener
+
+#if os(Android)
+struct OnApplyWindowInsetsCompatListenerViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = .setOnApplyWindowInsetsListener
+    let value: NativeOnApplyWindowInsetsCompatListener
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        if value.instance == nil {
+            value.attach(to: instance)
+        }
+        guard let view = instance.view else { return }
+        ViewCompat.onApplyWindowInsetsListener(view, value)
+    }
+}
+#endif
+extension View {
+    public typealias ApplyWindowInsetsCompatListenerEventHandler = @MainActor (NativeOnApplyWindowInsetsCompatListenerEvent) -> WindowInsetsCompat
+    /// Set an OnApplyWindowInsetsListener to take over the policy for applying window insets to this view.
+    @discardableResult
+    public func onApplyWindowInsetsCompat(_ handler: @escaping ApplyWindowInsetsCompatListenerEventHandler) -> Self {
+        #if os(Android)
+        return OnApplyWindowInsetsCompatListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
+            guard let self else { return $0.insets }
+            return handler($0)
         }).applyOrAppend(nil, self)
         #else
         return self
