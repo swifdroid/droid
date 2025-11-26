@@ -215,6 +215,11 @@ open class Activity: AnyActivity {
         return nil
         #endif
     }
+
+    /// Retrieves the value of the `android.R.attr.actionBarSize` attribute from the current theme.
+    public func actionBarSize() -> Int {
+        theme()?.actionBarSize() ?? 0
+    }
 }
 
 extension Activity {
