@@ -268,4 +268,16 @@ public final class ActivityContext: Contextable, JObjectable, JClassLoadable, @u
             self.object.clazz.name.path.components(separatedBy: "/").dropLast().joined(separator: "/")
         return [packageName, activity.className].joined(separator: "/")
     }
+
+extension Activity {
+    /// Retrieve the current Window for the activity.
+    /// This can be used to directly access parts of the Window API
+    /// that are not available through Activity/Screen.
+    public func window() -> Window? {
+        guard
+            let clazz = JClass.load(Window.className),
+            let global = _context.callObjectMethod(name: "getWindow", returningClass: clazz)
+        else { return nil }
+        return Window(global)
+    }
 }
