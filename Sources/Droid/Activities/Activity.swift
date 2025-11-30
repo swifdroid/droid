@@ -220,6 +220,11 @@ open class Activity: AnyActivity {
     public func actionBarSize() -> Int {
         theme()?.actionBarSize() ?? 0
     }
+
+    /// Retrieves a SharedPreferences object from the context
+    public func sharedPreferences(_ name: String, _ mode: Int32 = 0) -> SharedPreferences? {
+        context.sharedPreferences(name, mode)
+    }
 }
 
 extension Activity {
@@ -268,6 +273,18 @@ public final class ActivityContext: Contextable, JObjectable, JClassLoadable, @u
             self.object.clazz.name.path.components(separatedBy: "/").dropLast().joined(separator: "/")
         return [packageName, activity.className].joined(separator: "/")
     }
+
+    /// Retrieves a SharedPreferences object
+    public func sharedPreferences(_ name: String, _ mode: Int32 = 0) -> SharedPreferences? {
+        guard let clazz = JClass.load(SharedPreferences.className) else {
+            return nil
+        }
+        guard let global = callObjectMethod(name: "getSharedPreferences", args: name, mode, returningClass: clazz) else {
+            return nil
+        }
+        return SharedPreferences(global)
+    }
+}
 
 extension Activity {
     /// Retrieve the current Window for the activity.
