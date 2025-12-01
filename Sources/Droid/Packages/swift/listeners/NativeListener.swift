@@ -29,7 +29,7 @@ extension AnyNativeListener {
     func instantiate(_ context: Contextable) -> ListenerInstance? {
         instance = .init(
             id,
-            viewId: nil,
+            viewId: shouldInitWithViewId ? id : nil,
             context.context,
             Self.className
         )
