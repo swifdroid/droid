@@ -27,6 +27,9 @@ public final class Toolbar: ViewGroup, @unchecked Sendable {
     public override init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
         super.init(id: id, content: content)
     }
+
+    var titleState: State<String>?
+    var subtitleState: State<String>?
 }
 
 // MARK: - Methods
@@ -91,3 +94,6 @@ extension Toolbar {
 }
 
 // TODO: implement removeMenuProvider
+
+extension Toolbar: _SetTitleable {}
+extension Toolbar: _SetSubtitleable {}
