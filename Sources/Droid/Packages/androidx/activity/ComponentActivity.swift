@@ -66,4 +66,15 @@ extension ComponentActivity {
     public func invalidateMenu() {
         _context.object.callVoidMethod(name: "invalidateMenu")
     }
+
+    /// Enables the edge-to-edge display for this activity.
+    public func enableEdgeToEdge() {
+        guard
+            let clazz = JClass.load("androidx/activity/EdgeToEdge")
+        else {
+            Log.d("Failed to load androidx/activity/EdgeToEdge class")
+            return
+        }
+        clazz.staticVoidMethod(name: "enable", args: _context.signed(as: ComponentActivity.className))
+    }
 }
