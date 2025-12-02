@@ -13,10 +13,10 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
 
 /// A standard toolbar for use within application content.
 /// 
-public final class Toolbar: ViewGroup, @unchecked Sendable {
 /// [Learn more](https://developer.android.com/reference/androidx/appcompat/widget/Toolbar)
+open class Toolbar: ViewGroup, @unchecked Sendable {
     /// The JNI class name
-    public override class var className: JClassName { .androidx.appcompat.widget.Toolbar }
+    open override class var className: JClassName { .androidx.appcompat.widget.Toolbar }
 
     @discardableResult
     public override init (id: Int32? = nil) {
