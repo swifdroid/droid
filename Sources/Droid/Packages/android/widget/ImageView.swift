@@ -16,3 +16,20 @@ open class ImageView: View, @unchecked Sendable {
         super.init(id: id)
     }
 }
+
+extension ImageView {
+    public enum ScaleType: Int, Sendable {
+        case matrix = 0
+        case fitXY = 1
+        case fitStart = 2
+        case fitCenter = 3
+        case fitEnd = 4
+        case center = 5
+        case centerCrop = 6
+        case centerInside = 7
+
+        public static func from(_ ordinal: Int) -> ScaleType? {
+            return ScaleType(rawValue: ordinal)
+        }
+    }
+}
