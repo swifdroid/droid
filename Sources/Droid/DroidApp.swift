@@ -364,11 +364,24 @@ var androidBuildingArguments: AndroidBuildingArguments {
     // return v
 }
 extension Int32 {
+    /// Returns app-wise unique identifier for the view.
     @MainActor
     public static func nextViewId() -> Int32 {
         DroidApp.getNextViewId()
     }
 }
+public protocol NextViewIdentable {}
+extension NextViewIdentable {
+    /// Returns app-wise unique identifier for the view.
+    @MainActor
+    public static func nextViewId() -> Int32 {
+        DroidApp.getNextViewId()
+    }
+}
+extension Window: NextViewIdentable {}
+extension Activity: NextViewIdentable {}
+extension Fragment: NextViewIdentable {}
+extension View: NextViewIdentable {}
 extension JObject {
     /// Returns object's context reference
     public func context(_ className: JClassName = .android.content.Context) -> JObject? {
