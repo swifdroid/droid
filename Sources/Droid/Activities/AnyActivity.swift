@@ -463,16 +463,16 @@ extension AnyActivity {
 	/// Starts activity the classic way simplified
     public func startActivity(_ activity: AnyActivity.Type) {
         #if os(Android)
-		InnerLog.d("Starting activity 1 \(activity)")
+		InnerLog.t("Starting activity 1 \(activity)")
         guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
             InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
             return
         }
-		InnerLog.d("Starting activity 2 \(activity)")
+		InnerLog.t("Starting activity 2 \(activity)")
 		let activityClassName = context.activityClass(activity)
-		InnerLog.d("Starting activity 2.1 \(activity)")
+		InnerLog.t("Starting activity 2.1 \(activity)")
 		let className = JClassName(stringLiteral: activityClassName)
-		InnerLog.d("Starting activity 2.2 \(activity)")
+		InnerLog.t("Starting activity 2.2 \(activity)")
         guard
             let env = JEnv.current(),
             let intent = Intent(env, className: className)
@@ -480,7 +480,7 @@ extension AnyActivity {
             InnerLog.c("Unable to create `Intent` for \(activity).")
             return
         }
-		InnerLog.d("Starting activity 3 \(activity)")
+		InnerLog.t("Starting activity 3 \(activity)")
 		context.callVoidMethod(nil, name: "startActivity", args: intent.object.signed(as: .android.content.Intent))
         #endif
     }
