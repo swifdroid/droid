@@ -82,7 +82,7 @@ public final class ColorStateList: JObjectable, @unchecked Sendable {
     }
 
     public init! (_ items: [ColorStateListItem]) {
-        InnerLog.d("ColorStateList init 1")
+        InnerLog.t("ColorStateList init 1")
         var statesArray: [[Int32]] = []
         var colorsArray: [Int32] = []
         for item in items {
@@ -93,28 +93,28 @@ public final class ColorStateList: JObjectable, @unchecked Sendable {
             statesArray.append(stateSet)
             colorsArray.append(item.color.value)
         }
-        InnerLog.d("ColorStateList init 2")
+        InnerLog.t("ColorStateList init 2")
         #if os(Android)
         guard
             let env = JEnv.current()
         else {
-            InnerLog.d("ColorStateList init 2.1 exit")
+            InnerLog.t("ColorStateList init 2.1 exit")
             return nil
         }
-        InnerLog.d("ColorStateList init 3")
+        InnerLog.t("ColorStateList init 3")
         guard
             let clazz = JClass.load(Self.className)
         else {
-            InnerLog.d("ColorStateList init 3.1 exit")
+            InnerLog.t("ColorStateList init 3.1 exit")
             return nil
         }
-        InnerLog.d("ColorStateList init 4")
+        InnerLog.t("ColorStateList init 4")
         guard
             let global = clazz.newObject(env, args: statesArray, colorsArray)
         else {
-            InnerLog.d("ColorStateList init 4.1 exit")
+            InnerLog.t("ColorStateList init 4.1 exit")
             return nil }
-        InnerLog.d("ColorStateList init 5")
+        InnerLog.t("ColorStateList init 5")
         self.object = global
         #else
         return nil

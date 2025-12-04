@@ -310,7 +310,7 @@ open class DroidApp: @unchecked Sendable {
     #endif
     
     private func start() {
-        InnerLog.d("start")
+        InnerLog.t("start")
         parseAppBuilderItem(body.appBuilderContent)
         _lifecycles.forEach { $0._didFinishLaunching.forEach { $0() } }
     }
@@ -410,26 +410,26 @@ public func onCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobje
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_configurationChanged")
 /// Called by the system when the device configuration changes
 public func configurationChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, newValues: jintArray) {
-    InnerLog.d("update config 1")
+    InnerLog.t("update config 1")
     let env = JEnv(envPointer)
     let length = env.getArrayLength(newValues)
     var swiftArray = [Int32](repeating: 0, count: Int(length))
     env.getIntArrayRegion(newValues, start: 0, length: length, buffer: &swiftArray)
     if let shared = DroidApp.shared {
-        InnerLog.d("update config 5.1")
+        InnerLog.t("update config 5.1")
         Task { @MainActor in
             if shared.isStarted {
-                InnerLog.d("update config 5.2")
+                InnerLog.t("update config 5.2")
             } else {
-                InnerLog.d("update config 5.3")
+                InnerLog.t("update config 5.3")
             }
             shared.updateConfiguration(swiftArray)
-            InnerLog.d("update config 5.4")
+            InnerLog.t("update config 5.4")
         }
     } else {
-        InnerLog.d("update config failed, shared app is nil")
+        InnerLog.t("update config failed, shared app is nil")
     }
-    InnerLog.d("update config 6")
+    InnerLog.t("update config 6")
 }
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_lowMemory")
 /// This is called when the overall system is running low on memory,

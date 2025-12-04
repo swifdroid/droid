@@ -123,43 +123,43 @@ open class Activity: AnyActivity {
 
     @discardableResult
     open func body(@BodyBuilder block: BodyBuilder.SingleView) -> Self {
-        InnerLog.d("activity body 1")
+        InnerLog.t("activity body 1")
         if let contentView {
-            InnerLog.d("activity body 2 (existing contentView)")
+            InnerLog.t("activity body 2 (existing contentView)")
             contentView.body(block: block)
         } else {
-            InnerLog.d("activity body 3")
+            InnerLog.t("activity body 3")
             let item = block().bodyBuilderItem
             func setDefaultFrameLayout(_ item: BodyBuilderItem) {
-                InnerLog.d("activity body setDefaultFrameLayout")
+                InnerLog.t("activity body setDefaultFrameLayout")
                 contentView(FrameLayout()) { $0.addItem(item) }
             }
             func proceedItem(_ item: BodyBuilderItem) {
                 switch item {
                 case .single(let view):
-                    InnerLog.d("activity body 4 (single)")
+                    InnerLog.t("activity body 4 (single)")
                     contentView(view)
                 case .multiple(let views):
                     if views.count == 1, let view = views.first {
-                        InnerLog.d("activity body 5 (multiple)")
+                        InnerLog.t("activity body 5 (multiple)")
                         contentView(view)
                     } else {
-                        InnerLog.d("activity body 6 (multiple)")
+                        InnerLog.t("activity body 6 (multiple)")
                         setDefaultFrameLayout(item)
                     }
                 case .nested(let items):
                     if items.count == 1, let item = items.first {
-                        InnerLog.d("activity body 7 (nested)")
+                        InnerLog.t("activity body 7 (nested)")
                         proceedItem(item.bodyBuilderItem)
                     } else {
-                        InnerLog.d("activity body 8 (nested)")
+                        InnerLog.t("activity body 8 (nested)")
                         setDefaultFrameLayout(item)
                     }
                 case .forEach:
-                    InnerLog.d("activity body 9 (forEach)")
+                    InnerLog.t("activity body 9 (forEach)")
                     setDefaultFrameLayout(item)
                 case .none:
-                    InnerLog.d("activity body 10 (none)")
+                    InnerLog.t("activity body 10 (none)")
                     setDefaultFrameLayout(item)
                 }
             }

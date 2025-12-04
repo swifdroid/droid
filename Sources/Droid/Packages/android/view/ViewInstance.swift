@@ -45,7 +45,7 @@ extension View {
             self.object = global
             self.view = view
             self.context = context
-            InnerLog.d("❤️❤️❤️ INIT 1 view(id: \(id)) viewInstance: \(self.className.fullName) ref: \(object.ref.ref))")
+            InnerLog.t("🟩🟩 View.ViewInstance.init(id: \(id)) 1: \(self.className.fullName) ref: \(object.ref.ref))")
             // Assign Swift-generated id
             global.callVoidMethod(env, name: "setId", args: id)
             #else
@@ -59,7 +59,7 @@ extension View {
             self.object = object
             self.view = view
             self.context = context
-            InnerLog.d("❤️❤️❤️ INIT 2 view(id: \(id)) viewInstance: \(self.className.fullName) ref: \(object.ref.ref))")
+            InnerLog.t("🟩🟩 View.ViewInstance.init(id: \(id)) 2: \(self.className.fullName) ref: \(object.ref.ref))")
             if setId {
                 // Assign Swift-generated id
                 object.callVoidMethod(name: "setId", args: id)
@@ -70,7 +70,7 @@ extension View {
         }
 
         deinit {
-            InnerLog.d("💔💔💔 DEINIT view(id: \(id)) viewInstance: \(self.className.fullName)")
+            InnerLog.t("🟥🟥🟥 View.ViewInstance DEINIT(id: \(id)): \(self.className.fullName)")
             releaseStates()
         }
 
@@ -88,32 +88,32 @@ extension View {
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "requestLayout", signature: .returning(.void))
             else { return }
-            // InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 1")
+            // InnerLog.t("⚡️view(id: \(id)) viewInstance requestLayout 1")
             env.callVoidMethod(object: object, methodId: methodId)
-            // InnerLog.d("⚡️view(id: \(id)) viewInstance requestLayout 2")
+            // InnerLog.t("⚡️view(id: \(id)) viewInstance requestLayout 2")
             #endif
         }
         
         public func layoutParams(_ lpClassName: JClassName? = nil) -> LayoutParams? {
             #if os(Android)
-            // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1")
+            // InnerLog.t("view(id: \(id)) viewInstance getLayoutParams 1")
             guard let env = JEnv.current() else {
-                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.1 exit")
+                // InnerLog.t("view(id: \(id)) viewInstance getLayoutParams 1.1 exit")
                 return nil
             }
             guard let methodId = clazz.methodId(env: env, name: "getLayoutParams", signature: .returning(.object(.android.view.ViewGroup.LayoutParams))) else {
-                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
+                // InnerLog.t("view(id: \(id)) viewInstance getLayoutParams 1.2 exit clazz: \(clazz.name.path)")
                 return nil
             }
-                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
+                // InnerLog.t("view(id: \(id)) viewInstance getLayoutParams 1.3 exit clazz: \(clazz.name.path)")
             guard let lpClazz = JClass.load(lpClassName ?? self.lpClassName ?? .init(stringLiteral: "\(className.path)$LayoutParams")) else {
                 return nil
             }
             guard let globalObject = env.callObjectMethod(object: object, methodId: methodId, returningClass: lpClazz) else {
-                // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
+                // InnerLog.t("view(id: \(id)) viewInstance getLayoutParams 1.4 exit")
                 return nil
             }
-            // InnerLog.d("view(id: \(id)) viewInstance getLayoutParams 2")
+            // InnerLog.t("view(id: \(id)) viewInstance getLayoutParams 2")
             return LayoutParams(globalObject)
             #else
             return nil
@@ -126,9 +126,9 @@ extension View {
                 let env = JEnv.current(),
                 let methodId = clazz.methodId(env: env, name: "setLayoutParams", signature: .init(.object(.android.view.ViewGroup.LayoutParams), returning: .void))
             else { return }
-            // InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 1")
+            // InnerLog.t("view(id: \(id)) viewInstance setLayoutParams 1")
             env.callVoidMethod(object: object, methodId: methodId, args: [params.object])
-            // InnerLog.d("view(id: \(id)) viewInstance setLayoutParams 2")
+            // InnerLog.t("view(id: \(id)) viewInstance setLayoutParams 2")
             #endif
         }
 
@@ -141,9 +141,9 @@ extension View {
         ///     - index: the position at which to add the child
         ///     - layoutParams: the layout parameters to set on the child
         public func addView(_ viewInstance: ViewInstance, index: Int? = nil, layoutParams: LayoutParams? = nil) {
-            InnerLog.d("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
-            InnerLog.d("💚 view(id: \(id)) self viewInstance: \(self)")
-            InnerLog.d("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
+            InnerLog.t("💚 view(id: \(id)) viewInstance addView class: \(className.name)")
+            InnerLog.t("💚 view(id: \(id)) self viewInstance: \(self)")
+            InnerLog.t("💚 view(id: \(id)) target viewInstance: \(viewInstance)")
             var args: [JSignatureItemable] = [viewInstance.object.signed(as: .android.view.View)]
             if let index {
                 args.append(Int32(index))
@@ -151,9 +151,9 @@ extension View {
             if let layoutParams {
                 args.append(layoutParams.object.signed(as: .android.view.ViewGroup.LayoutParams))
             }
-            InnerLog.d("💚 view(id: \(id)) viewInstance addView 1")
+            InnerLog.t("💚 view(id: \(id)) viewInstance addView 1")
             object.callVoidMethod(name: "addView", args: args)
-            InnerLog.d("💚 view(id: \(id)) viewInstance addView 2")
+            InnerLog.t("💚 view(id: \(id)) viewInstance addView 2")
         }
 
         /// Removes a child view.
