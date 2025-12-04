@@ -5,10 +5,11 @@
 //  Created by Mihael Isaev on 21.11.2025.
 //
 
-/// A standard toolbar for use within application content.
+/// `MaterialToolbar` is a `Toolbar` that implements certain Material features,
+/// such as elevation overlays for Dark Themes and centered titles.
 /// 
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/appbar/MaterialToolbar)
-public final class MaterialToolbar: Toolbar, @unchecked Sendable {
+public final class MaterialToolbar: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     public override class var className: JClassName { "com/google/android/material/appbar/MaterialToolbar" }
 
@@ -23,191 +24,81 @@ public final class MaterialToolbar: Toolbar, @unchecked Sendable {
     }
 }
 
-// MARK: - Fields
-
-// TODO: logoScaleType
-// TODO: navigationIconTint
-
 // MARK: - Methods
 
-// MARK: clearNavigationIconTint
-
-fileprivate struct ClearNavigationIconTintViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "clearNavigationIconTint"
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue)
-    }
-}
 extension MaterialToolbar {
-    /// Clears the tint list of the toolbar's navigation icon.
-    /// 
-    /// E.g., if the navigation icon is an XML based vector drawable,
-    /// calling this method will clear the `android:tint`.
-    @discardableResult
-    public func clearNavigationIconTint() -> Self {
-        ClearNavigationIconTintViewProperty().applyOrAppend(nil, self)
+    /// Check whether this Toolbar is currently hosting an expanded action view.
+    public func hasExpandedActionView() -> Bool {
+        instance?.callBoolMethod(name: "hasExpandedActionView") ?? false
     }
 }
 
-// MARK: getLogoScaleType
-
-extension MaterialToolbar {
-    /// Returns scale type of logo's `ImageView`.
-    public func logoScaleType() -> ImageView.ScaleType? {
-        guard let enumOrdinal = instance?.callIntMethod(name: "getLogoScaleType") else { return nil }
-        return .init(rawValue: Int(enumOrdinal))
+extension Toolbar {
+    /// Hide the overflow items from the associated menu.
+    public func hideOverflowMenu() -> Bool {
+        instance?.callBoolMethod(name: "hideOverflowMenu") ?? false
     }
 }
 
-// MARK: getNavigationIconTint
-
-extension MaterialToolbar {
-    /// Gets the tint color of the toolbar's navigation icon,
-    /// or null if no tint color has been set.
-    public func navigationIconTint() -> GraphicsColor? {
-        guard let clazz = JClass.load(JInteger.className) else { return nil }
-        guard let object: JObject = instance?.callObjectMethod(name: "getNavigationIconTint", returningClass: clazz) else { return nil }
-        guard let value = JInteger(object).intValue() else { return nil }
-        return GraphicsColor(integerLiteral: value)
-    }
-}
-
-// MARK: isLogoAdjustViewBounds
-
-extension MaterialToolbar {
-    /// Returns whether the logo's `ImageView` adjusts its bounds
-    /// to preserve the aspect ratio of its drawable.
-    public func isLogoAdjustViewBounds() -> Bool {
-        instance?.callBoolMethod(name: "isLogoAdjustViewBounds") ?? false
-    }
-}
-
-// MARK: isSubtitleCentered
-
-extension MaterialToolbar {
-    /// Returns whether the subtitle text corresponding to the `setSubtitle` method
-    /// should be centered horizontally within the toolbar.
-    public func isSubtitleCentered() -> Bool {
-        instance?.callBoolMethod(name: "isSubtitleCentered") ?? false
-    }
-}
-
-// MARK: isTitleCentered
-
-extension MaterialToolbar {
-    /// Returns whether the title text corresponding to the `setTitle` method
-    /// should be centered horizontally within the toolbar.
-    public func isTitleCentered() -> Bool {
-        instance?.callBoolMethod(name: "isTitleCentered") ?? false
-    }
-}
-
-// MARK: setLogoAdjustViewBounds
-
-fileprivate struct ElevationViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "setLogoAdjustViewBounds"
-    let value: Bool
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
-    }
-}
-extension MaterialToolbar {
-    /// Sets `ImageView.adjustViewBounds` for logo's `ImageView`.
-    @discardableResult
-    public func logoAdjustViewBounds(_ adjustViewBounds: Bool = true) -> Self {
-        ElevationViewProperty(value: adjustViewBounds).applyOrAppend(nil, self)
-    }
-}
-
-// MARK: setLogoScaleType
-
-fileprivate struct LogoScaleTypeViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "setLogoScaleType"
-    let value: ImageView.ScaleType
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: Int32(value.rawValue))
-    }
-}
-extension MaterialToolbar {
-    /// Sets `ImageView.ScaleType` for logo's `ImageView`.
-    @discardableResult
-    public func logoScaleType(_ scaleType: ImageView.ScaleType) -> Self {
-        LogoScaleTypeViewProperty(value: scaleType).applyOrAppend(nil, self)
-    }
-}
-
-// MARK: setNavigationIcon
-
-fileprivate struct NavigationIconViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "setNavigationIcon"
-    let value: Drawable
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value.signed(as: Drawable.className))
-    }
-}
-extension MaterialToolbar {
-    /// Sets the navigation icon to a given drawable.
-    @discardableResult
-    public func navigationIcon(_ drawable: Drawable) -> Self {
-        NavigationIconViewProperty(value: drawable).applyOrAppend(nil, self)
-    }
-}
-
-// MARK: setNavigationIconTint
-
-fileprivate struct NavigationIconTintViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "setNavigationIconTint"
-    let value: GraphicsColor
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value.value)
-    }
-}
-extension MaterialToolbar {
-    /// Sets the color of the toolbar's navigation icon.
-    @discardableResult
-    public func navigationIconTint(_ color: GraphicsColor) -> Self {
-        NavigationIconTintViewProperty(value: color).applyOrAppend(nil, self)
-    }
-}
-
-// MARK: setSubtitleCentered
-
-fileprivate struct SubtitleCenteredViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "setSubtitleCentered"
-    let value: Bool
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
-    }
-}
-extension MaterialToolbar {
-    /// Sets whether the subtitle text corresponding to the `setSubtitle` method
-    /// should be centered horizontally within the toolbar.
+extension Toolbar {
+    /// Invalidates the to ensure that what is displayed matches the current internal state of the menu.
     ///
-    /// Note: it is not recommended to use centered titles in conjunction
-    /// with a nested custom view, as there may be positioning and overlap issues.
-    @discardableResult
-    public func subtitleCentered(_ centered: Bool = true) -> Self {
-        SubtitleCenteredViewProperty(value: centered).applyOrAppend(nil, self)
+    /// This should be called whenever the state of the menu is changed, such as items being removed or disabled based on some user event.
+    /// Only the items in the Menu that were provided by `MenuProviders` should be removed and repopulated, leaving
+    /// all manually inflated menu items untouched, as they should continue to be managed manually.
+    public func invalidateMenu() {
+        instance?.callVoidMethod(name: "invalidateMenu")
     }
 }
 
-// MARK: setTitleCentered
+extension Toolbar {
+    /// Returns whether the toolbar will attempt to register its own `OnBackInvokedCallback` in supported configurations
+    /// to handle collapsing expanded action items when a back invocation occurs.
+    public func isBackInvokedCallbackEnabled() -> Bool {
+        instance?.callBoolMethod(name: "isBackInvokedCallbackEnabled") ?? false
+    }
+}
 
-fileprivate struct TitleCenteredViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "setTitleCentered"
-    let value: Bool
+extension Toolbar {
+    /// Check whether the overflow menu is currently showing.
+    /// This may not reflect a pending show operation in progress.
+    public func isOverflowMenuShowing() -> Bool {
+        instance?.callBoolMethod(name: "isOverflowMenuShowing") ?? false
+    }
+}
+
+extension Toolbar {
+    public func onHoverEvent(_ event: MotionEvent) -> Bool {
+        instance?.callBoolMethod(name: "onHoverEvent", args: event.signed(as: MotionEvent.className)) ?? false
+    }
+}
+
+extension Toolbar {
+    public func onRtlPropertiesChanged(_ direction: LayoutDirection) {
+        instance?.callVoidMethod(name: "onRtlPropertiesChanged", args: direction.rawValue)
+    }
+}
+
+extension Toolbar {
+    public func onTouchEvent(_ event: MotionEvent) -> Bool {
+        instance?.callBoolMethod(name: "onTouchEvent", args: event.signed(as: MotionEvent.className)) ?? false
+    }
+}
+
+// TODO: implement removeMenuProvider
+
+// MARK: Title
+
+fileprivate struct TitleViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = "setTitle"
+    let value: String
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.wrap().signedAsCharSequence())
     }
 }
-extension MaterialToolbar {
-    /// Sets whether the title text corresponding to the `setTitle` method
-    /// should be centered horizontally within the toolbar.
-    /// 
-    /// Note: it is not recommended to use centered titles in conjunction
-    /// with a nested custom view, as there may be positioning and overlap issues.
+extension Toolbar {
     @discardableResult
-    public func titleCentered(_ centered: Bool = true) -> Self {
-        TitleCenteredViewProperty(value: centered).applyOrAppend(nil, self)
+    public func title(_ title: String) -> Self {
+        TitleViewProperty(value: title).applyOrAppend(nil, self)
     }
 }

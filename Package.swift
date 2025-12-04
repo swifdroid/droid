@@ -4,7 +4,6 @@ import PackageDescription
 let package = Package(
     name: "droid",
     products: [
-        .library(name: "DroidMaterial", targets: ["DroidMaterial"]),
         .library(name: "Droid", targets: ["Droid"]),
     ],
     dependencies: [
@@ -12,9 +11,6 @@ let package = Package(
         .package(url: "https://github.com/swifdroid/AndroidLogging.git", from: "0.1.0")
     ],
     targets: [
-        .target(name: "DroidMaterial", dependencies: [
-            .target(name: "Droid")
-        ]),
         .target(name: "Droid", dependencies: [
             .product(name: "JNIKit", package: "jni-kit"),
             .target(name: "Manifest"),

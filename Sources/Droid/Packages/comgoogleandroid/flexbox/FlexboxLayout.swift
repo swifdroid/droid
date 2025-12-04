@@ -17,6 +17,7 @@ extension LayoutParams.Class {
     static let flexboxLayout: Self = .init(.comGoogleAndroid.FlexboxLayout.LayoutParams)
 }
 
+/// [Learn more]()
 open class FlexboxLayout: ViewGroup, @unchecked Sendable {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.FlexboxLayout }
