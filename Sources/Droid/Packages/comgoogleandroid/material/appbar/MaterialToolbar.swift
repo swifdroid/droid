@@ -22,6 +22,9 @@ public final class MaterialToolbar: ViewGroup, @unchecked Sendable {
     public override init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
         super.init(id: id, content: content)
     }
+
+    var titleState: State<String>?
+    var subtitleState: State<String>?
 }
 
 // MARK: - Methods
@@ -33,14 +36,14 @@ extension MaterialToolbar {
     }
 }
 
-extension Toolbar {
+extension MaterialToolbar {
     /// Hide the overflow items from the associated menu.
     public func hideOverflowMenu() -> Bool {
         instance?.callBoolMethod(name: "hideOverflowMenu") ?? false
     }
 }
 
-extension Toolbar {
+extension MaterialToolbar {
     /// Invalidates the to ensure that what is displayed matches the current internal state of the menu.
     ///
     /// This should be called whenever the state of the menu is changed, such as items being removed or disabled based on some user event.
@@ -51,7 +54,7 @@ extension Toolbar {
     }
 }
 
-extension Toolbar {
+extension MaterialToolbar {
     /// Returns whether the toolbar will attempt to register its own `OnBackInvokedCallback` in supported configurations
     /// to handle collapsing expanded action items when a back invocation occurs.
     public func isBackInvokedCallbackEnabled() -> Bool {
@@ -59,7 +62,7 @@ extension Toolbar {
     }
 }
 
-extension Toolbar {
+extension MaterialToolbar {
     /// Check whether the overflow menu is currently showing.
     /// This may not reflect a pending show operation in progress.
     public func isOverflowMenuShowing() -> Bool {
@@ -67,19 +70,19 @@ extension Toolbar {
     }
 }
 
-extension Toolbar {
+extension MaterialToolbar {
     public func onHoverEvent(_ event: MotionEvent) -> Bool {
         instance?.callBoolMethod(name: "onHoverEvent", args: event.signed(as: MotionEvent.className)) ?? false
     }
 }
 
-extension Toolbar {
+extension MaterialToolbar {
     public func onRtlPropertiesChanged(_ direction: LayoutDirection) {
         instance?.callVoidMethod(name: "onRtlPropertiesChanged", args: direction.rawValue)
     }
 }
 
-extension Toolbar {
+extension MaterialToolbar {
     public func onTouchEvent(_ event: MotionEvent) -> Bool {
         instance?.callBoolMethod(name: "onTouchEvent", args: event.signed(as: MotionEvent.className)) ?? false
     }
@@ -87,18 +90,5 @@ extension Toolbar {
 
 // TODO: implement removeMenuProvider
 
-// MARK: Title
-
-fileprivate struct TitleViewProperty: ViewPropertyToApply {
-    let key: ViewPropertyKey = "setTitle"
-    let value: String
-    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value.wrap().signedAsCharSequence())
-    }
-}
-extension Toolbar {
-    @discardableResult
-    public func title(_ title: String) -> Self {
-        TitleViewProperty(value: title).applyOrAppend(nil, self)
-    }
-}
+extension MaterialToolbar: _SetTitleable {}
+extension MaterialToolbar: _SetSubtitleable {}
