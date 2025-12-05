@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Droid
-
 extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage {
     public class AppBarLayoutClass: JClassName, @unchecked Sendable {}
     public var AppBarLayout: AppBarLayoutClass { .init(parent: self, name: "AppBarLayout") }
@@ -72,20 +70,9 @@ open class AppBarLayout: ViewGroup, @unchecked Sendable {
 }
 
 extension LayoutParamKey {
-    static let weight: Self = "weight"
     static let scrollEffect: Self = "setScrollEffect"
     static let scrollFlags: Self = "setScrollFlags"
     static let scrollInterpolator: Self = "setScrollInterpolator"
-}
-
-// MARK: Weight
-
-struct WeightLayoutParam: LayoutParamToApply {
-    let key: LayoutParamKey = .weight
-    let value: Float
-    func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.setField(env, name: key.rawValue, arg: value)
-    }
 }
 
 // MARK: ScrollEffect
