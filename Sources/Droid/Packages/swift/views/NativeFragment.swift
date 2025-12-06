@@ -19,20 +19,20 @@ open class NativeFragment: NativeUIObject, AnyNativeObject, @unchecked Sendable 
 
     public init! (_ context: Contextable) {
         guard let env = JEnv.current() else { return nil }
-        super.init(env, context.context, Self.nativeObjectClassName)
+        super.init(env, context, Self.nativeObjectClassName, .static)
     }
 
-    public convenience init? (_ context: ActivityContext, _ className: JClassName) {
+    public convenience init? (_ context: Contextable, _ className: JClassName) {
         guard let env = JEnv.current() else { return nil }
-        self.init(env, context, Self.nativeObjectClassName)
+        self.init(env, context, Self.nativeObjectClassName, .static)
     }
 
-    public override init?(_ env: JEnv, _ context: Contextable, _ className: JClassName) {
-        super.init(env, context, Self.nativeObjectClassName)
+    public override init? (_ env: JEnv, _ context: Contextable, _ className: JClassName, _ initializer: Initializer = .normal) {
+        super.init(env, context, Self.nativeObjectClassName, .static)
     }
 
     /// Called when a fragment is first attached to its context. `onCreate` will be called after this.
-    open func onAttach(_ context: ActivityContext) {}
+    open func onAttach(_ context: Contextable) {}
     
     // TODO: onConfigurationChanged -> use DroidApp's configuration change event instead
     

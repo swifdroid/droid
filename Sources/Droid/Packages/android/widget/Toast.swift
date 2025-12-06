@@ -14,7 +14,7 @@ extension AndroidPackage.WidgetPackage {
 public final class Toast: JObjectable, @unchecked Sendable {
     public static var className: JClassName { .android.widget.Toast }
 
-    unowned let context: ActivityContext
+    private(set) weak var context: ActivityContext?
     public let object: JObject
 
     public convenience init? (_ context: Contextable) {
@@ -24,12 +24,16 @@ public final class Toast: JObjectable, @unchecked Sendable {
     
     init? (_ env: JEnv, _ context: Contextable) {
         #if os(Android)
+        guard let context = context.context else  {
+            InnerLog.c("🟥 Toast: Failed to initialize: context is nil")
+            return nil
+        }
         guard
-            let classLoader = context.context.getClassLoader(),
+            let classLoader = context.getClassLoader(),
             let clazz = classLoader.loadClass(Self.className),
-            let global = clazz.newObject(env, args: context.context.object.signed(as: .android.content.Context))
+            let global = clazz.newObject(env, args: context.object.signed(as: .android.content.Context))
         else { return nil }
-        self.context = context.context
+        self.context = context
         self.object = global
         #else
         return nil
@@ -59,6 +63,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
     @discardableResult
     public func view(_ view: View) -> Self {
         guard
+            let context,
             let instance = view.setStatusAsContentView(context)
         else { return self }
         object.callVoidMethod(name: "setView", args: instance.signed(as: .android.view.View))
@@ -129,7 +134,10 @@ public final class Toast: JObjectable, @unchecked Sendable {
         let callback = NativeToastCallback(DroidApp.getNextViewId(), viewId: nil)
             .setHandlers(onShown: onShown, onHidden: onHidden)
         self.callback = callback
-        guard let instance = callback.instantiate(context) else { return }
+        guard
+            let context,
+            let instance = callback.instantiate(context)
+        else { return }
         object.callVoidMethod(name: "addCallback", args: [(instance.object, .object("android/widget/Toast$Callback"))])
         #endif
     }
@@ -139,11 +147,12 @@ public final class Toast: JObjectable, @unchecked Sendable {
         #if os(Android)
         guard
             let env = JEnv.current(),
-            let classLoader = context.context.getClassLoader(),
+            let context = context.context,
+            let classLoader = context.getClassLoader(),
             let clazz = classLoader.loadClass(.android.widget.Toast),
             let methodId = clazz.staticMethodId(name: "makeText", signature: .init(.object(.android.content.Context), .object(.java.lang.CharSequence), .int, returning: .object(.android.widget.Toast))),
             let string = JString(from: text),
-            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.context.object, string, duration.rawValue], returningClass: clazz)
+            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.object, string, duration.rawValue], returningClass: clazz)
         else { return nil }
         return Toast(context, global)
         #else
@@ -156,11 +165,12 @@ public final class Toast: JObjectable, @unchecked Sendable {
         #if os(Android)
         guard
             let env = JEnv.current(),
-            let classLoader = context.context.getClassLoader(),
+            let context = context.context,
+            let classLoader = context.getClassLoader(),
             let clazz = classLoader.loadClass(.android.widget.Toast),
             let methodId = clazz.staticMethodId(name: "makeText", signature: .init(.object(.android.content.Context), .object(.java.lang.CharSequence), .int, .object(.android.graphics.drawable.Drawable), returning: .object(.android.widget.Toast))),
             let string = JString(from: text),
-            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.context.object, string, duration.rawValue, icon.object], returningClass: clazz)
+            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.object, string, duration.rawValue, icon.object], returningClass: clazz)
         else { return nil }
         return Toast(context, global)
         #else
@@ -173,10 +183,11 @@ public final class Toast: JObjectable, @unchecked Sendable {
         #if os(Android)
         guard
             let env = JEnv.current(),
-            let classLoader = context.context.getClassLoader(),
+            let context = context.context,
+            let classLoader = context.getClassLoader(),
             let clazz = classLoader.loadClass(.android.widget.Toast),
             let methodId = clazz.staticMethodId(name: "makeText", signature: .init(.object(.android.content.Context), .int, .int, returning: .object(.android.widget.Toast))),
-            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.context.object, stringResId, duration.rawValue], returningClass: clazz)
+            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.object, stringResId, duration.rawValue], returningClass: clazz)
         else { return nil }
         return Toast(context, global)
         #else

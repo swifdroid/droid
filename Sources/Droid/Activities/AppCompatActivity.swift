@@ -76,11 +76,19 @@ open class AppCompatActivity: FragmentActivity {
 
 extension AppCompatActivity {
     public func closeOptionsMenu() {
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to closeOptionsMenu: activity context is nil")
+            return
+        }
         context.object.callVoidMethod(name: "closeOptionsMenu")
     }
 
     public func dispatchKeyEvent(_ event: KeyEvent) -> Bool {
-        context.object.callBoolMethod(name: "dispatchKeyEvent", args: event.signed(as: KeyEvent.className)) ?? false
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to dispatchKeyEvent: activity context is nil")
+            return false
+        }
+        return context.object.callBoolMethod(name: "dispatchKeyEvent", args: event.signed(as: KeyEvent.className)) ?? false
     }
 
     // TODO: getDelegate
@@ -90,6 +98,10 @@ extension AppCompatActivity {
 
     /// Retrieve a reference to this activity's ActionBar.
     public func supportActionBar() -> ActionBar! {
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to supportActionBar: activity context is nil")
+            return nil
+        }
         guard
             let returningClazz = JClass.load(ActionBar.className),
             let value = context.object.callObjectMethod(name: "getSupportActionBar", returningClass: returningClazz)
@@ -100,6 +112,10 @@ extension AppCompatActivity {
     /// Obtain an `android.content.Intent` that will launch an explicit target activity specified by sourceActivity's `PARENT_ACTIVITY` element in the application's manifest.
     /// If the device is running **Jellybean** or newer, the `android:parentActivityName` attribute will be preferred if it is present.
     public func supportParentActivityIntent() -> Intent! {
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to supportParentActivityIntent: activity context is nil")
+            return nil
+        }
         guard
             let returningClazz = JClass.load(Intent.className),
             let value = context.object.callObjectMethod(name: "getSupportParentActivityIntent", returningClass: returningClazz)
@@ -108,10 +124,18 @@ extension AppCompatActivity {
     }
 
     public func invalidateOptionsMenu() {
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to invalidateOptionsMenu: activity context is nil")
+            return
+        }
         context.object.callVoidMethod(name: "invalidateOptionsMenu")
     }
 
     public func openOptionsMenu() {
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to openOptionsMenu: activity context is nil")
+            return
+        }
         context.object.callVoidMethod(name: "openOptionsMenu")
     }
 
@@ -127,17 +151,32 @@ extension AppCompatActivity {
     public func supportActionBar(_ toolbar: Toolbar) {
         guard
             let toolbar = toolbar.instance
-        else { return }
+        else {
+            Log.c("🟥 AppCompatActivity: Failed to setSupportActionBar: toolbar instance is nil")
+            return
+        }
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to setSupportActionBar: activity context is nil")
+            return
+        }
         context.object.callVoidMethod(name: "setSupportActionBar", args: toolbar.signed(as: Toolbar.className))
     }
 
     public func theme(_ resId: Int32) {
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to setTheme: activity context is nil")
+            return
+        }
         context.object.callVoidMethod(name: "setTheme", args: resId)
     }
 
     // TODO: startSupportActionMode
 
     public func supportNavigateUpTo(_ upIntent: Intent) {
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to supportNavigateUpTo: activity context is nil")
+            return
+        }
         context.object.callVoidMethod(name: "supportNavigateUpTo", args: upIntent.signed(as: Intent.className))
     }
 
@@ -145,14 +184,22 @@ extension AppCompatActivity {
     ///
     /// This is a convenience for calling `getWindow().requestFeature()`.
     public func supportRequestWindowFeature(_ feature: AppCompatDelegate.Feature) -> Bool {
-        context.object.callBoolMethod(name: "supportRequestWindowFeature", args: feature.rawValue) ?? false
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to supportRequestWindowFeature: activity context is nil")
+            return false
+        }
+        return context.object.callBoolMethod(name: "supportRequestWindowFeature", args: feature.rawValue) ?? false
     }
 
     /// Returns true if sourceActivity should recreate the task when navigating 'up' by using targetIntent.
     ///
     /// If this method returns false the app can trivially call supportNavigateUpTo using the same parameters to correctly perform up navigation. If this method returns false, the app should synthesize a new task stack by using androidx.core.app.TaskStackBuilder or another similar mechanism to perform up navigation.
     public func supportShouldUpRecreateTask(_ targetIntent: Intent) -> Bool {
-        context.object.callBoolMethod(name: "supportRequestWindowFeature", args: targetIntent.signed(as: Intent.className)) ?? false
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to supportShouldUpRecreateTask: activity context is nil")
+            return false
+        }
+        return context.object.callBoolMethod(name: "supportRequestWindowFeature", args: targetIntent.signed(as: Intent.className)) ?? false
     }
 
     // MARK: - Permissions
@@ -164,6 +211,10 @@ extension AppCompatActivity {
     public func checkPermission(_ permission: ManifestPermission) -> Bool {
         #if os(Android)
         permission.warnIfMissing()
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to checkPermission: activity context is nil")
+            return false
+        }
         guard let clazz = JClass.load("androidx/core/content/ContextCompat") else { return false }
         guard let result = clazz.staticIntMethod(name: "checkSelfPermission", args: context.signed(as: "android/content/Context"), permission.value) else { return false }
         return result == 0
@@ -188,6 +239,10 @@ extension AppCompatActivity {
     ///   - requestCode: Request code to identify the permission request result
     public func requestPermissions(_ permissions: [ManifestPermission], requestCode: Int) {
         #if os(Android)
+        guard let context else {
+            Log.c("🟥 AppCompatActivity: Failed to requestPermissions: activity context is nil")
+            return
+        }
         let jPermissions = permissions.compactMap { $0.value.wrap() }
         guard
             let clazz = JClass.load("androidx/core/app/ActivityCompat")

@@ -7,12 +7,12 @@ import Logging
 
 extension View {
     @MainActor
-    public final class ViewInstance: JObjectable, StatesHolder, @unchecked Sendable {
+    public final class ViewInstance: JObjectable, Contextable, StatesHolder, @unchecked Sendable {
         /// Unique identifier
         public let id: Int32
 
         /// Context
-        public unowned let context: ActivityContext
+        public private(set) weak var context: ActivityContext?
 
         /// View
         public private(set) weak var view: View?

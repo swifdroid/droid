@@ -18,7 +18,7 @@ extension Activity: @unchecked Sendable {}
 #endif
 
 @MainActor
-open class Activity: AnyActivity {
+open class Activity: Contextable, AnyActivity {
     /// The body of the view hierarchy.
     public typealias Body = BodyBuilderItemable
     public typealias Style = RStyle
@@ -73,32 +73,26 @@ open class Activity: AnyActivity {
 	open class nonisolated var intentFilters: [IntentFilter] { [] }
 	open class nonisolated var metaData: [MetaData] { [] }
     
-    var _context: ActivityContext!
-    public var context: ActivityContext {
-        if _context == nil {
-            InnerLog.c("Attempt to reach nil context at \(Self.className). Seems you haven't started this activity yet.")
-        }
-        return _context
-    }
+    public private(set) var context: ActivityContext?
     public var contentView: View?
 
 	@discardableResult
     public required init() {
         #if !os(Android)
-        _context = ActivityContext(object: .init(JObjectBox(), .init("")))
         onCreate(context)
+        context = ActivityContext(object: .init(JObjectBox(), .init("")))
         body { body }
         buildUI()
         #endif
     }
 
     public init (_ object: JObject) {
-        _context = .init(object: object)
+        context = ActivityContext(object: object)
     }
 
-    public func attach(to context: JObject) {
-        _context = ActivityContext(object: context)
-        onCreate(self.context)
+    public func attach(to contextObject: JObject) {
+        context = ActivityContext(object: contextObject)
+        onCreate(context!)
         body { body }
         buildUI()
     }
@@ -109,6 +103,10 @@ open class Activity: AnyActivity {
         contentView = view
         proceed?(contentView!)
         view.willMoveToParent()
+        guard let context else {
+            InnerLog.c("🟥 Unable to set content view: activity context is nil")
+            return
+        }
         guard let viewInstance = view.setStatusAsContentView(context) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setContentView`")
             return
@@ -192,6 +190,10 @@ open class Activity: AnyActivity {
     /// Retrieves the current theme associated with the activity.
     public func theme() -> Resources.Theme? {
         #if os(Android)
+        guard let context else {
+            InnerLog.t("Activity.getTheme 0 exit: context is nil")
+            return nil
+        }
         InnerLog.t("Activity.getTheme 1")
         guard let env = JEnv.current() else {
             InnerLog.t("Activity.getTheme 1.1 exit")
@@ -223,12 +225,20 @@ open class Activity: AnyActivity {
 
     /// Retrieves a SharedPreferences object from the context
     public func sharedPreferences(_ name: String, _ mode: Int32 = 0) -> SharedPreferences? {
-        context.sharedPreferences(name, mode)
+        guard let context else {
+            InnerLog.c("🟥 Activity: Failed to get SharedPreferences: activity context is nil")
+            return nil
+        }
+        return context.sharedPreferences(name, mode)
     }
 }
 
 extension Activity {
     public func findViewById(_ id: Int32) -> View? {
+        guard let context else {
+            Log.c("🟥 Activity: Failed to findViewById: activity context is nil")
+            return nil
+        }
         guard
             let returningClazz = JClass.load(.android.view.View),
             let global = context.object.callObjectMethod(name: "findViewById", args: id, returningClass: returningClazz)
@@ -251,7 +261,7 @@ public final class ComponentCaller: JObjectable, @unchecked Sendable {
 public final class ActivityContext: Contextable, JObjectable, JClassLoadable, @unchecked Sendable {
     public let object: JObject
 
-    public var context: ActivityContext { self }
+    public var context: ActivityContext? { self }
 
     public var cachedClassLoader: JClassLoader? = nil
 
@@ -291,9 +301,13 @@ extension Activity {
     /// This can be used to directly access parts of the Window API
     /// that are not available through Activity/Screen.
     public func window() -> Window? {
+        guard let context else {
+            InnerLog.c("🟥 Activity: Failed to get Window: activity context is nil")
+            return nil
+        }
         guard
             let clazz = JClass.load(Window.className),
-            let global = _context.callObjectMethod(name: "getWindow", returningClass: clazz)
+            let global = context.callObjectMethod(name: "getWindow", returningClass: clazz)
         else { return nil }
         return Window(global)
     }

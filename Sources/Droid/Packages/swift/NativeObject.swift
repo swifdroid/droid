@@ -27,7 +27,7 @@ extension AnyNativeObject {
 
 @MainActor
 open class NativeUIObject: NativeObject, Contextable, @unchecked Sendable {
-    public unowned let context: ActivityContext
+    public private(set) weak var context: ActivityContext?
 
     public init (_ object: JObject, _ context: Contextable) {
         self.context = context.context

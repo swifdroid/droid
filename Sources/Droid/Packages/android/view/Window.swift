@@ -1144,7 +1144,7 @@ public final class ActionBar: JObjectable, Sendable {
     public static var lpClassName: JClassName { "androidx/appcompat/app/ActionBar$LayoutParams" }
 
     public let object: JObject
-    public unowned let context: ActivityContext
+    public private(set) weak var context: ActivityContext?
 
     public init (_ object: JObject, _ context: ActivityContext) {
         self.object = object
@@ -1159,6 +1159,7 @@ extension ActionBar {
     /// The current custom view.
     public func customView() -> View! {
         guard
+            let context,
             let returningClazz = JClass.load(.android.view.View),
             let global = object.callObjectMethod(name: "getCustomView", returningClass: returningClazz)
         else { return nil }

@@ -7,7 +7,7 @@
 
 public protocol Contextable: Sendable {
 	@MainActor
-	var context: ActivityContext { get }
+	var context: ActivityContext? { get }
 }
 
 @MainActor
@@ -450,6 +450,10 @@ extension AnyActivity {
 	/// Starts activity the classic way with intent
 	public func startActivity(_ intent: Intent, bundle: Bundle? = nil) {
 		#if os(Android)
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to startActivity 1: context is nil")
+			return
+		}
 		if let bundle {
 			InnerLog.t("Starting activity with intent and bundle 1")
         	context.callVoidMethod(nil, name: "startActivity", args: intent.object.signed(as: .android.content.Intent), bundle.object.signed(as: Bundle.className))
@@ -463,6 +467,10 @@ extension AnyActivity {
 	/// Starts activity the classic way simplified
     public func startActivity(_ activity: AnyActivity.Type) {
         #if os(Android)
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to startActivity 2: context is nil")
+			return
+		}
 		InnerLog.t("Starting activity 1 \(activity)")
         guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
             InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
@@ -494,6 +502,10 @@ extension AnyActivity {
 	/// Starts activity with result the classic way with intent
     public func startActivityForResult(_ intent: Intent, requestCode: Int) {
         #if os(Android)
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to startActivityForResult 1: context is nil")
+			return
+		}
         context.callVoidMethod(nil, name: "startActivityForResult", args: intent.object.signed(as: .android.content.Intent), Int32(requestCode))
         #endif
     }
@@ -501,6 +513,10 @@ extension AnyActivity {
 	/// Starts activity with result the classic way simplified
     public func startActivityForResult(_ activity: AnyActivity.Type, requestCode: Int) {
         #if os(Android)
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to startActivityForResult 2: context is nil")
+			return
+		}
         guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
             InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
             return
@@ -530,6 +546,10 @@ extension AnyActivity {
 	/// Starts multiple activities the classic way with intents
     public func startActivities(_ intents: [Intent]) {
         #if os(Android)
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to startActivities 1: context is nil")
+			return
+		}
         InnerLog.t("startActivities with intents init 1")
 		guard
 			let intentClazz = JClass.load(.android.content.Intent)
@@ -557,6 +577,10 @@ extension AnyActivity {
 	/// Starts multiple activities the classic way simplified
     public func startActivities(_ activities: [AnyActivity.Type]) {
         #if os(Android)
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to startActivities 2: context is nil")
+			return
+		}
         for activity in activities {
 			guard let _ = DroidApp.shared._activities.first(where: { $0 == activity }) else {
 				InnerLog.c("Unable to start \(activity.className) because it is not registered in the App->Manifest->activities.")
@@ -604,22 +628,38 @@ extension AnyActivity {
 extension AnyActivity {
 	/// Call this when your activity is done and should be closed.
 	public func finish() {
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to finish: context is nil")
+			return
+		}
 		context.callVoidMethod(nil, name: "finish")
 	}
 
 	/// Finish this activity as well as all activities immediately below
 	/// it in the current task that have the same affinity.
 	public func finishAffinity() {
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to finishAffinity: context is nil")
+			return
+		}
 		context.callVoidMethod(nil, name: "finishAffinity")
 	}
 
 	/// Call this to finish the activity after completing any ongoing transitions.
 	public func finishAfterTransition() {
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to finishAfterTransition: context is nil")
+			return
+		}
 		context.callVoidMethod(nil, name: "finishAfterTransition")
 	}
 
 	/// Force finish another activity that you had previously started with `startActivityForResult`.
 	public func finishActivity(requestCode: Int) {
+		guard let context else {
+			InnerLog.c("🟥 AnyActivity: Failed to finishActivity with requestCode \(requestCode): context is nil")
+			return
+		}
 		context.callVoidMethod(nil, name: "finishActivity", args: Int32(requestCode))
 	}
 }

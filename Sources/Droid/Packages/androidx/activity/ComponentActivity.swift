@@ -26,10 +26,12 @@ open class ComponentActivity: Activity {
 
 extension ComponentActivity {
     public func addContentView(_ view: View, _ lp: LayoutParams) {
-        guard
-            let view = view.instance
-        else { return }
-        _context.object.callVoidMethod(name: "addContentView", args: view.signed(as: .android.view.View), lp.object.signed(as: .android.view.ViewGroup.LayoutParams))
+        guard let view = view.instance else { return }
+        guard let context else {
+            Log.c("🟥 ComponentActivity: Failed to addContentView: activity context is nil")
+            return
+        }
+        context.object.callVoidMethod(name: "addContentView", args: view.signed(as: .android.view.View), lp.object.signed(as: .android.view.ViewGroup.LayoutParams))
     }
 
     // public func addMenuProvider(_ provider: NativeMenuProvider) {
@@ -57,24 +59,36 @@ extension ComponentActivity {
     /// Sets the view tree owners before setting the content view so that the inflation process
     /// and attach listeners will see them already present.
     public func initializeViewTreeOwners() {
-        _context.object.callVoidMethod(name: "initializeViewTreeOwners")
+        guard let context else {
+            Log.c("🟥 ComponentActivity: Failed to initializeViewTreeOwners: activity context is nil")
+            return
+        }
+        context.object.callVoidMethod(name: "initializeViewTreeOwners")
     }
     
     /// Invalidates the `android.view.Menu` to ensure that what is displayed
     /// matches the current internal state of the menu. This should be called whenever
     /// the state of the menu is changed, such as items being removed or disabled based on some user event.
     public func invalidateMenu() {
-        _context.object.callVoidMethod(name: "invalidateMenu")
+        guard let context else {
+            Log.c("🟥 ComponentActivity: Failed to invalidateMenu: activity context is nil")
+            return
+        }
+        context.object.callVoidMethod(name: "invalidateMenu")
     }
 
     /// Enables the edge-to-edge display for this activity.
     public func enableEdgeToEdge() {
+        guard let context else {
+            Log.c("🟥 ComponentActivity: Failed to enableEdgeToEdge: activity context is nil")
+            return
+        }
         guard
             let clazz = JClass.load("androidx/activity/EdgeToEdge")
         else {
             Log.d("Failed to load androidx/activity/EdgeToEdge class")
             return
         }
-        clazz.staticVoidMethod(name: "enable", args: _context.signed(as: ComponentActivity.className))
+        clazz.staticVoidMethod(name: "enable", args: context.signed(as: ComponentActivity.className))
     }
 }

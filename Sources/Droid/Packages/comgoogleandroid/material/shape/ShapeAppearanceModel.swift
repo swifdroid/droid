@@ -14,7 +14,7 @@ public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
     public class var className: JClassName { "com/google/android/material/shape/ShapeAppearanceModel" }
 
     public let object: JObject
-    public unowned let context: ActivityContext
+    public private(set) weak var context: ActivityContext?
 
     public init (_ object: JObject, _ context: Contextable) {
         self.object = object
@@ -25,11 +25,12 @@ public final class ShapeAppearanceModel: JObjectable, Contextable, Sendable {
         #if os(Android)
         guard
             let env = JEnv.current(),
+            let context = context.context,
             let clazz = JClass.load(Self.className),
-            let global = clazz.newObject(env, args: context.context.object.signed(as: .android.content.Context))
+            let global = clazz.newObject(env, args: context.object.signed(as: .android.content.Context))
         else { return nil }
         self.object = global
-        self.context = context.context
+        self.context = context
         #else
         return nil
         #endif

@@ -22,9 +22,13 @@ open class FragmentActivity: ComponentActivity {
 
     /// Return the `FragmentManager` for interacting with fragments associated with this activity.
     public func supportFragmentManager() -> FragmentManager! {
+        guard let context else {
+            Log.c("🟥 FragmentActivity: Failed to get supportFragmentManager: activity context is nil")
+            return nil
+        }
         guard
             let returningClazz = JClass.load(FragmentManager.className),
-            let global = _context.object.callObjectMethod(name: "getSupportFragmentManager", returningClass: returningClazz)
+            let global = context.object.callObjectMethod(name: "getSupportFragmentManager", returningClass: returningClazz)
         else { return nil }
         return .init(global, self)
     }
@@ -40,7 +44,11 @@ extension FragmentActivity {
         _ intent: Intent,
         requestCode: Int
     ) {
-        _context.object.callVoidMethod(name: "startActivityFromFragment", args: fragment.signed(as: Fragment.className), intent.signed(as: Intent.className), Int32(requestCode))
+        guard let context else {
+            Log.c("🟥 FragmentActivity: Failed to startActivityFromFragment: activity context is nil")
+            return
+        }
+        context.object.callVoidMethod(name: "startActivityFromFragment", args: fragment.signed(as: Fragment.className), intent.signed(as: Intent.className), Int32(requestCode))
     }
 
     /// Called by `Fragment.startActivityForResult()` to implement its behavior.
@@ -50,6 +58,10 @@ extension FragmentActivity {
         requestCode: Int,
         options: Bundle
     ) {
-        _context.object.callVoidMethod(name: "startActivityFromFragment", args: fragment.signed(as: Fragment.className), intent.signed(as: Intent.className), Int32(requestCode), options.signed(as: Bundle.className))
+        guard let context else {
+            Log.c("🟥 FragmentActivity: Failed to startActivityFromFragment: activity context is nil")
+            return
+        }
+        context.object.callVoidMethod(name: "startActivityFromFragment", args: fragment.signed(as: Fragment.className), intent.signed(as: Intent.className), Int32(requestCode), options.signed(as: Bundle.className))
     }
 }

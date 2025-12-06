@@ -11,7 +11,7 @@ public final class FragmentManager: JObjectable, Contextable, Sendable {
     public class var className: JClassName { .init(stringLiteral: "androidx/fragment/app/FragmentManager") }
 
     public let object: JObject
-    public unowned let context: ActivityContext
+    public private(set) weak var context: ActivityContext?
 
     public init (_ object: JObject, _ context: Contextable) {
         self.object = object

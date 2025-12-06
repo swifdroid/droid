@@ -109,7 +109,7 @@ public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchec
         }
         let view = onCreateViewHolderHandler(position)
         view.willMoveToParent()
-        if let holder = NativeRecyclerViewHolder(instance.context, view) {
+        if let holder = NativeRecyclerViewHolder(instance, view) {
             return holder.object
         }
         return nil
@@ -135,18 +135,19 @@ public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchec
     //     NativeRecyclerViewAdapter.store.remove(id: id)
     // }
 
-    func instantiate(_ context: View.ViewInstance) -> RecyclerViewAdapterInstance? {
-        instance = RecyclerViewAdapterInstance(context.context, id)
+    func instantiate(_ viewInstance: View.ViewInstance) -> RecyclerViewAdapterInstance? {
+        instance = RecyclerViewAdapterInstance(viewInstance, id)
         return instance
     }
 }
 
-final class RecyclerViewAdapterInstance: JObjectable, Sendable {
+@MainActor
+final class RecyclerViewAdapterInstance: JObjectable, Contextable, @unchecked Sendable {
     /// The JNI class name
     static var className: JClassName { "stream/swift/droid/appkit/adapters/NativeRecyclerViewAdapter" }
 
     /// Context
-    unowned let context: ActivityContext
+    private(set) weak var context: ActivityContext?
 
     /// Object wrapper
     let object: JObject
@@ -154,7 +155,7 @@ final class RecyclerViewAdapterInstance: JObjectable, Sendable {
     /// ID
     let id: Int32
 
-    convenience init? (_ context: ActivityContext, _ id: Int32) {
+    convenience init? (_ context: Contextable, _ id: Int32) {
         #if os(Android)
         guard let env = JEnv.current() else { return nil }
         self.init(env, context, id)
@@ -163,8 +164,9 @@ final class RecyclerViewAdapterInstance: JObjectable, Sendable {
         #endif
     }
     
-    init? (_ env: JEnv, _ context: ActivityContext, _ id: Int32) {
+    init? (_ env: JEnv, _ context: Contextable, _ id: Int32) {
         #if os(Android)
+        guard let context = context.context else { return nil }
         guard
             let clazz = JClass.load(Self.className)
         else {

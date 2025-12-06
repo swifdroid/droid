@@ -32,7 +32,7 @@ open class Fragment: NativeFragment, @unchecked Sendable {
 
     open override func onCreateView(_ inflater: LayoutInflater, _ container: View?, _ savedInstanceState: Bundle?) -> View? {
         buildUI()
-        func returnPlaceholder() -> View {
+        func returnPlaceholder(_ context: ActivityContext) -> View {
             let contentView = TextView("Empty Fragment Content").gravity(.center)
             if let container {
                 contentView.setStatusInParent(container, context)
@@ -42,8 +42,12 @@ open class Fragment: NativeFragment, @unchecked Sendable {
             contentView.willMoveToParent()
             return contentView
         }
+        guard let context else {
+            Log.c("🟥 Fragment: Failed to onCreateView: activity context is nil")
+            return nil
+        }
         guard let contentBlock else {
-            return returnPlaceholder()
+            return returnPlaceholder(context)
         }
         let item = contentBlock().bodyBuilderItem
         func setDefaultFrameLayout(_ item: BodyBuilderItem) {
@@ -75,7 +79,7 @@ open class Fragment: NativeFragment, @unchecked Sendable {
         }
         proceedItem(item)
         guard let contentView else {
-            return returnPlaceholder()
+            return returnPlaceholder(context)
         }
         if let container {
             contentView.setStatusInParent(container, context)
@@ -181,6 +185,10 @@ open class Fragment: NativeFragment, @unchecked Sendable {
 
     /// Get the root view for the fragment's layout (the one returned by onCreateView).
     public func requireView() -> View! {
+        guard let context else {
+            Log.c("🟥 Fragment: Failed to requireView: activity context is nil")
+            return nil
+        }
         guard
             let returningClazz = JClass.load(View.className),
             let global = object.callObjectMethod(name: "requireView", returningClass: returningClazz)
@@ -520,6 +528,10 @@ extension Fragment {
     }
 
     public func view() -> View? {
+        guard let context else {
+            Log.c("🟥 Fragment: Failed to get view: activity context is nil")
+            return nil
+        }
         guard
             let returningClazz = JClass.load(View.className),
             let global = object.callObjectMethod(name: "getView", returningClass: returningClazz)

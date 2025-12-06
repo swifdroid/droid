@@ -87,7 +87,7 @@ public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolde
 
     var viewMovedToParent = false
 
-    public convenience init? (_ context: ActivityContext, _ view: V) {
+    public convenience init? (_ context: Contextable, _ view: V) {
         #if os(Android)
         guard let env = JEnv.current() else { return nil }
         self.init(env, context, view)
@@ -96,8 +96,9 @@ public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolde
         #endif
     }
     
-    public init? (_ env: JEnv, _ context: ActivityContext, _ view: V) {
+    public init? (_ env: JEnv, _ context: Contextable, _ view: V) {
         #if os(Android)
+        guard let context = context.context else { return nil }
         guard
             let clazz = JClass.load(Self.className)
         else {

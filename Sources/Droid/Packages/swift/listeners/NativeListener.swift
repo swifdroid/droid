@@ -27,20 +27,24 @@ extension AnyNativeListener {
 
     @MainActor
     func instantiate(_ context: Contextable) -> ListenerInstance? {
+        guard let context = context.context else {
+            InnerLog.c("🟥 NativeListener: Failed to instantiate: context is nil")
+            return nil
+        }
         instance = .init(
             id,
             viewId: shouldInitWithViewId ? id : nil,
-            context.context,
+            context,
             Self.className
         )
         return instance
     }
 
-    func attach(to view: View.ViewInstance) {
+    func attach(to viewInstance: View.ViewInstance) {
         instance = .init(
             id,
-            viewId: shouldInitWithViewId ? view.id : nil,
-            view.context,
+            viewId: shouldInitWithViewId ? viewInstance.id : nil,
+            viewInstance,
             Self.className
         )
     }
@@ -75,12 +79,12 @@ class ListenerInstance: @unchecked Sendable {
     /// Object wrapper
     public let object: JObject
 
-    public convenience init? (_ id: Int32, viewId: Int32? = nil, _ context: ActivityContext, _ className: JClassName) {
+    public convenience init? (_ id: Int32, viewId: Int32? = nil, _ context: Contextable, _ className: JClassName) {
         guard let env = JEnv.current() else { return nil }
         self.init(env, id, viewId: viewId, context, className)
     }
     
-    public init? (_ env: JEnv, _ id: Int32, viewId: Int32? = nil, _ context: ActivityContext, _ className: JClassName) {
+    public init? (_ env: JEnv, _ id: Int32, viewId: Int32? = nil, _ context: Contextable, _ className: JClassName) {
         var args: [JSignatureItemable] = [id]
         if let viewId {
             args.append(viewId)

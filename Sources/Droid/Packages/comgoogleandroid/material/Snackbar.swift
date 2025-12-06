@@ -18,7 +18,7 @@ public final class Snackbar: JObjectable, Sendable {
 
     public let object: JObject
     public let view: View
-    public unowned let context: ActivityContext
+    public private(set) weak var context: ActivityContext?
 
     public init (_ object: JObject, _ view: View, _ context: Contextable) {
         self.object = object
@@ -43,13 +43,14 @@ public final class Snackbar: JObjectable, Sendable {
         guard
             let env = JEnv.current(),
             let viewInstance = view.instance,
+            let context = viewInstance.context,
             let clazz = JClass.load(Self.className),
             let returningClazz = JClass.load(Snackbar.className),
             let methodId = clazz.staticMethodId(name: "make", signature: .init(.object(.android.content.Context), .object(.android.view.View), .object(.java.lang.CharSequence), .int, returning: .object(Snackbar.className))),
             let str = JString(from: text),
-            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [viewInstance.context.object, viewInstance.object, str, duration.value], returningClass: returningClazz)
+            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.object, viewInstance.object, str, duration.value], returningClass: returningClazz)
         else { return nil }
-        return .init(global, view, viewInstance.context)
+        return .init(global, view, context)
         #else
         return nil
         #endif
@@ -72,12 +73,13 @@ public final class Snackbar: JObjectable, Sendable {
         guard
             let env = JEnv.current(),
             let viewInstance = view.instance,
+            let context = viewInstance.context,
             let clazz = JClass.load(Self.className),
             let returningClazz = JClass.load(Snackbar.className),
             let methodId = clazz.staticMethodId(name: "make", signature: .init(.object(.android.content.Context), .object(.android.view.View), .int, .int, returning: .object(Snackbar.className))),
-            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [viewInstance.context.object, viewInstance.object, textResId, duration.value], returningClass: returningClazz)
+            let global = env.callStaticObjectMethod(clazz: clazz, methodId: methodId, args: [context.object, viewInstance.object, textResId, duration.value], returningClass: returningClazz)
         else { return nil }
-        return .init(global, view, viewInstance.context)
+        return .init(global, view, context)
         #else
         return nil
         #endif
@@ -88,8 +90,9 @@ public final class Snackbar: JObjectable, Sendable {
         #if os(Android)
         let id = DroidApp.getNextViewId()
         guard
+            let context,
             let str = JString(from: text),
-            let listenerInstance = NativeOnClickListener(id, viewId: id).setHandler(view, handler).instantiate(self.context),
+            let listenerInstance = NativeOnClickListener(id, viewId: id).setHandler(view, handler).instantiate(context),
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setAction", args: str.signed(as: .java.lang.CharSequence), listenerInstance.object.signed(as: .android.view.ViewOnClickListener), returningClass: returningClazz)
         else { return self }
@@ -104,7 +107,8 @@ public final class Snackbar: JObjectable, Sendable {
         #if os(Android)
         let id = DroidApp.getNextViewId()
         guard
-            let listenerInstance = NativeOnClickListener(id, viewId: id).setHandler(view, handler).instantiate(self.context),
+            let context,
+            let listenerInstance = NativeOnClickListener(id, viewId: id).setHandler(view, handler).instantiate(context),
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setAction", args: textResId, listenerInstance.object.signed(as: .android.view.ViewOnClickListener), returningClass: returningClazz)
         else { return nil }
@@ -118,6 +122,7 @@ public final class Snackbar: JObjectable, Sendable {
     public func actionTextColor(_ color: GraphicsColor) -> Self! {
         #if os(Android)
         guard
+            let context,
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setActionTextColor", args: [(color.value, .int)], returningClass: returningClazz)
         else { return nil }
@@ -131,6 +136,7 @@ public final class Snackbar: JObjectable, Sendable {
     public func backgroundTint(_ color: GraphicsColor) -> Self! {
         #if os(Android)
         guard
+            let context,
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setBackgroundTint", args: [(color.value, .int)], returningClass: returningClazz)
         else { return nil }
@@ -149,6 +155,7 @@ public final class Snackbar: JObjectable, Sendable {
     /// If the width is exceeded the action would go to the next line.
     public func maxInlineActionWidth(_ value: Int, _ unit: DimensionUnit = .dp) -> Self! {
         guard
+            let context,
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setBackgroundTint", args: unit.toPixels(Int32(value)), returningClass: returningClazz)
         else { return nil }
@@ -158,6 +165,7 @@ public final class Snackbar: JObjectable, Sendable {
     /// Updates the text.
     public func text(_ text: String) -> Self! {
         guard
+            let context,
             let str = JString(from: text),
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setBackgroundTint", args: str.signed(as: .java.lang.CharSequence), returningClass: returningClazz)
@@ -168,6 +176,7 @@ public final class Snackbar: JObjectable, Sendable {
     /// Updates the text.
     public func text(resId: Int32) -> Self! {
         guard
+            let context,
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setBackgroundTint", args: resId, returningClass: returningClazz)
         else { return nil }
@@ -178,6 +187,7 @@ public final class Snackbar: JObjectable, Sendable {
     public func textColor(_ value: GraphicsColor) -> Self! {
         #if os(Android)
         guard
+            let context,
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setTextColor", args: [(value.value, .int)], returningClass: returningClazz)
         else { return nil }
@@ -190,6 +200,7 @@ public final class Snackbar: JObjectable, Sendable {
     /// Sets the max line count of the message.
     public func textMaxLines(_ value: Int) -> Self! {
         guard
+            let context,
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setTextMaxLines", args: Int32(value), returningClass: returningClazz)
         else { return nil }
@@ -199,6 +210,7 @@ public final class Snackbar: JObjectable, Sendable {
     /// Sets the animation mode.
     public func animationMode(_ value: AnimationMode) -> Self! {
         guard
+            let context,
             let returningClazz = JClass.load(Snackbar.className),
             let global = object.callObjectMethod(name: "setAnimationMode", args: value.rawValue, returningClass: returningClazz, returningSignatureClass: Snackbar.parentClassName)
         else { return nil }

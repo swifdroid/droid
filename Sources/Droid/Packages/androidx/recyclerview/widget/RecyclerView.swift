@@ -61,7 +61,7 @@ final class SetLayoutManagerViewProperty: ViewPropertyToApply {
     init (_ value: LayoutManager) { self.value = value }
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
         guard
-            let lmInstance = value.instantiate(env, instance.context)
+            let lmInstance = value.instantiate(env, instance)
         else {
             return
         }
@@ -290,7 +290,7 @@ struct MakePaginableViewProperty: ViewPropertyToApply {
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
         guard
             let env = env ?? JEnv.current(),
-            let pager = PagerSnapHelper(env, instance.context)
+            let pager = PagerSnapHelper(env, instance)
         else { return }
         pager.attachToRecyclerView(env, instance)
     }
@@ -352,7 +352,7 @@ public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
         self.object = object
     }
 
-    public init? (_ env: JEnv, _ context: ActivityContext) {
+    public init? (_ env: JEnv, _ context: Contextable) {
         #if os(Android)
         guard
             let clazz = JClass.load(PagerSnapHelper.className),
@@ -382,14 +382,15 @@ open class LayoutManager: @unchecked Sendable {
     @MainActor
     public final class LayoutManagerInstance: JObjectable, @unchecked Sendable {
         /// Context
-        public unowned let context: ActivityContext
+        public private(set) weak var context: ActivityContext?
         
         /// Object
         public let object: JObject
 
-        public init? (_ env: JEnv, _ className: JClassName, _ context: ActivityContext, _ initWithContext: Bool, _ initializerItems: [JSignatureItemable]) {
+        public init? (_ env: JEnv, _ className: JClassName, _ context: Contextable, _ initWithContext: Bool, _ initializerItems: [JSignatureItemable]) {
             #if os(Android)
             guard
+                let context = context.context,
                 let clazz = JClass.load(className),
                 let global = clazz.newObject(env, args: (initWithContext ? [context.object.signed(as: .android.content.Context)] : []) + initializerItems.map { $0.signatureItemWithValue })
             else { return nil }
@@ -408,7 +409,7 @@ open class LayoutManager: @unchecked Sendable {
 
     public init () {}
 
-    func instantiate(_ env: JEnv?, _ context: ActivityContext) -> LayoutManagerInstance? {
+    func instantiate(_ env: JEnv?, _ context: Contextable) -> LayoutManagerInstance? {
         guard
             let env = env ?? JEnv.current(),
             let instance = LayoutManagerInstance(env, Self.className, context, initializerRequiresContext, initializerItems)

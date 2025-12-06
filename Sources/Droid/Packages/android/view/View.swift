@@ -251,9 +251,13 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
         #endif
         subviews.append(subview)
         if let instance {
+            guard let context = instance.context else {
+                InnerLog.c("🟥 Unable to add subview: parent view's context is nil")
+                return self
+            }
             subview.willMoveToParent()
             willAddSubview(subview)
-            if let subviewInstance = subview.setStatusInParent(self, instance.context) {
+            if let subviewInstance = subview.setStatusInParent(self, context) {
                 instance.addView(subviewInstance)
                 subview.didMoveToParent()
                 didAddSubview(subview)
@@ -334,32 +338,38 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     /// Triggered after this view added into parent view
     open func didMoveToParent() {
         // InnerLog.t("view(id: \(id)) didMoveToParent 1")
-        if let instance {
-            InnerLog.t("view(id: \(id)) didMoveToParent 2 before setting all properties")
-            processProperties([], instance)
-            InnerLog.t("view(id: \(id)) didMoveToParent 2.5 after setting all properties")
-            if subviews.count > 0 {
-                // InnerLog.t("view(id: \(id)) didMoveToParent iterating subviews")
-                for (_, subview) in subviews.filter({ v in
-                    switch v.status {
-                        case .new, .floating: return true
-                        default: return false
-                    }
-                }).enumerated() {
-                    // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 1")
-                    if let subviewInstance = subview.setStatusInParent(self, instance.context) {
-                        // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 2")
-                        subview.willMoveToParent()
-                        instance.addView(subviewInstance)
-                        subview.didMoveToParent()
-                    } else {
-                        // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 3")
-                        InnerLog.c("🟥 Unable to initialize ViewInstance for `addView` in `didMoveToParent`")
-                    }
+        guard let instance else {
+            InnerLog.c("🟥 Unable to proceed `didMoveToParent` when its ViewInstance is nil")
+            return
+        }
+        guard let context = instance.context else {
+            InnerLog.c("🟥 Unable to proceed `didMoveToParent`: view's context is nil")
+            return
+        }
+        InnerLog.t("view(id: \(id)) didMoveToParent 2 before setting all properties")
+        processProperties([], instance)
+        InnerLog.t("view(id: \(id)) didMoveToParent 2.5 after setting all properties")
+        if subviews.count > 0 {
+            // InnerLog.t("view(id: \(id)) didMoveToParent iterating subviews")
+            for (_, subview) in subviews.filter({ v in
+                switch v.status {
+                    case .new, .floating: return true
+                    default: return false
+                }
+            }).enumerated() {
+                // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 1")
+                if let subviewInstance = subview.setStatusInParent(self, context) {
+                    // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 2")
+                    subview.willMoveToParent()
+                    instance.addView(subviewInstance)
+                    subview.didMoveToParent()
+                } else {
+                    // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 3")
+                    InnerLog.c("🟥 Unable to initialize ViewInstance for `addView` in `didMoveToParent`")
                 }
             }
-            proceedSubviewsLayoutParams(instance)
         }
+        proceedSubviewsLayoutParams(instance)
     }
 
     /// Triggered before this view removed from its parent view
