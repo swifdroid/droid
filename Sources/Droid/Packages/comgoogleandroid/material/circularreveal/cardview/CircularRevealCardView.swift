@@ -5,8 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Droid
-
 extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage.CardViewPackage {
     public class CircularRevealCardViewClass: JClassName, @unchecked Sendable {}
     

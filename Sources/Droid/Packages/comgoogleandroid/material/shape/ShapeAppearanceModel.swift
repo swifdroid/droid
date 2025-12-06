@@ -1,4 +1,9 @@
-import Droid
+//
+//  ShapeAppearanceModel.swift
+//  Droid
+//
+//  Created by Mihael Isaev on 16.11.2025.
+//
 
 /// This class models the edges and corners of a shape,
 /// which are used by `MaterialShapeDrawable` to generate

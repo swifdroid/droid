@@ -5,7 +5,6 @@
 //  Created by Mihael Isaev on 16.01.2022.
 //
 
-import Droid
 #if os(Android)
 import Android
 #endif
