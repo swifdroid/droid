@@ -11,7 +11,34 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import androidx.fragment.app.Fragment
 
-class NativeFragment(private val uniqueId: Int): Fragment() {
+class NativeFragment(): Fragment() {
+    private var uniqueId: Int = 0
+
+    companion object {
+        private const val UNIQUE_ID_KEY = "UNIQUE_ID"
+
+        @JvmStatic
+        fun newInstance(uniqueId: Int): NativeFragment {
+            val fragment = NativeFragment()
+            val args = Bundle()
+            args.putInt(UNIQUE_ID_KEY, uniqueId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        uniqueId = arguments?.getInt(UNIQUE_ID_KEY) ?: throw IllegalStateException("NativeFragment: UNIQUE_ID not found in arguments")
+        if (savedInstanceState != null) {
+            onCreateSavedInstanceState(uniqueId, savedInstanceState)
+        } else {
+            onCreate(uniqueId)
+        }
+    }
+    private external fun onCreate(uniqueId: Int)
+    private external fun onCreateSavedInstanceState(uniqueId: Int, savedInstanceState: Bundle)
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         onAttach(uniqueId, context)
@@ -22,17 +49,6 @@ class NativeFragment(private val uniqueId: Int): Fragment() {
         return onContextItemSelected(uniqueId, item)
     }
     private external fun onContextItemSelected(uniqueId: Int, item: MenuItem): Boolean
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState != null) {
-            onCreateSavedInstanceState(uniqueId, savedInstanceState)
-        } else {
-            onCreate(uniqueId)
-        }
-    }
-    private external fun onCreate(uniqueId: Int)
-    private external fun onCreateSavedInstanceState(uniqueId: Int, savedInstanceState: Bundle)
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         return onCreateAnimation(uniqueId, transit, enter, nextAnim)
