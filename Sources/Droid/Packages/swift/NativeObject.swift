@@ -39,9 +39,9 @@ open class NativeUIObject: NativeObject, Contextable, @unchecked Sendable {
         self.init(env, context, className)
     }
 
-    public init? (_ env: JEnv, _ context: Contextable, _ className: JClassName) {
+    public init? (_ env: JEnv, _ context: Contextable, _ className: JClassName, _ initializer: Initializer = .normal) {
         self.context = context.context
-        super.init(env, className)
+        super.init(env, className, initializer)
     }
 }
 
@@ -61,14 +61,21 @@ open class NativeObject: JObjectable, @unchecked Sendable {
         self.init(env, className)
     }
 
-    public init? (_ env: JEnv, _ className: JClassName) {
+    public enum Initializer: String {
+        case normal = "normal"
+        case `static` = "static"
+    }
+
+    public init? (_ env: JEnv, _ className: JClassName, _ initializer: Initializer = .normal) {
         self.id = DroidApp.shared.getNextViewId()
         #if os(Android)
         guard
             let clazz = JClass.load(className),
-            let global = clazz.newObject(env, args: id)
+            let global = initializer == .normal
+                ? clazz.newObject(env, args: id)
+                : clazz.staticObjectMethod(env, name: "newInstance", args: id, returningClass: clazz)
         else {
-            InnerLog.w("⚠️ Unable to initialize NativeObject for className: \(className.path)")
+            InnerLog.w("⚠️ Unable to initialize NativeObject(\(initializer.rawValue)) for className: \(className.path)")
             return nil
         }
         self.object = global
