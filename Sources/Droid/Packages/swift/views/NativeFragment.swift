@@ -261,7 +261,7 @@ public func nativeFragmentOnCreate(env: UnsafeMutablePointer<JNIEnv?>, callerCla
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onCreate(nil)
     }
 }
@@ -274,7 +274,7 @@ public func nativeFragmentOnCreateSavedInstanceState(env: UnsafeMutablePointer<J
     else { return }
     if let object = savedInstanceState.box(JEnv(env))?.object() {
         let bundle = Bundle(object)
-        Task { @MainActor in
+        MainActor.assumeIsolated {
             listener.onCreate(bundle)
         }
     } else {
@@ -320,7 +320,7 @@ public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>
         InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap View")
         return
     }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         let activityContext = ActivityContext(object: context)
         let menu = ContextMenu(menuObject)
         let view = View(viewObject, { activityContext })
@@ -458,7 +458,7 @@ public func nativeFragmentOnDestroy(env: UnsafeMutablePointer<JNIEnv?>, callerCl
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onDestroy()
     }
 }
@@ -469,7 +469,7 @@ public func nativeFragmentOnDestroyView(env: UnsafeMutablePointer<JNIEnv?>, call
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onDestroyView()
     }
 }
@@ -480,7 +480,7 @@ public func nativeFragmentOnDetach(env: UnsafeMutablePointer<JNIEnv?>, callerCla
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onDetach()
     }
     ObjectStore.shared.remove(listener)
@@ -493,7 +493,7 @@ public func nativeFragmentOnHiddenChanged(env: UnsafeMutablePointer<JNIEnv?>, ca
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let hidden = hidden == 1
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onHiddenChanged(hidden: hidden)
     }
 }
@@ -505,7 +505,7 @@ public func nativeFragmentOnMultiWindowModeChanged(env: UnsafeMutablePointer<JNI
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let isInMultiWindowMode = isInMultiWindowMode == 1
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode)
     }
 }
@@ -516,7 +516,7 @@ public func nativeFragmentOnPause(env: UnsafeMutablePointer<JNIEnv?>, callerClas
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onPause()
     }
 }
@@ -528,7 +528,7 @@ public func nativeFragmentOnPictureInPictureModeChanged(env: UnsafeMutablePointe
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let isInPictureInPictureMode = isInPictureInPictureMode == 1
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onPictureInPictureModeChanged(isInPictureInPictureMode: isInPictureInPictureMode)
     }
 }
@@ -540,7 +540,7 @@ public func nativeFragmentOnPrimaryNavigationFragmentChanged(env: UnsafeMutableP
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     let isPrimaryNavigationFragment = isPrimaryNavigationFragment == 1
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment: isPrimaryNavigationFragment)
     }
 }
@@ -551,7 +551,7 @@ public func nativeFragmentOnResume(env: UnsafeMutablePointer<JNIEnv?>, callerCla
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onResume()
     }
 }
@@ -566,7 +566,7 @@ public func nativeFragmentOnSaveInstanceState(env: UnsafeMutablePointer<JNIEnv?>
         InnerLog.c("⚠️ nativeFragmentOnSaveInstanceState unable to unwrap Bundle")
         return
     }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onSaveInstanceState(outState: .init(object))
     }
 }
@@ -577,7 +577,7 @@ public func nativeFragmentOnStart(env: UnsafeMutablePointer<JNIEnv?>, callerClas
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onStart()
     }
 }
@@ -588,7 +588,7 @@ public func nativeFragmentOnStop(env: UnsafeMutablePointer<JNIEnv?>, callerClass
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onStop()
     }
 }
@@ -604,7 +604,7 @@ public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, call
         return
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         let activityContext = ActivityContext(object: context)
         listener.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: nil)
     }
@@ -625,7 +625,7 @@ public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePoin
         return
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         let activityContext = ActivityContext(object: context)
         listener.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: .init(bundleObject))
     }
@@ -637,7 +637,7 @@ public func nativeFragmentOnViewStateRestored(env: UnsafeMutablePointer<JNIEnv?>
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onViewStateRestored(savedInstanceState: nil)
     }
 }
@@ -652,7 +652,7 @@ public func nativeFragmentOnViewStateRestoredSavedInstanceState(env: UnsafeMutab
         InnerLog.c("⚠️ nativeFragmentOnViewStateRestored unable to unwrap Bundle")
         return
     }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         listener.onViewStateRestored(savedInstanceState: .init(object))
     }
 }

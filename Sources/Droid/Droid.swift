@@ -287,7 +287,7 @@ private func _activityOnCreate(_ env: JEnv, _ context: JObject, _ activityId: In
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnPause")
 public func activityOnPause(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onPause()
     }
 }
@@ -315,14 +315,14 @@ public func activityOnSaveInstanceState(envPointer: UnsafeMutablePointer<JNIEnv?
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStateNotSaved")
 public func activityOnStateNotSaved(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onStateNotSaved()
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnResume")
 public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onResume()
     }
 }
@@ -370,21 +370,21 @@ public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObje
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStart")
 public func activityOnStart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onStart()
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStop")
 public func activityOnStop(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onStop()
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnDestroy")
 public func activityOnDestroy(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onDestroy()
         DroidApp.shared._activeActivities.removeValue(forKey: Int(activityId))
     }
@@ -392,14 +392,14 @@ public func activityOnDestroy(envPointer: UnsafeMutablePointer<JNIEnv?>, appObje
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnAttachedToWindow")
 public func activityOnAttachedToWindow(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onAttachedToWindow()
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnBackPressed")
 public func activityOnBackPressed(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onBackPressed()
     }
 }
@@ -417,7 +417,7 @@ public func activityOnActivityResult1(envPointer: UnsafeMutablePointer<JNIEnv?>,
     if let object = componentCallerRef?.box(env)?.object() {
         componentCaller = .init(object)
     }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onActivityResult(requestCode: Int(requestCode), resultCode: Int(resultCode), intent: intent, componentCaller: componentCaller)
     }
 }
@@ -431,13 +431,13 @@ public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>,
             intent = .init(object)
         }
     }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onActivityResult(requestCode: Int(requestCode), resultCode: Int(resultCode), intent: intent, componentCaller: nil)
     }
 }
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnMultiWindowModeChanged")
 public func activityOnMultiWindowModeChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, isInMultiWindowMode: jboolean) {
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode != 0)
     }
 }
@@ -459,7 +459,7 @@ public func activityOnRequestPermissionsResult(envPointer: UnsafeMutablePointer<
             results.append(value)
         }
     }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onRequestPermissionsResult(requestCode: Int(requestCode), results: results, deviceId: Int(deviceId))
     }
 }

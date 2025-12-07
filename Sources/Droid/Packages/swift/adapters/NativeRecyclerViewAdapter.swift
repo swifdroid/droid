@@ -222,7 +222,7 @@ public func NativeRecyclerViewAdapterOnBindViewHolder(env: UnsafeMutablePointer<
         let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId),
         let viewHolder = RecyclerViewHolderStore.shared.find(id: holderId)
     else { return }
-    Task { @MainActor in
+    MainActor.assumeIsolated {
         adapter.bindViewHolder(viewHolder, Int(position))
     }
 }
