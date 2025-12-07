@@ -250,7 +250,7 @@ extension Activity {
             let global = context.object.callObjectMethod(name: "findViewById", args: id, returningClass: returningClazz)
         else { return nil }
         return .init(id: id, global, { [weak self] in
-            InnerLog.t("🟡 Activity.findViewById(id: \(view.id)): getting context for view (\(self?.context != nil))")
+            InnerLog.t("🟡 Activity.findViewById(id: \(id)): getting context for view (\(self?.context != nil))")
             return self?.context
         })
     }
