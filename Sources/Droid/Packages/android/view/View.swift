@@ -418,7 +418,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
         if Self.layoutParamsShouldBeLoaded {
             instance.lpClassName = Self.layoutParamsClass.className
         }
-        self.status = .inParent(.init(self), instance)
+        self.status = .inParent(.init(parent), instance)
         // InnerLog.t("view(id: \(id)) setStatusInParent 3")
         return instance
     }
