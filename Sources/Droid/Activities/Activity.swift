@@ -97,6 +97,13 @@ open class Activity: Contextable, AnyActivity {
         buildUI()
     }
 
+    public func attachOnRestart(to contextObject: JObject, savedInstanceState: Bundle?) {
+        context = ActivityContext(object: contextObject)
+        body { body }
+        buildUI()
+        onRestart()
+    }
+
     open func onCreate(_ context: ActivityContext, savedInstanceState: Bundle?) {}
 
     public func contentView(_ view: View, _ proceed: ((View) -> Void)? = nil) {

@@ -59,7 +59,7 @@ open class DroidAppCompatActivity: AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         val app: DroidApp = applicationContext as DroidApp
-        app.activityOnRestart(uniqueId)
+        app.activityOnRestart(this, uniqueId)
     }
 
     override fun onStart() {

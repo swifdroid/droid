@@ -328,9 +328,43 @@ public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRestart")
-public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
-    Task { @MainActor in
-        DroidApp.shared._activeActivities[Int(activityId)]?.onRestart()
+public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
+    InnerLog.d("💚 activityOnRestart(id: \(activityId))")
+    let localEnv = JEnv(envPointer)
+    let globalCallerObj = activityRef.box(localEnv)
+    guard let context = globalCallerObj?.object() else {
+        InnerLog.c("💧 activityOnRestart: unable to wrap activity context")
+        return
+    }
+    let activityId = Int(activityId)
+    if let saved = DroidApp.shared._savedActivities[activityId] {
+        InnerLog.t("💚 _activityOnRestart → saved block")
+        let (activity, savedInstanceState) = saved
+        MainActor.assumeIsolated {
+            #if os(Android)
+            DroidApp.shared._activeActivities[activityId] = activity
+            DroidApp.shared._savedActivities.removeValue(forKey: activityId)
+            activity.attachOnRestart(to: context, savedInstanceState: savedInstanceState)
+            #endif
+        }
+    } else if let pendingActivity = DroidApp.shared._pendingActivities.last {
+        InnerLog.t("💚 _activityOnRestart → pending block")
+        DroidApp.shared._pendingActivities.remove(at: DroidApp.shared._pendingActivities.count - 1)
+        MainActor.assumeIsolated {
+            #if os(Android)
+            DroidApp.shared._activeActivities[activityId] = pendingActivity
+            pendingActivity.attachOnRestart(to: context, savedInstanceState: nil)
+            #endif
+        }
+    } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
+        InnerLog.t("💚 _activityOnRestart → new block")
+        MainActor.assumeIsolated {
+            let activity = activityType.init()
+            DroidApp.shared._activeActivities[activityId] = activity
+            activity.attachOnRestart(to: context, savedInstanceState: nil)
+        }
+    } else {
+        InnerLog.t("🟥 _activityOnRestart → else block")
     }
 }
 

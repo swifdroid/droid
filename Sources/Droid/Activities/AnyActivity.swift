@@ -21,6 +21,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	init ()
 
 	func attachOnCreate(to context: JObject, savedInstanceState: Bundle?)
+	func attachOnRestart(to context: JObject, savedInstanceState: Bundle?)
 
 	func onCreate(_ context: ActivityContext, savedInstanceState: Bundle?)
 
