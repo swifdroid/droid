@@ -300,7 +300,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     @discardableResult
     public func removeSubview(_ subview: View) -> Self {
         guard let subviewIndex = subviews.firstIndex(of: subview) else {
-            InnerLog.t("🟨 Attempt to remove already removed view")
+            InnerLog.t("🟨 Attempt to remove already removed view(id: \(subview.id))")
             return self
         }
         subview.willMoveFromParent()
@@ -316,7 +316,11 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     }
 
     public func removeFromParent() {
-        InnerLog.t("Removing (\(Self.className.name))view(id: \(id)) from parent")
+        if let parent {
+            InnerLog.t("Removing (\(Self.className.name))view(id: \(id)) from (\(parent.className.name))parentView(id: \(parent.id))) subviews.count=\(subviews.count)")
+        } else {
+            InnerLog.t("Removing (\(Self.className.name))view(id: \(id)) from the content root view")
+        }
         for subview in subviews {
             subview.removeFromParent()
         }
