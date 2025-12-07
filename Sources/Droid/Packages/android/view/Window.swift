@@ -992,8 +992,9 @@ extension Window {
     
     /// Sets whether sustained performance mode is enabled for this Window.
     @discardableResult
-    public func sustainedPerformanceMode(_ enabled: Bool = true) {
+    public func sustainedPerformanceMode(_ enabled: Bool = true) -> Self {
         callVoidMethod(name: "setSustainedPerformanceMode", args: enabled)
+        return self
     }
     
     // TODO: setSystemGestureExclusionRects
