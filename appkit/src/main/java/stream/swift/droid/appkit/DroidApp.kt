@@ -5,6 +5,7 @@ import android.app.ComponentCaller
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
+import android.os.Bundle
 
 class DroidApp : Application() {
     companion object {
@@ -92,7 +93,9 @@ class DroidApp : Application() {
     private external fun configurationChanged(newConfig: IntArray)
 
     external fun activityOnCreate(activity: Any, uniqueId: Int)
+    external fun activityOnCreateSavedInstanceState(activity: Any, uniqueId: Int, savedInstanceState: Bundle)
     external fun activityOnPause(activityId: Int)
+    external fun activityOnSaveInstanceState(activityId: Int, outState: Bundle)
     external fun activityOnStateNotSaved(activityId: Int)
     external fun activityOnResume(activityId: Int)
     external fun activityOnRestart(activityId: Int)

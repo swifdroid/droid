@@ -20,9 +20,9 @@ public protocol AnyActivity: AnyObject, Contextable {
 
 	init ()
 
-	func attach(to context: JObject)
+	func attachOnCreate(to context: JObject, savedInstanceState: Bundle?)
 
-	func onCreate(_ context: ActivityContext)
+	func onCreate(_ context: ActivityContext, savedInstanceState: Bundle?)
 
 	// MARK: Manifest Properties
 
@@ -332,6 +332,11 @@ public protocol AnyActivity: AnyObject, Contextable {
     /// but this one is still partially visible. 
     /// Use this to pause animations, video playback, or other ongoing tasks.
 	func onPause()
+
+	/// Called to retrieve per-instance state from an activity before being killed
+	/// so that the state can be restored in `onCreate(Bundle)` or `onRestoreInstanceState(Bundle)``
+	/// (the Bundle populated by this method will be passed to both).
+	func onSaveInstanceState(bundle: Bundle)
 	
 	/// Called when the system is about to save the activity's state,
     /// but before that state has actually been committed.

@@ -79,8 +79,8 @@ open class Activity: Contextable, AnyActivity {
 	@discardableResult
     public required init() {
         #if !os(Android)
-        onCreate(context)
         context = ActivityContext(object: .init(JObjectBox(), .init("")))
+        onCreate(context!, savedInstanceState: nil)
         body { body }
         buildUI()
         #endif
@@ -90,14 +90,14 @@ open class Activity: Contextable, AnyActivity {
         context = ActivityContext(object: object)
     }
 
-    public func attach(to contextObject: JObject) {
+    public func attachOnCreate(to contextObject: JObject, savedInstanceState: Bundle?) {
         context = ActivityContext(object: contextObject)
-        onCreate(context!)
+        onCreate(context!, savedInstanceState: savedInstanceState)
         body { body }
         buildUI()
     }
 
-    open func onCreate(_ context: ActivityContext) {}
+    open func onCreate(_ context: ActivityContext, savedInstanceState: Bundle?) {}
 
     public func contentView(_ view: View, _ proceed: ((View) -> Void)? = nil) {
         contentView = view
@@ -173,6 +173,9 @@ open class Activity: Contextable, AnyActivity {
 
     // MARK: Lifecycle
 
+    open func onSaveInstanceState(bundle: Bundle) {
+        contentView?.removeFromParent()
+    }
     open func onPause() {}
 	open func onStateNotSaved() {}
 	open func onResume() {}

@@ -226,26 +226,62 @@ public struct Log {
 #if os(Android)
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnCreate")
 public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
+    InnerLog.d("💚 activityOnCreate(id: \(activityId))")
     let localEnv = JEnv(envPointer)
     let globalCallerObj = activityRef.box(localEnv)
     if let context = globalCallerObj?.object() {
-        if let pendingActivity = DroidApp.shared._pendingActivities.last {
-            DroidApp.shared._pendingActivities.remove(at: DroidApp.shared._pendingActivities.count - 1)
-            Task { @MainActor in
-                #if os(Android)
-                pendingActivity.attach(to: context)
-                DroidApp.shared._activeActivities[Int(activityId)] = pendingActivity
-                #endif
-            }
-        } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
-            Task { @MainActor in
-                let activity = activityType.init()
-                activity.attach(to: context)
-                DroidApp.shared._activeActivities[Int(activityId)] = activity
-            }
+        _activityOnCreate(localEnv, context, Int(activityId), nil)
+    } else {
+        InnerLog.c("💧 activityOnCreate: unable to wrap activity context")
+    }
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnCreateSavedInstanceState")
+public func activityOnCreateSavedInstanceState(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint, bundleObject: jobject) {
+    InnerLog.d("💚 activityOnCreateSavedInstanceState(id: \(activityId))")
+    let localEnv = JEnv(envPointer)
+    let globalCallerObj = activityRef.box(localEnv)
+    if let context = globalCallerObj?.object() {
+        if let global = bundleObject.box(localEnv)?.object(as: Bundle.className) {
+            _activityOnCreate(localEnv, context, Int(activityId), Bundle(global))
+        } else {
+            InnerLog.c("💧 activityOnCreateSavedInstanceState: unable to get Bundle")
+            _activityOnCreate(localEnv, context, Int(activityId), nil)
         }
     } else {
-        InnerLog.c("💧 Unable to wrap activity context")
+        InnerLog.c("💧 activityOnCreateSavedInstanceState: unable to wrap activity context")
+    }
+}
+
+private func _activityOnCreate(_ env: JEnv, _ context: JObject, _ activityId: Int, _ bundle: Bundle?) {
+    if let saved = DroidApp.shared._savedActivities[activityId] {
+        InnerLog.t("💚 _activityOnCreate → saved block")
+        let (activity, savedInstanceState) = saved
+        MainActor.assumeIsolated {
+            #if os(Android)
+            DroidApp.shared._activeActivities[activityId] = activity
+            DroidApp.shared._savedActivities.removeValue(forKey: activityId)
+            activity.attachOnCreate(to: context, savedInstanceState: bundle ?? savedInstanceState)
+            #endif
+        }
+    } else if let pendingActivity = DroidApp.shared._pendingActivities.last {
+        InnerLog.t("💚 _activityOnCreate → pending block")
+        DroidApp.shared._pendingActivities.remove(at: DroidApp.shared._pendingActivities.count - 1)
+        MainActor.assumeIsolated {
+            #if os(Android)
+            DroidApp.shared._activeActivities[activityId] = pendingActivity
+            pendingActivity.attachOnCreate(to: context, savedInstanceState: nil)
+            #endif
+        }
+    } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
+        InnerLog.t("💚 _activityOnCreate → new block")
+        MainActor.assumeIsolated {
+            let activity = activityType.init()
+            DroidApp.shared._activeActivities[activityId] = activity
+            activity.attachOnCreate(to: context, savedInstanceState: nil)
+        }
+    } else {
+        InnerLog.t("🟥 _activityOnCreate → else block")
     }
 }
 
@@ -253,6 +289,27 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
 public func activityOnPause(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
     Task { @MainActor in
         DroidApp.shared._activeActivities[Int(activityId)]?.onPause()
+    }
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnSaveInstanceState")
+public func activityOnSaveInstanceState(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, bundleObject: jobject) {
+    InnerLog.d("💚 activityOnSaveInstanceState")
+    let localEnv = JEnv(envPointer)
+    guard let global = bundleObject.box(localEnv)?.object(as: Bundle.className) else {
+        InnerLog.c("🟥 activityOnSaveInstanceState exit: unable to get Bundle")
+        return
+    }
+    MainActor.assumeIsolated {
+        if let activity = DroidApp.shared._activeActivities[Int(activityId)] {
+            InnerLog.d("💚 activityOnSaveInstanceState → active activity(id: \(activityId)) found")
+            let bundle = Bundle(global)
+            activity.onSaveInstanceState(bundle: bundle)
+            DroidApp.shared._savedActivities[Int(activityId)] = (activity, bundle)
+            DroidApp.shared._activeActivities.removeValue(forKey: Int(activityId))
+        } else {
+            InnerLog.c("🟥 activityOnSaveInstanceState exit: active activity(id: \(activityId)) not found")
+        }
     }
 }
 

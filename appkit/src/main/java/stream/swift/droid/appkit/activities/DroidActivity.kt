@@ -8,13 +8,26 @@ import android.view.View
 import stream.swift.droid.appkit.DroidApp
 
 open class DroidActivity: Activity() {
-    private val uniqueId by lazy { View.generateViewId() }
+    @Suppress("PrivatePropertyName")
+    private val UNIQUE_ID_KEY = "UNIQUE_ID"
+
+    protected var uniqueId: Int = 0
+        private set
     private var isStopping = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val app: DroidApp = applicationContext as DroidApp
-        app.activityOnCreate(this, uniqueId)
+        if (savedInstanceState != null) {
+            uniqueId = savedInstanceState.getInt(UNIQUE_ID_KEY, 0)
+            if (uniqueId == 0) {
+                throw IllegalStateException("DroidActivity: UNIQUE_ID wasn't saved properly")
+            }
+            app.activityOnCreateSavedInstanceState(this, uniqueId, savedInstanceState)
+        } else {
+            uniqueId = View.generateViewId()
+            app.activityOnCreate(this, uniqueId)
+        }
     }
 
     override fun onPause() {
@@ -23,6 +36,14 @@ open class DroidActivity: Activity() {
         app.activityOnPause(uniqueId)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(UNIQUE_ID_KEY, uniqueId)
+        val app: DroidApp = applicationContext as DroidApp
+        app.activityOnSaveInstanceState(uniqueId, outState)
+    }
+
+    @Deprecated("Deprecated in Java")
     override fun onStateNotSaved() {
         super.onStateNotSaved()
         val app: DroidApp = applicationContext as DroidApp
