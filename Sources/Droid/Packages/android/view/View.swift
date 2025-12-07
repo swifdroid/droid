@@ -2817,6 +2817,15 @@ extension View {
     }
 }
 
+// MARK: RequestApplyInsets
+
+extension View {
+    /// Ask that a new dispatch of `View.onApplyWindowInsets(WindowInsets)` be performed.
+    public func requestApplyInsets() {
+        instance?.callVoidMethod(name: "requestApplyInsets")
+    }
+}
+
 // MARK: Right
 
 struct RightProperty: ViewPropertyToApply {

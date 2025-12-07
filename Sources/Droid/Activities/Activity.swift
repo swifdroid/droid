@@ -180,13 +180,22 @@ open class Activity: Contextable, AnyActivity {
 
     // MARK: Lifecycle
 
+    private var requestApplyInsetsAfterRestart = false
+
     open func onSaveInstanceState(bundle: Bundle) {
         contentView?.removeFromParent()
     }
     open func onPause() {}
 	open func onStateNotSaved() {}
-	open func onResume() {}
-	open func onRestart() {}
+	open func onResume() {
+        if requestApplyInsetsAfterRestart {
+            requestApplyInsetsAfterRestart = false
+            contentView?.requestApplyInsets()
+        }
+    }
+	open func onRestart() {
+        requestApplyInsetsAfterRestart = true
+    }
 	open func onStart() {}
 	open func onStop() {}
 	open func onDestroy() {
