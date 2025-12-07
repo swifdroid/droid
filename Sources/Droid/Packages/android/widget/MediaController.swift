@@ -16,7 +16,7 @@ open class MediaController: View, @unchecked Sendable {
         super.init(id: id)
     }
 
-    public override init(id: Int32? = nil, _ object: JObject, _ context: ActivityContext) {
-        super.init(id: id, object, context)
+    public override init(id: Int32? = nil, _ object: JObject, _ contextLink: @escaping () -> ActivityContext?) {
+        super.init(id: id, object, contextLink)
     }
 }

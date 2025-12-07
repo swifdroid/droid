@@ -12,7 +12,14 @@ extension View {
         public let id: Int32
 
         /// Context
-        public private(set) weak var context: ActivityContext?
+        let contextLink: () -> ActivityContext?
+        public var context: ActivityContext? {
+            let c = contextLink()
+            if c == nil {
+                InnerLog.c("🟥🟥 View.ViewInstance.context is nil for view(id: \(id))")
+            }
+            return c
+        }
 
         /// View
         public private(set) weak var view: View?
@@ -26,17 +33,21 @@ extension View {
         /// Layout Params Class name
         var lpClassName: JClassName?
 
-        public convenience init? (_ className: JClassName, _ view: View, _ context: ActivityContext, _ id: Int32) {
+        public convenience init? (_ className: JClassName, _ view: View, _ contextLink: @escaping () -> ActivityContext?, _ id: Int32) {
             #if os(Android)
             guard let env = JEnv.current() else { return nil }
-            self.init(env, className, view, context, id)
+            self.init(env, className, view, contextLink, id)
             #else
             return nil
             #endif
         }
         
-        public init? (_ env: JEnv, _ className: JClassName, _ view: View, _ context: ActivityContext, _ id: Int32) {
+        public init? (_ env: JEnv, _ className: JClassName, _ view: View, _ contextLink: @escaping () -> ActivityContext?, _ id: Int32) {
             #if os(Android)
+            guard let context = contextLink() else {
+                InnerLog.c("🟥🟥 View.ViewInstance.init 2 failed: context is nil for view(id: \(id)) class: \(className.path)")
+                return nil
+            }
             guard
                 let clazz = JClass.load(className),
                 let global = clazz.newObject(env, args: context.object.signed(as: .android.content.Context))
@@ -44,7 +55,7 @@ extension View {
             self.id = id
             self.object = global
             self.view = view
-            self.context = context
+            self.contextLink = contextLink
             InnerLog.t("🟩🟩 View.ViewInstance.init(id: \(id)) 1: \(self.className.fullName) ref: \(object.ref.ref))")
             // Assign Swift-generated id
             global.callVoidMethod(env, name: "setId", args: id)
@@ -53,12 +64,16 @@ extension View {
             #endif
         }
         
-        public init? (_ object: JObject, _ view: View, _ context: ActivityContext, _ id: Int32, setId: Bool) {
+        public init? (_ object: JObject, _ view: View, _ contextLink: @escaping () -> ActivityContext?, _ id: Int32, setId: Bool) {
             #if os(Android)
+            if contextLink() == nil {
+                InnerLog.c("🟥🟥 View.ViewInstance.init 3 failed: context is nil for view(id: \(view.id))")
+                return nil
+            }
             self.id = id
             self.object = object
             self.view = view
-            self.context = context
+            self.contextLink = contextLink
             InnerLog.t("🟩🟩 View.ViewInstance.init(id: \(id)) 2: \(self.className.fullName) ref: \(object.ref.ref))")
             if setId {
                 // Assign Swift-generated id

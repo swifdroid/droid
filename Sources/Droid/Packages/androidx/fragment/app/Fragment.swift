@@ -32,22 +32,24 @@ open class Fragment: NativeFragment, @unchecked Sendable {
 
     open override func onCreateView(_ inflater: LayoutInflater, _ container: View?, _ savedInstanceState: Bundle?) -> View? {
         buildUI()
-        func returnPlaceholder(_ context: ActivityContext) -> View {
+        func returnPlaceholder() -> View {
             let contentView = TextView("Empty Fragment Content").gravity(.center)
             if let container {
-                contentView.setStatusInParent(container, context)
+                contentView.setStatusInParent(container, { [weak self] in
+                    InnerLog.t("🟡 Fragment.onCreateView().setStatusInParent 1: getting context (\(self?.context != nil))")
+                    return self?.context
+                })
             } else {
-                contentView.setStatusAsContentView(context)
+                contentView.setStatusAsContentView({ [weak self] in
+                    InnerLog.t("🟡 Fragment.onCreateView().setStatusAsContentView 1: getting context (\(self?.context != nil))")
+                    return self?.context
+                })
             }
             contentView.willMoveToParent()
             return contentView
         }
-        guard let context else {
-            Log.c("🟥 Fragment: Failed to onCreateView: activity context is nil")
-            return nil
-        }
         guard let contentBlock else {
-            return returnPlaceholder(context)
+            return returnPlaceholder()
         }
         let item = contentBlock().bodyBuilderItem
         func setDefaultFrameLayout(_ item: BodyBuilderItem) {
@@ -79,12 +81,18 @@ open class Fragment: NativeFragment, @unchecked Sendable {
         }
         proceedItem(item)
         guard let contentView else {
-            return returnPlaceholder(context)
+            return returnPlaceholder()
         }
         if let container {
-            contentView.setStatusInParent(container, context)
+            contentView.setStatusInParent(container, { [weak self] in
+                InnerLog.t("🟡 Fragment.onCreateView().setStatusInParent 2: getting context (\(self?.context != nil))")
+                return self?.context
+            })
         } else {
-            contentView.setStatusAsContentView(context)
+            contentView.setStatusAsContentView({ [weak self] in
+                InnerLog.t("🟡 Fragment.onCreateView().setStatusAsContentView 2: getting context (\(self?.context != nil))")
+                return self?.context
+            })
         }
         contentView.willMoveToParent()
         return contentView
@@ -185,15 +193,14 @@ open class Fragment: NativeFragment, @unchecked Sendable {
 
     /// Get the root view for the fragment's layout (the one returned by onCreateView).
     public func requireView() -> View! {
-        guard let context else {
-            Log.c("🟥 Fragment: Failed to requireView: activity context is nil")
-            return nil
-        }
         guard
             let returningClazz = JClass.load(View.className),
             let global = object.callObjectMethod(name: "requireView", returningClass: returningClazz)
         else { return nil }
-        return .init(global, context)
+        return .init(global, { [weak self] in
+            InnerLog.t("🟡 Fragment.requireView(): getting context for view (\(self?.context != nil))")
+            return self?.context
+        })
     }
 
     /// Sets whether the the exit transition and enter transition overlap or not.
@@ -528,16 +535,15 @@ extension Fragment {
     }
 
     public func view() -> View? {
-        guard let context else {
-            Log.c("🟥 Fragment: Failed to get view: activity context is nil")
-            return nil
-        }
         guard
             let returningClazz = JClass.load(View.className),
             let global = object.callObjectMethod(name: "getView", returningClass: returningClazz)
         else { return nil }
         let id = global.callIntMethod(name: "getId")
-        return .init(id: id, global, context)
+        return .init(id: id, global, { [weak self] in
+            InnerLog.t("🟡 Fragment.view(): getting context for view (\(self?.context != nil))")
+            return self?.context
+        })
     }
 
     // TODO: getViewLifecycleOwner

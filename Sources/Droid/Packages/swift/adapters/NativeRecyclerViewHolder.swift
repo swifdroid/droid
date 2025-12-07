@@ -105,7 +105,10 @@ public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolde
             return nil
         }
         guard
-            let viewInstance = view.setStatusAsContentView(context)
+            let viewInstance = view.setStatusAsContentView({ [weak context] in
+                InnerLog.t("🟡 NativeRecyclerViewHolder: getting context for view (\(context != nil))")
+                return context
+            })
         else {
             return nil
         }

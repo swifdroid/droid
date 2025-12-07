@@ -107,7 +107,10 @@ open class Activity: Contextable, AnyActivity {
             InnerLog.c("🟥 Unable to set content view: activity context is nil")
             return
         }
-        guard let viewInstance = view.setStatusAsContentView(context) else {
+        guard let viewInstance = view.setStatusAsContentView({ [weak self] in
+            InnerLog.t("🟡 Activity.contentView(id: \(view.id)): getting context for view (\(self?.context != nil))")
+            return self?.context
+        }) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setContentView`")
             return
         }
@@ -243,7 +246,10 @@ extension Activity {
             let returningClazz = JClass.load(.android.view.View),
             let global = context.object.callObjectMethod(name: "findViewById", args: id, returningClass: returningClazz)
         else { return nil }
-        return .init(id: id, global, context)
+        return .init(id: id, global, { [weak self] in
+            InnerLog.t("🟡 Activity.findViewById(id: \(view.id)): getting context for view (\(self?.context != nil))")
+            return self?.context
+        })
     }
 }
 

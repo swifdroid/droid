@@ -63,8 +63,10 @@ public final class Toast: JObjectable, @unchecked Sendable {
     @discardableResult
     public func view(_ view: View) -> Self {
         guard
-            let context,
-            let instance = view.setStatusAsContentView(context)
+            let instance = view.setStatusAsContentView({ [weak self] in
+                InnerLog.t("🟡 Toast.view(): getting context (\(self?.context != nil))")
+                return self?.context
+            })
         else { return self }
         object.callVoidMethod(name: "setView", args: instance.signed(as: .android.view.View))
         return self

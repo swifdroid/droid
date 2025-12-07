@@ -321,8 +321,9 @@ public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>
         return
     }
     Task { @MainActor in
+        let activityContext = ActivityContext(object: context)
         let menu = ContextMenu(menuObject)
-        let view = View(viewObject, .init(object: context))
+        let view = View(viewObject, { activityContext })
         listener.onCreateContextMenu(menu, view, nil)
     }
 }
@@ -348,7 +349,7 @@ public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<
     MainActor.assumeIsolated {
         let activityContext = ActivityContext(object: context)
         let menu = ContextMenu(menuObject)
-        let view = View(viewObject, activityContext)
+        let view = View(viewObject, { activityContext })
         let info = ContextMenu.ContextMenuInfo(infoObject)
         listener.onCreateContextMenu(menu, view, info)
     }
@@ -390,8 +391,9 @@ public func nativeFragmentOnCreateViewContainer(env: UnsafeMutablePointer<JNIEnv
         return nil
     }
     let result = MainActor.assumeIsolated {
+        let activityContext = ActivityContext(object: context)
         let inflater = LayoutInflater(inflaterObject)
-        let container = ViewGroup(containerObject, .init(object: context))
+        let container = ViewGroup(containerObject, { activityContext })
         return listener.onCreateView(inflater, container, nil)?.instance?.object.ref
     }
     return result?.ref
@@ -441,8 +443,9 @@ public func nativeFragmentOnCreateViewContainerSavedInstanceState(env: UnsafeMut
         return nil
     }
     let result = MainActor.assumeIsolated {
+        let activityContext = ActivityContext(object: context)
         let inflater = LayoutInflater(inflaterObject)
-        let container = ViewGroup(containerObject, .init(object: context))
+        let container = ViewGroup(containerObject, { activityContext })
         let savedInstanceState = Bundle(savedInstanceStateObject)
         return listener.onCreateView(inflater, container, savedInstanceState)?.instance?.object.ref
     }
@@ -602,7 +605,8 @@ public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, call
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
     Task { @MainActor in
-        listener.onViewCreated(view: .init(id: viewId, viewObject, .init(object: context)), savedInstanceState: nil)
+        let activityContext = ActivityContext(object: context)
+        listener.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: nil)
     }
 }
 
@@ -622,7 +626,8 @@ public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePoin
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
     Task { @MainActor in
-        listener.onViewCreated(view: .init(id: viewId, viewObject, .init(object: context)), savedInstanceState: .init(bundleObject))
+        let activityContext = ActivityContext(object: context)
+        listener.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: .init(bundleObject))
     }
 }
 

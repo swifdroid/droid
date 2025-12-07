@@ -188,9 +188,9 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     }
 
     @discardableResult
-    public init (id: Int32? = nil, _ object: JObject, _ context: ActivityContext) {
+    public init (id: Int32? = nil, _ object: JObject, _ contextLink: @escaping () -> ActivityContext?) {
         self.id = id ?? .nextViewId()
-        if let instance = ViewInstance(object, self, context, self.id, setId: id != nil) {
+        if let instance = ViewInstance(object, self, contextLink, self.id, setId: id != nil) {
             self.status = .asContentView(instance)
         }
         #if os(Android)
@@ -251,13 +251,13 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
         #endif
         subviews.append(subview)
         if let instance {
-            guard let context = instance.context else {
+            if instance.contextLink() == nil {
                 InnerLog.c("🟥 Unable to add subview: parent view's context is nil")
                 return self
             }
             subview.willMoveToParent()
             willAddSubview(subview)
-            if let subviewInstance = subview.setStatusInParent(self, context) {
+            if let subviewInstance = subview.setStatusInParent(self, instance.contextLink) {
                 instance.addView(subviewInstance)
                 subview.didMoveToParent()
                 didAddSubview(subview)
@@ -342,7 +342,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
             InnerLog.c("🟥 Unable to proceed `didMoveToParent` when its ViewInstance is nil")
             return
         }
-        guard let context = instance.context else {
+        if instance.contextLink() == nil {
             InnerLog.c("🟥 Unable to proceed `didMoveToParent`: view's context is nil")
             return
         }
@@ -358,7 +358,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
                 }
             }).enumerated() {
                 // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 1")
-                if let subviewInstance = subview.setStatusInParent(self, context) {
+                if let subviewInstance = subview.setStatusInParent(self, instance.contextLink) {
                     // InnerLog.t("view(id: \(id)) didMoveToParent iterating, subview(#\(i) id:\(subview.id)) 2")
                     subview.willMoveToParent()
                     instance.addView(subviewInstance)
@@ -380,7 +380,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     }
 
     @discardableResult
-    func setStatusAsContentView(_ context: ActivityContext) -> ViewInstance? {
+    func setStatusAsContentView(_ contextLink: @escaping () -> ActivityContext?) -> ViewInstance? {
         InnerLog.t("view(id: \(id)) \(self) setStatusAsContentView 1")
         switch status {
             case .new, .floating: break
@@ -389,7 +389,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
                 return nil
         }
         // InnerLog.t("view(id: \(id)) setStatusAsContentView 2")
-        guard let instance: ViewInstance = ViewInstance(Self.className, self, context, id) else {
+        guard let instance: ViewInstance = ViewInstance(Self.className, self, contextLink, id) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setAsContentView`")
             return nil
         }
@@ -402,7 +402,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
     }
     
     @discardableResult
-    func setStatusInParent(_ parent: View, _ context: ActivityContext) -> ViewInstance? {
+    func setStatusInParent(_ parent: View, _ contextLink: @escaping () -> ActivityContext?) -> ViewInstance? {
         InnerLog.t("view(id: \(id)) \(self) setStatusInParent 1")
         switch status {
             case .new, .floating: break
@@ -411,7 +411,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
                 return nil
         }
         // InnerLog.t("view(id: \(id)) setStatusInParent 2")
-        guard let instance = ViewInstance(Self.className, self, context, id) else {
+        guard let instance = ViewInstance(Self.className, self, contextLink, id) else {
             InnerLog.c("🟥 Unable to initialize ViewInstance for `setStatusInParent`")
             return nil
         }

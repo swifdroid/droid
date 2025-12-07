@@ -170,10 +170,12 @@ extension Window {
     public func currentFocus() -> View? {
         guard
             let returningClazz = JClass.load(.android.view.View),
-            let global = callObjectMethod(name: "getCurrentFocus", returningClass: returningClazz),
-            let context = context()
+            let global = callObjectMethod(name: "getCurrentFocus", returningClass: returningClazz)
         else { return nil }
-        return .init(global, context)
+        return .init(global, { [weak self] in
+            InnerLog.t("🟡 Window.currentFocus(): getting context (\(self?.context() != nil))")
+            return self?.context()
+        })
     }
 
     /// Retrieve the top-level window decor view (containing the standard window
@@ -184,10 +186,12 @@ extension Window {
     public func decorView() -> View? {
         guard
             let returningClazz = JClass.load(.android.view.View),
-            let global = callObjectMethod(name: "getDecorView", returningClass: returningClazz),
-            let context = context()
+            let global = callObjectMethod(name: "getDecorView", returningClass: returningClazz)
         else { return nil }
-        return .init(global, context)
+        return .init(global, { [weak self] in
+            InnerLog.t("🟡 Window.decorView(): getting context (\(self?.context() != nil))")
+            return self?.context()
+        })
     }
 
     /// Return the feature bits set by default on a window.
@@ -235,10 +239,12 @@ extension Window {
     public func mediaController() -> MediaController? {
         guard
             let returningClazz = JClass.load(MediaController.className),
-            let global = callObjectMethod(name: "getMediaController", returningClass: returningClazz),
-            let context = context()
+            let global = callObjectMethod(name: "getMediaController", returningClass: returningClazz)
         else { return nil }
-        return MediaController(global, context)
+        return MediaController(global, { [weak self] in
+            InnerLog.t("🟡 Window.mediaController(): getting context (\(self?.context() != nil))")
+            return self?.context()
+        })
     }
 
     /// Get the current navigation bar color.
@@ -455,10 +461,12 @@ extension Window {
     public func peekDecorView() -> View? {
         guard
             let returningClazz = JClass.load(.android.view.View),
-            let global = callObjectMethod(name: "peekDecorView", returningClass: returningClazz),
-            let context = context()
+            let global = callObjectMethod(name: "peekDecorView", returningClass: returningClazz)
         else { return nil }
-        return .init(global, context)
+        return .init(global, { [weak self] in
+            InnerLog.t("🟡 Window.peekDecorView(): getting context (\(self?.context() != nil))")
+            return self?.context()
+        })
     }
     
     /// Perform the context menu action associated with a particular identifier.
@@ -1159,12 +1167,14 @@ extension ActionBar {
     /// The current custom view.
     public func customView() -> View! {
         guard
-            let context,
             let returningClazz = JClass.load(.android.view.View),
             let global = object.callObjectMethod(name: "getCustomView", returningClass: returningClazz)
         else { return nil }
         let id = Int32.nextViewId()
-        return .init(id: id, global, context)
+        return .init(id: id, global, { [weak context] in
+            InnerLog.t("🟡 ActionBar.customView(): getting context (\(context != nil))")
+            return context
+        })
     }
 
     /// The current set of display options.

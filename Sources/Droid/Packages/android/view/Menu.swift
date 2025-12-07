@@ -357,7 +357,10 @@ extension AdapterView {
                 let returningClazz = JClass.load(View.className),
                 let global = object.objectField(name: "targetView", returningClass: returningClazz)
             else { return nil }
-            return .init(global, context)
+            return .init(global, { [weak context] in
+                InnerLog.t("🟡 AdapterView.targetView(): getting context (\(context != nil))")
+                return context
+            })
         }
     }
 }
@@ -406,7 +409,10 @@ extension ExpandableListView {
                 let returningClazz = JClass.load(View.className),
                 let global = object.objectField(name: "targetView", returningClass: returningClazz)
             else { return nil }
-            return .init(global, context)
+            return .init(global, { [weak context] in
+                InnerLog.t("🟡 ExpandableListView.targetView(): getting context (\(context != nil))")
+                return context
+            })
         }
     }
 }
@@ -592,7 +598,10 @@ extension MenuItem {
             let returningClazz = JClass.load(View.className),
             let global = object.callObjectMethod(name: "getActionView", returningClass: returningClazz)
         else { return nil }
-        return .init(global, context)
+        return .init(global, { [weak context] in
+            InnerLog.t("🟡 MenuItem.actionView(): getting context (\(context != nil))")
+            return context
+        })
     }
 
     /// Return the modifier for this menu item's alphabetic shortcut.
