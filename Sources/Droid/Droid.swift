@@ -321,7 +321,7 @@ public func activityOnStateNotSaved(envPointer: UnsafeMutablePointer<JNIEnv?>, a
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnResume")
-public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onResume()
     }
@@ -369,7 +369,7 @@ public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObje
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStart")
-public func activityOnStart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+public func activityOnStart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onStart()
     }

@@ -53,7 +53,7 @@ open class DroidAppCompatActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val app: DroidApp = applicationContext as DroidApp
-        app.activityOnResume(uniqueId)
+        app.activityOnResume(this, uniqueId)
     }
 
     override fun onRestart() {
@@ -65,7 +65,7 @@ open class DroidAppCompatActivity: AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val app: DroidApp = applicationContext as DroidApp
-        app.activityOnStart(uniqueId)
+        app.activityOnStart(this, uniqueId)
         isStopping = false
     }
 
