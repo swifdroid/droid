@@ -184,6 +184,8 @@ open class Activity: Contextable, AnyActivity {
 
     open func onSaveInstanceState(bundle: Bundle) {
         contentView?.removeFromParent()
+        contentView = nil
+        context = nil
     }
     open func onPause() {}
 	open func onStateNotSaved() {}
@@ -200,6 +202,8 @@ open class Activity: Contextable, AnyActivity {
 	open func onStop() {}
 	open func onDestroy() {
         contentView?.removeFromParent()
+        contentView = nil
+        context = nil
     }
 	open func onAttachedToWindow() {}
 	open func onBackPressed() {}
