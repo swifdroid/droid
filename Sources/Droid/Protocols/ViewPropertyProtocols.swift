@@ -25,6 +25,16 @@ extension SetTextable {
         }
         if let state = value.stateValue {
             s.textState = state
+            if let v = self as? EditText {
+                v.textChangedListener(
+                    beforeTextChanged: { _ in },
+                    onTextChanged: { event in
+                        guard let str = event.p0 else { return }
+                        value.stateValue?.wrappedValue = str
+                    },
+                    afterTextChanged: { _ in }
+                )
+            }
         } else {
             s.textState = .init(wrappedValue: value.simpleValue)
         }
@@ -44,7 +54,13 @@ fileprivate final class SetTextViewProperty: ViewPropertyToApply {
         instance.setText(env, textState.wrappedValue)
         textState.listen { [weak instance] old, new in
             guard old != new else { return }
-            instance?.setText(env, new)
+            if let v = instance?.view as? EditText {
+                guard v.text() != new else { return }
+                instance?.setText(env, new)
+                v.setSelection(index: new.count)
+            } else {
+                instance?.setText(env, new)
+            }
         }.hold(in: instance)
         #endif
     }

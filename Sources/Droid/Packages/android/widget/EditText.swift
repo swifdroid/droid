@@ -21,6 +21,20 @@ open class EditText: TextView, @unchecked Sendable {
     public override init (id: Int32? = nil) {
         super.init(id: id)
     }
+
+    @discardableResult
+    public override init<S>(id: Int32? = nil, _ state: S) where S: StateValuable, S.Value == String {
+        super.init(id: id)
+        self.text(state)
+        self.textChangedListener(
+            beforeTextChanged: { _ in },
+            onTextChanged: { event in
+                guard let str = event.p0 else { return }
+                state.stateValue?.wrappedValue = str
+            },
+            afterTextChanged: { _ in }
+        )
+    }
     
     func addTextChangedListener(_ textWatcher: JClass) {
         // callVoidWithMethod("addTextChangedListener", .object(.android.text.TextWatcher) / textWatcher)

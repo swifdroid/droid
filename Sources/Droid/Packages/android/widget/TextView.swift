@@ -1175,7 +1175,9 @@ extension TextView {
             let returningClazz = JClass.load(JString.charSequenseClassName),
             let obj = instance?.callObjectMethod(name: "getText", returningClass: returningClazz)
         else { return "" }
-        return JString(obj).string() ?? "" // may fail if the original object is Editable
+        // FIXME: the following crashes with JNI DETECTED ERROR IN APPLICATION: jstring has wrong type: android.text.SpannableStringBuilder
+        // return JString(obj).string() ?? "" // may fail if the original object is Editable
+        return obj.toString() // seems simply working solution
     }
 }
 
