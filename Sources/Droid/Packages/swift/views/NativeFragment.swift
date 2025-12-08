@@ -220,7 +220,7 @@ open class NativeFragment: NativeUIObject, AnyNativeObject, @unchecked Sendable 
 #if os(Android)
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onAttach")
 public func nativeFragmentOnAttach(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, context: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnAttach 1")
+    InnerLog.t("🩵 nativeFragmentOnAttach(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -230,24 +230,20 @@ public func nativeFragmentOnAttach(env: UnsafeMutablePointer<JNIEnv?>, callerCla
             listener.onAttach(context)
         }
     } else {
-        InnerLog.c("⚠️ nativeFragmentOnAttach unable to unwrap Context")
+        InnerLog.c("🟥 nativeFragmentOnAttach(id: \(uniqueId)) unable to unwrap Context")
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onContextItemSelected")
 public func nativeFragmentOnContextItemSelected(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, item: jobject) -> jboolean {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnContextItemSelected 1")
+    InnerLog.t("🩵 nativeFragmentOnContextItemSelected(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return 0 }
     guard let object = item.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnContextItemSelected unable to unwrap MenuItem")
+        InnerLog.c("🟥 nativeFragmentOnContextItemSelected(id: \(uniqueId)) unable to unwrap MenuItem")
         return 0
     }
-    // guard let context = object.context() else {
-    //     InnerLog.c("⚠️ nativeFragmentOnContextItemSelected unable to unwrap MenuItem's Context")
-    //     return 0
-    // }
     let result = MainActor.assumeIsolated {
         let item = MenuItem(object)
         return listener.onContextItemSelected(item)
@@ -257,7 +253,7 @@ public func nativeFragmentOnContextItemSelected(env: UnsafeMutablePointer<JNIEnv
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreate")
 public func nativeFragmentOnCreate(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreate 1")
+    InnerLog.t("🩵 nativeFragmentOnCreate(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -268,7 +264,7 @@ public func nativeFragmentOnCreate(env: UnsafeMutablePointer<JNIEnv?>, callerCla
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateSavedInstanceState")
 public func nativeFragmentOnCreateSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreateSavedInstanceState 1")
+    InnerLog.t("🩵 nativeFragmentOnCreateSavedInstanceState(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -278,13 +274,13 @@ public func nativeFragmentOnCreateSavedInstanceState(env: UnsafeMutablePointer<J
             listener.onCreate(bundle)
         }
     } else {
-        InnerLog.c("⚠️ nativeFragmentOnCreate unable to unwrap Bundle")
+        InnerLog.c("🟥 nativeFragmentOnCreate(id: \(uniqueId)) unable to unwrap Bundle")
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateAnimation")
 public func nativeFragmentOnCreateAnimation(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, transit: jint, enter: jboolean, nextAnim: jint) -> jobject? {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreateAnimation 1")
+    InnerLog.t("🩵 nativeFragmentOnCreateAnimation(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return nil }
@@ -296,7 +292,7 @@ public func nativeFragmentOnCreateAnimation(env: UnsafeMutablePointer<JNIEnv?>, 
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateAnimator")
 public func nativeFragmentOnCreateAnimator(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, transit: jint, enter: jboolean, nextAnim: jint) -> jobject? {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreateAnimator 1")
+    InnerLog.t("🩵 nativeFragmentOnCreateAnimator(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return nil }
@@ -308,16 +304,16 @@ public func nativeFragmentOnCreateAnimator(env: UnsafeMutablePointer<JNIEnv?>, c
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateContextMenu")
 public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, menu: jobject, view: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreateContextMenu 1")
+    InnerLog.t("🩵 nativeFragmentOnCreateContextMenu(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     guard let menuObject = menu.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap ContextMenu")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap ContextMenu")
         return
     }
     guard let viewObject = view.box(JEnv(env))?.object(), let context = viewObject.context() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap View")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap View")
         return
     }
     MainActor.assumeIsolated {
@@ -330,20 +326,20 @@ public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateContextMenuWithInfo")
 public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, menu: jobject, view: jobject, info: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreateContextMenuWithInfo 1")
+    InnerLog.t("🩵 nativeFragmentOnCreateContextMenuWithInfo(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     guard let menuObject = menu.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap ContextMenu")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap ContextMenu")
         return
     }
     guard let viewObject = view.box(JEnv(env))?.object(), let context = viewObject.context() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap View")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap View")
         return
     }
     guard let infoObject = info.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateContextMenu unable to unwrap ContextMenu.Contextnfo")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap ContextMenu.Contextnfo")
         return
     }
     MainActor.assumeIsolated {
@@ -357,14 +353,15 @@ public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateView")
 public func nativeFragmentOnCreateView(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject) -> jobject? {
+    InnerLog.t("🩵 nativeFragmentOnCreateView(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to find fragment instance in cache")
+        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to find fragment instance in cache")
         return nil
     }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap LayoutInflater")
+        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to unwrap LayoutInflater")
         return nil
     }
     let result = MainActor.assumeIsolated {
@@ -376,18 +373,19 @@ public func nativeFragmentOnCreateView(env: UnsafeMutablePointer<JNIEnv?>, calle
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateViewContainer")
 public func nativeFragmentOnCreateViewContainer(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject, container: jobject) -> jobject? {
+    InnerLog.t("🩵 nativeFragmentOnCreateViewContainer(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to find fragment instance in cache")
+        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to find fragment instance in cache")
         return nil
     }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap LayoutInflater")
+        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to unwrap LayoutInflater")
         return nil
     }
     guard let containerObject = container.box(JEnv(env))?.object(), let context = containerObject.context() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap ViewGroup")
+        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to unwrap ViewGroup")
         return nil
     }
     let result = MainActor.assumeIsolated {
@@ -401,19 +399,19 @@ public func nativeFragmentOnCreateViewContainer(env: UnsafeMutablePointer<JNIEnv
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateViewSavedInstanceState")
 public func nativeFragmentOnCreateViewSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject, savedInstanceState: jobject) -> jobject? {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreateViewSavedInstanceState 1")
+    InnerLog.t("🩵 nativeFragmentOnCreateViewSavedInstanceState(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to find fragment instance in cache")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewSavedInstanceState(id: \(uniqueId)) unable to find fragment instance in cache")
         return nil
     }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap LayoutInflater")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewSavedInstanceState(id: \(uniqueId)) unable to unwrap LayoutInflater")
         return nil
     }
     guard let savedInstanceStateObject = savedInstanceState.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap Bundle")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewSavedInstanceState(id: \(uniqueId)) unable to unwrap Bundle")
         return nil
     }
     let result = MainActor.assumeIsolated {
@@ -426,20 +424,20 @@ public func nativeFragmentOnCreateViewSavedInstanceState(env: UnsafeMutablePoint
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateViewContainerSavedInstanceState")
 public func nativeFragmentOnCreateViewContainerSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject, container: jobject, savedInstanceState: jobject) -> jobject? {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnCreateViewContainerSavedInstanceState 1")
+    InnerLog.t("🩵 nativeFragmentOnCreateViewContainerSavedInstanceState")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return nil }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap LayoutInflater")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewContainerSavedInstanceState(id: \(uniqueId)) unable to unwrap LayoutInflater")
         return nil
     }
     guard let containerObject = container.box(JEnv(env))?.object(), let context = containerObject.context() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap ViewGroup")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewContainerSavedInstanceState(id: \(uniqueId)) unable to unwrap ViewGroup")
         return nil
     }
     guard let savedInstanceStateObject = savedInstanceState.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnCreateView unable to unwrap Bundle")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewContainerSavedInstanceState(id: \(uniqueId)) unable to unwrap Bundle")
         return nil
     }
     let result = MainActor.assumeIsolated {
@@ -454,7 +452,7 @@ public func nativeFragmentOnCreateViewContainerSavedInstanceState(env: UnsafeMut
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onDestroy")
 public func nativeFragmentOnDestroy(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnDestroy 1")
+    InnerLog.t("🩵 nativeFragmentOnDestroy(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -465,7 +463,7 @@ public func nativeFragmentOnDestroy(env: UnsafeMutablePointer<JNIEnv?>, callerCl
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onDestroyView")
 public func nativeFragmentOnDestroyView(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnDestroyView 1")
+    InnerLog.t("🩵 nativeFragmentOnDestroyView(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -476,7 +474,7 @@ public func nativeFragmentOnDestroyView(env: UnsafeMutablePointer<JNIEnv?>, call
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onDetach")
 public func nativeFragmentOnDetach(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnDetach 1")
+    InnerLog.t("🩵 nativeFragmentOnDetach(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -488,7 +486,7 @@ public func nativeFragmentOnDetach(env: UnsafeMutablePointer<JNIEnv?>, callerCla
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onHiddenChanged")
 public func nativeFragmentOnHiddenChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, hidden: jboolean) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnHiddenChanged 1")
+    InnerLog.t("🩵 nativeFragmentOnHiddenChanged(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -500,7 +498,7 @@ public func nativeFragmentOnHiddenChanged(env: UnsafeMutablePointer<JNIEnv?>, ca
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onMultiWindowModeChanged")
 public func nativeFragmentOnMultiWindowModeChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isInMultiWindowMode: jboolean) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnMultiWindowModeChanged 1")
+    InnerLog.t("🩵 nativeFragmentOnMultiWindowModeChanged(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -512,7 +510,7 @@ public func nativeFragmentOnMultiWindowModeChanged(env: UnsafeMutablePointer<JNI
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onPause")
 public func nativeFragmentOnPause(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnPause 1")
+    InnerLog.t("🩵 nativeFragmentOnPause(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -523,7 +521,7 @@ public func nativeFragmentOnPause(env: UnsafeMutablePointer<JNIEnv?>, callerClas
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onPictureInPictureModeChanged")
 public func nativeFragmentOnPictureInPictureModeChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isInPictureInPictureMode: jboolean) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnPictureInPictureModeChanged 1")
+    InnerLog.t("🩵 nativeFragmentOnPictureInPictureModeChanged(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -535,7 +533,7 @@ public func nativeFragmentOnPictureInPictureModeChanged(env: UnsafeMutablePointe
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onPrimaryNavigationFragmentChanged")
 public func nativeFragmentOnPrimaryNavigationFragmentChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isPrimaryNavigationFragment: jboolean) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnPrimaryNavigationFragmentChanged 1")
+    InnerLog.t("🩵 nativeFragmentOnPrimaryNavigationFragmentChanged(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -547,7 +545,7 @@ public func nativeFragmentOnPrimaryNavigationFragmentChanged(env: UnsafeMutableP
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onResume")
 public func nativeFragmentOnResume(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnResume 1")
+    InnerLog.t("🩵 nativeFragmentOnResume(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -558,12 +556,12 @@ public func nativeFragmentOnResume(env: UnsafeMutablePointer<JNIEnv?>, callerCla
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onSaveInstanceState")
 public func nativeFragmentOnSaveInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnSaveInstanceState 1")
+    InnerLog.t("🩵 nativeFragmentOnSaveInstanceState(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     guard let object = savedInstanceState.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnSaveInstanceState unable to unwrap Bundle")
+        InnerLog.c("🟥 nativeFragmentOnSaveInstanceState(id: \(uniqueId)) unable to unwrap Bundle")
         return
     }
     MainActor.assumeIsolated {
@@ -573,7 +571,7 @@ public func nativeFragmentOnSaveInstanceState(env: UnsafeMutablePointer<JNIEnv?>
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onStart")
 public func nativeFragmentOnStart(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnStart 1")
+    InnerLog.t("🩵 nativeFragmentOnStart(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -584,7 +582,7 @@ public func nativeFragmentOnStart(env: UnsafeMutablePointer<JNIEnv?>, callerClas
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onStop")
 public func nativeFragmentOnStop(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnStop 1")
+    InnerLog.t("🩵 nativeFragmentOnStop(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -595,12 +593,12 @@ public func nativeFragmentOnStop(env: UnsafeMutablePointer<JNIEnv?>, callerClass
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewCreated")
 public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, view: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnViewCreated 1")
+    InnerLog.t("🩵 nativeFragmentOnViewCreated(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     guard let viewObject = view.box(JEnv(env))?.object(), let context = viewObject.context() else {
-        InnerLog.c("⚠️ nativeFragmentOnViewCreated unable to unwrap View")
+        InnerLog.c("🟥 nativeFragmentOnViewCreated(id: \(uniqueId)) unable to unwrap View")
         return
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
@@ -612,16 +610,16 @@ public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, call
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewCreatedSavedInstanceState")
 public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, view: jobject, savedInstanceState: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnViewCreatedSavedInstanceState 1")
+    InnerLog.t("🩵 nativeFragmentOnViewCreatedSavedInstanceState(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     guard let viewObject = view.box(JEnv(env))?.object(), let context = viewObject.context() else {
-        InnerLog.c("⚠️ nativeFragmentOnViewCreated unable to unwrap View")
+        InnerLog.c("🟥 nativeFragmentOnViewCreatedSavedInstanceState(id: \(uniqueId)) unable to unwrap View")
         return
     }
     guard let bundleObject = savedInstanceState.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnViewCreated unable to unwrap Bundle")
+        InnerLog.c("🟥 nativeFragmentOnViewCreatedSavedInstanceState(id: \(uniqueId)) unable to unwrap Bundle")
         return
     }
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
@@ -633,7 +631,7 @@ public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePoin
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewStateRestored")
 public func nativeFragmentOnViewStateRestored(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnViewStateRestored 1")
+    InnerLog.t("🩵 nativeFragmentOnViewStateRestored(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
@@ -644,12 +642,12 @@ public func nativeFragmentOnViewStateRestored(env: UnsafeMutablePointer<JNIEnv?>
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onViewStateRestoredSavedInstanceState")
 public func nativeFragmentOnViewStateRestoredSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
-    InnerLog.c("🩵🩵🩵🩵🩵 nativeFragmentOnViewStateRestoredSavedInstanceState 1")
+    InnerLog.t("🩵 nativeFragmentOnViewStateRestoredSavedInstanceState(id: \(uniqueId))")
     guard
         let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else { return }
     guard let object = savedInstanceState.box(JEnv(env))?.object() else {
-        InnerLog.c("⚠️ nativeFragmentOnViewStateRestored unable to unwrap Bundle")
+        InnerLog.c("🟥 nativeFragmentOnViewStateRestoredSavedInstanceState(id: \(uniqueId)) unable to unwrap Bundle")
         return
     }
     MainActor.assumeIsolated {

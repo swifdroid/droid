@@ -226,7 +226,7 @@ public struct Log {
 #if os(Android)
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnCreate")
 public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
-    InnerLog.d("💚 activityOnCreate(id: \(activityId))")
+    InnerLog.t("💚 activityOnCreate(id: \(activityId))")
     let localEnv = JEnv(envPointer)
     let globalCallerObj = activityRef.box(localEnv)
     if let context = globalCallerObj?.object() {
@@ -238,7 +238,7 @@ public func activityOnCreate(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnCreateSavedInstanceState")
 public func activityOnCreateSavedInstanceState(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint, bundleObject: jobject) {
-    InnerLog.d("💚 activityOnCreateSavedInstanceState(id: \(activityId))")
+    InnerLog.t("💚 activityOnCreateSavedInstanceState(id: \(activityId))")
     let localEnv = JEnv(envPointer)
     let globalCallerObj = activityRef.box(localEnv)
     if let context = globalCallerObj?.object() {
@@ -255,7 +255,7 @@ public func activityOnCreateSavedInstanceState(envPointer: UnsafeMutablePointer<
 
 private func _activityOnCreate(_ env: JEnv, _ context: JObject, _ activityId: Int, _ bundle: Bundle?) {
     if let saved = DroidApp.shared._savedActivities[activityId] {
-        InnerLog.t("💚 _activityOnCreate → saved block")
+        InnerLog.t("💚 _activityOnCreate(id: \(activityId)) → saved block")
         let (activity, savedInstanceState) = saved
         MainActor.assumeIsolated {
             #if os(Android)
@@ -265,7 +265,7 @@ private func _activityOnCreate(_ env: JEnv, _ context: JObject, _ activityId: In
             #endif
         }
     } else if let pendingActivity = DroidApp.shared._pendingActivities.last {
-        InnerLog.t("💚 _activityOnCreate → pending block")
+        InnerLog.t("💚 _activityOnCreate(id: \(activityId)) → pending block")
         DroidApp.shared._pendingActivities.remove(at: DroidApp.shared._pendingActivities.count - 1)
         MainActor.assumeIsolated {
             #if os(Android)
@@ -274,19 +274,20 @@ private func _activityOnCreate(_ env: JEnv, _ context: JObject, _ activityId: In
             #endif
         }
     } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
-        InnerLog.t("💚 _activityOnCreate → new block")
+        InnerLog.t("💚 _activityOnCreate(id: \(activityId)) → new block")
         MainActor.assumeIsolated {
             let activity = activityType.init()
             DroidApp.shared._activeActivities[activityId] = activity
             activity.attachOnCreate(to: context, savedInstanceState: nil)
         }
     } else {
-        InnerLog.t("🟥 _activityOnCreate → else block")
+        InnerLog.t("🟥 _activityOnCreate(id: \(activityId)) → else block")
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnPause")
 public func activityOnPause(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnPause(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onPause()
     }
@@ -294,27 +295,28 @@ public func activityOnPause(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnSaveInstanceState")
 public func activityOnSaveInstanceState(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, bundleObject: jobject) {
-    InnerLog.d("💚 activityOnSaveInstanceState")
+    InnerLog.t("💚 activityOnSaveInstanceState(id: \(activityId))")
     let localEnv = JEnv(envPointer)
     guard let global = bundleObject.box(localEnv)?.object(as: Bundle.className) else {
-        InnerLog.c("🟥 activityOnSaveInstanceState exit: unable to get Bundle")
+        InnerLog.c("🟥 activityOnSaveInstanceState(id: \(activityId)) exit: unable to get Bundle")
         return
     }
     MainActor.assumeIsolated {
         if let activity = DroidApp.shared._activeActivities[Int(activityId)] {
-            InnerLog.d("💚 activityOnSaveInstanceState → active activity(id: \(activityId)) found")
+            InnerLog.t("💚 activityOnSaveInstanceState(id: \(activityId)) → active activity(id: \(activityId)) found")
             let bundle = Bundle(global)
             activity.onSaveInstanceState(bundle: bundle)
             DroidApp.shared._savedActivities[Int(activityId)] = (activity, bundle)
             DroidApp.shared._activeActivities.removeValue(forKey: Int(activityId))
         } else {
-            InnerLog.c("🟥 activityOnSaveInstanceState exit: active activity(id: \(activityId)) not found")
+            InnerLog.c("🟥 activityOnSaveInstanceState(id: \(activityId)) exit: active activity(id: \(activityId)) not found")
         }
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStateNotSaved")
 public func activityOnStateNotSaved(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnStateNotSaved(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onStateNotSaved()
     }
@@ -322,6 +324,7 @@ public func activityOnStateNotSaved(envPointer: UnsafeMutablePointer<JNIEnv?>, a
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnResume")
 public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnResume(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onResume()
     }
@@ -329,16 +332,16 @@ public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRestart")
 public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
-    InnerLog.d("💚 activityOnRestart(id: \(activityId))")
+    InnerLog.t("💚 activityOnRestart(id: \(activityId))")
     let localEnv = JEnv(envPointer)
     let globalCallerObj = activityRef.box(localEnv)
     guard let context = globalCallerObj?.object() else {
-        InnerLog.c("💧 activityOnRestart: unable to wrap activity context")
+        InnerLog.c("💧 activityOnRestart(id: \(activityId)): unable to wrap activity context")
         return
     }
     let activityId = Int(activityId)
     if let saved = DroidApp.shared._savedActivities[activityId] {
-        InnerLog.t("💚 _activityOnRestart → saved block")
+        InnerLog.t("💚 _activityOnRestart(id: \(activityId)) → saved block")
         let (activity, savedInstanceState) = saved
         MainActor.assumeIsolated {
             #if os(Android)
@@ -348,7 +351,7 @@ public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObje
             #endif
         }
     } else if let pendingActivity = DroidApp.shared._pendingActivities.last {
-        InnerLog.t("💚 _activityOnRestart → pending block")
+        InnerLog.t("💚 _activityOnRestart(id: \(activityId)) → pending block")
         DroidApp.shared._pendingActivities.remove(at: DroidApp.shared._pendingActivities.count - 1)
         MainActor.assumeIsolated {
             #if os(Android)
@@ -357,19 +360,20 @@ public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObje
             #endif
         }
     } else if let activityType = DroidApp.shared._activities.first(where: { $0.className == context.className.name }) {
-        InnerLog.t("💚 _activityOnRestart → new block")
+        InnerLog.t("💚 _activityOnRestart(id: \(activityId)) → new block")
         MainActor.assumeIsolated {
             let activity = activityType.init()
             DroidApp.shared._activeActivities[activityId] = activity
             activity.attachOnRestart(to: context, savedInstanceState: nil)
         }
     } else {
-        InnerLog.t("🟥 _activityOnRestart → else block")
+        InnerLog.t("🟥 _activityOnRestart(id: \(activityId)) → else block")
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStart")
 public func activityOnStart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnStart(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onStart()
     }
@@ -377,6 +381,7 @@ public func activityOnStart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnStop")
 public func activityOnStop(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnStop(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onStop()
     }
@@ -384,6 +389,7 @@ public func activityOnStop(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject:
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnDestroy")
 public func activityOnDestroy(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnDestroy(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onDestroy()
         DroidApp.shared._activeActivities.removeValue(forKey: Int(activityId))
@@ -392,6 +398,7 @@ public func activityOnDestroy(envPointer: UnsafeMutablePointer<JNIEnv?>, appObje
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnAttachedToWindow")
 public func activityOnAttachedToWindow(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnAttachedToWindow(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onAttachedToWindow()
     }
@@ -399,6 +406,7 @@ public func activityOnAttachedToWindow(envPointer: UnsafeMutablePointer<JNIEnv?>
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnBackPressed")
 public func activityOnBackPressed(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnBackPressed(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onBackPressed()
     }
@@ -406,6 +414,7 @@ public func activityOnBackPressed(envPointer: UnsafeMutablePointer<JNIEnv?>, app
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult1")
 public func activityOnActivityResult1(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, resultCode: jint, intentRef: jobject?, componentCallerRef: jobject?) {
+    InnerLog.t("💚 activityOnActivityResult1(id: \(activityId))")
     let env = JEnv(envPointer)
     var intent: Intent?
     if let object = intentRef?.box(env)?.object() {
@@ -424,6 +433,7 @@ public func activityOnActivityResult1(envPointer: UnsafeMutablePointer<JNIEnv?>,
 
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnActivityResult2")
 public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, resultCode: jint, intentRef: jobject?) {
+    InnerLog.t("💚 activityOnActivityResult2(id: \(activityId))")
     let env = JEnv(envPointer)
     var intent: Intent?
     if let object = intentRef?.box(env)?.object() {
@@ -437,19 +447,19 @@ public func activityOnActivityResult2(envPointer: UnsafeMutablePointer<JNIEnv?>,
 }
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnMultiWindowModeChanged")
 public func activityOnMultiWindowModeChanged(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, isInMultiWindowMode: jboolean) {
+    InnerLog.t("💚 activityOnMultiWindowModeChanged(id: \(activityId))")
     MainActor.assumeIsolated {
         DroidApp.shared._activeActivities[Int(activityId)]?.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode != 0)
     }
 }
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRequestPermissionsResult")
 public func activityOnRequestPermissionsResult(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, requestCode: jint, permissions: jobjectArray, grantResults: jarray, deviceId: jint) {
+    InnerLog.t("💚 activityOnRequestPermissionsResult(id: \(activityId))")
     let env = JEnv(envPointer)
     guard let permissionsBox = permissions.box(env) else { return }
     guard let permissionsObject = permissionsBox.object() else { return }
     let permissionsArray = JObjectArray(env, permissionsObject).toArray().compactMap { JString($0).string() }
     let grantResultsLength = env.getArrayLength(grantResults)
-    InnerLog.c("permissionsArray.count: \(permissionsArray.count)")
-    InnerLog.c("grantResultsLength.count: \(grantResultsLength)")
     var grantResultsArray = [Int32](repeating: 0, count: Int(grantResultsLength))
     env.getIntArrayRegion(grantResults, start: 0, length: grantResultsLength, buffer: &grantResultsArray)
     var results: [ActivityPermissionResult] = []
