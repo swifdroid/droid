@@ -27,6 +27,10 @@ open class FrameLayout: ViewGroup, @unchecked Sendable {
         super.init(id: id)
     }
 
+    public override init(id: Int32? = nil, _ object: JObject, _ contextLink: @escaping () -> ActivityContext?) {
+        super.init(id: id, object, contextLink)
+    }
+
     @discardableResult
     public override init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
         super.init(id: id, content: content)
