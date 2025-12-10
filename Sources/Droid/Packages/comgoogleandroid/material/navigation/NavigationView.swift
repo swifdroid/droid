@@ -272,7 +272,7 @@ extension NavigationView {
 
 // MARK: SetBottomInsetScrimEnabled
 
-struct BottomInsetScrimEnabledViewProperty: ViewPropertyToApply {
+private struct BottomInsetScrimEnabledViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setBottomInsetScrimEnabled"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -290,7 +290,7 @@ extension NavigationView {
 
 // MARK: SetCheckedItem
 
-struct CheckedItemViewProperty: ViewPropertyToApply {
+private struct CheckedItemViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setCheckedItem"
     let value: MenuItem
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -307,7 +307,7 @@ extension NavigationView {
 
 // MARK: SetDividerInsetEnd
 
-struct DividerInsetEndViewProperty: ViewPropertyToApply {
+private struct DividerInsetEndViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setDividerInsetEnd"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -325,7 +325,7 @@ extension NavigationView {
 
 // MARK: SetDividerInsetStart
 
-struct DividerInsetStartViewProperty: ViewPropertyToApply {
+private struct DividerInsetStartViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setDividerInsetStart"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -343,7 +343,7 @@ extension NavigationView {
 
 // MARK: SetDrawBottomInsetForeground
 
-struct DrawBottomInsetForegroundViewProperty: ViewPropertyToApply {
+private struct DrawBottomInsetForegroundViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setDrawBottomInsetForeground"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -361,7 +361,7 @@ extension NavigationView {
 
 // MARK: SetDrawLeftInsetForeground
 
-struct DrawLeftInsetForegroundViewProperty: ViewPropertyToApply {
+private struct DrawLeftInsetForegroundViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setDrawLeftInsetForeground"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -379,7 +379,7 @@ extension NavigationView {
 
 // MARK: SetDrawRightInsetForeground
 
-struct DrawRightInsetForegroundViewProperty: ViewPropertyToApply {
+private struct DrawRightInsetForegroundViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setDrawRightInsetForeground"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -397,7 +397,7 @@ extension NavigationView {
 
 // MARK: SetDrawTopInsetForeground
 
-struct DrawTopInsetForegroundViewProperty: ViewPropertyToApply {
+private struct DrawTopInsetForegroundViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setDrawTopInsetForeground"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -415,7 +415,7 @@ extension NavigationView {
 
 // MARK: SetItemBackground
 
-struct ItemBackgroundViewProperty: ViewPropertyToApply {
+private struct ItemBackgroundViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemBackground"
     let value: Drawable?
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -434,7 +434,7 @@ extension NavigationView {
 
 // MARK: SetItemBackgroundResource
 
-struct ItemBackgroundResourceViewProperty: ViewPropertyToApply {
+private struct ItemBackgroundResourceViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemBackgroundResource"
     let value: Int32
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -452,7 +452,7 @@ extension NavigationView {
 
 // MARK: SetItemHorizontalPadding
 
-struct ItemHorizontalPaddingViewProperty: ViewPropertyToApply {
+private struct ItemHorizontalPaddingViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemHorizontalPadding"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -470,7 +470,7 @@ extension NavigationView {
 
 // MARK: SetItemHorizontalPaddingResource
 
-struct ItemHorizontalPaddingResourceViewProperty: ViewPropertyToApply {
+private struct ItemHorizontalPaddingResourceViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemHorizontalPaddingResource"
     let value: Int32
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -487,7 +487,7 @@ extension NavigationView {
 
 // MARK: SetItemIconPadding
 
-struct ItemIconPaddingViewProperty: ViewPropertyToApply {
+private struct ItemIconPaddingViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemIconPadding"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -505,7 +505,7 @@ extension NavigationView {
 
 // MARK: SetItemIconPaddingResource
 
-struct ItemIconPaddingResourceViewProperty: ViewPropertyToApply {
+private struct ItemIconPaddingResourceViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemIconPaddingResource"
     let value: Int32
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -522,7 +522,7 @@ extension NavigationView {
 
 // MARK: SetItemIconSize
 
-struct ItemIconSizeViewProperty: ViewPropertyToApply {
+private struct ItemIconSizeViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemIconSize"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -541,7 +541,7 @@ extension NavigationView {
 
 // MARK: SetItemIconTintList
 
-struct ItemIconTintListViewProperty: ViewPropertyToApply {
+private struct ItemIconTintListViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemIconTintList"
     let value: ColorStateList?
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -558,7 +558,7 @@ extension NavigationView {
 
 // MARK: SetItemMaxLines
 
-struct ItemMaxLinesViewProperty: ViewPropertyToApply {
+private struct ItemMaxLinesViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemMaxLines"
     let value: Int
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -575,7 +575,7 @@ extension NavigationView {
 
 // MARK: SetItemTextAppearance
 
-struct ItemTextAppearanceViewProperty: ViewPropertyToApply {
+private struct ItemTextAppearanceViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemTextAppearance"
     let value: Int32
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -592,7 +592,7 @@ extension NavigationView {
 
 // MARK: SetItemTextAppearanceActiveBoldEnabled
 
-struct ItemTextAppearanceActiveBoldEnabledViewProperty: ViewPropertyToApply {
+private struct ItemTextAppearanceActiveBoldEnabledViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemTextAppearanceActiveBoldEnabled"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -609,7 +609,7 @@ extension NavigationView {
 
 // MARK: SetItemTextColor
 
-struct ItemTextColorViewProperty: ViewPropertyToApply {
+private struct ItemTextColorViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemTextColor"
     let value: ColorStateList?
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -626,7 +626,7 @@ extension NavigationView {
 
 // MARK: SetItemVerticalPadding
 
-struct ItemVerticalPaddingViewProperty: ViewPropertyToApply {
+private struct ItemVerticalPaddingViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemVerticalPadding"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -644,7 +644,7 @@ extension NavigationView {
 
 // MARK: SetItemVerticalPaddingResource
 
-struct ItemVerticalPaddingResourceViewProperty: ViewPropertyToApply {
+private struct ItemVerticalPaddingResourceViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setItemVerticalPaddingResource"
     let value: Int32
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -663,7 +663,7 @@ extension NavigationView {
 
 // MARK: SetScrimInsetForeground
 
-struct ScrimInsetForegroundViewProperty: ViewPropertyToApply {
+private struct ScrimInsetForegroundViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setScrimInsetForeground"
     let value: Drawable?
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -680,7 +680,7 @@ extension NavigationView {
 
 // MARK: SetStartInsetScrimEnabled
 
-struct StartInsetScrimEnabledViewProperty: ViewPropertyToApply {
+private struct StartInsetScrimEnabledViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setStartInsetScrimEnabled"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -698,7 +698,7 @@ extension NavigationView {
 
 // MARK: SetSubheaderInsetEnd
 
-struct SubheaderInsetEndViewProperty: ViewPropertyToApply {
+private struct SubheaderInsetEndViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setSubheaderInsetEnd"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -716,7 +716,7 @@ extension NavigationView {
 
 // MARK: SetSubheaderInsetStart
 
-struct SubheaderInsetStartViewProperty: ViewPropertyToApply {
+private struct SubheaderInsetStartViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setSubheaderInsetStart"
     let value: (Int, DimensionUnit)
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
@@ -734,7 +734,7 @@ extension NavigationView {
 
 // MARK: SetTopInsetScrimEnabled
 
-struct TopInsetScrimEnabledViewProperty: ViewPropertyToApply {
+private struct TopInsetScrimEnabledViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = "setTopInsetScrimEnabled"
     let value: Bool
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
