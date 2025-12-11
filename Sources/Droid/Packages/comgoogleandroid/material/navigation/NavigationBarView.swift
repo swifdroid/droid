@@ -166,13 +166,13 @@ extension NavigationBarView {
     /// Returns the navigation items' layout gravity.
     public func itemGravity() -> Gravity {
         let value = instance?.callIntMethod(name: "getItemGravity") ?? 0
-        return Gravity(rawValue: Int(value)) ?? .start
+        return Gravity(rawValue: Int(value))
     }
 
     /// Returns the current item icon gravity.
     public func itemIconGravity() -> Gravity {
         let value = instance?.callIntMethod(name: "getItemIconGravity") ?? 0
-        return Gravity(rawValue: Int(value)) ?? .top
+        return Gravity(rawValue: Int(value))
     }
 
     /// Returns the size provided for the menu item icons.
