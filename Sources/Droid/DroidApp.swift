@@ -46,7 +46,7 @@ open class DroidApp: @unchecked Sendable {
             Self.start()
         }
         #else
-        MainActor.assumeIsolated {
+        _ = MainActor.assumeIsolated {
             Self.start()
         }
         #endif
