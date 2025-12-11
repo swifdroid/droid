@@ -13,7 +13,7 @@ extension AndroidPackage.WidgetPackage {
 /// A user interface element for entering and modifying text.
 ///
 /// [Learn more](https://developer.android.com/reference/android/widget/EditText)
-open class EditText: TextView, @unchecked Sendable {
+open class EditText: TextView {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.EditText }
 

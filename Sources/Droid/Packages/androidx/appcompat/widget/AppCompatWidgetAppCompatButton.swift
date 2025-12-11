@@ -19,7 +19,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
 /// This will automatically be used when you use Button in your layouts and the top-level activity / dialog is provided by appcompat. You should only need to manually use this class when writing custom views.
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/appcompat/widget/AppCompatButton)
-open class AppCompatButton: Button, @unchecked Sendable {
+open class AppCompatButton: Button {
     /// The JNI class name
     open override class var className: JClassName { .androidx.appcompat.widget.AppCompatButton }
 }

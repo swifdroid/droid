@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ViewAnimator: ViewAnimatorClass { .init(parent: self, name: "ViewAnimator") }
 }
 
-open class ViewAnimator: View, @unchecked Sendable {
+open class ViewAnimator: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatMultiAutoCompleteTextView: AppCompatMultiAutoCompleteTextViewClass { .init(parent: self, name: "AppCompatMultiAutoCompleteTextView") }
 }
 
-// class AppCompatMultiAutoCompleteTextView: View, @unchecked Sendable {
+// class AppCompatMultiAutoCompleteTextView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView], args: [])
 //     }

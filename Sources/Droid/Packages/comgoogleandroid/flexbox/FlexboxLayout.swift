@@ -18,7 +18,7 @@ extension LayoutParams.Class {
 }
 
 /// [Learn more]()
-open class FlexboxLayout: ViewGroup, @unchecked Sendable {
+open class FlexboxLayout: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.FlexboxLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .flexboxLayout }

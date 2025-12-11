@@ -5,7 +5,7 @@
 //  Created by Mihael Isaev on 01.07.2025.
 //
 
-public final class VStack: LinearLayout, @unchecked Sendable {
+public final class VStack: LinearLayout {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

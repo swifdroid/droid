@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var RadioGroup: RadioGroupClass { .init(parent: self, name: "RadioGroup") }
 }
 
-open class RadioGroup: View, @unchecked Sendable {
+open class RadioGroup: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

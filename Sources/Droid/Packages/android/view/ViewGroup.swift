@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     public static let viewGroup: Self = .init(.android.view.ViewGroup.LayoutParams)
 }
 
-open class ViewGroup: View, @unchecked Sendable {
+open class ViewGroup: View {
     /// The JNI class name
     open override class var className: JClassName { .android.view.ViewGroup }
 }

@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var TwoLineListItem: TwoLineListItemClass { .init(parent: self, name: "TwoLineListItem") }
 }
 
-open class TwoLineListItem: View, @unchecked Sendable {
+open class TwoLineListItem: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

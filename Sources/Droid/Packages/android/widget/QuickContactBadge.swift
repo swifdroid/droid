@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var QuickContactBadge: QuickContactBadgeClass { .init(parent: self, name: "QuickContactBadge") }
 }
 
-open class QuickContactBadge: View, @unchecked Sendable {
+open class QuickContactBadge: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

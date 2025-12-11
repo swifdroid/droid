@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var StackView: StackViewClass { .init(parent: self, name: "StackView") }
 }
 
-open class StackView: View, @unchecked Sendable {
+open class StackView: View {
     /// The JNI class name
     public override class var className: JClassName { .android.widget.StackView }
 

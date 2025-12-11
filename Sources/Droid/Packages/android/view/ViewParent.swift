@@ -10,7 +10,7 @@ extension AndroidPackage.ViewPackage {
     public var ViewParent: ViewGroupClass { .init(parent: self, name: "ViewParent") }
 }
 
-// public class ViewParent: View, @unchecked Sendable {
+// public class ViewParent: View {
 //     /// The JNI class name
 //     public override class var className: JClassName { .android.view.ViewParent }
 

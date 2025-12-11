@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
     public var MaterialButtonToggleGroup: MaterialButtonToggleGroupClass { .init(parent: self, name: "MaterialButtonToggleGroup") }
 }
 
-// class MaterialButtonToggleGroup: View, @unchecked Sendable {
+// class MaterialButtonToggleGroup: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.button.MaterialButtonToggleGroup], args: [])
 //     }

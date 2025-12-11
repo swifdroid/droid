@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage.Coordina
     public var CircularRevealFrameLayout: CircularRevealFrameLayoutClass { .init(parent: self, name: "CircularRevealFrameLayout") }
 }
 
-// class CircularRevealFrameLayout: View, @unchecked Sendable {
+// class CircularRevealFrameLayout: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.coordinatorlayout.CircularRevealFrameLayout], args: [])
 //     }

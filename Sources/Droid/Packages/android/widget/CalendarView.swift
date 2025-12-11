@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var CalendarView: CalendarViewClass { .init(parent: self, name: "CalendarView") }
 }
 
-open class CalendarView: FrameLayout, @unchecked Sendable {
+open class CalendarView: FrameLayout {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.CalendarView }
 

@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatAutoCompleteTextView: AppCompatAutoCompleteTextViewClass { .init(parent: self, name: "AppCompatAutoCompleteTextView") }
 }
 
-// class AppCompatAutoCompleteTextView: View, @unchecked Sendable {
+// class AppCompatAutoCompleteTextView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatAutoCompleteTextView], args: [])
 //     }

@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.SliderPackage {
     public var Slider: SliderClass { .init(parent: self, name: "Slider") }
 }
 
-// class Slider: View, @unchecked Sendable {
+// class Slider: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.slider.Slider], args: [])
 //     }

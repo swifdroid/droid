@@ -9,7 +9,7 @@
 /// such as elevation overlays for Dark Themes and centered titles.
 /// 
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/appbar/MaterialToolbar)
-public final class MaterialToolbar: ViewGroup, @unchecked Sendable {
+public final class MaterialToolbar: ViewGroup {
     /// The JNI class name
     public override class var className: JClassName { "com/google/android/material/appbar/MaterialToolbar" }
 

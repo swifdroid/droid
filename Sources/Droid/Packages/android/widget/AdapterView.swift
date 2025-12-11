@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var AdapterView: AdapterViewClass { .init(parent: self, name: "AdapterView") }
 }
 
-open class AdapterView<T: Adapter>: ViewGroup, @unchecked Sendable {
+open class AdapterView<T: Adapter>: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.AdapterView }
 

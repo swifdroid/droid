@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let constraintLayout: Self = .init(.androidx.constraintlayout.widget.ConstraintLayout.LayoutParams)
 }
 
-open class ConstraintLayout: ViewGroup, @unchecked Sendable {
+open class ConstraintLayout: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .androidx.constraintlayout.widget.ConstraintLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .constraintLayout }

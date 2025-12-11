@@ -11,7 +11,7 @@ extension AndroidXPackage.ViewPagerPackage.WidgetPackage {
     public var PagerTabStrip: PagerTabStripClass { .init(parent: self, name: "PagerTabStrip") }
 }
 
-// class PagerTabStrip: View, @unchecked Sendable {
+// class PagerTabStrip: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.viewpager.widget.PagerTabStrip], args: [])
 //     }

@@ -54,6 +54,7 @@ extension AndroidPackage.ViewPackage {
 public protocol AnyView: AnyObject, ViewInstanceable {
     static var gradleDependencies: [AppGradleDependency] { get }
 }
+@MainActor
 protocol _AnyView: AnyView {
     var _propertiesToApply: [any ViewPropertyToApply] { get set }
 }
@@ -83,7 +84,7 @@ extension JClassNameable {
     public var className: JClassName { type(of: self).className }
 }
 
-open class View: _AnyView, JClassNameable, StatesHolder, @unchecked Sendable {
+open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
     public typealias Body = BodyBuilder.Result
 
     /// The JNI class name

@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Toolbar: ToolbarClass { .init(parent: self, name: "Toolbar") }
 }
 
-open class Toolbar1: View, @unchecked Sendable {
+open class Toolbar1: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

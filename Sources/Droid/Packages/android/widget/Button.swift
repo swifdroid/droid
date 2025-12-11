@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Button: ButtonClass { .init(parent: self, name: "Button") }
 }
 
-open class Button: TextView, @unchecked Sendable {
+open class Button: TextView {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.Button }
 }

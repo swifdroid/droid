@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var SwitchCompat: SwitchCompatClass { .init(parent: self, name: "SwitchCompat") }
 }
 
-// class SwitchCompat: View, @unchecked Sendable {
+// class SwitchCompat: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.SwitchCompat], args: [])
 //     }

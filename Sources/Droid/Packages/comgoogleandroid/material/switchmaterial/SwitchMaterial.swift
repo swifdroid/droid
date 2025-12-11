@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.SwitchMaterialPackage {
     public var SwitchMaterial: SwitchMaterialClass { .init(parent: self, name: "SwitchMaterial") }
 }
 
-// class SwitchMaterial: View, @unchecked Sendable {
+// class SwitchMaterial: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.switchmaterial.SwitchMaterial], args: [])
 //     }

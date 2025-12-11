@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var TextClock: TextClockClass { .init(parent: self, name: "TextClock") }
 }
 
-open class TextClock: View, @unchecked Sendable {
+open class TextClock: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

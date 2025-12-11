@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var CheckedTextView: CheckedTextViewClass { .init(parent: self, name: "CheckedTextView") }
 }
 
-open class CheckedTextView: View, @unchecked Sendable {
+open class CheckedTextView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

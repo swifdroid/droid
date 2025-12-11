@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ZoomControls: ZoomControlsClass { .init(parent: self, name: "ZoomControls") }
 }
 
-open class ZoomControls: View, @unchecked Sendable {
+open class ZoomControls: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

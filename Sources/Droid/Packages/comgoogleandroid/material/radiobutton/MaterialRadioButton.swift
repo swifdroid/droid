@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.RadioButtonPackage {
     public var MaterialRadioButton: MaterialRadioButtonClass { .init(parent: self, name: "MaterialRadioButton") }
 }
 
-// class MaterialRadioButton: View, @unchecked Sendable {
+// class MaterialRadioButton: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.radiobutton.MaterialRadioButton], args: [])
 //     }

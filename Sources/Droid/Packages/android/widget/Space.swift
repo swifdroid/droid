@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Space: SpaceClass { .init(parent: self, name: "Space") }
 }
 
-open class Space: ViewGroup, @unchecked Sendable {
+open class Space: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.Space }
 

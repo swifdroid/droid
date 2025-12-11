@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var SearchView: SearchViewClass { .init(parent: self, name: "SearchView") }
 }
 
-open class SearchView: View, @unchecked Sendable {
+open class SearchView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

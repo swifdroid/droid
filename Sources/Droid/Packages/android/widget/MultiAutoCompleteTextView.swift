@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var MultiAutoCompleteTextView: MultiAutoCompleteTextViewClass { .init(parent: self, name: "MultiAutoCompleteTextView") }
 }
 
-open class MultiAutoCompleteTextView: View, @unchecked Sendable {
+open class MultiAutoCompleteTextView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

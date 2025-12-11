@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatCheckedTextView: AppCompatCheckedTextViewClass { .init(parent: self, name: "AppCompatCheckedTextView") }
 }
 
-// class AppCompatCheckedTextView: View, @unchecked Sendable {
+// class AppCompatCheckedTextView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatCheckedTextView], args: [])
 //     }

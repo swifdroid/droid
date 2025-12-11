@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let gallery: Self = .init(.android.widget.Gallery.LayoutParams)
 }
 
-open class Gallery: View, @unchecked Sendable {
+open class Gallery: View {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.Gallery }
     open override class var layoutParamsClass: LayoutParams.Class { .gallery }

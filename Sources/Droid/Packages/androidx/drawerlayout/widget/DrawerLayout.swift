@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let drawerLayout: Self = .init(.androidx.drawerlayout.widget.DrawerLayout.LayoutParams)
 }
 
-open class DrawerLayout: ViewGroup, @unchecked Sendable {
+open class DrawerLayout: ViewGroup {
     /// The JNI class name
     public override class var className: JClassName { .androidx.drawerlayout.widget.DrawerLayout }
     public override class var layoutParamsClass: LayoutParams.Class { .drawerLayout }

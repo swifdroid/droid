@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TextFieldPackage {
     public var TextInputEditText: TextInputEditTextClass { .init(parent: self, name: "TextInputEditText") }
 }
 
-// class TextInputEditText: View, @unchecked Sendable {
+// class TextInputEditText: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.textfield.TextInputEditText], args: [])
 //     }

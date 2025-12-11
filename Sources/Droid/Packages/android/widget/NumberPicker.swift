@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var NumberPicker: NumberPickerClass { .init(parent: self, name: "NumberPicker") }
 }
 
-open class NumberPicker: View, @unchecked Sendable {
+open class NumberPicker: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

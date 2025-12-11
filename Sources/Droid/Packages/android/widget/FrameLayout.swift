@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let frameLayout: Self = .init(.android.widget.FrameLayout.LayoutParams)
 }
 
-open class FrameLayout: ViewGroup, @unchecked Sendable {
+open class FrameLayout: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.FrameLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .frameLayout }

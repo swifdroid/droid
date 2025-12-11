@@ -10,7 +10,7 @@ extension AndroidPackage.ViewPackage {
     public var SurfaceView: SurfaceViewClass { .init(parent: self, name: "SurfaceView") }
 }
 
-public class SurfaceView: View, @unchecked Sendable {
+public class SurfaceView: View {
     /// The JNI class name
     public override class var className: JClassName { .android.view.SurfaceView }
 }

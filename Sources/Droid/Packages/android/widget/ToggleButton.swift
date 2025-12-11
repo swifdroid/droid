@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ToggleButton: ToggleButtonClass { .init(parent: self, name: "ToggleButton") }
 }
 
-open class ToggleButton: View, @unchecked Sendable {
+open class ToggleButton: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

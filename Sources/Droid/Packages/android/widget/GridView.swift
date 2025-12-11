@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var GridView: GridViewClass { .init(parent: self, name: "GridView") }
 }
 
-open class GridView: View, @unchecked Sendable {
+open class GridView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

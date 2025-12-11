@@ -10,7 +10,7 @@ extension AndroidPackage.ViewPackage {
     public var TextureView: TextureViewClass { .init(parent: self, name: "TextureView") }
 }
 
-public class TextureView: View, @unchecked Sendable {
+public class TextureView: View {
     /// The JNI class name
     public override class var className: JClassName { .android.view.TextureView }
 }

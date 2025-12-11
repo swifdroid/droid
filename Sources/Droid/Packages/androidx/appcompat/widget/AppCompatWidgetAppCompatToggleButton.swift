@@ -11,7 +11,7 @@ extension AndroidXPackage.AppCompatPackage.WidgetPackage {
     public var AppCompatToggleButton: AppCompatToggleButtonClass { .init(parent: self, name: "AppCompatToggleButton") }
 }
 
-// class AppCompatToggleButton: View, @unchecked Sendable {
+// class AppCompatToggleButton: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.appcompat.widget.AppCompatToggleButton], args: [])
 //     }

@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var MediaController: MediaControllerClass { .init(parent: self, name: "MediaController") }
 }
 
-open class MediaController: View, @unchecked Sendable {
+open class MediaController: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

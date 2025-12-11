@@ -11,7 +11,7 @@ extension AndroidXPackage.CorePackage.WidgetPackage {
     public var ContentLoadingProgressBar: ContentLoadingProgressBarClass { .init(parent: self, name: "ContentLoadingProgressBar") }
 }
 
-// class ContentLoadingProgressBar: View, @unchecked Sendable {
+// class ContentLoadingProgressBar: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.core.widget.ContentLoadingProgressBar], args: [])
 //     }

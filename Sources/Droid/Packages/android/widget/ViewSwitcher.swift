@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ViewSwitcher: ViewSwitcherClass { .init(parent: self, name: "ViewSwitcher") }
 }
 
-open class ViewSwitcher: View, @unchecked Sendable {
+open class ViewSwitcher: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var VideoView: VideoViewClass { .init(parent: self, name: "VideoView") }
 }
 
-open class VideoView: View, @unchecked Sendable {
+open class VideoView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let linearLayoutCompat: Self = .init(.androidx.appcompat.widget.LinearLayoutCompat.LayoutParams)
 }
 
-open class LinearLayoutCompat: ViewGroup, @unchecked Sendable {
+open class LinearLayoutCompat: ViewGroup {
     /// The JNI class name
     public override class var className: JClassName { .androidx.appcompat.widget.LinearLayoutCompat }
     public override class var layoutParamsClass: LayoutParams.Class { .linearLayoutCompat }

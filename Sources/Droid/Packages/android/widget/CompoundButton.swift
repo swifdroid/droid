@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var CompoundButton: CompoundButtonClass { .init(parent: self, name: "CompoundButton") }
 }
 
-open class CompoundButton: Button, Checkable, @unchecked Sendable {
+open class CompoundButton: Button, Checkable {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

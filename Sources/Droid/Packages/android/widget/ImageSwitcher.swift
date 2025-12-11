@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ImageSwitcher: ImageSwitcherClass { .init(parent: self, name: "ImageSwitcher") }
 }
 
-open class ImageSwitcher: View, @unchecked Sendable {
+open class ImageSwitcher: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

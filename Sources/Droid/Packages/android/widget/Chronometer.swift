@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Chronometer: ChronometerClass { .init(parent: self, name: "Chronometer") }
 }
 
-open class Chronometer: View, @unchecked Sendable {
+open class Chronometer: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

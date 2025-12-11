@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ScrollView: ScrollViewClass { .init(parent: self, name: "ScrollView") }
 }
 
-open class ScrollView: ViewGroup, @unchecked Sendable {
+open class ScrollView: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.ScrollView }
     public override class var layoutParamsClass: LayoutParams.Class { .frameLayout }

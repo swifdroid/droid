@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage {
     public var CircularRevealRelativeLayout: CircularRevealRelativeLayoutClass { .init(parent: self, name: "CircularRevealRelativeLayout") }
 }
 
-// class CircularRevealRelativeLayout: View, @unchecked Sendable {
+// class CircularRevealRelativeLayout: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.CircularRevealRelativeLayout], args: [])
 //     }

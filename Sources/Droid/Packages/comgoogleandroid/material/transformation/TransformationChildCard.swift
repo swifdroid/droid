@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.TransformationPackage {
     public var TransformationChildCard: TransformationChildCardClass { .init(parent: self, name: "TransformationChildCard") }
 }
 
-// class TransformationChildCard: View, @unchecked Sendable {
+// class TransformationChildCard: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.transformation.TransformationChildCard], args: [])
 //     }

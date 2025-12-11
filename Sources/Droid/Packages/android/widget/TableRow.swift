@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let tableRow: Self = .init(.android.widget.TableLayout.LayoutParams)
 }
 
-open class TableRow: View, @unchecked Sendable {
+open class TableRow: View {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.TableRow }
     open override class var layoutParamsClass: LayoutParams.Class { .tableRow }

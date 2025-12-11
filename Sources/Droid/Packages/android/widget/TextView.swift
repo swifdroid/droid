@@ -17,7 +17,7 @@ extension AndroidPackage.WidgetPackage {
 /// A user interface element that displays text to the user.
 ///
 /// [Learn more](https://developer.android.com/reference/android/widget/TextView)
-open class TextView: View, @unchecked Sendable {
+open class TextView: View {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.TextView }
 

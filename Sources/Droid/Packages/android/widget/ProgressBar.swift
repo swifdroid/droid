@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ProgressBar: ProgressBarClass { .init(parent: self, name: "ProgressBar") }
 }
 
-open class ProgressBar: View, @unchecked Sendable {
+open class ProgressBar: View {
     /// The JNI class name
     public override class var className: JClassName { .android.widget.ProgressBar }
 

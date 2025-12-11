@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let absoluteLayout: Self = .init(.android.widget.AbsoluteLayout.LayoutParams)
 }
 
-open class AbsoluteLayout: ViewGroup, @unchecked Sendable {
+open class AbsoluteLayout: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.AbsoluteLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .absoluteLayout }

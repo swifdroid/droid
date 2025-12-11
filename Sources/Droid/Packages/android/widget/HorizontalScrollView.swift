@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var HorizontalScrollView: HorizontalScrollViewClass { .init(parent: self, name: "HorizontalScrollView") }
 }
 
-open class HorizontalScrollView: View, @unchecked Sendable {
+open class HorizontalScrollView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

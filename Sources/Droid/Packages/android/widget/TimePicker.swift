@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var TimePicker: TimePickerClass { .init(parent: self, name: "TimePicker") }
 }
 
-open class TimePicker: View, @unchecked Sendable {
+open class TimePicker: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

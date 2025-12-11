@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.AppBarPackage {
     public var CollapsingToolbarLayout: CollapsingToolbarLayoutClass { .init(parent: self, name: "CollapsingToolbarLayout") }
 }
 
-// class CollapsingToolbarLayout: View, @unchecked Sendable {
+// class CollapsingToolbarLayout: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.appbar.CollapsingToolbarLayout], args: [])
 //     }

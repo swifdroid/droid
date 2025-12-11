@@ -5,7 +5,7 @@
 //  Created by Mihael Isaev on 01.07.2025.
 //
 
-public final class VSpace: Space, @unchecked Sendable {
+public final class VSpace: Space {
     @discardableResult
     public init(_ height: LayoutParams.LayoutSize, _ unit: DimensionUnit = .dp, weight: Float = 0) {
         super.init(weight: weight)

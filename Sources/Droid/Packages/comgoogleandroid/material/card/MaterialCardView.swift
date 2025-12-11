@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.CardPackage {
     public var MaterialCardView: MaterialCardViewClass { .init(parent: self, name: "MaterialCardView") }
 }
 
-// class MaterialCardView: View, @unchecked Sendable {
+// class MaterialCardView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.card.MaterialCardView], args: [])
 //     }

@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.NavigationRailPackage {
     public var NavigationRailView: NavigationRailViewClass { .init(parent: self, name: "NavigationRailView") }
 }
 
-// class NavigationRailView: View, @unchecked Sendable {
+// class NavigationRailView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.navigationrail.NavigationRailView], args: [])
 //     }

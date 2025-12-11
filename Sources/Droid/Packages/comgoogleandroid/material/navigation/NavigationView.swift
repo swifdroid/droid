@@ -15,7 +15,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.NavigationPackage {
 /// 
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/navigation/NavigationView)
 @MainActor
-open class NavigationView: FrameLayout, @unchecked Sendable {
+open class NavigationView: FrameLayout {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.navigation.NavigationView }
     open override class var gradleDependencies: [AppGradleDependency] { [.material] }

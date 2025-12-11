@@ -31,7 +31,7 @@ extension LayoutParams.Class {
     static let recyclerLayout: Self = .init(.androidx.recyclerview.widget.RecyclerView.LayoutParams)
 }
 
-public final class RecyclerView: ViewGroup, @unchecked Sendable {
+public final class RecyclerView: ViewGroup {
     /// The JNI class name
     public override class var className: JClassName { .androidx.recyclerview.widget.RecyclerView }
     public override class var layoutParamsClass: LayoutParams.Class { .recyclerLayout }

@@ -11,7 +11,7 @@ extension AndroidXPackage.CardViewPackage.WidgetPackage {
     public var CardView: CardViewClass { .init(parent: self, name: "CardView") }
 }
 
-// class CardView: View, @unchecked Sendable {
+// class CardView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.cardview.widget.CardView], args: [])
 //     }

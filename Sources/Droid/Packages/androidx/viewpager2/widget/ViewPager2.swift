@@ -11,7 +11,7 @@ extension AndroidXPackage.ViewPager2Package.WidgetPackage {
     public var ViewPager2: ViewPager2Class { .init(parent: self, name: "ViewPager2") }
 }
 
-// class ViewPager2: View, @unchecked Sendable {
+// class ViewPager2: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.viewpager2.widget.ViewPager2], args: [])
 //     }

@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Spinner: SpinnerClass { .init(parent: self, name: "Spinner") }
 }
 
-open class Spinner: View, @unchecked Sendable {
+open class Spinner: View {
     /// The JNI class name
     public override class var className: JClassName { .android.widget.Spinner }
 

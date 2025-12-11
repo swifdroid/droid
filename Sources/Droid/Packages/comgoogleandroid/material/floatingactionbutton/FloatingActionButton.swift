@@ -26,7 +26,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.FloatingActionButtonPackage {
 /// 
 /// For more information, see the [component developer guidance](https://github.com/material-components/material-components-android/blob/master/docs/components/FloatingActionButton.md) and [design guidelines](https://material.io/components/floating-action-button/overview).
 @MainActor
-open class FloatingActionButton: ImageButton, @unchecked Sendable {
+open class FloatingActionButton: ImageButton {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.floatingactionbutton.FloatingActionButton }
     open override class var gradleDependencies: [AppGradleDependency] { [.material] }

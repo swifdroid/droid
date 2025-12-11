@@ -43,7 +43,7 @@ extension LayoutParams.Class {
 /// A string resource containing the full class name is available.
 ///
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/appbar/AppBarLayout)
-open class AppBarLayout: ViewGroup, @unchecked Sendable {
+open class AppBarLayout: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.appbar.AppBarLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .materialAppBarLayout }

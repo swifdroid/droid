@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var SlidingDrawer: SlidingDrawerClass { .init(parent: self, name: "SlidingDrawer") }
 }
 
-open class SlidingDrawer: View, @unchecked Sendable {
+open class SlidingDrawer: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

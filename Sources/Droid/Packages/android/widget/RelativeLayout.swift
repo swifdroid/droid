@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let relativeLayout: Self = .init(.android.widget.RelativeLayout.LayoutParams)
 }
 
-open class RelativeLayout: View, @unchecked Sendable {
+open class RelativeLayout: View {
     /// The JNI class name
     public override class var className: JClassName { .android.widget.RelativeLayout }
     public override class var layoutParamsClass: LayoutParams.Class { .relativeLayout }

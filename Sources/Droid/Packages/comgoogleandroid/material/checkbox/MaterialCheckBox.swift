@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.CheckBoxPackage {
     public var MaterialCheckBox: MaterialCheckBoxClass { .init(parent: self, name: "MaterialCheckBox") }
 }
 
-// class MaterialCheckBox: View, @unchecked Sendable {
+// class MaterialCheckBox: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.checkbox.MaterialCheckBox], args: [])
 //     }

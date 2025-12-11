@@ -5,7 +5,7 @@
 //  Created by Mihael Isaev on 01.07.2025.
 //
 
-public final class HStack: LinearLayout, @unchecked Sendable {
+public final class HStack: LinearLayout {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

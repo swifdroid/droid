@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let actionMenuView: Self = .init(.android.widget.ActionMenuView.LayoutParams)
 }
 
-open class ActionMenuView: LinearLayout, @unchecked Sendable {
+open class ActionMenuView: LinearLayout {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.ActionMenuView }
     open override class var layoutParamsClass: LayoutParams.Class { .actionMenuView }

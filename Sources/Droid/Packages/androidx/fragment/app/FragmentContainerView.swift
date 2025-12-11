@@ -13,7 +13,7 @@ extension AndroidXPackage.FragmentPackage.AppPackage {
 // androidx.fragment.app.FragmentContainerView
 // https://developer.android.com/reference/androidx/fragment/app/FragmentContainerView
 
-// class FragmentContainerView: View, @unchecked Sendable {
+// class FragmentContainerView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.fragment.app.FragmentContainerView], args: [])
 //     }

@@ -37,7 +37,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.ButtonPackage {
 /// 
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/button/MaterialButton)
 @MainActor
-open class MaterialButton: AppCompatButton, @unchecked Sendable {
+open class MaterialButton: AppCompatButton {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.button.MaterialButton }
     open override class var gradleDependencies: [AppGradleDependency] { [.material] }

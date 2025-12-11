@@ -17,7 +17,7 @@ extension AndroidXPackage.CorePackage.WidgetPackage {
 /// Nested scrolling is enabled by default.
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/core/widget/NestedScrollView)
-public final class NestedScrollView: FrameLayout, @unchecked Sendable {
+public final class NestedScrollView: FrameLayout {
     /// The JNI class name
     public override class var className: JClassName { .androidx.core.widget.NestedScrollView }
 

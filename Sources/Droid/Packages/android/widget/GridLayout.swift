@@ -21,7 +21,7 @@ extension LayoutParams.Class {
     static let gridLayout: Self = .init(.android.widget.GridLayout.LayoutParams)
 }
 
-open class GridLayout: View, @unchecked Sendable {
+open class GridLayout: View {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.GridLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .gridLayout }

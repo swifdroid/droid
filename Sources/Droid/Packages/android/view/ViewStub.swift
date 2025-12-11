@@ -10,7 +10,7 @@ extension AndroidPackage.ViewPackage {
     public var ViewStub: ViewStubClass { .init(parent: self, name: "ViewStub") }
 }
 
-public class ViewStub: View, @unchecked Sendable {
+public class ViewStub: View {
     /// The JNI class name
     public override class var className: JClassName { .android.view.ViewStub }
 }

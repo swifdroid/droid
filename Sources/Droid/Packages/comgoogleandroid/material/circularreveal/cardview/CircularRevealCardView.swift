@@ -11,7 +11,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.CircularRevealPackage.CardView
     public var CircularRevealCardView: CircularRevealCardViewClass { .init(parent: self, name: "CircularRevealCardView") }
 }
 
-// class CircularRevealCardView: View, @unchecked Sendable {
+// class CircularRevealCardView: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.comGoogleAndroid.material.circularreveal.cardview.CircularRevealCardView], args: [])
 //     }

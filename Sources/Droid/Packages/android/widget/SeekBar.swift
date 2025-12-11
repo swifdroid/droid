@@ -13,7 +13,7 @@ extension AndroidPackage.WidgetPackage {
     public var SeekBarOnSeekBarChangeListener: SeekBarOnSeekBarChangeListenerInterface { .init(parent: self, name: "SeekBar$OnSeekBarChangeListener") }
 }
 
-open class SeekBar: AbsSeekBar, @unchecked Sendable {
+open class SeekBar: AbsSeekBar {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

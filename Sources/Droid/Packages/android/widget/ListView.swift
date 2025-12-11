@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var ListView: ListViewClass { .init(parent: self, name: "ListView") }
 }
 
-open class ListView: View, @unchecked Sendable {
+open class ListView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

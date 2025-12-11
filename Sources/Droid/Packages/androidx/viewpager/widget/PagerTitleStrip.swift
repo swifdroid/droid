@@ -11,7 +11,7 @@ extension AndroidXPackage.ViewPagerPackage.WidgetPackage {
     public var PagerTitleStrip: PagerTitleStripClass { .init(parent: self, name: "PagerTitleStrip") }
 }
 
-// class PagerTitleStrip: View, @unchecked Sendable {
+// class PagerTitleStrip: View {
 //     override init (_ environment: JEnvironment, _ context: JObjectReference) {
 //         super.init(environment, context, classes: [.androidx.viewpager.widget.PagerTitleStrip], args: [])
 //     }

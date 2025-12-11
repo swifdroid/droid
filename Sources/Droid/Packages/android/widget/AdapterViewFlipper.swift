@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var AdapterViewFlipper: AdapterViewFlipperClass { .init(parent: self, name: "AdapterViewFlipper") }
 }
 
-open class AdapterViewFlipper: View, @unchecked Sendable {//: AdapterViewAnimator {
+open class AdapterViewFlipper: View {//: AdapterViewAnimator {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.AdapterViewFlipper }
 

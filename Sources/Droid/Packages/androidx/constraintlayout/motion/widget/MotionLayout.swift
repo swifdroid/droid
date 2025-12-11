@@ -10,7 +10,7 @@ extension AndroidXPackage.ConstraintLayoutPackage.MotionPackage.WidgetPackage {
     public var MotionLayout: MotionLayoutClass { .init(parent: self, name: "MotionLayout") }
 }
 
-class MotionLayout: ConstraintLayout, @unchecked Sendable {
+class MotionLayout: ConstraintLayout {
     /// The JNI class name
     public override class var className: JClassName { .androidx.constraintlayout.motion.widget.MotionLayout }
 

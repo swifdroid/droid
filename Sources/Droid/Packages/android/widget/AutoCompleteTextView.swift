@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var AutoCompleteTextView: AutoCompleteTextViewClass { .init(parent: self, name: "AutoCompleteTextView") }
 }
 
-open class AutoCompleteTextView: EditText, @unchecked Sendable {
+open class AutoCompleteTextView: EditText {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.AutoCompleteTextView }
 

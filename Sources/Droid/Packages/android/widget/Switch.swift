@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var Switch: SwitchClass { .init(parent: self, name: "Switch") }
 }
 
-open class Switch: View, @unchecked Sendable {
+open class Switch: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

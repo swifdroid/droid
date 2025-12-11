@@ -17,7 +17,7 @@ extension LayoutParams.Class {
     static let slidingPaneLayout: Self = .init(.androidx.slidingpanelayout.SlidingPaneLayout.LayoutParams)
 }
 
-open class SlidingPaneLayout: ViewGroup, @unchecked Sendable {
+open class SlidingPaneLayout: ViewGroup {
     /// The JNI class name
     public override class var className: JClassName { .androidx.slidingpanelayout.SlidingPaneLayout }
     public override class var layoutParamsClass: LayoutParams.Class { .slidingPaneLayout }

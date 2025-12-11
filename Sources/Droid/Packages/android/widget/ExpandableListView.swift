@@ -17,7 +17,7 @@ extension AndroidPackage.WidgetPackage {
 /// The items come from the ExpandableListAdapter associated with this view.
 /// 
 /// [Learn more](https://developer.android.com/reference/android/widget/ExpandableListView)
-open class ExpandableListView: View, @unchecked Sendable {
+open class ExpandableListView: View {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

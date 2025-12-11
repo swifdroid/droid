@@ -19,7 +19,7 @@ extension LayoutParams.Class {
     static let coordinatorLayout: Self = .init(.androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams)
 }
 
-open class CoordinatorLayout: ViewGroup, @unchecked Sendable {
+open class CoordinatorLayout: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .androidx.coordinatorlayout.widget.CoordinatorLayout }
     open override class var layoutParamsClass: LayoutParams.Class { .coordinatorLayout }

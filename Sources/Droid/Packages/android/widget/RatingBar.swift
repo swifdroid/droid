@@ -10,7 +10,7 @@ extension AndroidPackage.WidgetPackage {
     public var RatingBar: RatingBarClass { .init(parent: self, name: "RatingBar") }
 }
 
-open class RatingBar: AbsSeekBar, @unchecked Sendable {
+open class RatingBar: AbsSeekBar {
     @discardableResult
     public override init (id: Int32? = nil) {
         super.init(id: id)

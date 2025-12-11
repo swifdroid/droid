@@ -24,7 +24,7 @@ extension ComGoogleAndroidPackage.MaterialPackage.BottomNavigationPackage {
 /// 
 /// [Learn more](https://developer.android.com/reference/com/google/android/material/bottomnavigation/BottomNavigationView)
 @MainActor
-open class BottomNavigationView: NavigationBarView, @unchecked Sendable {
+open class BottomNavigationView: NavigationBarView {
     /// The JNI class name
     open override class var className: JClassName { .comGoogleAndroid.material.bottomnavigation.BottomNavigationView }
     open override class var gradleDependencies: [AppGradleDependency] { [.material] }
