@@ -11,14 +11,8 @@ extension AndroidPackage.AppPackage {
     public var Activity: ActivityPackage { .init(parent: self, name: "Activity") }
 }
 
-#if os(Android)
-extension Activity: Sendable {}
-#else
-extension Activity: @unchecked Sendable {}
-#endif
-
 @MainActor
-open class Activity: Contextable, AnyActivity {
+open class Activity: Contextable, AnyActivity, Sendable {
     /// The body of the view hierarchy.
     public typealias Body = BodyBuilderItemable
     public typealias Style = RStyle

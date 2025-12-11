@@ -5,12 +5,6 @@
 //  Created by Mihael Isaev on 25.02.2023.
 //
 
-#if os(Android)
-extension AppCompatActivity: Sendable {}
-#else
-extension AppCompatActivity: @unchecked Sendable {}
-#endif
-
 @MainActor
 open class AppCompatActivity: FragmentActivity {
     open class override var className: JClassName { "androidx/appcompat/app/AppCompatActivity" }

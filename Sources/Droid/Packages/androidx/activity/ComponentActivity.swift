@@ -5,12 +5,6 @@
 //  Created by Mihael Isaev on 27.08.2025.
 //
 
-#if os(Android)
-extension ComponentActivity: Sendable {}
-#else
-extension ComponentActivity: @unchecked Sendable {}
-#endif
-
 /// Base class for activities that enables composition of higher level components.
 /// 
 /// Rather than all functionality being built directly into this class, only the minimal set of lower level building blocks are included.
