@@ -9,7 +9,7 @@
 import Android
 #endif
 
-open class NativeFragment: NativeUIObject, AnyNativeObject, @unchecked Sendable {
+open class NativeFragment: NativeUIObject, AnyNativeObject {
     /// The JNI class name
     class nonisolated var nativeObjectClassName: JClassName { "stream/swift/droid/appkit/views/NativeFragment" }    
 

@@ -5,12 +5,6 @@
 //  Created by Mihael Isaev on 27.08.2025.
 //
 
-#if os(Android)
-extension FragmentActivity: Sendable {}
-#else
-extension FragmentActivity: @unchecked Sendable {}
-#endif
-
 /// Base class for activities that want to use the support-based Fragments.
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/FragmentActivity)

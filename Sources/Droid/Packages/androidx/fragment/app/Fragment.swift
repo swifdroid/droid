@@ -11,7 +11,7 @@
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/Fragment)
 @MainActor
-open class Fragment: NativeFragment, @unchecked Sendable {
+open class Fragment: NativeFragment {
     /// The JNI class name
     public static let className: JClassName = "androidx/fragment/app/Fragment"
 
