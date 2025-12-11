@@ -26,12 +26,19 @@ extension AnyNativeObject {
 }
 
 @MainActor
-open class NativeUIObject: NativeObject, Contextable, @unchecked Sendable {
+open class NativeUIObject: JObjectable, Contextable {
+
+    /// Unique identifier
+    let id: Int32
+
+    public let object: JObject
+
     public private(set) weak var context: ActivityContext?
 
     public init (_ object: JObject, _ context: Contextable) {
+        self.id = DroidApp.shared.getNextViewId()
+        self.object = object
         self.context = context.context
-        super.init(object)
     }
 
     public convenience init? (_ context: Contextable, _ className: JClassName) {
@@ -40,8 +47,32 @@ open class NativeUIObject: NativeObject, Contextable, @unchecked Sendable {
     }
 
     public init? (_ env: JEnv, _ context: Contextable, _ className: JClassName, _ initializer: Initializer = .normal) {
+        self.id = DroidApp.shared.getNextViewId()
         self.context = context.context
-        super.init(env, className, initializer)
+        #if os(Android)
+        guard
+            let clazz = JClass.load(className),
+            let global = initializer == .normal
+                ? clazz.newObject(env, args: id)
+                : clazz.staticObjectMethod(env, name: "newInstance", args: id, returningClass: clazz)
+        else {
+            InnerLog.w("⚠️ Unable to initialize NativeObject(\(initializer.rawValue)) for className: \(className.path)")
+            return nil
+        }
+        self.object = global
+        if let s = self as? AnyNativeObject {
+            s.addIntoStore()
+        } else {
+            InnerLog.w("⚠️ Unable to store \(className.path) because it does not conform to AnyNativeObject")
+        }
+        #else
+        return nil
+        #endif
+    }
+
+    public enum Initializer: String {
+        case normal = "normal"
+        case `static` = "static"
     }
 }
 
