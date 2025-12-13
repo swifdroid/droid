@@ -85,20 +85,42 @@ open class Activity: Contextable, AnyActivity, Sendable {
     }
 
     public func attachOnCreate(to contextObject: JObject, savedInstanceState: Bundle?) {
+        InnerLog.t("Activity.attachOnCreate(to:savedInstanceState:)")
         context = ActivityContext(object: contextObject)
         onCreate(context!, savedInstanceState: savedInstanceState)
-        body { body }
-        buildUI()
     }
 
     public func attachOnRestart(to contextObject: JObject, savedInstanceState: Bundle?) {
+        InnerLog.t("Activity.attachOnRestart(to:savedInstanceState:)")
         context = ActivityContext(object: contextObject)
-        body { body }
-        buildUI()
         onRestart()
     }
 
-    open func onCreate(_ context: ActivityContext, savedInstanceState: Bundle?) {}
+    private var _hasCalledOnCreate = false
+
+    /// Called when the activity is starting. This is where most initialization
+    /// should go. Note that this method is calling `body()` and `buildUI()`.
+    open func onCreate(_ context: ActivityContext, savedInstanceState: Bundle?) {
+        InnerLog.t("🟢 onCreate called")
+        if _hasCalledOnCreate {
+            InnerLog.t("🟢 onCreate: already called before")
+            if savedInstanceState != nil {
+                contentView?.removeFromParent()
+                contentView = nil
+                InnerLog.t("🟢 onCreate: executing body()")
+                body { body }
+                InnerLog.t("🟢 onCreate: executing buildUI()")
+                buildUI()
+            }
+        } else {
+            InnerLog.t("🟢 onCreate: first time call")
+            _hasCalledOnCreate = true
+            InnerLog.t("🟢 onCreate: executing body()")
+            body { body }
+            InnerLog.t("🟢 onCreate: executing buildUI()")
+            buildUI()
+        }
+    }
 
     public func contentView(_ view: View, _ proceed: ((View) -> Void)? = nil) {
         contentView = view
@@ -177,8 +199,6 @@ open class Activity: Contextable, AnyActivity, Sendable {
     private var requestApplyInsetsAfterRestart = false
 
     open func onSaveInstanceState(bundle: Bundle) {
-        contentView?.removeFromParent()
-        contentView = nil
         context = nil
     }
     open func onPause() {}
