@@ -209,7 +209,11 @@ open class Activity: Contextable, AnyActivity, Sendable {
             contentView?.requestApplyInsets()
         }
     }
+    /// Called after onStop() when the current activity is being re-displayed to the user
+    /// (the user has navigated back to it). It will be followed by onStart().
+    /// Note that this method is calling `body()` and `buildUI()`.
 	open func onRestart() {
+        InnerLog.t("🟢 onRestart called, will request apply insets after restart")
         requestApplyInsetsAfterRestart = true
     }
 	open func onStart() {}
