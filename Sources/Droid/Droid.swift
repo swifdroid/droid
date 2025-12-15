@@ -330,6 +330,14 @@ public func activityOnResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObjec
     }
 }
 
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnPostResume")
+public func activityOnPostResume(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
+    InnerLog.t("💚 activityOnPostResume(id: \(activityId))")
+    MainActor.assumeIsolated {
+        DroidApp.shared._activeActivities[Int(activityId)]?.onPostResume()
+    }
+}
+
 @_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnRestart")
 public func activityOnRestart(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, callerObject activityRef: jobject, activityId: jint) {
     InnerLog.t("💚 activityOnRestart(id: \(activityId))")

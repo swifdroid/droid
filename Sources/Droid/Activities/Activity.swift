@@ -203,10 +203,25 @@ open class Activity: Contextable, AnyActivity, Sendable {
     }
     open func onPause() {}
 	open func onStateNotSaved() {}
-	open func onResume() {
+	open func onResume() {}
+    open func onPostResume() {
+        InnerLog.t("🟢 onPostResume called, requestApplyInsetsAfterRestart: \(requestApplyInsetsAfterRestart)")
         if requestApplyInsetsAfterRestart {
             requestApplyInsetsAfterRestart = false
-            contentView?.requestApplyInsets()
+            if let contentView {
+                InnerLog.t("🟢 Activity.onPostResume: requested apply insets for contentView id: \(contentView.id)")
+                contentView.requestApplyInsets()
+            }
+            if let window = window() {
+                if let decorView = window.decorView() {
+                    InnerLog.t("🟢 Activity.onPostResume: requested apply insets for decorView")
+                    decorView.requestApplyInsets()
+                } else {
+                    InnerLog.c("🟥 Activity.onPostResume: Failed to get DecorView")
+                }
+            } else {
+                InnerLog.c("🟥 Activity.onPostResume: Failed to get Window: activity context is nil")
+            }
         }
     }
     /// Called after onStop() when the current activity is being re-displayed to the user

@@ -353,6 +353,12 @@ public protocol AnyActivity: AnyObject, Contextable {
     /// Resume any tasks that were paused (e.g. restarting animations or refreshing data).
 	func onResume()
 
+	/// Called when the activity has resumed and is now interacting with the user.
+	///
+	/// This is called after `onResume()`.
+	/// Use this for final UI adjustments or to start tasks that require the activity to be fully resumed.
+	func onPostResume()
+
 	/// Called after the activity has been stopped, just before it starts again.
     ///
     /// This is typically followed by a call to `onStart()` and then `onResume()`.

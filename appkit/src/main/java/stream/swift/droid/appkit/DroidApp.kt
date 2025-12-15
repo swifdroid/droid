@@ -98,6 +98,7 @@ class DroidApp : Application() {
     external fun activityOnSaveInstanceState(activityId: Int, outState: Bundle)
     external fun activityOnStateNotSaved(activityId: Int)
     external fun activityOnResume(activity: Any, activityId: Int)
+    external fun activityOnPostResume(activity: Any, activityId: Int)
     external fun activityOnRestart(activity: Any, activityId: Int)
     external fun activityOnStart(activity: Any, activityId: Int)
     external fun activityOnStop(activityId: Int)

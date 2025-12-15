@@ -56,6 +56,12 @@ open class DroidActivity: Activity() {
         app.activityOnResume(this, uniqueId)
     }
 
+    override fun onPostResume() {
+        super.onPostResume()
+        val app: DroidApp = applicationContext as DroidApp
+        app.activityOnPostResume(this, uniqueId)
+    }
+
     override fun onRestart() {
         super.onRestart()
         val app: DroidApp = applicationContext as DroidApp
