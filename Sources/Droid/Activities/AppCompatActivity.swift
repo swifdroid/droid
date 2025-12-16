@@ -91,7 +91,7 @@ extension AppCompatActivity {
     // TODO: getResources
 
     /// Retrieve a reference to this activity's ActionBar.
-    public func supportActionBar() -> ActionBar! {
+    public func supportActionBar() -> ActionBarCompat! {
         guard let context else {
             Log.c("🟥 AppCompatActivity: Failed to supportActionBar: activity context is nil")
             return nil
