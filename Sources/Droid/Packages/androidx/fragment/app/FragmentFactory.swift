@@ -30,6 +30,6 @@ extension FragmentFactory {
             let str = JString(from: className.path),
             let global = object.callObjectMethod(name: "instantiate", args: classLoader.signed(as: JClassLoader.className), str.signedAsString(), returningClass: returningClazz)
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 }

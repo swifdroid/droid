@@ -11,8 +11,18 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import androidx.fragment.app.Fragment
 
-class NativeFragment(): Fragment() {
-    private var uniqueId: Int = 0
+open class NativeFragment(): Fragment() {
+    private var _uniqueId: Int = 0
+    private val uniqueId: Int
+        get() = arguments?.getInt(NativeFragment.UNIQUE_ID_KEY) ?: _uniqueId
+
+    init {
+        onInit(this, this::class.java.name)
+    }
+    private external fun onInit(fragment: NativeFragment, className: String)
+    fun assignId(uniqueId: Int) {
+        _uniqueId = uniqueId
+    }
 
     companion object {
         private const val UNIQUE_ID_KEY = "UNIQUE_ID"
@@ -29,7 +39,13 @@ class NativeFragment(): Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        uniqueId = arguments?.getInt(UNIQUE_ID_KEY) ?: throw IllegalStateException("NativeFragment: UNIQUE_ID not found in arguments")
+        if (arguments?.getInt(NativeFragment.UNIQUE_ID_KEY) == null) {
+            val args = Bundle()
+            args.putInt(UNIQUE_ID_KEY, _uniqueId)
+            arguments = args
+        } else {
+            _uniqueId = uniqueId
+        }
         if (savedInstanceState != null) {
             onCreateSavedInstanceState(uniqueId, savedInstanceState)
         } else {

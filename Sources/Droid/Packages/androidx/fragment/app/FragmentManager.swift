@@ -154,7 +154,7 @@ extension FragmentManager {
             let returningClazz = JClass.load(Fragment.className),
             let global = object.callObjectMethod(name: "getPrimaryNavigationFragment", returningClass: returningClazz)
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     // TODO: getStrictModePolicy?

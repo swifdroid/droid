@@ -9,30 +9,36 @@
 import Android
 #endif
 
-open class NativeFragment: NativeUIObject, AnyNativeObject {
+open class NativeFragment: NativeUIObject, AnyNativeObject, Contextable {
     /// The JNI class name
-    class nonisolated var nativeObjectClassName: JClassName { "stream/swift/droid/appkit/views/NativeFragment" }    
+    class nonisolated var nativeObjectClassName: JClassName { "stream/swift/droid/appkit/views/NativeFragment" }
+    class nonisolated var nativeNavHostFragmentObjectClassName: JClassName { "stream/swift/droid/appkit/views/NativeNavHostFragment" }
 
-    public override init(_ object: JObject, _ context: Contextable) {
-        super.init(object, context)
+    public private(set) var context: ActivityContext?
+
+    public required init(_ object: JObject) {
+        super.init(object)
     }
 
-    public init! (_ context: Contextable) {
+    public init! () {
         guard let env = JEnv.current() else { return nil }
-        super.init(env, context, Self.nativeObjectClassName, .static)
+        super.init(env, Self.nativeObjectClassName, .static)
     }
 
-    public convenience init? (_ context: Contextable, _ className: JClassName) {
+    public convenience init? (_ className: JClassName) {
         guard let env = JEnv.current() else { return nil }
-        self.init(env, context, Self.nativeObjectClassName, .static)
+        self.init(env, Self.nativeObjectClassName, .static)
     }
 
-    public override init? (_ env: JEnv, _ context: Contextable, _ className: JClassName, _ initializer: Initializer = .normal) {
-        super.init(env, context, Self.nativeObjectClassName, .static)
+    public override init? (_ env: JEnv, _ className: JClassName, _ initializer: Initializer = .normal) {
+        super.init(env, className, .static)
     }
 
     /// Called when a fragment is first attached to its context. `onCreate` will be called after this.
-    open func onAttach(_ context: Contextable) {}
+    open func onAttach(_ context: Contextable) {
+        self.context = context.context
+        InnerLog.t("NativeFragment onAttach context: \(String(describing: self.context))")
+    }
     
     // TODO: onConfigurationChanged -> use DroidApp's configuration change event instead
     
@@ -143,7 +149,9 @@ open class NativeFragment: NativeUIObject, AnyNativeObject {
     /// Called when the fragment is no longer attached to its activity.
     /// 
     /// This is called after `onDestroy`.
-    open func onDetach() {}
+    open func onDetach() {
+        self.context = nil
+    }
 
     // TODO: onGetLayoutInflater: not sure how to implement it and if we should to
 
@@ -217,17 +225,43 @@ open class NativeFragment: NativeUIObject, AnyNativeObject {
     open func onViewStateRestored(savedInstanceState: Bundle?) {}
 }
 
+// MARK: - NativeFragment
+
 #if os(Android)
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onInit")
+public func nativeFragmentOnInit(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, fragmentObject: jobject, classNameObject: jstring) {
+    InnerLog.t("🩵 nativeFragmentOnInit")
+    guard
+        let global = fragmentObject.box(JEnv(env))?.object(),
+        let className = JString(from: classNameObject)?.string()
+    else {
+        InnerLog.c("🟥 nativeFragmentOnInit unable to unwrap Fragment")
+        return
+    }
+    MainActor.assumeIsolated {
+        guard let fragmentType = DroidApp.shared._fragments.first(where: { $0.nativeFragmentClassName.fullName == className }) else {
+            InnerLog.c("🟥 nativeFragmentOnInit unable to find Fragment class: \(className)")
+            return
+        }
+        let fragment = fragmentType.init(global)
+        fragment.addIntoStore()
+        fragment.callVoidMethod(name: "assignId", args: fragment.id)
+    }
+}
+
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onAttach")
 public func nativeFragmentOnAttach(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, context: jobject) {
     InnerLog.t("🩵 nativeFragmentOnAttach(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnAttach(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     if let object = context.box(JEnv(env))?.object() {
         MainActor.assumeIsolated {
             let context = ActivityContext(object: object)
-            listener.onAttach(context)
+            fragment.onAttach(context)
         }
     } else {
         InnerLog.c("🟥 nativeFragmentOnAttach(id: \(uniqueId)) unable to unwrap Context")
@@ -238,41 +272,65 @@ public func nativeFragmentOnAttach(env: UnsafeMutablePointer<JNIEnv?>, callerCla
 public func nativeFragmentOnContextItemSelected(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, item: jobject) -> jboolean {
     InnerLog.t("🩵 nativeFragmentOnContextItemSelected(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return 0 }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnContextItemSelected(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return 0
+    }
     guard let object = item.box(JEnv(env))?.object() else {
         InnerLog.c("🟥 nativeFragmentOnContextItemSelected(id: \(uniqueId)) unable to unwrap MenuItem")
         return 0
     }
     let result = MainActor.assumeIsolated {
         let item = MenuItem(object)
-        return listener.onContextItemSelected(item)
+        return fragment.onContextItemSelected(item)
     }
     return result ? 1 : 0
+}
+
+private func _fragmentOnCreate(_ env: JEnv, _ fragmentId: Int32, _ bundle: Bundle?) -> (NativeFragment, Bundle?)? {
+    if let saved = DroidApp.shared._savedFragments[fragmentId] {
+        InnerLog.t("🩵 _fragmentOnCreate(id: \(fragmentId)) → saved block")
+        let (fragment, savedInstanceState) = saved
+        MainActor.assumeIsolated {
+            #if os(Android)
+            if let _: NativeFragment = ObjectStore.shared.find(id: fragmentId) {} else {
+                fragment.addIntoStore()
+            }
+            DroidApp.shared._savedFragments.removeValue(forKey: fragmentId)
+            fragment.onCreate(bundle ?? savedInstanceState)
+            #endif
+        }
+        return (fragment, bundle ?? savedInstanceState)
+    } else if let fragment: NativeFragment = ObjectStore.shared.find(id: fragmentId) {
+        InnerLog.t("🩵 _fragmentOnCreate(id: \(fragmentId)) → existing block")
+        return (fragment, bundle)
+    } else {
+        InnerLog.c("🟥 _fragmentOnCreate(id: \(fragmentId)) → else block: unable to find fragment, it was never initialized")
+        return nil
+    }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreate")
 public func nativeFragmentOnCreate(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnCreate(id: \(uniqueId))")
-    guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
-    MainActor.assumeIsolated {
-        listener.onCreate(nil)
+    if let (fragment, bundle) = _fragmentOnCreate(JEnv(env), uniqueId, nil) {
+        MainActor.assumeIsolated {
+            fragment.onCreate(bundle)
+        }
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onCreateSavedInstanceState")
 public func nativeFragmentOnCreateSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
     InnerLog.t("🩵 nativeFragmentOnCreateSavedInstanceState(id: \(uniqueId))")
-    guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
     if let object = savedInstanceState.box(JEnv(env))?.object() {
         let bundle = Bundle(object)
+        if let (fragment, bundle) = _fragmentOnCreate(JEnv(env), uniqueId, bundle) {
         MainActor.assumeIsolated {
-            listener.onCreate(bundle)
+            fragment.onCreate(bundle)
         }
+    }
     } else {
         InnerLog.c("🟥 nativeFragmentOnCreate(id: \(uniqueId)) unable to unwrap Bundle")
     }
@@ -282,10 +340,13 @@ public func nativeFragmentOnCreateSavedInstanceState(env: UnsafeMutablePointer<J
 public func nativeFragmentOnCreateAnimation(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, transit: jint, enter: jboolean, nextAnim: jint) -> jobject? {
     InnerLog.t("🩵 nativeFragmentOnCreateAnimation(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return nil }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnCreateAnimation(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return nil
+    }
     let result = MainActor.assumeIsolated {
-        return listener.onCreateAnimator(transit, enter == 1, nextAnim)?.object.ref
+        return fragment.onCreateAnimator(transit, enter == 1, nextAnim)?.object.ref
     }
     return result?.ref
 }
@@ -294,10 +355,13 @@ public func nativeFragmentOnCreateAnimation(env: UnsafeMutablePointer<JNIEnv?>, 
 public func nativeFragmentOnCreateAnimator(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, transit: jint, enter: jboolean, nextAnim: jint) -> jobject? {
     InnerLog.t("🩵 nativeFragmentOnCreateAnimator(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return nil }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnCreateAnimator(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return nil
+    }
     let result = MainActor.assumeIsolated {
-        return listener.onCreateAnimator(transit, enter == 1, nextAnim)?.object.ref
+        return fragment.onCreateAnimator(transit, enter == 1, nextAnim)?.object.ref
     }
     return result?.ref
 }
@@ -306,8 +370,11 @@ public func nativeFragmentOnCreateAnimator(env: UnsafeMutablePointer<JNIEnv?>, c
 public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, menu: jobject, view: jobject) {
     InnerLog.t("🩵 nativeFragmentOnCreateContextMenu(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     guard let menuObject = menu.box(JEnv(env))?.object() else {
         InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap ContextMenu")
         return
@@ -320,7 +387,7 @@ public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>
         let activityContext = ActivityContext(object: context)
         let menu = ContextMenu(menuObject)
         let view = View(viewObject, { activityContext })
-        listener.onCreateContextMenu(menu, view, nil)
+        fragment.onCreateContextMenu(menu, view, nil)
     }
 }
 
@@ -328,18 +395,21 @@ public func nativeFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>
 public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, menu: jobject, view: jobject, info: jobject) {
     InnerLog.t("🩵 nativeFragmentOnCreateContextMenuWithInfo(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenuWithInfo(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     guard let menuObject = menu.box(JEnv(env))?.object() else {
-        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap ContextMenu")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenuWithInfo(id: \(uniqueId)) unable to unwrap ContextMenu")
         return
     }
     guard let viewObject = view.box(JEnv(env))?.object(), let context = viewObject.context() else {
-        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap View")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenuWithInfo    (id: \(uniqueId)) unable to unwrap View")
         return
     }
     guard let infoObject = info.box(JEnv(env))?.object() else {
-        InnerLog.c("🟥 nativeFragmentOnCreateContextMenu(id: \(uniqueId)) unable to unwrap ContextMenu.Contextnfo")
+        InnerLog.c("🟥 nativeFragmentOnCreateContextMenuWithInfo(id: \(uniqueId)) unable to unwrap ContextMenu.Contextnfo")
         return
     }
     MainActor.assumeIsolated {
@@ -347,7 +417,7 @@ public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<
         let menu = ContextMenu(menuObject)
         let view = View(viewObject, { activityContext })
         let info = ContextMenu.ContextMenuInfo(infoObject)
-        listener.onCreateContextMenu(menu, view, info)
+        fragment.onCreateContextMenu(menu, view, info)
     }
 }
 
@@ -355,9 +425,9 @@ public func nativeFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<
 public func nativeFragmentOnCreateView(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject) -> jobject? {
     InnerLog.t("🩵 nativeFragmentOnCreateView(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else {
-        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to find fragment instance in cache")
+        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to find fragment, it was never initialized")
         return nil
     }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
@@ -366,7 +436,7 @@ public func nativeFragmentOnCreateView(env: UnsafeMutablePointer<JNIEnv?>, calle
     }
     let result = MainActor.assumeIsolated {
         let inflater = LayoutInflater(inflaterObject)
-        return listener.onCreateView(inflater, nil, nil)?.instance?.object.ref
+        return fragment.onCreateView(inflater, nil, nil)?.instance?.object.ref
     }
     return result?.ref
 }
@@ -375,24 +445,24 @@ public func nativeFragmentOnCreateView(env: UnsafeMutablePointer<JNIEnv?>, calle
 public func nativeFragmentOnCreateViewContainer(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject, container: jobject) -> jobject? {
     InnerLog.t("🩵 nativeFragmentOnCreateViewContainer(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else {
-        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to find fragment instance in cache")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewContainer(id: \(uniqueId)) unable to find fragment, it was never initialized")
         return nil
     }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
-        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to unwrap LayoutInflater")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewContainer(id: \(uniqueId)) unable to unwrap LayoutInflater")
         return nil
     }
     guard let containerObject = container.box(JEnv(env))?.object(), let context = containerObject.context() else {
-        InnerLog.c("🟥 nativeFragmentOnCreateView(id: \(uniqueId)) unable to unwrap ViewGroup")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewContainer(id: \(uniqueId)) unable to unwrap ViewGroup")
         return nil
     }
     let result = MainActor.assumeIsolated {
         let activityContext = ActivityContext(object: context)
         let inflater = LayoutInflater(inflaterObject)
         let container = ViewGroup(containerObject, { activityContext })
-        return listener.onCreateView(inflater, container, nil)?.instance?.object.ref
+        return fragment.onCreateView(inflater, container, nil)?.instance?.object.ref
     }
     return result?.ref
 }
@@ -401,9 +471,9 @@ public func nativeFragmentOnCreateViewContainer(env: UnsafeMutablePointer<JNIEnv
 public func nativeFragmentOnCreateViewSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject, savedInstanceState: jobject) -> jobject? {
     InnerLog.t("🩵 nativeFragmentOnCreateViewSavedInstanceState(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
     else {
-        InnerLog.c("🟥 nativeFragmentOnCreateViewSavedInstanceState(id: \(uniqueId)) unable to find fragment instance in cache")
+        InnerLog.c("🟥 nativeFragmentOnCreateViewSavedInstanceState(id: \(uniqueId)) unable to find fragment, it was never initialized")
         return nil
     }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
@@ -417,7 +487,7 @@ public func nativeFragmentOnCreateViewSavedInstanceState(env: UnsafeMutablePoint
     let result = MainActor.assumeIsolated {
         let inflater = LayoutInflater(inflaterObject)
         let savedInstanceState = Bundle(savedInstanceStateObject)
-        return listener.onCreateView(inflater, nil, savedInstanceState)?.instance?.object.ref
+        return fragment.onCreateView(inflater, nil, savedInstanceState)?.instance?.object.ref
     }
     return result?.ref
 }
@@ -426,8 +496,11 @@ public func nativeFragmentOnCreateViewSavedInstanceState(env: UnsafeMutablePoint
 public func nativeFragmentOnCreateViewContainerSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject, container: jobject, savedInstanceState: jobject) -> jobject? {
     InnerLog.t("🩵 nativeFragmentOnCreateViewContainerSavedInstanceState")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return nil }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnCreateViewContainerSavedInstanceState(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return nil
+    }
     guard let inflaterObject = inflater.box(JEnv(env))?.object() else {
         InnerLog.c("🟥 nativeFragmentOnCreateViewContainerSavedInstanceState(id: \(uniqueId)) unable to unwrap LayoutInflater")
         return nil
@@ -445,7 +518,7 @@ public func nativeFragmentOnCreateViewContainerSavedInstanceState(env: UnsafeMut
         let inflater = LayoutInflater(inflaterObject)
         let container = ViewGroup(containerObject, { activityContext })
         let savedInstanceState = Bundle(savedInstanceStateObject)
-        return listener.onCreateView(inflater, container, savedInstanceState)?.instance?.object.ref
+        return fragment.onCreateView(inflater, container, savedInstanceState)?.instance?.object.ref
     }
     return result?.ref
 }
@@ -454,10 +527,13 @@ public func nativeFragmentOnCreateViewContainerSavedInstanceState(env: UnsafeMut
 public func nativeFragmentOnDestroy(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnDestroy(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnDestroy(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     MainActor.assumeIsolated {
-        listener.onDestroy()
+        fragment.onDestroy()
     }
 }
 
@@ -465,10 +541,13 @@ public func nativeFragmentOnDestroy(env: UnsafeMutablePointer<JNIEnv?>, callerCl
 public func nativeFragmentOnDestroyView(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnDestroyView(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnDestroyView(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     MainActor.assumeIsolated {
-        listener.onDestroyView()
+        fragment.onDestroyView()
     }
 }
 
@@ -476,23 +555,29 @@ public func nativeFragmentOnDestroyView(env: UnsafeMutablePointer<JNIEnv?>, call
 public func nativeFragmentOnDetach(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnDetach(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
-    MainActor.assumeIsolated {
-        listener.onDetach()
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnDetach(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
     }
-    ObjectStore.shared.remove(listener)
+    MainActor.assumeIsolated {
+        fragment.onDetach()
+    }
+    ObjectStore.shared.remove(fragment)
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onHiddenChanged")
 public func nativeFragmentOnHiddenChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, hidden: jboolean) {
     InnerLog.t("🩵 nativeFragmentOnHiddenChanged(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnHiddenChanged(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     let hidden = hidden == 1
     MainActor.assumeIsolated {
-        listener.onHiddenChanged(hidden: hidden)
+        fragment.onHiddenChanged(hidden: hidden)
     }
 }
 
@@ -500,11 +585,14 @@ public func nativeFragmentOnHiddenChanged(env: UnsafeMutablePointer<JNIEnv?>, ca
 public func nativeFragmentOnMultiWindowModeChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isInMultiWindowMode: jboolean) {
     InnerLog.t("🩵 nativeFragmentOnMultiWindowModeChanged(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnMultiWindowModeChanged(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     let isInMultiWindowMode = isInMultiWindowMode == 1
     MainActor.assumeIsolated {
-        listener.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode)
+        fragment.onMultiWindowModeChanged(isInMultiWindowMode: isInMultiWindowMode)
     }
 }
 
@@ -512,10 +600,13 @@ public func nativeFragmentOnMultiWindowModeChanged(env: UnsafeMutablePointer<JNI
 public func nativeFragmentOnPause(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnPause(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnPause(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     MainActor.assumeIsolated {
-        listener.onPause()
+        fragment.onPause()
     }
 }
 
@@ -523,23 +614,25 @@ public func nativeFragmentOnPause(env: UnsafeMutablePointer<JNIEnv?>, callerClas
 public func nativeFragmentOnPictureInPictureModeChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isInPictureInPictureMode: jboolean) {
     InnerLog.t("🩵 nativeFragmentOnPictureInPictureModeChanged(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnPictureInPictureModeChanged(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     let isInPictureInPictureMode = isInPictureInPictureMode == 1
     MainActor.assumeIsolated {
-        listener.onPictureInPictureModeChanged(isInPictureInPictureMode: isInPictureInPictureMode)
+        fragment.onPictureInPictureModeChanged(isInPictureInPictureMode: isInPictureInPictureMode)
     }
 }
 
 @_cdecl("Java_stream_swift_droid_appkit_views_NativeFragment_onPrimaryNavigationFragmentChanged")
 public func nativeFragmentOnPrimaryNavigationFragmentChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isPrimaryNavigationFragment: jboolean) {
     InnerLog.t("🩵 nativeFragmentOnPrimaryNavigationFragmentChanged(id: \(uniqueId))")
-    guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
     let isPrimaryNavigationFragment = isPrimaryNavigationFragment == 1
-    MainActor.assumeIsolated {
-        listener.onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment: isPrimaryNavigationFragment)
+    if let (fragment, _) = _fragmentOnCreate(JEnv(env), uniqueId, nil) {
+        MainActor.assumeIsolated {
+            fragment.onPrimaryNavigationFragmentChanged(isPrimaryNavigationFragment: isPrimaryNavigationFragment)
+        }
     }
 }
 
@@ -547,10 +640,13 @@ public func nativeFragmentOnPrimaryNavigationFragmentChanged(env: UnsafeMutableP
 public func nativeFragmentOnResume(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnResume(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnResume(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     MainActor.assumeIsolated {
-        listener.onResume()
+        fragment.onResume()
     }
 }
 
@@ -558,14 +654,19 @@ public func nativeFragmentOnResume(env: UnsafeMutablePointer<JNIEnv?>, callerCla
 public func nativeFragmentOnSaveInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
     InnerLog.t("🩵 nativeFragmentOnSaveInstanceState(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
-    guard let object = savedInstanceState.box(JEnv(env))?.object() else {
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnSaveInstanceState(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
+    guard let bundleObject = savedInstanceState.box(JEnv(env))?.object() else {
         InnerLog.c("🟥 nativeFragmentOnSaveInstanceState(id: \(uniqueId)) unable to unwrap Bundle")
         return
     }
+    let bundle = Bundle(bundleObject)
     MainActor.assumeIsolated {
-        listener.onSaveInstanceState(outState: .init(object))
+        fragment.onSaveInstanceState(outState: bundle)
+        DroidApp.shared._savedFragments[uniqueId] = (fragment, bundle)
     }
 }
 
@@ -573,10 +674,13 @@ public func nativeFragmentOnSaveInstanceState(env: UnsafeMutablePointer<JNIEnv?>
 public func nativeFragmentOnStart(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnStart(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnStart(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     MainActor.assumeIsolated {
-        listener.onStart()
+        fragment.onStart()
     }
 }
 
@@ -584,10 +688,13 @@ public func nativeFragmentOnStart(env: UnsafeMutablePointer<JNIEnv?>, callerClas
 public func nativeFragmentOnStop(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnStop(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnStop(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     MainActor.assumeIsolated {
-        listener.onStop()
+        fragment.onStop()
     }
 }
 
@@ -595,8 +702,11 @@ public func nativeFragmentOnStop(env: UnsafeMutablePointer<JNIEnv?>, callerClass
 public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, view: jobject) {
     InnerLog.t("🩵 nativeFragmentOnViewCreated(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnViewCreated(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     guard let viewObject = view.box(JEnv(env))?.object(), let context = viewObject.context() else {
         InnerLog.c("🟥 nativeFragmentOnViewCreated(id: \(uniqueId)) unable to unwrap View")
         return
@@ -604,7 +714,7 @@ public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, call
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
     MainActor.assumeIsolated {
         let activityContext = ActivityContext(object: context)
-        listener.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: nil)
+        fragment.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: nil)
     }
 }
 
@@ -612,8 +722,11 @@ public func nativeFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, call
 public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, view: jobject, savedInstanceState: jobject) {
     InnerLog.t("🩵 nativeFragmentOnViewCreatedSavedInstanceState(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnViewCreatedSavedInstanceState(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     guard let viewObject = view.box(JEnv(env))?.object(), let context = viewObject.context() else {
         InnerLog.c("🟥 nativeFragmentOnViewCreatedSavedInstanceState(id: \(uniqueId)) unable to unwrap View")
         return
@@ -625,7 +738,7 @@ public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePoin
     let viewId = viewObject.callIntMethod(JEnv(env), name: "getId")
     MainActor.assumeIsolated {
         let activityContext = ActivityContext(object: context)
-        listener.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: .init(bundleObject))
+        fragment.onViewCreated(view: .init(id: viewId, viewObject, { activityContext }), savedInstanceState: .init(bundleObject))
     }
 }
 
@@ -633,10 +746,13 @@ public func nativeFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePoin
 public func nativeFragmentOnViewStateRestored(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
     InnerLog.t("🩵 nativeFragmentOnViewStateRestored(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnViewStateRestored(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     MainActor.assumeIsolated {
-        listener.onViewStateRestored(savedInstanceState: nil)
+        fragment.onViewStateRestored(savedInstanceState: nil)
     }
 }
 
@@ -644,14 +760,17 @@ public func nativeFragmentOnViewStateRestored(env: UnsafeMutablePointer<JNIEnv?>
 public func nativeFragmentOnViewStateRestoredSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
     InnerLog.t("🩵 nativeFragmentOnViewStateRestoredSavedInstanceState(id: \(uniqueId))")
     guard
-        let listener: NativeFragment = ObjectStore.shared.find(id: uniqueId)
-    else { return }
+        let fragment: NativeFragment = ObjectStore.shared.find(id: uniqueId)
+    else {
+        InnerLog.c("🟥 nativeFragmentOnViewStateRestoredSavedInstanceState(id: \(uniqueId)) unable to find fragment, it was never initialized")
+        return
+    }
     guard let object = savedInstanceState.box(JEnv(env))?.object() else {
         InnerLog.c("🟥 nativeFragmentOnViewStateRestoredSavedInstanceState(id: \(uniqueId)) unable to unwrap Bundle")
         return
     }
     MainActor.assumeIsolated {
-        listener.onViewStateRestored(savedInstanceState: .init(object))
+        fragment.onViewStateRestored(savedInstanceState: .init(object))
     }
 }
 #endif

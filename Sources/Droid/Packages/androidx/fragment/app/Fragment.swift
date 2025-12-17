@@ -5,17 +5,52 @@
 //  Created by Mihael Isaev on 26.08.2025.
 //
 
+protocol _Fragmentable: Fragmentable {
+    var id: Int32 { get }
+    func addIntoStore()
+    init (_ object: JObject)
+}
+
+@MainActor
+public protocol Fragmentable: JObjectable {
+    /// The fully qualified class name of the object (e.g., `"androidx/fragment/app/Fragment"`).
+    static var className: JClassName { get }
+    static var nativeFragmentClassName: JClassName { get }
+}
+extension Fragmentable {
+    /// The fully qualified class name of the native Fragment class.
+    public static var nativeFragmentClassName: JClassName { .init(stringLiteral: "\(DroidAppUIPackage)/\(Self.self)") }
+}
+
 /// A Fragment is a piece of an application's user interface or behavior that can be placed in an Activity.
 ///
 /// Interaction with fragments is done through `FragmentManager`, which can be obtained via Activity.getFragmentManager() and Fragment.getFragmentManager().
 /// 
 /// [Learn more](https://developer.android.com/reference/androidx/fragment/app/Fragment)
 @MainActor
-open class Fragment: NativeFragment {
+open class Fragment: NativeFragment, _Fragmentable {
     /// The JNI class name
-    public static let className: JClassName = "androidx/fragment/app/Fragment"
+    open class var className: JClassName { "androidx/fragment/app/Fragment" }
 
     var contentBlock: BodyBuilder.SingleView?
+
+    public required init (_ object: JObject) {
+        contentBlock = nil
+        super.init(object)
+    }
+
+    public override init! () {
+        super.init()
+    }
+
+    public convenience init? (_ className: JClassName) {
+        guard let env = JEnv.current() else { return nil }
+        self.init(env, Self.nativeObjectClassName, .static)
+    }
+
+    public override init? (_ env: JEnv, _ className: JClassName, _ initializer: Initializer = .normal) {
+        super.init(env, className, initializer)
+    }
 
     /// Sets the content view for this fragment.
     @discardableResult
@@ -31,6 +66,7 @@ open class Fragment: NativeFragment {
     var contentView: View?
 
     open override func onCreateView(_ inflater: LayoutInflater, _ container: View?, _ savedInstanceState: Bundle?) -> View? {
+        InnerLog.t("Fragment onCreateView context: \(String(describing: self.context))")
         buildUI()
         func returnPlaceholder() -> View {
             let contentView = TextView("Empty Fragment Content").gravity(.center)
@@ -188,7 +224,7 @@ open class Fragment: NativeFragment {
             let returningClazz = JClass.load(Fragment.className),
             let global = object.callObjectMethod(name: "requireParentFragment", returningClass: returningClazz)
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Get the root view for the fragment's layout (the one returned by onCreateView).
@@ -455,7 +491,7 @@ extension Fragment {
             let returningClazz = JClass.load(Fragment.className),
             let global = object.callObjectMethod(name: "getParentFragment", returningClass: returningClazz)
         else { return nil }
-        return .init(global, self)
+        return .init(global)
     }
 
     /// Return the FragmentManager for interacting with fragments associated with this fragment's activity.
