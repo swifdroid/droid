@@ -774,3 +774,134 @@ public func nativeFragmentOnViewStateRestoredSavedInstanceState(env: UnsafeMutab
     }
 }
 #endif
+
+// MARK: - NativeNavHostFragment
+
+#if os(Android)
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onAttach")
+public func nativeNavHostFragmentOnAttach(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, context: jobject) {
+    nativeFragmentOnAttach(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, context: context)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onContextItemSelected")
+public func nativeNavHostFragmentOnContextItemSelected(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, item: jobject) -> jboolean {
+    nativeFragmentOnContextItemSelected(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, item: item)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onCreate")
+public func nativeNavHostFragmentOnCreate(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnCreate(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onCreateSavedInstanceState")
+public func nativeNavHostFragmentOnCreateSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
+    nativeFragmentOnCreateSavedInstanceState(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, savedInstanceState: savedInstanceState)
+}
+
+// nativeNavHostFragmentOnCreateAnimation should be handled on Java side, it is too fragile to touch
+// nativeNavHostFragmentOnCreateAnimator should be handled on Java side, it is too fragile to touch
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onCreateContextMenu")
+public func nativeNavHostFragmentOnCreateContextMenu(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, menu: jobject, view: jobject) {
+    nativeFragmentOnCreateContextMenu(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, menu: menu, view: view)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onCreateContextMenuWithInfo")
+public func nativeNavHostFragmentOnCreateContextMenuWithInfo(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, menu: jobject, view: jobject, info: jobject) {
+    nativeFragmentOnCreateContextMenuWithInfo(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, menu: menu, view: view, info: info)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onCreateView")
+public func nativeNavHostFragmentOnCreateView(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject) -> jobject? {
+    nativeFragmentOnCreateView(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, inflater: inflater)
+}
+
+// nativeNavHostFragmentOnCreateViewContainer should always be handled on Java side
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onCreateViewSavedInstanceState")
+public func nativeNavHostFragmentOnCreateViewSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, inflater: jobject, savedInstanceState: jobject) -> jobject? {
+    nativeFragmentOnCreateViewSavedInstanceState(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, inflater: inflater, savedInstanceState: savedInstanceState)
+}
+
+// nativeNavHostFragmentOnCreateViewContainerSavedInstanceState should always be handled on Java side
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onDestroy")
+public func nativeNavHostFragmentOnDestroy(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnDestroy(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onDestroyView")
+public func nativeNavHostFragmentOnDestroyView(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnDestroyView(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onDetach")
+public func nativeNavHostFragmentOnDetach(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnDetach(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onHiddenChanged")
+public func nativeNavHostFragmentOnHiddenChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, hidden: jboolean) {
+    nativeFragmentOnHiddenChanged(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, hidden: hidden)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onMultiWindowModeChanged")
+public func nativeNavHostFragmentOnMultiWindowModeChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isInMultiWindowMode: jboolean) {
+    nativeFragmentOnMultiWindowModeChanged(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, isInMultiWindowMode: isInMultiWindowMode)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onPause")
+public func nativeNavHostFragmentOnPause(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnPause(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onPictureInPictureModeChanged")
+public func nativeNavHostFragmentOnPictureInPictureModeChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isInPictureInPictureMode: jboolean) {
+    nativeFragmentOnPictureInPictureModeChanged(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, isInPictureInPictureMode: isInPictureInPictureMode)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onPrimaryNavigationFragmentChanged")
+public func nativeNavHostFragmentOnPrimaryNavigationFragmentChanged(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, isPrimaryNavigationFragment: jboolean) {
+    nativeFragmentOnPrimaryNavigationFragmentChanged(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, isPrimaryNavigationFragment: isPrimaryNavigationFragment)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onResume")
+public func nativeNavHostFragmentOnResume(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnResume(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onSaveInstanceState")
+public func nativeNavHostFragmentOnSaveInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
+    nativeFragmentOnSaveInstanceState(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, savedInstanceState: savedInstanceState)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onStart")
+public func nativeNavHostFragmentOnStart(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnStart(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onStop")
+public func nativeNavHostFragmentOnStop(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnStop(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onViewCreated")
+public func nativeNavHostFragmentOnViewCreated(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, view: jobject) {
+    nativeFragmentOnViewCreated(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, view: view)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onViewCreatedSavedInstanceState")
+public func nativeNavHostFragmentOnViewCreatedSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, view: jobject, savedInstanceState: jobject) {
+    nativeFragmentOnViewCreatedSavedInstanceState(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, view: view, savedInstanceState: savedInstanceState)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onViewStateRestored")
+public func nativeNavHostFragmentOnViewStateRestored(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint) {
+    nativeFragmentOnViewStateRestored(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_views_NativeNavHostFragment_onViewStateRestoredSavedInstanceState")
+public func nativeNavHostFragmentOnViewStateRestoredSavedInstanceState(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, uniqueId: jint, savedInstanceState: jobject) {
+    nativeFragmentOnViewStateRestoredSavedInstanceState(env: env, callerClassObject: callerClassObject, uniqueId: uniqueId, savedInstanceState: savedInstanceState)
+}
+#endif
