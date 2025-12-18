@@ -8,6 +8,8 @@ import AndroidLogging
 import Logging
 #endif
 
+let DroidAppUIPackage = "stream/swift/droid/appui"
+
 // MARK: - Log
 
 public struct InnerLog {
