@@ -26,29 +26,25 @@ extension AnyNativeObject {
 }
 
 @MainActor
-open class NativeUIObject: JObjectable, Contextable {
+open class NativeUIObject: JObjectable {
 
     /// Unique identifier
     let id: Int32
 
     public let object: JObject
 
-    public private(set) weak var context: ActivityContext?
-
-    public init (_ object: JObject, _ context: Contextable) {
+    public required init (_ object: JObject) {
         self.id = DroidApp.shared.getNextViewId()
         self.object = object
-        self.context = context.context
     }
 
-    public convenience init? (_ context: Contextable, _ className: JClassName) {
+    public convenience init? (_ className: JClassName) {
         guard let env = JEnv.current() else { return nil }
-        self.init(env, context, className)
+        self.init(env, className)
     }
 
-    public init? (_ env: JEnv, _ context: Contextable, _ className: JClassName, _ initializer: Initializer = .normal) {
+    public init? (_ env: JEnv, _ className: JClassName, _ initializer: Initializer = .normal) {
         self.id = DroidApp.shared.getNextViewId()
-        self.context = context.context
         #if os(Android)
         guard
             let clazz = JClass.load(className),
