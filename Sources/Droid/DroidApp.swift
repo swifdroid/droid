@@ -250,6 +250,8 @@ open class DroidApp: @unchecked Sendable {
     
     @MainActor
     private func proceedAndroidBuildingAction(_ action: _AndroidBuildingAction, _ args: [String]) {
+        func droidContentBegin() { print("++==DROID-CONTENT-BEGIN==++") }
+        func droidContentEnd() { print("++==DROID-CONTENT-END==++") }
         switch action {
         case .gradleDependencies:
             var dependencies: Set<String> = []
@@ -270,7 +272,9 @@ open class DroidApp: @unchecked Sendable {
             do {
                 let data = try JSONEncoder().encode(dependencies)
                 if let string = String(data: data, encoding: .utf8) {
+                    droidContentBegin()
                     print(string)
+                    droidContentEnd()
                 } else {
                     print("Unable to generate JSON string")
                 }
@@ -278,11 +282,15 @@ open class DroidApp: @unchecked Sendable {
                 print("Error has occured during JSON generation: \(error)")
             }
         case .manifest:
+            droidContentBegin()
             print(_manifest.generateXML())
+            droidContentEnd()
         case .activityNames:
             if let app = _manifest.items.compactMap({ $0 as? Application }).first {
                 let activityTags = app.items.compactMap { $0 as? ActivityTag }
+                droidContentBegin()
                 print(activityTags.map { $0.class.className }.joined(separator: ","))
+                droidContentEnd()
             }
         case .generateAllActivities:
             if let app = _manifest.items.compactMap({ $0 as? Application }).first {
@@ -296,7 +304,9 @@ open class DroidApp: @unchecked Sendable {
                 do {
                     let data = try JSONEncoder().encode(activities)
                     if let string = String(data: data, encoding: .utf8) {
+                        droidContentBegin()
                         print(string)
+                        droidContentEnd()
                     } else {
                         print("Unable to generate JSON string")
                     }
