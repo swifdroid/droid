@@ -362,6 +362,7 @@ open class DroidApp: @unchecked Sendable {
     var _savedActivities: [Int: (any AnyActivity, Bundle)] = [:]
     var _activeActivities: [Int: any AnyActivity] = [:]
     var _activities: [AnyActivity.Type] = []
+    var _savedFragments: [Int32: (NativeFragment, Bundle)] = [:]
     var _lifecycles: [AppLifecycle] = []
     var _manifest: AppManifest = Manifest
         .placeholders()
