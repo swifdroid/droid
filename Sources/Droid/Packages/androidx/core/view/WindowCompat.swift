@@ -56,14 +56,13 @@ extension WindowCompat {
     /// 
     /// Please note: using the `setSystemUiVisibility` API in your app can conflict
     /// with this method. Please discontinue use of `setSystemUiVisibility`.
-    public static func decorFitsSystemWindows(_ decorFitsSystemWindows: Bool = true, _ window: Window) {
+    public static func decorFitsSystemWindows(_ window: Window, _ decorFitsSystemWindows: Bool = true) {
         guard
             let clazz = JClass.load(WindowCompat.className)
         else { return }
         clazz.staticVoidMethod(
             name: "setDecorFitsSystemWindows",
-            args: decorFitsSystemWindows,
-            window.signed(as: Window.className)
+            args: window.signed(as: Window.className), decorFitsSystemWindows
         )
     }
 }
