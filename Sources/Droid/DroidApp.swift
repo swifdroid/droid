@@ -226,6 +226,7 @@ open class DroidApp: @unchecked Sendable {
         case manifest
         case gradleDependencies
         case activityNames
+        case generateAllFragments
         case generateAllActivities
     }
     
@@ -314,6 +315,36 @@ open class DroidApp: @unchecked Sendable {
                     print("Error has occured during JSON generation: \(error)")
                 }
             }
+        case .generateAllFragments:
+            if let app = _manifest.items.compactMap({ $0 as? Application }).first {
+                let activityTags = app.items.compactMap { $0 as? ActivityTag }
+                for activity in activityTags.map({ $0.class }) {
+                    #if !os(Android)
+                    _ = activity.init()
+                    #endif
+                }
+            }
+            var fragments: [String: String] = [:]
+            for fragment in _fragments {
+                let fragmentName = fragment.nativeFragmentClassName.name
+                if !fragments.keys.contains(fragmentName) {
+                    if let base64 = generateFragment(fragmentName)?.data(using: .utf8)?.base64EncodedString() {
+                        fragments[fragmentName] = base64
+                    }
+                }
+            }
+            do {
+                let data = try JSONEncoder().encode(fragments)
+                if let string = String(data: data, encoding: .utf8) {
+                    droidContentBegin()
+                    print(string)
+                    droidContentEnd()
+                } else {
+                    print("Unable to generate JSON string")
+                }
+            } catch {
+                print("Error has occured during JSON generation: \(error)")
+            }
         }
         exit(0)
     }
@@ -340,6 +371,7 @@ open class DroidApp: @unchecked Sendable {
             .label("__TARGET_NAME__")
         }
     var _gradleDependencies: AppGradleDependencies = .init()
+    var _fragments: [_Fragmentable.Type] = []
     
     private func parseAppBuilderItem(_ item: AppBuilder.Item) {
         switch item {
