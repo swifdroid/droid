@@ -128,6 +128,8 @@ public struct AppGradleDependency: Sendable, ExpressibleByStringLiteral, CustomS
     }
 
     public static let appCompat: Self = #"implementation("androidx.appcompat:appcompat:1.7.1")"#
+    public static let androidXNavigationFragment: Self = #"implementation("androidx.navigation:navigation-fragment:2.6.0")"#
+    public static let androidXNavigationUI: Self = #"implementation("androidx.navigation:navigation-ui:2.6.0")"#
     public static let composeBOM: Self = #"implementation(platform("androidx.compose:compose-bom:2025.07.00"))"#
     public static let flexbox: Self = #"implementation("com.google.android.flexbox:flexbox:3.0.0")"#
     public static let constraintlayout: Self = #"implementation("androidx.constraintlayout:constraintlayout:2.2.1")"#
