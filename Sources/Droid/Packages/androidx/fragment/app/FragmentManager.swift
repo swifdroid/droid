@@ -109,8 +109,20 @@ extension FragmentManager {
     }
 
     // TODO: findFragment?
-    // TODO: findFragmentById?
     // TODO: findFragmentByTag?
+
+    /// Finds a fragment that was identified by the given id either when inflated from XML
+    /// or as the container ID when added in a transaction. This first searches through
+    /// fragments that are currently added to the manager's activity;
+    /// if no such fragment is found, then all fragments currently on the back stack associated
+    /// with this ID are searched.
+    public func findFragmentById(_ id: Int32) -> Fragment? {
+        guard
+            let returningClazz = JClass.load(Fragment.className),
+            let global = object.callObjectMethod(name: "findFragmentById", args: id, returningClass: returningClazz)
+        else { return nil }
+        return .init(global)
+    }
 
     /// Recurse up the view hierarchy, looking for a FragmentManager
     public func findFragmentManager() -> FragmentManager? {
