@@ -151,7 +151,7 @@ open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
         let params = subview.filteredLayoutParams(applicableLayoutParams())
         let env = JEnv.current()
         params.forEach {
-            InnerLog.t("Processing LP: \($0.key) for \(subview.className.path)#\(subview.id)")
+            InnerLog.t("Processing LP: \($0.key) for \(subview.className.path)#\(subview.id) in lp: \(lp.clazz.name.path)")
             $0.apply(env, instance, lp)
         }
     }
@@ -445,6 +445,9 @@ open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
     var _propertiesToApply: [any ViewPropertyToApply] = []
     var _layoutParamsToApply: [any LayoutParamToApply] = []
 
+    var layoutParamsShouldBeLoaded: Bool { Self.layoutParamsShouldBeLoaded }
+    var layoutParamsClass: LayoutParams.Class { Self.layoutParamsClass }
+
         // InnerLog.t("view(id: \(id)) proceedSubviewsLayoutParams")
     func proceedSubviewsLayoutParams(_ instance: ViewInstance) {
         for subview in subviews.filter({ v in
@@ -454,9 +457,11 @@ open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
             }
         }) {
             if Self.layoutParamsShouldBeLoaded, let lp = subview.instance?.layoutParams(Self.layoutParamsClass.className) {
+                InnerLog.t("view(id: \(id)) proceedSubviewsLayoutParams loaded lp for subview(id: \(subview.id)) in lp: \(lp.clazz.name.path)")
                 processLayoutParams(instance, lp, for: subview)
                 subview.layoutParams(lp)
             } else if let lp = layoutParamsForSubviews() {
+                InnerLog.t("view(id: \(id)) proceedSubviewsLayoutParams created lp for subview(id: \(subview.id)) in lp: \(lp.clazz.name.path)")
                 processLayoutParams(instance, lp, for: subview)
                 subview.layoutParams(lp)
             }
@@ -1962,10 +1967,13 @@ struct OnApplyWindowInsetsCompatListenerViewProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setOnApplyWindowInsetsListener
     let value: NativeOnApplyWindowInsetsCompatListener
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        InnerLog.t("🌏🌏🌏 onApplyWindowInsetsCompat applyToInstance 1")
         if value.instance == nil {
             value.attach(to: instance)
         }
+        InnerLog.t("🌏🌏🌏 onApplyWindowInsetsCompat applyToInstance 2")
         guard let view = instance.view else { return }
+        InnerLog.t("🌏🌏🌏 onApplyWindowInsetsCompat applyToInstance 3")
         ViewCompat.onApplyWindowInsetsListener(view, value)
     }
 }
@@ -1975,6 +1983,7 @@ extension View {
     /// Set an OnApplyWindowInsetsListener to take over the policy for applying window insets to this view.
     @discardableResult
     public func onApplyWindowInsetsCompat(_ handler: @escaping ApplyWindowInsetsCompatListenerEventHandler) -> Self {
+        InnerLog.t("🌏🌏🌏 onApplyWindowInsetsCompat")
         #if os(Android)
         return OnApplyWindowInsetsCompatListenerViewProperty(value: .init(id, viewId: id).setHandler(self) { @MainActor [weak self] in
             guard let self else { return $0.insets }

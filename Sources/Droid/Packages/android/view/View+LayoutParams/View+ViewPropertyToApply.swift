@@ -11,10 +11,11 @@ extension ViewPropertyToApply {
     @discardableResult
     public func applyOrAppend<T: AnyView>(_ env: JEnv?, _ view: T) -> T {
         guard let v = view as? _AnyView else { return view }
-        if let instance = v.instance {
-            applyToInstance(env, instance)
-        } else {
-            v._propertiesToApply.append(self)
+        switch v.status {
+            case .new, .floating:
+                v._propertiesToApply.append(self)
+            case .asContentView(let instance), .inParent(_, let instance):
+                applyToInstance(env, instance)
         }
         return view
     }

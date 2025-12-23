@@ -10,11 +10,25 @@ extension LayoutParamToApply {
     @MainActor
     @discardableResult
     public func applyOrAppend<T: View>(_ view: T) -> T {
-        if let instance = view.instance, let lp = instance.layoutParams() {
-            apply(nil, instance, lp)
-            instance.setLayoutParams(lp)
-        } else {
-            view._layoutParamsToApply.append(self)
+        InnerLog.t("LayoutParamToApply: applying \(key.rawValue) to view \(view)")
+        switch view.status {
+            case .new, .floating:
+                InnerLog.t("LayoutParamToApply: view is new or floating, appending \(key.rawValue) to _layoutParamsToApply")
+                view._layoutParamsToApply.append(self)
+            case .asContentView(let instance), .inParent(_, let instance):
+                InnerLog.t("LayoutParamToApply: view has instance, applying \(key.rawValue) parent: \(view.parent != nil), layoutParamsShouldBeLoaded: \(view.parent?.layoutParamsShouldBeLoaded ?? false)")
+                if let parent = view.parent, parent.layoutParamsShouldBeLoaded, let lp = instance.layoutParams(parent.layoutParamsClass.className) {
+                    InnerLog.t("LayoutParamToApply: applying \(key.rawValue) to parent's lp: \(lp.clazz.name.path)")
+                    apply(nil, instance, lp)
+                    instance.setLayoutParams(lp)
+                } else if let lp = instance.layoutParams() {
+                    InnerLog.t("LayoutParamToApply: applying \(key.rawValue) to default(!) lp: \(lp.clazz.name.path)")
+                    apply(nil, instance, lp)
+                    instance.setLayoutParams(lp)
+                } else {
+                    InnerLog.t("LayoutParamToApply: lp not found, appending \(key.rawValue) to _layoutParamsToApply")
+                    view._layoutParamsToApply.append(self)
+                }
         }
         return view
     }
