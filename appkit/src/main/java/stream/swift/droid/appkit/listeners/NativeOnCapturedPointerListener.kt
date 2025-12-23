@@ -5,7 +5,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.RequiresApi
 
-@RequiresApi(Build.VERSION_CODES.O)
 class NativeOnCapturedPointerListener(private val uniqueId: Int, private val viewId: Int): View.OnCapturedPointerListener {
     override fun onCapturedPointer(view: View?, event: MotionEvent?): Boolean {
         if (view != null) {
