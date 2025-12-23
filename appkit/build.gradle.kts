@@ -37,6 +37,7 @@ android {
 dependencies {
     //noinspection UseTomlInstead
     api("androidx.annotation:annotation:1.9.1")
+    api("androidx.navigation:navigation-fragment:2.6.0")
     api("androidx.appcompat:appcompat:1.7.1")
     api("androidx.recyclerview:recyclerview:1.4.0")
 }
