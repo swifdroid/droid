@@ -60,11 +60,20 @@ protocol _AnyView: AnyView {
 }
 
 @MainActor
-enum ViewStatus {
+enum ViewStatus: @MainActor CustomStringConvertible {
     case new
     case floating(View.ViewInstance)
     case asContentView(View.ViewInstance)
     case inParent(WeakView, View.ViewInstance)
+
+    var description: String {
+        switch self {
+            case .new: return "new"
+            case .floating: return "floating"
+            case .asContentView: return "asContentView"
+            case .inParent: return "inParent"
+        }
+    }
 }
 @MainActor
 final class WeakView {
