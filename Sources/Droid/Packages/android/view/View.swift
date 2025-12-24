@@ -1647,6 +1647,17 @@ extension View {
     }
 }
 
+// MARK: Itself
+
+extension AnyView {
+    /// Assigns the view itself to the provided inout parameter and returns the view.
+    @discardableResult
+    public func itself(_ itself: inout Self?) -> Self {
+        itself = self
+        return self
+    }
+}
+
 // MARK: KeepScreenOn
 
 struct KeepScreenOnViewProperty: ViewPropertyToApply {
