@@ -53,17 +53,43 @@ extension Menu {
 
 extension Menu {
     /// Add a new item to the menu. This item displays the given title for its label.
+    @discardableResult
     public func add(
         groupId: Int32 = Menu.none,
         itemId: Int32,
         order: Int = 100,
         title: String
-    ) -> Menu {
+    ) -> MenuItem? {
         guard
             let str = JString(from: title),
-            let returningClazz = JClass.load(Menu.className),
+            let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "add", args: groupId, itemId, Int32(order), str.signed(as: .java.lang.CharSequence), returningClass: returningClazz)
-        else { return self }
+        else { return nil }
+        return .init(global)
+    }
+
+    /// Add a new item to the menu. This item displays the given title for its label.
+    @discardableResult
+    public func add(
+        _ titleRes: Int32
+    ) -> MenuItem? {
+        guard
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "add", args: titleRes, returningClass: returningClazz)
+        else { return nil }
+        return .init(global)
+    }
+
+    /// Add a new item to the menu. This item displays the given title for its label.
+    @discardableResult
+    public func add(
+        _ title: String
+    ) -> MenuItem? {
+        guard
+            let str = JString(from: title),
+            let returningClazz = JClass.load(MenuItem.className),
+            let global = object.callObjectMethod(name: "add", args: str.signedAsCharSequence(), returningClass: returningClazz)
+        else { return nil }
         return .init(global)
     }
 
