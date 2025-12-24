@@ -2874,6 +2874,15 @@ extension View {
     }
 }
 
+// MARK: Invalidate
+
+extension View {
+    /// Invalidate the whole view. If the view is visible, `onDraw(Canvas)` will be called at some point in the future.
+    public func invalidate() {
+        instance?.callVoidMethod(name: "invalidate")
+    }
+}
+
 // MARK: Right
 
 struct RightProperty: ViewPropertyToApply {
