@@ -57,6 +57,7 @@ public protocol AnyView: AnyObject, ViewInstanceable {
 @MainActor
 protocol _AnyView: AnyView {
     var _propertiesToApply: [any ViewPropertyToApply] { get set }
+    var status: ViewStatus { get set }
 }
 
 @MainActor
