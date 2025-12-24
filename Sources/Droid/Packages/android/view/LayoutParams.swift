@@ -57,6 +57,7 @@ public final class LayoutParams: Sendable, JObjectable {
             self.value = Int32(value)
         }
         
+        public static var matchConstraint: Self { .init(0) }
         public static var matchParent: Self { .init(-1) }
         public static var wrapContent: Self { .init(-2) }
 
