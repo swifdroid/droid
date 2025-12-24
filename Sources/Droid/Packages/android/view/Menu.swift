@@ -836,6 +836,7 @@ extension MenuItem {
     /// The provider also provides a default action invoked if the item is placed in the overflow menu.
     ///
     /// Note: Setting an action provider overrides the action view set via `setActionView(int)` or `setActionView(View)`.
+    @discardableResult
     public func actionProvider(_ provider: ActionProvider) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -849,6 +850,7 @@ extension MenuItem {
     /// An action view will be displayed in place of an automatically generated menu item element in the UI when this item is shown as an action within a parent.
     /// 
     /// Note: Setting an action view overrides the action provider set via `setActionProvider(ActionProvider)`.
+    @discardableResult
     public func actionView(_ resId: Int32) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -862,6 +864,7 @@ extension MenuItem {
     /// An action view will be displayed in place of an automatically generated menu item element in the UI when this item is shown as an action within a parent.
     /// 
     /// Note: Setting an action view overrides the action provider set via `setActionProvider(ActionProvider)`.
+    @discardableResult
     public func actionView(_ view: View) -> MenuItem! {
         guard
             let view = view.instance,
@@ -882,6 +885,7 @@ extension MenuItem {
     /// Note that menu items with the characters '\b' or '\n' as shortcuts will get triggered by the Delete key or Carriage Return key, respectively.
     /// 
     /// See Menu for the menu types that support shortcuts.
+    @discardableResult
     public func alphabeticShortcut(_ alphaChar: UInt16) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -901,6 +905,7 @@ extension MenuItem {
     /// Note that menu items with the characters '\b' or '\n' as shortcuts will get triggered by the Delete key or Carriage Return key, respectively.
     /// 
     /// See Menu for the menu types that support shortcuts.
+    @discardableResult
     public func alphabeticShortcut(_ alphaChar: UInt16, alphaModifiers: Int) -> MenuItem! { // TODO: OptionSet for modifiers?
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -916,6 +921,7 @@ extension MenuItem {
     /// rather, it ensures there is room in the item in which to display a check mark.
     ///
     /// See Menu for the menu types that support check marks.
+    @discardableResult
     public func checkable(_ value: Bool = true) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -932,6 +938,7 @@ extension MenuItem {
     /// If this item is a member of a group that contains mutually-exclusive items (set via Menu.setGroupCheckable(int, boolean, boolean), the other items in the group will be unchecked.
     ///
     /// See Menu for the menu types that support check marks.
+    @discardableResult
     public func checked(_ value: Bool = true) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -941,6 +948,7 @@ extension MenuItem {
     }
 
     /// Change the content description associated with this menu item.
+    @discardableResult
     public func contentDescription(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
@@ -955,6 +963,7 @@ extension MenuItem {
     /// Disabling a menu item will not allow it to be invoked via its shortcut.
     /// 
     /// The menu item will still be visible.
+    @discardableResult
     public func enabled(_ value: Bool = true) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -966,6 +975,7 @@ extension MenuItem {
     /// Change the icon associated with this item.
     /// 
     /// This icon will not always be shown, so the title should be sufficient in describing this item.
+    @discardableResult
     public func icon(_ value: Drawable) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -977,6 +987,7 @@ extension MenuItem {
     /// Change the icon associated with this item.
     /// 
     /// This icon will not always be shown, so the title should be sufficient in describing this item.
+    @discardableResult
     public func icon(_ resId: Int32) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -999,6 +1010,7 @@ extension MenuItem {
     /// because `Runnable.run` does not return a value so there is no way to tell if it handled the item.
     /// 
     /// In this case it is assumed that the `Runnable` always handles the item, and the intent will never be started.
+    @discardableResult
     public func intent(_ intent: Intent) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -1008,6 +1020,7 @@ extension MenuItem {
     }
 
     /// Change the numeric shortcut and modifiers associated with this item.
+    @discardableResult
     public func numericShortcut(numericChar: UInt16, numericModifiers: Int) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -1017,6 +1030,7 @@ extension MenuItem {
     }
 
     /// Change the numeric shortcut associated with this item.
+    @discardableResult
     public func numericShortcut(numericChar: UInt16) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -1029,6 +1043,7 @@ extension MenuItem {
     // TODO: setOnMenuItemClickListener
 
     /// Change the numeric shortcut and modifiers associated with this item.
+    @discardableResult
     public func shortcut(numericChar: UInt16, numericModifiers: Int) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -1038,6 +1053,7 @@ extension MenuItem {
     }
 
     /// Change the numeric shortcut associated with this item.
+    @discardableResult
     public func shortcut(numericChar: UInt16) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -1052,7 +1068,8 @@ extension MenuItem {
     }
 
     /// Sets how this item should display in the presence of an Action Bar.
-    public func setShowAsActionFlags(_ value: ShowAsAction) -> MenuItem! {
+    @discardableResult
+    public func showAsActionFlags(_ value: ShowAsAction) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "setShowAsActionFlags", args: value.rawValue, returningClass: returningClazz)
@@ -1061,6 +1078,7 @@ extension MenuItem {
     }
 
     /// Change the title associated with this item.
+    @discardableResult
     public func title(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
@@ -1071,6 +1089,7 @@ extension MenuItem {
     }
 
     /// Change the title associated with this item.
+    @discardableResult
     public func title(_ resId: Int32) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -1082,6 +1101,7 @@ extension MenuItem {
     /// Change the condensed title associated with this item.
     /// 
     /// The condensed title is used in situations where the normal title may be too long to be displayed.
+    @discardableResult
     public func titleCondensed(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
@@ -1094,6 +1114,7 @@ extension MenuItem {
     /// Change the condensed title associated with this item.
     /// 
     /// The condensed title is used in situations where the normal title may be too long to be displayed.
+    @discardableResult
     public func titleCondensed(_ resId: Int32) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
@@ -1103,6 +1124,7 @@ extension MenuItem {
     }
 
     /// Change the tooltip text associated with this menu item.
+    @discardableResult
     public func tooltipText(_ value: String) -> MenuItem! {
         guard
             let str = JString(from: value),
@@ -1112,6 +1134,8 @@ extension MenuItem {
         return .init(global)
     }
 
+    /// Visibility of this menu item.
+    @discardableResult
     public func visible(_ value: Bool = true) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
