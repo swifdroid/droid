@@ -192,6 +192,37 @@ extension Menu {
         object.callBoolMethod(name: "hasVisibleItems") ?? false
     }
 
+    /// Change the icon associated with this item.
+    /// 
+    /// This icon will not always be shown, so the title should be sufficient in describing this item.
+    /// 
+    /// See Menu for the menu types that support icons.
+    @discardableResult
+    public func icon(_ value: Drawable) -> Menu! {
+        guard
+            let returningClazz = JClass.load(Menu.className),
+            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz)
+        else { return nil }
+        return .init(global)
+    }
+
+    /// Change the icon associated with this item.
+    /// 
+    /// This icon will not always be shown, so the title should be sufficient in describing this item.
+    /// 
+    /// See Menu for the menu types that support icons.
+    ///
+    /// This method will set the resource ID of the icon
+    /// which will be used to lazily get the Drawable when this item is being shown.
+    @discardableResult
+    public func icon(_ resId: Int32) -> Menu! {
+        guard
+            let returningClazz = JClass.load(Menu.className),
+            let global = object.callObjectMethod(name: "setIcon", args: resId, returningClass: returningClazz)
+        else { return nil }
+        return .init(global)
+    }
+
     /// Is a keypress one of the defined shortcut keys for this window.
     public func isShortcutKey(_ keyCode: KeyEvent.KeyCode, _ event: KeyEvent) -> Bool {
         object.callBoolMethod(name: "isShortcutKey", args: keyCode.rawValue, event.signed(as: KeyEvent.className)) ?? false
