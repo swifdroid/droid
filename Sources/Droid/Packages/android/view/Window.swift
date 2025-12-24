@@ -1148,7 +1148,7 @@ extension AppCompatDelegate {
 ///
 /// [Learn more](https://developer.android.com/reference/androidx/appcompat/app/ActionBar)
 @MainActor
-public final class ActionBar: JObjectable, Sendable {
+public final class ActionBarCompat: JObjectable, Sendable {
     public static var className: JClassName { "androidx/appcompat/app/ActionBar" }
     public static var lpClassName: JClassName { "androidx/appcompat/app/ActionBar$LayoutParams" }
 
@@ -1161,7 +1161,7 @@ public final class ActionBar: JObjectable, Sendable {
     }
 }
 
-extension ActionBar {
+extension ActionBarCompat {
     // TODO: addOnMenuVisibilityListener
     // TODO: addTab
 
@@ -1216,7 +1216,7 @@ extension ActionBar {
     }
 }
 
-extension ActionBar {
+extension ActionBarCompat {
     public struct Display: OptionSet, Sendable {
         public let rawValue: Int
 
@@ -1336,7 +1336,7 @@ extension ActionBar {
         guard
             let view = view.instance
         else { return }
-        object.callVoidMethod(name: "setCustomView", args: view.signed(as: View.className), lp.signed(as: ActionBar.lpClassName))
+        object.callVoidMethod(name: "setCustomView", args: view.signed(as: View.className), lp.signed(as: ActionBarCompat.lpClassName))
     }
 
     /// Set whether home should be displayed as an "up" affordance.
