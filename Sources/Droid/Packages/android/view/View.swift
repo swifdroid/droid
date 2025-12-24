@@ -174,7 +174,11 @@ open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
     }
     
     /// Status of the view in the app, e.g. instantiated in in JNI or not yet
-    var status: ViewStatus = .new
+    var status: ViewStatus = .new {
+        didSet {
+            InnerLog.t("🔳 Status changed to \(status) for (\(Self.className.name))view(id: \(id))")
+        }
+    }
     
     public var subviews: [View] = []
     public var parent: View? {
