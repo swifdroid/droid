@@ -2865,6 +2865,15 @@ extension View {
     }
 }
 
+// MARK: RequestLayout
+
+extension View {
+    /// Call this when something has changed which has invalidated the layout of this view. This will schedule a layout pass of the view tree.
+    public func requestLayout() {
+        instance?.callVoidMethod(name: "requestLayout")
+    }
+}
+
 // MARK: Right
 
 struct RightProperty: ViewPropertyToApply {
