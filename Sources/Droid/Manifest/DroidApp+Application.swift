@@ -1281,6 +1281,21 @@ extension DroidApp {
 			items.append(manifestTag)
 			return self
 		}
+
+		// MARK: -
+		
+		/// Declares fragments that should be generated on the Android Project side.
+		public func fragments(_ fragments: Fragmentable.Type...) -> Self {
+			fragments.forEach { fragment($0) }
+			return self
+		}
+
+		/// Declares a fragment that should be generated on the Android Project side.
+		@discardableResult
+		public func fragment(_ fragment: Fragmentable.Type) -> Self {
+			DroidApp.shared._fragments.append(fragment as! _Fragmentable.Type)
+			return self
+		}
 		
 		// MARK: -
 		
