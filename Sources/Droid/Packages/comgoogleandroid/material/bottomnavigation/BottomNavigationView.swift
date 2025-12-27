@@ -67,4 +67,14 @@ extension BottomNavigationView {
     public func itemHorizontalTranslationEnabled(_ value: Bool = true) -> Self {
         ItemHorizontalTranslationEnabledViewProperty(value: value).applyOrAppend(nil, self)
     }
+
+    public func clearOnItemSelectedListener() {
+        let listener: JObject? = nil
+        instance?.callVoidMethod(name: "setOnItemSelectedListener", args: listener.signed(as: "com/google/android/material/navigation/NavigationBarView$OnItemSelectedListener"))
+    }
+
+    public func clearOnItemReselectedListener() {
+        let listener: JObject? = nil
+        instance?.callVoidMethod(name: "setOnItemReselectedListener", args: listener.signed(as: "com/google/android/material/navigation/NavigationBarView$OnItemReselectedListener"))
+    }
 }
