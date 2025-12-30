@@ -273,7 +273,6 @@ extension NavDestination {
     public func className<T>(_ type: T.Type) -> Self where T: Fragmentable {
         guard let clazz = JClass.load(FragmentNavigator.Destination.className) else { return self }
         _ = self.cast(to: FragmentNavigator.Destination.className)?.callObjectMethod(name: "setClassName", args: type.nativeFragmentClassName.fullName, returningClass: clazz)
-        print("setClassName called with \(type.nativeFragmentClassName.fullName)")
         return self
     }
 
