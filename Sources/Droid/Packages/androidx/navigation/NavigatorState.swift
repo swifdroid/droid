@@ -47,6 +47,17 @@ extension NavigatorState {
         )
     }
 
+    /// Pop all destinations up to and including popUpTo.
+    /// This will remove those destinations from the backStack,
+    /// saving their state if saveState is true.
+    public func pop(_ popUpTo: NavBackStackEntry, _ saveState: Bool) {
+        callVoidMethod(
+            name: "pop",
+            args: popUpTo.signed(as: NavBackStackEntry.className),
+                saveState
+        )
+    }
+
     /// Pops all destinations up to and including popUpTo.
     ///
     /// This also adds the given and incoming entry to the set of in progress transitions.
