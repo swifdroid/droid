@@ -57,8 +57,15 @@ public final class LayoutParams: Sendable, JObjectable {
             self.value = Int32(value)
         }
         
+        /// In a ConstraintLayout, similar to `match_parent`.
+        /// 
+        /// The view takes all the available space within the view's constraints.
         public static var matchConstraint: Self { .init(0) }
+
+        /// The view expands as much as possible within the parent view.
         public static var matchParent: Self { .init(-1) }
+
+        /// The view sets its size to fit the content the view contains.
         public static var wrapContent: Self { .init(-2) }
 
         public static func == (lhs: LayoutSize, rhs: LayoutSize) -> Bool {
