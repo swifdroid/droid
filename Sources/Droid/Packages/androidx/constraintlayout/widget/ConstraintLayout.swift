@@ -17,6 +17,23 @@ extension LayoutParams.Class {
     static let constraintLayout: Self = .init(.androidx.constraintlayout.widget.ConstraintLayout.LayoutParams)
 }
 
+/// A `ConstraintLayout` is a `ViewGroup` which allows you to position and size widgets in a flexible way.
+///
+/// There are currently various types of constraints that you can use:
+/// 
+/// - Relative positioning
+/// - Margins
+/// - Centering positioning
+/// - Circular positioning
+/// - Visibility behavior
+/// - Dimension constraints
+/// - Chains
+/// - Virtual Helpers objects
+/// - Optimizer
+/// 
+/// Note that you cannot have a circular dependency in constraints.
+///
+/// [Learn more](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout)
 open class ConstraintLayout: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .androidx.constraintlayout.widget.ConstraintLayout }
