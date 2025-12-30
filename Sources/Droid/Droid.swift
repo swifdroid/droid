@@ -15,6 +15,18 @@ let DroidAppUIPackage = "stream/swift/droid/appui"
 public struct InnerLog {
     static var logger: Logger { DroidApp.shared.innerLogger }
 
+    static func warnThatLoggerDisabled() {
+        #if os(Android)
+        #if DROIDLOGS
+        // Logger is enabled
+        #else
+        InnerLog.logger.critical("""
+        ⚠️ Droid InnerLog is disabled. To enable, compile with -D DROIDLOGS flag by enabling "Droid Logs" checkbox in Swift Stream IDE.
+        """)
+        #endif
+        #endif
+    }
+
     /// Critical
     static func c(
         _ message: @autoclosure () -> Logger.Message,
@@ -24,7 +36,9 @@ public struct InnerLog {
         line: UInt = #line
     ) {
         #if os(Android)
+        #if DROIDLOGS
         InnerLog.logger.critical(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
         #endif
     }
 
@@ -37,7 +51,9 @@ public struct InnerLog {
         line: UInt = #line
     ) {
         #if os(Android)
+        #if DROIDLOGS
         InnerLog.logger.debug(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
         #endif
     }
 
@@ -50,7 +66,9 @@ public struct InnerLog {
         line: UInt = #line
     ) {
         #if os(Android)
+        #if DROIDLOGS
         InnerLog.logger.error(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
         #endif
     }
 
@@ -63,7 +81,9 @@ public struct InnerLog {
         line: UInt = #line
     ) {
         #if os(Android)
+        #if DROIDLOGS
         InnerLog.logger.info(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
         #endif
     }
 
@@ -76,7 +96,9 @@ public struct InnerLog {
         line: UInt = #line
     ) {
         #if os(Android)
+        #if DROIDLOGS
         InnerLog.logger.notice(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
         #endif
     }
 
@@ -89,7 +111,9 @@ public struct InnerLog {
         line: UInt = #line
     ) {
         #if os(Android)
+        #if DROIDLOGS
         InnerLog.logger.trace(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
         #endif
     }
 
@@ -102,7 +126,9 @@ public struct InnerLog {
         line: UInt = #line
     ) {
         #if os(Android)
+        #if DROIDLOGS
         InnerLog.logger.warning(message(), metadata: metadata(), file: file, function: function, line: line)
+        #endif
         #endif
     }
 }

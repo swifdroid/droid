@@ -130,7 +130,12 @@ open class DroidApp: @unchecked Sendable {
     }
 
     public static func setInnerLogLevel(_ level: Logger.Level) {
+        #if DROIDLOGS
         shared.setInnerLogLevel(level)
+        #else
+        shared.setInnerLogLevel(.critical)
+        InnerLog.warnThatLoggerDisabled()
+        #endif
     }
 
     /// Returns app-wise unique identifier for the view.
