@@ -9,6 +9,7 @@
 import Android
 #endif
 
+@MainActor
 open class NativeFragment: NativeUIObject, AnyNativeObject, Contextable {
     /// The JNI class name
     class nonisolated var nativeObjectClassName: JClassName { "stream/swift/droid/appkit/views/NativeFragment" }
