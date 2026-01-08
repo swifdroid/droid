@@ -576,4 +576,70 @@ public func activityOnOptionsMenuClosed(envPointer: UnsafeMutablePointer<JNIEnv?
         DroidApp.shared._activeActivities[Int(activityId)]?.onOptionsMenuClosed(menu: menu)
     }
 }
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnCreateContextMenu")
+public func activityOnCreateContextMenu(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityRef: jobject, activityId: jint, menuRef: jobject, vRef: jobject, menuInfoRef: jobject) {
+    InnerLog.t("💚 activityOnCreateContextMenu(id: \(activityId))")
+    let env = JEnv(envPointer)
+    let globalCallerObj = activityRef.box(env)
+    guard let context = globalCallerObj?.object() else {
+        InnerLog.c("💧 activityOnCreateContextMenu(id: \(activityId)): unable to wrap activity context")
+        return
+    }
+    var menu: ContextMenu?
+    if let object = menuRef.box(env)?.object() {
+        MainActor.assumeIsolated {
+            menu = .init(object)
+        }
+    }
+    var v: View?
+    if let object = vRef.box(env)?.object() {
+        MainActor.assumeIsolated {
+            v = .init(object) { ActivityContext(object: context) }
+        }
+    }
+    var menuInfo: ContextMenu.ContextMenuInfo?
+    if let object = menuInfoRef.box(env)?.object() {
+        MainActor.assumeIsolated {
+            menuInfo = .init(object)
+        }
+    }
+    guard let menu else { return }
+    MainActor.assumeIsolated {
+        DroidApp.shared._activeActivities[Int(activityId)]?.onCreateContextMenu(menu: menu, v: v, menuInfo: menuInfo)
+    }
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnContextItemSelected")
+public func activityOnContextItemSelected(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, itemRef: jobject) -> jboolean {
+    InnerLog.t("💚 activityOnContextItemSelected(id: \(activityId))")
+    let env = JEnv(envPointer)
+    var item: MenuItem?
+    if let object = itemRef.box(env)?.object() {
+        MainActor.assumeIsolated {
+            item = .init(object)
+        }
+    }
+    guard let item else { return 0 }
+    let result = MainActor.assumeIsolated {
+        DroidApp.shared._activeActivities[Int(activityId)]?.onContextItemSelected(item: item) ?? false
+    }
+    return UInt8(result ? 1 : 0)
+}
+
+@_cdecl("Java_stream_swift_droid_appkit_DroidApp_activityOnContextMenuClosed")
+public func activityOnContextMenuClosed(envPointer: UnsafeMutablePointer<JNIEnv?>, appObject: jobject, activityId: jint, menuRef: jobject) {
+    InnerLog.t("💚 activityOnContextMenuClosed(id: \(activityId))")
+    let env = JEnv(envPointer)
+    var menu: Menu?
+    if let object = menuRef.box(env)?.object() {
+        MainActor.assumeIsolated {
+            menu = .init(object)
+        }
+    }
+    guard let menu else { return }
+    MainActor.assumeIsolated {
+        DroidApp.shared._activeActivities[Int(activityId)]?.onContextMenuClosed(menu: menu)
+    }
+}
 #endif
