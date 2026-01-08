@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 
 class DroidApp : Application() {
     companion object {
@@ -115,4 +117,8 @@ class DroidApp : Application() {
     external fun activityOnActivityResult2(activityId: Int, requestCode: Int, resultCode: Int, data: Intent?)
     external fun activityOnMultiWindowModeChanged(uniqueId: Int, isInMultiWindowMode: Boolean)
     external fun activityOnRequestPermissionsResult(uniqueId: Int, requestCode: Int, permissions: Array<out String>, grantResults: IntArray, deviceId: Int)
+    external fun activityOnCreateOptionsMenu(activityId: Int, menu: Menu?): Boolean
+    external fun activityOnPrepareOptionsMenu(activityId: Int, menu: Menu?): Boolean
+    external fun activityOnOptionsItemSelected(activityId: Int, item: MenuItem): Boolean
+    external fun activityOnOptionsMenuClosed(activityId: Int, menu: Menu?)
 }

@@ -381,6 +381,51 @@ open class Activity: Contextable, AnyActivity, Sendable {
     /// The `results` parameter is an array of `ActivityPermissionResult`
     /// corresponding to the requested permissions.
     open func onRequestPermissionsResult(requestCode: Int, results: [ActivityPermissionResult], deviceId: Int) {}
+    /// Initialize the contents of the Activity's standard options menu.
+    /// You should place your menu items in to menu.
+    /// 
+    /// This is only called once, the first time the options menu is displayed.
+    /// To update the menu every time it is displayed, see `onPrepareOptionsMenu`.
+    /// 
+    /// The default implementation populates the menu with standard system menu items.
+    /// These are placed in the `Menu.CATEGORY_SYSTEM` group so that they
+    /// will be correctly ordered with application-defined menu items.
+    /// Deriving classes should always call through to the base implementation.
+    /// 
+    /// You can safely hold on to menu (and any items created from it),
+    /// making modifications to it as desired, until the next time `onCreateOptionsMenu()` is called.
+    /// 
+    /// When you add items to the menu, you can implement the Activity's `onOptionsItemSelected` method to handle them there.
+    ///
+    /// - Returns: You must return true for the menu to be displayed; if you return false it will not be shown.
+    open func onCreateOptionsMenu(menu: Menu) -> Bool { true }
+    /// Prepare the Screen's standard options menu to be displayed.
+    /// 
+    /// This is called right before the menu is shown, every time it is shown.
+    /// 
+    /// You can use this method to efficiently enable/disable items or otherwise dynamically modify the contents.
+    /// 
+    /// The default implementation updates the system menu items based on the activity's state.
+    /// 
+    /// Deriving classes should always call through to the base class implementation.
+    ///
+    /// - Returns: You must return true for the menu to be displayed; if you return false it will not be shown.
+    open func onPrepareOptionsMenu(menu: Menu) -> Bool { true }
+    /// This hook is called whenever an item in your options menu is selected.
+    /// 
+    /// The default implementation simply returns false to have the normal processing happen
+    /// (calling the item's Runnable or sending a message to its Handler as appropriate).
+    /// 
+    /// You can use this method for any items for which you would like to do processing without those other facilities.
+    /// 
+    /// Derived classes should call through to the base class for it to perform the default menu handling.
+    ///
+    /// - Returns: Return false to allow normal menu processing to proceed, true to consume it here. Returns false by default.
+    open func onOptionsItemSelected(item: MenuItem) -> Bool { false }
+
+    /// This hook is called whenever the options menu is being closed
+    /// (either by the user canceling the menu with the back/menu button, or when an item is selected).
+    open func onOptionsMenuClosed(menu: Menu) {}
 
     // MARK: Methods
 

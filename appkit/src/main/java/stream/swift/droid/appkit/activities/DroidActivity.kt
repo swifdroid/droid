@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import stream.swift.droid.appkit.DroidApp
 
@@ -118,5 +120,29 @@ open class DroidActivity: Activity() {
         super.onActivityResult(requestCode, resultCode, data)
         val app: DroidApp = applicationContext as DroidApp
         app.activityOnActivityResult2(uniqueId, requestCode, resultCode, data)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnCreateOptionsMenu(uniqueId, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnPrepareOptionsMenu(uniqueId, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnOptionsItemSelected(uniqueId, item)
+    }
+
+    override fun onOptionsMenuClosed(menu: Menu?) {
+        super.onOptionsMenuClosed(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        app.activityOnOptionsMenuClosed(uniqueId, menu)
     }
 }

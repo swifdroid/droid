@@ -66,6 +66,32 @@ open class AppCompatActivity: FragmentActivity {
         super.onRequestPermissionsResult(requestCode: requestCode, results: results, deviceId: deviceId)
         permissionRequests[requestCode]?(results)
     }
+
+    open override func onCreateOptionsMenu(menu: Menu) -> Bool {
+        return _supportActionBar != nil
+    }
+
+    open override func onPrepareOptionsMenu(menu: Menu) -> Bool {
+        if let supportActionBar = _supportActionBar {
+            menu.clear()
+            supportActionBar.buildMenu(menu)
+        }
+        return true
+    }
+
+    open override func onOptionsItemSelected(item: MenuItem) -> Bool {
+        if let supportActionBar = _supportActionBar {
+            if supportActionBar.parentIds.contains(item.itemId()) {
+                return false
+            }
+            return true
+        }
+        return false
+    }
+
+    open override func onOptionsMenuClosed(menu: Menu) {
+        super.onOptionsMenuClosed(menu: menu)
+    }
 }
 
 extension AppCompatActivity {

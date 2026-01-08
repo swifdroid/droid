@@ -163,4 +163,28 @@ open class DroidFragmentActivity: FragmentActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnCreateOptionsMenu(uniqueId, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnPrepareOptionsMenu(uniqueId, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnOptionsItemSelected(uniqueId, item)
+    }
+
+    override fun onOptionsMenuClosed(menu: Menu?) {
+        super.onOptionsMenuClosed(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        app.activityOnOptionsMenuClosed(uniqueId, menu)
+    }
 }

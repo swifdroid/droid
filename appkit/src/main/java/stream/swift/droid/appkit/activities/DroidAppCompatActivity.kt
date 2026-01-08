@@ -3,6 +3,8 @@ package stream.swift.droid.appkit.activities
 import android.app.ComponentCaller
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import stream.swift.droid.appkit.DroidApp
@@ -132,5 +134,29 @@ open class DroidAppCompatActivity: AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
         val app: DroidApp = applicationContext as DroidApp
         app.activityOnRequestPermissionsResult(uniqueId, requestCode, permissions, grantResults, deviceId)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnCreateOptionsMenu(uniqueId, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        super.onPrepareOptionsMenu(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnPrepareOptionsMenu(uniqueId, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        val app: DroidApp = applicationContext as DroidApp
+        return app.activityOnOptionsItemSelected(uniqueId, item)
+    }
+
+    override fun onOptionsMenuClosed(menu: Menu?) {
+        super.onOptionsMenuClosed(menu)
+        val app: DroidApp = applicationContext as DroidApp
+        app.activityOnOptionsMenuClosed(uniqueId, menu)
     }
 }
