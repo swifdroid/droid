@@ -316,6 +316,40 @@ public final class State<Value: Sendable>: @MainActor Stateable, StatesHolder, S
     }
 }
 
+public protocol OptionalStateValue {
+    associatedtype Wrapped
+    var optional: Wrapped? { get }
+    static func unwrap(_ wrapped: Wrapped) -> Self
+}
+
+extension Optional: OptionalStateValue {
+    public var optional: Wrapped? { self }
+    public static func unwrap(_ wrapped: Wrapped) -> Self { wrapped }
+}
+
+extension State where Value: OptionalStateValue, Value: ExpressibleByNilLiteral, Value.Wrapped: Sendable {
+    /// Merges this optional state with a non-optional state so that they stay in sync.
+    public func mergeWithNonOptional(with state: State<Value.Wrapped>) -> [StateListener] {
+        self.wrappedValue = .unwrap(state.wrappedValue)
+        var justSetExternal = false
+        var justSetInternal = false
+        let listener1 = state.listen { [weak self] new in
+            guard !justSetInternal else { return }
+            justSetExternal = true
+            self?.wrappedValue = .unwrap(new)
+            justSetExternal = false
+        }
+        let listener2 = self.listen { [weak state] new in
+            guard !justSetExternal else { return }
+            guard let new = new.optional else { return }
+            justSetInternal = true
+            state?.wrappedValue = new
+            justSetInternal = false
+        }
+        return [listener1, listener2]
+    }
+}
+
 extension State: @MainActor Equatable, @MainActor Hashable {
     public static func == (lhs: State<Value>, rhs: State<Value>) -> Bool {
         lhs.id == rhs.id
