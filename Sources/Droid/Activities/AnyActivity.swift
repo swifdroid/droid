@@ -472,6 +472,38 @@ public protocol AnyActivity: AnyObject, Contextable {
     /// This hook is called whenever the options menu is being closed
     /// (either by the user canceling the menu with the back/menu button, or when an item is selected).
     func onOptionsMenuClosed(menu: Menu)
+
+    /// Called when a context menu for the view is about to be shown.
+    /// Unlike `onCreateOptionsMenu(Menu)`, this will be called every time
+    /// the context menu is about to be shown and should be populated for the view
+    /// (or item inside the view for AdapterView subclasses, this can be found in the `menuInfo`)).
+    /// 
+    /// Use `onContextItemSelected(MenuItem)` to know when an item has been selected.
+    /// 
+    /// It is not safe to hold onto the context menu after this method returns.
+    func onCreateContextMenu(
+        menu: ContextMenu,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    )
+
+    /// This hook is called whenever an item in a context menu is selected.
+    /// 
+    /// The default implementation simply returns false to have the normal processing happen
+    /// (calling the item's Runnable or sending a message to its Handler as appropriate).
+    /// 
+    /// You can use this method for any items for which you would like to do processing without those other facilities.
+    /// 
+    /// Use `MenuItem.getMenuInfo()` to get extra information set by the View that added this menu item.
+    /// 
+    /// Derived classes should call through to the base class for it to perform the default menu handling.
+    ///
+    /// - Returns: Return false to allow normal context menu processing to proceed, true to consume it here. Returns false by default.
+    func onContextItemSelected(item: MenuItem) -> Bool
+
+    /// This hook is called whenever the context menu is being closed
+    /// (either by the user canceling the menu with the back/menu button, or when an item is selected).
+    func onContextMenuClosed(menu: Menu)
 }
 
 extension AnyActivity {

@@ -6,8 +6,10 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 
 class DroidApp : Application() {
     companion object {
@@ -121,4 +123,13 @@ class DroidApp : Application() {
     external fun activityOnPrepareOptionsMenu(activityId: Int, menu: Menu?): Boolean
     external fun activityOnOptionsItemSelected(activityId: Int, item: MenuItem): Boolean
     external fun activityOnOptionsMenuClosed(activityId: Int, menu: Menu?)
+    external fun activityOnCreateContextMenu(
+        activity: Any,
+        activityId: Int,
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    )
+    external fun activityOnContextItemSelected(activityId: Int, item: MenuItem): Boolean
+    external fun activityOnContextMenuClosed(activityId: Int, menu: Menu)
 }
