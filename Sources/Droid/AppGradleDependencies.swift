@@ -135,6 +135,6 @@ public struct AppGradleDependency: Sendable, ExpressibleByStringLiteral, CustomS
     public static let constraintlayout: Self = #"implementation("androidx.constraintlayout:constraintlayout:2.2.1")"#
     public static let constraintlayoutCore: Self = #"implementation("androidx.constraintlayout:constraintlayout-core:1.1.1")"#
     public static let coordinatorlayout: Self = #"implementation("androidx.coordinatorlayout:coordinatorlayout:1.3.0")"#
-    public static let recyclerview: Self = #"implementation "androidx.recyclerview:recyclerview:1.3.2""#
+    public static let recyclerview: Self = #"implementation("androidx.recyclerview:recyclerview:1.3.2")"#
     public static let material: Self = #"implementation("com.google.android.material:material:1.14.0-alpha06")"#
 }
