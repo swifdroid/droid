@@ -267,6 +267,11 @@ open class DroidApp: @unchecked Sendable {
                     #if !os(Android)
                     _ = activity.init()
                     #endif
+                    if let theme = activity.theme {
+                        for dep in theme.dependencies() {
+                            dependencies.insert(dep.value)
+                        }
+                    }
                     for dep in activity.gradleDependencies {
                         dependencies.insert(dep.value)
                     }

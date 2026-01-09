@@ -54,6 +54,17 @@ public struct RStyle: Sendable {
             fatalError("Unable to parse style: \(value). It should either start from @style/ or contain R.style.")
         }
     }
+
+    @MainActor
+    public func dependencies() -> [AppGradleDependency] {
+        let lowercasedValue = value.lowercased()
+        if lowercasedValue.contains("material3") {
+            return [.material]
+        } else if lowercasedValue.contains("appcompat") {
+            return [.appCompat]
+        }
+        return []
+    }
 }
 
 extension RStyle: @MainActor ExpressibleByStringLiteral {}
