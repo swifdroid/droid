@@ -71,6 +71,18 @@ extension Dialog {
         callVoidMethod(name: "closeOptionsMenu")
     }
 
+    /// Return the activity `Context` that owns this dialog.
+    public func context() -> ActivityContext? {
+        guard
+            let clazz = JClass.load("android/content/Context"),
+            let global = callObjectMethod(
+                name: "getContext",
+                returningClass: clazz
+            )
+        else { return nil }
+        return ActivityContext(object: global)
+    }
+
     /// Forces immediate creation of the dialog.
     ///
     /// Note that you should not override this method to perform dialog creation.
