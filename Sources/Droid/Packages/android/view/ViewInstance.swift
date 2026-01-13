@@ -89,9 +89,9 @@ extension View {
             releaseStates()
         }
 
-        public func setLayoutParams(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) {
+        public func setLayoutParams(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, _ unit: DimensionUnit) {
             #if os(Android)
-            if let lp = view?.layoutParamsForSubviews(width: width, height: height, unit: unit) {
+            if let lp = view?.layoutParamsForSubviews(width: width, height: height, unit) {
                 setLayoutParams(lp)
             }
             #endif

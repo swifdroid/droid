@@ -103,7 +103,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
     public private(set) var marginDimensionUnit: DimensionUnit = .dp
 
     @discardableResult
-    public func margin(_ horizontalMargin: Float, _ verticalMargin: Float, unit: DimensionUnit = .dp) -> Self {
+    public func margin(_ horizontalMargin: Float, _ verticalMargin: Float, _ unit: DimensionUnit = .dp) -> Self {
         self.horizontalMargin = horizontalMargin
         self.verticalMargin = verticalMargin
         self.marginDimensionUnit = unit
@@ -116,7 +116,7 @@ public final class Toast: JObjectable, @unchecked Sendable {
     public private(set) var gravityYOffset: Int = 0
     public private(set) var gravityDimensionUnit: DimensionUnit = .dp
 
-    public func gravity(gravity: Gravity, xOffset: Int, yOffset: Int, unit: DimensionUnit = .dp) {
+    public func gravity(gravity: Gravity, xOffset: Int, yOffset: Int, _ unit: DimensionUnit = .dp) {
         self.gravity = gravity
         self.gravityXOffset = xOffset
         self.gravityYOffset = yOffset

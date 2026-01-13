@@ -128,8 +128,8 @@ open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
     /// Layout Params for subviews, it uses `layoutParamsClass` so no need to override it in each view.
     /// 
     /// - **Very important**: Call it only when view already have its instance
-    open func layoutParamsForSubviews(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, unit: DimensionUnit) -> LayoutParams? {
-        .init(Self.layoutParamsClass.className, width: width, height: height, unit: unit)
+    open func layoutParamsForSubviews(width: LayoutParams.LayoutSize, height: LayoutParams.LayoutSize, _ unit: DimensionUnit) -> LayoutParams? {
+        .init(Self.layoutParamsClass.className, width: width, height: height, unit)
     }
 
     open func applicableLayoutParams() -> [LayoutParamKey] {

@@ -95,16 +95,16 @@ public final class LayoutParams: Sendable, JObjectable {
         #endif
     }
     
-    convenience init? (_ className: JClassName, width: LayoutSize, height: LayoutSize, unit: DimensionUnit = .dp) {
+    convenience init? (_ className: JClassName, width: LayoutSize, height: LayoutSize, _ unit: DimensionUnit = .dp) {
         #if os(Android)
         guard let env = JEnv.current() else { return nil }
-        self.init(env, className, width: width, height: height, unit: unit)
+        self.init(env, className, width: width, height: height, unit)
         #else
         return nil
         #endif
     }
     
-    init? (_ env: JEnv, _ className: JClassName, width: LayoutSize, height: LayoutSize, unit: DimensionUnit = .dp) {
+    init? (_ env: JEnv, _ className: JClassName, width: LayoutSize, height: LayoutSize, _ unit: DimensionUnit = .dp) {
         #if os(Android)
         let correctWidth: LayoutSize
         if [.matchParent, .wrapContent].contains(width) {

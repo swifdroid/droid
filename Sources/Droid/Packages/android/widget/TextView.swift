@@ -1659,7 +1659,7 @@ extension TextView {
     /// - autoSizeMaxTextSize: The maximum text size in pixels
     /// - autoSizeStepGranularity: The step size in pixels
     /// - unit: The unit of the parameters. One of COMPLEX_UNIT_*
-    public func autoSizeTextTypeUniform(minTextSize: Int, maxTextSize: Int, stepGranularity: Int, unit: DimensionUnit = .px) -> Self {
+    public func autoSizeTextTypeUniform(minTextSize: Int, maxTextSize: Int, stepGranularity: Int, _ unit: DimensionUnit = .px) -> Self {
         AutoSizeTextTypeUniformViewProperty(value: (minTextSize, maxTextSize, stepGranularity, unit)).applyOrAppend(nil, self)
     }
 }
@@ -1674,7 +1674,7 @@ extension TextView {
 //     /// Parameters:
 //     /// - presetSizes: The array of preset sizes in pixels
 //     /// - unit: The unit of the parameters. One of COMPLEX_UNIT_*
-//     public func autoSizeTextTypeUniform(presetSizes: [Int], unit: DimensionUnit = .px) -> Self {
+//     public func autoSizeTextTypeUniform(presetSizes: [Int], _ unit: DimensionUnit = .px) -> Self {
 //         guard
 //             let env = JEnv.current(),
 //             let arrayClazz = JClass.load(),

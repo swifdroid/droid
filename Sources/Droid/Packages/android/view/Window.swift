@@ -1396,7 +1396,7 @@ extension ActionBarCompat {
     /// Set the Z-axis elevation of the action bar in pixels.
     ///
     /// The action bar's elevation is the distance it is placed from its parent surface. Higher values are closer to the user.
-    public func elevation(_ value: Float, unit: DimensionUnit = .dp) {
+    public func elevation(_ value: Float, _ unit: DimensionUnit = .dp) {
         object.callVoidMethod(name: "setElevation", args: unit.toPixels(value))
     }
 
@@ -1404,7 +1404,7 @@ extension ActionBarCompat {
     /// 
     /// The action bar's current hide offset is the distance that the action bar is currently scrolled offscreen in pixels.
     /// The valid range is 0 (fully visible) to the action bar's current measured height (fully invisible).
-    public func hideOffset(_ value: Int, unit: DimensionUnit = .dp) {
+    public func hideOffset(_ value: Int, _ unit: DimensionUnit = .dp) {
         object.callVoidMethod(name: "setHideOffset", args: unit.toPixels(Int32(value)))
     }
 
