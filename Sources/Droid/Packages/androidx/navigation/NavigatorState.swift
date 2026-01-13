@@ -47,6 +47,37 @@ extension NavigatorState {
         )
     }
 
+    /// Informational callback indicating that the given backStackEntry
+    /// has been affected by a NavOptions.shouldLaunchSingleTop operation.
+    /// 
+    /// Replaces the topmost entry with same id with the new backStackEntry
+    public func onLaunchSingleTop(_ backStackEntry: NavBackStackEntry) {
+        callVoidMethod(
+            name: "onLaunchSingleTop",
+            args: backStackEntry.signed(as: NavBackStackEntry.className)
+        )
+    }
+
+    /// Informational callback indicating that the given `backStackEntry`
+    /// has been affected by a `NavOptions.shouldLaunchSingleTop` operation.
+    ///
+    /// This also adds the given and previous entry to the set of in progress transitions.
+    ///
+    /// Added entries have their `Lifecycle` capped at `Lifecycle.State.STARTED`
+    /// until an entry is passed into the `markTransitionComplete` callback,
+    /// when they are allowed to go to `Lifecycle.State.RESUMED`
+    /// while previous entries have their `Lifecycle` held at `Lifecycle.State.CREATED`
+    /// until an entry is passed into the `markTransitionComplete` callback,
+    /// when they are allowed to go to `Lifecycle.State.DESTROYED` and have their state cleared.
+    ///
+    /// Replaces the topmost entry with same id with the new backStackEntry
+    public func onLaunchSingleTopWithTransition(_ backStackEntry: NavBackStackEntry) {
+        callVoidMethod(
+            name: "onLaunchSingleTopWithTransition",
+            args: backStackEntry.signed(as: NavBackStackEntry.className)
+        )
+    }
+
     /// Pop all destinations up to and including popUpTo.
     /// This will remove those destinations from the backStack,
     /// saving their state if saveState is true.
