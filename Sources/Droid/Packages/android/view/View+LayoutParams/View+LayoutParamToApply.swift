@@ -78,7 +78,14 @@ struct SetMarginsLayoutParam: LayoutParamToApply {
     let key: LayoutParamKey = .setMargins
     let value: (Int, Int, Int, Int, DimensionUnit)
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
-        lp.callVoidMethod(nil, name: key.rawValue, args: value.4.toPixels(Int32(value.0)), value.4.toPixels(Int32(value.1)), value.4.toPixels(Int32(value.2)), value.4.toPixels(Int32(value.3)))
+        guard let env = env ?? JEnv.current() else { return }
+        lp.callVoidMethod(env, name: key.rawValue, args: value.4.toPixels(Int32(value.0)), value.4.toPixels(Int32(value.1)), value.4.toPixels(Int32(value.2)), value.4.toPixels(Int32(value.3)))
+        #if os(Android)
+        if env.checkException() {
+            env.describeException()
+            env.clearException()
+        }
+        #endif
     }
 }
 
