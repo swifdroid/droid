@@ -1152,6 +1152,7 @@ public final class ActionBarCompat: JObjectable, Sendable {
     public static var className: JClassName { "androidx/appcompat/app/ActionBar" }
     public static var lpClassName: JClassName { "androidx/appcompat/app/ActionBar$LayoutParams" }
 
+    let id: Int32 = .nextViewId()
     public let object: JObject
     public private(set) weak var context: ActivityContext?
 
@@ -1161,8 +1162,40 @@ public final class ActionBarCompat: JObjectable, Sendable {
     }
 }
 
+// MARK: OnMenuVisibilityListener
+
 extension ActionBarCompat {
-    // TODO: addOnMenuVisibilityListener
+    public typealias ActionBarCompatOnMenuVisibilityListenerHandler = @MainActor (_ isVisible: Bool) -> Void
+    /// Add a listener that will respond to menu visibility change events.
+    ///
+    /// The callback is called when an action bar menu is shown or hidden.
+    /// Applications may want to use this to tune auto-hiding behavior for the action bar
+    /// or pause/resume video playback, gameplay, or other activity within the main content area.
+    @discardableResult
+    public func onMenuVisibilityChanged(_ handler: @escaping ActionBarCompatOnMenuVisibilityListenerHandler) -> Self {
+        #if os(Android)
+        guard let context else {
+            InnerLog.c("🚨 ActionBarCompat.onMenuVisibilityChanged: context is nil, cannot proceed")
+            return self
+        }
+        let listener = NativeActionBarCompatOnMenuVisibilityListener(id, viewId: id).setHandler { @MainActor [weak self] in
+            guard let self else { return }
+            return handler($0)
+        }
+        guard let instance = listener.instantiate(context) else {
+            InnerLog.c("🚨 ActionBarCompat.onMenuVisibilityChanged: listener instance is nil, cannot proceed")
+            return self
+        }
+        listener.addIntoStore()
+        callVoidMethod(name: "addOnMenuVisibilityListener", args: instance.object.signed(as: listener.androidClassName))
+        return self
+        #else
+        return self
+        #endif
+    }
+}
+
+extension ActionBarCompat {
     // TODO: addTab
 
     /// The current custom view.
