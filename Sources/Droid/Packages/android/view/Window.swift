@@ -1156,6 +1156,7 @@ public final class ActionBarCompat: JObjectable, Sendable {
     public let object: JObject
     public private(set) weak var context: ActivityContext?
 
+    /// Base Droid constructor with existing JNI object
     public init (_ object: JObject, _ context: ActivityContext) {
         self.object = object
         self.context = context
@@ -1206,7 +1207,7 @@ extension ActionBarCompat {
         else { return nil }
         let id = Int32.nextViewId()
         return .init(id: id, global, { [weak context] in
-            InnerLog.t("🟡 ActionBar.customView(): getting context (\(context != nil))")
+            InnerLog.t("🟡 ActionBarCompat.customView(): getting context (\(context != nil))")
             return context
         })
     }
@@ -1320,6 +1321,7 @@ extension ActionBarCompat {
         object.callBoolMethod(name: "isHideOnContentScrollEnabled") ?? false
     }
 
+    /// Return whether the `ActionBar` is currently showing.
     public func isShowing() -> Bool {
         object.callBoolMethod(name: "isShowing") ?? false
     }
