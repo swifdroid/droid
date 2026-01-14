@@ -59,13 +59,56 @@ import Android
 open class ActionBar: JObjectable, @unchecked Sendable {
     open class var className: JClassName { "android/app/ActionBar" }
 
+    let id: Int32 = .nextViewId()
     /// JNI Object
     public let object: JObject
+    public private(set) weak var context: ActivityContext?
     
     /// Base Droid constructor with existing JNI object
-    public init (_ object: JObject) {
+    public init (_ object: JObject, _ context: ActivityContext) {
         self.object = object
+        self.context = context
     }
 }
 
-// TODO: implement ActionBar methods
+// MARK: OnMenuVisibilityListener
+
+extension ActionBar {
+    public typealias ActionBarOnMenuVisibilityListenerHandler = @MainActor (_ isVisible: Bool) -> Void
+    /// Add a listener that will respond to menu visibility change events.
+    ///
+    /// The callback is called when an action bar menu is shown or hidden.
+    /// Applications may want to use this to tune auto-hiding behavior for the action bar
+    /// or pause/resume video playback, gameplay, or other activity within the main content area.
+    @discardableResult
+    public func onMenuVisibilityChanged(_ handler: @escaping ActionBarOnMenuVisibilityListenerHandler) -> Self {
+        #if os(Android)
+        let listener = NativeActionBarOnMenuVisibilityListener(id, viewId: id).setHandler { @MainActor [weak self] in
+            guard let self else { return }
+            return handler($0)
+        }
+        callVoidMethod(name: "addOnMenuVisibilityListener", args: listener.instance?.object.signed(as: listener.androidClassName))
+        return self
+        #else
+        return self
+        #endif
+    }
+}
+
+extension ActionBar {
+    public func customView() -> View! {
+        #if os(Android)
+        guard
+            let env = JEnv.current(),
+            let returningClazz = JClass.load(View.className),
+            let global = object.callObjectMethod(env, name: "getCustomView", returningClass: returningClazz)
+        else { return nil }
+        return .init(global, { [weak context] in
+            InnerLog.t("🟡 ActionBar.customView(): getting context (\(context != nil))")
+            return context
+        })
+        #else
+        return nil
+        #endif
+    }
+}

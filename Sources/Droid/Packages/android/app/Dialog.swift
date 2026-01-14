@@ -161,9 +161,10 @@ extension Dialog {
             let global = callObjectMethod(
                 name: "getActionBar",
                 returningClass: clazz
-            )
+            ),
+            let context = context()
         else { return nil }
-        return ActionBar(global)
+        return ActionBar(global, context)
     }
 
     // TODO: implement Dialog methods
