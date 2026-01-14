@@ -631,15 +631,13 @@ struct SmoothScrollbarEnabledLayoutManagerProperty: LayoutManager.ParamToApply {
 open class GridLayoutManager: LinearLayoutManager, @unchecked Sendable {
     open override class var className: JClassName { .androidx.recyclerview.widget.GridLayoutManager }
 
-    public init(spanCount: Int, orientation: LinearLayout.Orientation? = nil, reverseLayout: Bool? = nil) {
+    public init(spanCount: Int, orientation: LinearLayout.Orientation? = nil) {
         super.init()
         initializerRequiresContext = true
         initializerItems.append(Int32(spanCount))
         if let orientation {
             initializerItems.append(Int32(orientation.rawValue))
-        }
-        if let reverseLayout {
-            initializerItems.append(reverseLayout)
+            initializerItems.append(false)
         }
     }
 
