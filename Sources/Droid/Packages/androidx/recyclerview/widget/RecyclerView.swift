@@ -501,14 +501,12 @@ struct MeasurementCacheEnabledLayoutManagerProperty: LayoutManager.ParamToApply 
 open class LinearLayoutManager: LayoutManager, @unchecked Sendable {
     open override class var className: JClassName { .androidx.recyclerview.widget.LinearLayoutManager }
 
-    public init(orientation: LinearLayout.Orientation? = nil, reverseLayout: Bool? = nil) {
+    public init(orientation: LinearLayout.Orientation? = nil) {
         super.init()
         initializerRequiresContext = true
         if let orientation {
             initializerItems.append(Int32(orientation.rawValue))
-        }
-        if let reverseLayout {
-            initializerItems.append(reverseLayout)
+            initializerItems.append(false)
         }
     }
 
