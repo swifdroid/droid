@@ -289,7 +289,6 @@ extension AppCompatActivity {
         var toRequest: [ManifestPermission] = []
         for p in permissions {
             if checkPermission(p) {
-                print("appending checked permission \(p.value)")
                 results.append(.init(p, true))
             } else {
                 toRequest.append(p)
