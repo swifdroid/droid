@@ -18,7 +18,7 @@
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/Menu)
 @MainActor
-open class Menu: JObjectable, @unchecked Sendable {
+open class Menu: JObjectable, Sendable {
     /// The JNI class name
     open class var className: JClassName { "android/view/Menu" }
 
