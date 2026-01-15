@@ -37,7 +37,10 @@ open class Activity: Contextable, AnyActivity, Sendable {
 	open class nonisolated var documentLaunchMode: DocumentLaunchMode? { nil }
 	open class nonisolated var enabled: Bool? { nil }
 	open class nonisolated var excludeFromRecents: Bool? { nil }
-	open class nonisolated var exported: Bool? { nil }
+	open class nonisolated var exported: Bool? {
+        if intentFilters.contains(.mainLauncher) { return true }
+        return nil
+    }
 	open class nonisolated var finishOnTaskLaunch: Bool? { nil }
 	open class nonisolated var hardwareAccelerated: Bool? { nil }
 	open class nonisolated var icon: String? { nil }
