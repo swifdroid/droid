@@ -123,9 +123,20 @@ extension AppCompatActivity {
             return nil
         }
         guard
-            let returningClazz = JClass.load(ActionBar.className),
-            let value = context.object.callObjectMethod(name: "getSupportActionBar", returningClass: returningClazz)
+            let env = JEnv.current()
         else { return nil }
+        guard
+            let returningClazz = JClass.load(ActionBarCompat.className),
+            let value = context.object.callObjectMethod(env, name: "getSupportActionBar", returningClass: returningClazz)
+        else {
+            #if os(Android)
+            if env.checkException() {
+                env.describeException()
+                env.clearException()
+            }
+            #endif
+            return nil
+        }
         return .init(value, context)
     }
 
