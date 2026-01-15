@@ -108,6 +108,7 @@ public protocol AnyActivity: AnyObject, Contextable {
 	/// This element sets whether the activity can be launched by components of other applications:
 	///
 	/// If "true", the activity is accessible to any app, and is launchable by its exact class name.
+	/// Returns "true" automatically in `intentFilters` contains `mainLauncher`.
 	///
 	/// If "false", the activity can be launched only by components of the same application,
 	/// applications with the same user ID, or privileged system components.
