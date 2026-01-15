@@ -480,15 +480,9 @@ extension ExpandableListView {
 /// 
 /// [Learn more](https://developer.android.com/reference/android/view/SubMenu)
 @MainActor
-public final class SubMenu: JObjectable, Sendable {
+public final class SubMenu: Menu {
     /// The JNI class name
-    public class var className: JClassName { "android/view/SubMenu" }
-
-    public let object: JObject
-
-    public init (_ object: JObject) {
-        self.object = object
-    }
+    public class override var className: JClassName { "android/view/SubMenu" }
 }
 
 extension SubMenu {
