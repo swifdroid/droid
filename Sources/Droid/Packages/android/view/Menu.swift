@@ -59,7 +59,7 @@ extension Menu {
         itemId: Int32,
         order: Int = 100,
         title: String
-    ) -> MenuItem? {
+    ) -> MenuItem! {
         guard
             let str = JString(from: title),
             let returningClazz = JClass.load(MenuItem.className),
@@ -72,7 +72,7 @@ extension Menu {
     @discardableResult
     public func add(
         _ titleRes: Int32
-    ) -> MenuItem? {
+    ) -> MenuItem! {
         guard
             let returningClazz = JClass.load(MenuItem.className),
             let global = object.callObjectMethod(name: "add", args: titleRes, returningClass: returningClazz)
@@ -84,7 +84,7 @@ extension Menu {
     @discardableResult
     public func add(
         _ title: String
-    ) -> MenuItem? {
+    ) -> MenuItem! {
         guard
             let str = JString(from: title),
             let returningClazz = JClass.load(MenuItem.className),
