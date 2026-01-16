@@ -500,6 +500,30 @@ open class Activity: Contextable, AnyActivity, Sendable {
         theme()?.actionBarSize() ?? 0
     }
 
+    /// Retrieve a reference to this activity's classic ActionBar.
+    public func actionBar() -> ActionBar! {
+        guard let context else {
+            Log.c("🟥 Activity: Failed to get actionBar: activity context is nil")
+            return nil
+        }
+        guard
+            let env = JEnv.current()
+        else { return nil }
+        guard
+            let returningClazz = JClass.load(ActionBar.className),
+            let value = context.object.callObjectMethod(env, name: "getActionBar", returningClass: returningClazz)
+        else {
+            #if os(Android)
+            if env.checkException() {
+                env.describeException()
+                env.clearException()
+            }
+            #endif
+            return nil
+        }
+        return .init(value, context)
+    }
+
     /// Retrieves a SharedPreferences object from the context
     public func sharedPreferences(_ name: String, _ mode: Int32 = 0) -> SharedPreferences? {
         guard let context else {
