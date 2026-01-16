@@ -4,6 +4,7 @@ public enum BodyBuilderItem: Sendable {
     case multiple([View])
     case nested([BodyBuilderItemable])
     case forEach(AnyForEach)
+    case supportActiionBar(AppCompatActivity.SupportActionBar)
 }
 @MainActor
 public protocol BodyBuilderItemable: Sendable {

@@ -542,6 +542,8 @@ open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
             // InnerLog.t("view(id: \(id)) addItem 5 (nested)")
             items.forEach { addItem($0, at: index) }
             break
+        case .supportActiionBar:
+            break
         case .none:
             // InnerLog.t("view(id: \(id)) addItem 6 (none)")
             break

@@ -551,23 +551,23 @@ extension SubMenu {
         return .init(global)
     }
 
-    /// Change the icon associated with this submenu's item in its parent menu.
-    public func icon(_ value: Drawable) -> SubMenu! {
-        guard
-            let returningClazz = JClass.load(SubMenu.className),
-            let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz)
-        else { return nil }
-        return .init(global)
-    }
+    // /// Change the icon associated with this submenu's item in its parent menu.
+    // public func icon(_ value: Drawable) -> SubMenu! {
+    //     guard
+    //         let returningClazz = JClass.load(SubMenu.className),
+    //         let global = object.callObjectMethod(name: "setIcon", args: value.signed(as: Drawable.className), returningClass: returningClazz)
+    //     else { return nil }
+    //     return .init(global)
+    // }
 
-    /// Change the icon associated with this submenu's item in its parent menu.
-    public func icon(_ resId: Int32) -> SubMenu! {
-        guard
-            let returningClazz = JClass.load(SubMenu.className),
-            let global = object.callObjectMethod(name: "setIcon", args: resId, returningClass: returningClazz)
-        else { return nil }
-        return .init(global)
-    }
+    // /// Change the icon associated with this submenu's item in its parent menu.
+    // public func icon(_ resId: Int32) -> SubMenu! {
+    //     guard
+    //         let returningClazz = JClass.load(SubMenu.className),
+    //         let global = object.callObjectMethod(name: "setIcon", args: resId, returningClass: returningClazz)
+    //     else { return nil }
+    //     return .init(global)
+    // }
 }
 
 /// Interface for direct access to a previously created menu item.

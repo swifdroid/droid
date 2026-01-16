@@ -78,8 +78,6 @@ open class Activity: Contextable, AnyActivity, Sendable {
         #if !os(Android)
         context = ActivityContext(object: .init(JObjectBox(), .init("")))
         onCreate(context!, savedInstanceState: nil)
-        body { body }
-        buildUI()
         #endif
     }
 
@@ -172,7 +170,15 @@ open class Activity: Contextable, AnyActivity, Sendable {
                 InnerLog.t("activity body setDefaultFrameLayout")
                 contentView(FrameLayout()) { $0.addItem(item) }
             }
-            func proceedItem(_ item: BodyBuilderItem) {
+            func filterSurrogates(_ items: [any BodyBuilderItemable], returnSurrogates: Bool) -> [any BodyBuilderItemable] {
+                items.filter({
+                    switch $0.bodyBuilderItem {
+                    case .supportActiionBar: return returnSurrogates
+                    default: return !returnSurrogates
+                    }
+                })
+            }
+            func proceedItem(_ item: BodyBuilderItem, level: Int) {
                 switch item {
                 case .single(let view):
                     InnerLog.t("activity body 4 (single)")
@@ -188,20 +194,50 @@ open class Activity: Contextable, AnyActivity, Sendable {
                 case .nested(let items):
                     if items.count == 1, let item = items.first {
                         InnerLog.t("activity body 7 (nested)")
-                        proceedItem(item.bodyBuilderItem)
+                        proceedItem(item.bodyBuilderItem, level: level + 1)
                     } else {
-                        InnerLog.t("activity body 8 (nested)")
-                        setDefaultFrameLayout(item)
+                        if level == 0 {
+                            let surrogates = filterSurrogates(items, returnSurrogates: true)
+                            let notSurrogates = filterSurrogates(items, returnSurrogates: false)
+                            for item in surrogates {
+                                switch item.bodyBuilderItem {
+                                    case .supportActiionBar(let actionBar):
+                                        InnerLog.t("activity body 8 (nested) -> supportActionBar")
+                                        if let currentActivity = self as? AppCompatActivity {
+                                            actionBar.attach(to: currentActivity)
+                                        } else {
+                                            Log.w("🟥 Activity.body: Unable to attach SupportActionBar: Activity is not an AppCompatActivity")
+                                        }
+                                    default: break
+                                }
+                            }
+                            if notSurrogates.count == 1 {
+                                InnerLog.t("activity body 8 (nested) single non-surrogate")
+                                proceedItem(notSurrogates[0].bodyBuilderItem, level: level)
+                            } else {
+                                InnerLog.t("activity body 8 (nested) with surrogates")
+                                setDefaultFrameLayout(item)
+                            }
+                        } else {
+                            InnerLog.t("activity body 8 (nested) only views")
+                            setDefaultFrameLayout(item)
+                        }
                     }
                 case .forEach:
                     InnerLog.t("activity body 9 (forEach)")
                     setDefaultFrameLayout(item)
+                case .supportActiionBar(let actionBar):
+                    InnerLog.t("activity body supportActionBar")
+                    if let currentActivity = self as? AppCompatActivity {
+                        actionBar.attach(to: currentActivity)
+                    } else {
+                        Log.w("🟥 Activity.body: Unable to attach SupportActionBar: Activity is not an AppCompatActivity")
+                    }
                 case .none:
                     InnerLog.t("activity body 10 (none)")
-                    setDefaultFrameLayout(item)
                 }
             }
-            proceedItem(item)
+            proceedItem(item, level: 0)
         }
         return self
     }

@@ -12,6 +12,7 @@ open class AppCompatActivity: FragmentActivity {
     open class override var parentClass: String { "DroidAppCompatActivity()" }
 
     var permissionRequests: [Int: (_ results: [ActivityPermissionResult]) -> Void] = [:]
+    fileprivate var _supportActionBar: SupportActionBar?
 
     open func onConfigurationChanged() {} // TODO: implement Configuration https://developer.android.com/reference/android/content/res/Configuration.html
 
@@ -338,6 +339,540 @@ extension AppCompatActivity {
             self.requestPermissions(permissions, requestCode: requestCode) { results in
                 continuation.resume(with: .success(results))
             }
+        }
+    }
+}
+
+extension AppCompatActivity {
+    @MainActor
+    public final class SupportActionBar: StatesHolder, BodyBuilderItemable {
+        public var bodyBuilderItem: BodyBuilderItem { .supportActiionBar(self) }
+        
+        public let statesValues = StatesHolderValuesBox()
+
+        deinit { releaseStates() }
+
+        private var actionBar: ActionBarCompat?
+        private let hiddenState: State<Bool> = .init(wrappedValue: false)
+        private let backgroundDrawable: State<Drawable?> = .init(wrappedValue: nil)
+        private let customView: State<View?> = .init(wrappedValue: nil)
+        private let displayHomeAsUpEnabled: State<Bool?> = .init(wrappedValue: nil)
+        private let displayShowCustomEnabled: State<Bool?> = .init(wrappedValue: nil)
+        private let displayShowHomeEnabled: State<Bool?> = .init(wrappedValue: nil)
+        private let displayShowTitleEnabled: State<Bool?> = .init(wrappedValue: nil)
+        private let displayUseLogoEnabled: State<Bool?> = .init(wrappedValue: nil)
+        private let elevation: State<Float?> = .init(wrappedValue: nil)
+        private var elevationUnit: DimensionUnit = .dp
+        private let hideOffset: State<Int?> = .init(wrappedValue: nil)
+        private var hideOffsetUnit: DimensionUnit = .dp
+        private let hideOnContentScrollEnabled: State<Bool?> = .init(wrappedValue: nil)
+        private let homeActionContentDescription: State<String?> = .init(wrappedValue: nil)
+        private let homeAsUpIndicator: State<Drawable?> = .init(wrappedValue: nil)
+        private let homeButtonEnabled: State<Bool?> = .init(wrappedValue: nil)
+        private let icon: State<Drawable?> = .init(wrappedValue: nil)
+        private let logo: State<Drawable?> = .init(wrappedValue: nil)
+        private let splitBackgroundDrawable: State<Drawable?> = .init(wrappedValue: nil)
+        private let subtitleState: State<String?> = .init(wrappedValue: nil)
+        private let titleState: State<String?> = .init(wrappedValue: nil)
+
+        let menu: MenuBuilder.Block
+        
+        public init (@MenuBuilder block: @escaping MenuBuilder.Block) {
+            menu = block
+        }
+
+        public convenience init () {
+            self.init { EmptyMenuBuilderItem() }
+        }
+
+        func attach(to activity: AppCompatActivity) {
+            guard let actionBar = activity.supportActionBar() else {
+                Log.w("🟥 AppCompatActivity.SupportActionBar: Failed to attach: activity has no supportActionBar")
+                return
+            }
+            activity._supportActionBar = self
+            self.actionBar = actionBar
+            hiddenState.wrappedValue = !actionBar.isShowing()
+            hiddenState.listenDistinct { [weak self] isHidden in
+                if isHidden {
+                    self?.actionBar?.hide()
+                } else {
+                    self?.actionBar?.show()
+                }
+            }.hold(in: self)
+            if hiddenState.wrappedValue {
+                if actionBar.isShowing() {
+                    actionBar.hide()
+                }
+            } else {
+                if !actionBar.isShowing() {
+                    actionBar.show()
+                }
+            }
+            backgroundDrawable.listen { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.backgroundDrawable(value)
+            }.hold(in: self)
+            if let value = backgroundDrawable.wrappedValue {
+                actionBar.backgroundDrawable(value)
+            }
+            customView.listen { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.customView(value)
+            }.hold(in: self)
+            if let value = customView.wrappedValue {
+                actionBar.customView(value)
+            }
+            displayHomeAsUpEnabled.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.displayHomeAsUpEnabled(value)
+            }.hold(in: self)
+            if let value = displayHomeAsUpEnabled.wrappedValue {
+                actionBar.displayHomeAsUpEnabled(value)
+            }
+            displayShowCustomEnabled.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.displayShowCustomEnabled(value)
+            }.hold(in: self)
+            if let value = displayShowCustomEnabled.wrappedValue {
+                actionBar.displayShowCustomEnabled(value)
+            }
+            displayShowHomeEnabled.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.displayShowHomeEnabled(value)
+            }.hold(in: self)
+            if let value = displayShowHomeEnabled.wrappedValue {
+                actionBar.displayShowHomeEnabled(value)
+            }
+            displayShowTitleEnabled.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.displayShowTitleEnabled(value)
+            }.hold(in: self)
+            if let value = displayShowTitleEnabled.wrappedValue {
+                actionBar.displayShowTitleEnabled(value)
+            }
+            displayUseLogoEnabled.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.displayUseLogoEnabled(value)
+            }.hold(in: self)
+            if let value = displayUseLogoEnabled.wrappedValue {
+                actionBar.displayUseLogoEnabled(value)
+            }
+            elevation.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.elevation(value, self?.elevationUnit ?? .dp)
+            }.hold(in: self)
+            if let value = elevation.wrappedValue {
+                actionBar.elevation(value, elevationUnit)
+            }
+            hideOffset.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.hideOffset(value, self?.hideOffsetUnit ?? .dp)
+            }.hold(in: self)
+            if let value = hideOffset.wrappedValue {
+                actionBar.hideOffset(value, hideOffsetUnit)
+            }
+            hideOnContentScrollEnabled.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.hideOnContentScrollEnabled(value)
+            }.hold(in: self)
+            if let value = hideOnContentScrollEnabled.wrappedValue {
+                actionBar.hideOnContentScrollEnabled(value)
+            }
+            homeActionContentDescription.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.homeActionContentDescription(value)
+            }.hold(in: self)
+            if let value = homeActionContentDescription.wrappedValue {
+                actionBar.homeActionContentDescription(value)
+            }
+            homeAsUpIndicator.listen { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.homeAsUpIndicator(value)
+            }.hold(in: self)
+            if let value = homeAsUpIndicator.wrappedValue {
+                actionBar.homeAsUpIndicator(value)
+            }
+            homeButtonEnabled.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.homeButtonEnabled(value)
+            }.hold(in: self)
+            if let value = homeButtonEnabled.wrappedValue {
+                actionBar.homeButtonEnabled(value)
+            }
+            icon.listen { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.icon(value)
+            }.hold(in: self)
+            if let value = icon.wrappedValue {
+                actionBar.icon(value)
+            }
+            logo.listen { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.logo(value)
+            }.hold(in: self)
+            if let value = logo.wrappedValue {
+                actionBar.logo(value)
+            }
+            splitBackgroundDrawable.listen { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.splitBackgroundDrawable(value)
+            }.hold(in: self)
+            if let value = splitBackgroundDrawable.wrappedValue {
+                actionBar.splitBackgroundDrawable(value)
+            }
+            subtitleState.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.subtitle(value)
+            }.hold(in: self)
+            if let value = subtitleState.wrappedValue {
+                actionBar.subtitle(value)
+            }
+            titleState.listenDistinct { [weak self] value in
+                guard let value else { return }
+                self?.actionBar?.title(value)
+            }.hold(in: self)
+            if let value = titleState.wrappedValue {
+                actionBar.title(value)
+            }
+        }
+
+        var parentIds: [Int] = []
+
+        func buildMenu(_ menu: Menu) {
+            parentIds.removeAll()
+            func proceedItem(_ builderItem: MenuBuilder.Item, in menu: Menu) {
+                switch builderItem {
+                    case .items(let items):
+                        for item in items {
+                            proceedItem(item, in: menu)
+                        }
+                    case .menu(let submenu):
+                        let id: Int32 = .nextViewId()
+                        if let sm = menu.addSubMenu(groupId: 0, itemId: Int(id), order: 0, submenu.titleState.wrappedValue) {
+                            parentIds.append(Int(id))
+                            proceedItem(submenu.menu().menuBuilderContent, in: sm)
+                        }
+                    case .menuItem(let item):
+                        menu.add(item.titleState.wrappedValue).showAsAction(item.showAsAction)
+                    case .none:
+                        break
+                }
+            }
+            proceedItem(self.menu().menuBuilderContent, in: menu)
+        }
+
+        /// Show or hide the ActionBar.
+        /// 
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing the visibility.
+        public func hidden<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                hiddenState.merge(with: state).hold(in: self)
+            } else {
+                hiddenState.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the `ActionBar`'s background.
+        ///
+        /// - Parameter state: Either a `Drawable` or a `State<Drawable>` representing the background drawable.
+        public func backgroundDrawable<S>(_ state: S) -> Self where S: StateValuable, S.Value == Drawable {
+            if let state = state.stateValue {
+                backgroundDrawable.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                backgroundDrawable.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the action bar into custom navigation mode, supplying a view for custom navigation.
+        ///
+        /// - Parameter state: Either a `View` or a `State<View>` representing the custom view.
+        public func customView<S>(_ state: S) -> Self where S: StateValuable, S.Value == View {
+            if let state = state.stateValue {
+                customView.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                customView.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set whether home should be displayed as an "up" affordance.
+        /// 
+        /// Set this to true if selecting "home" returns up by a single level in your UI rather than to the top level or front page.
+        /// 
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing whether home is displayed as up.
+        public func displayHomeAsUpEnabled<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                displayHomeAsUpEnabled.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                displayHomeAsUpEnabled.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set whether a custom view should be displayed, if set.
+        ///
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing whether the custom view is displayed.
+        public func displayShowCustomEnabled<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                displayShowCustomEnabled.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                displayShowCustomEnabled.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set whether to include the application home affordance in the action bar.
+        /// Home is presented as either an activity icon or logo.
+        ///
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing whether home is displayed.
+        public func displayShowHomeEnabled<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                displayShowHomeEnabled.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                displayShowHomeEnabled.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set whether an activity title/subtitle should be displayed.
+        ///
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing whether the title is displayed.
+        public func displayShowTitleEnabled<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                displayShowTitleEnabled.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                displayShowTitleEnabled.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set whether to display the activity logo rather than the activity icon. A logo is often a wider, more detailed image.
+        ///
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing whether to use the logo.
+        public func displayUseLogoEnabled<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                displayUseLogoEnabled.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                displayUseLogoEnabled.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the Z-axis elevation of the action bar in pixels.
+        ///
+        /// The action bar's elevation is the distance it is placed from its parent surface. Higher values are closer to the user.
+        ///
+        /// - Parameters:
+        ///   - state: Either a `Float` or a `State<Float>` representing the elevation value.
+        ///   - unit: DimensionUnit for the elevation value, `.dp` by default.
+        public func elevation<S>(_ state: S, _ unit: DimensionUnit = .dp) -> Self where S: StateValuable, S.Value == Float {
+            if let state = state.stateValue {
+                elevation.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                elevation.wrappedValue = state.simpleValue
+            }
+            elevationUnit = unit
+            return self
+        }
+
+        /// Set the current hide offset of the action bar.
+        /// 
+        /// The action bar's current hide offset is the distance that the action bar is currently scrolled offscreen in pixels.
+        /// 
+        /// The valid range is 0 (fully visible) to the action bar's current measured height (fully invisible).
+        ///
+        /// - Parameters:
+        ///   - state: Either an `Int` or a `State<Int>` representing the hide offset value.
+        ///   - unit: DimensionUnit for the hide offset value, `.dp` by default.
+        public func hideOffset<S>(_ state: S, _ unit: DimensionUnit = .dp) -> Self where S: StateValuable, S.Value == Int {
+            if let state = state.stateValue {
+                hideOffset.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                hideOffset.wrappedValue = state.simpleValue
+            }
+            hideOffsetUnit = unit
+            return self
+        }
+
+        /// Enable hiding the action bar on content scroll.
+        /// 
+        /// If enabled, the action bar will scroll out of sight along with a nested scrolling child view's content.
+        /// The action bar must be in overlay mode to enable hiding on content scroll.
+        /// 
+        /// When partially scrolled off screen the action bar is considered hidden.
+        /// A call to show will cause it to return to full view.
+        ///
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing whether to hide on content scroll.
+        public func hideOnContentScrollEnabled<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                hideOnContentScrollEnabled.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                hideOnContentScrollEnabled.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set an alternate description for the Home/Up action, when enabled.
+        ///
+        /// This description is commonly used for accessibility/screen readers when the Home action is enabled.
+        /// (See [setDisplayHomeAsUpEnabled](https://developer.android.com/reference/androidx/appcompat/app/ActionBar#setDisplayHomeAsUpEnabled(boolean)).)
+        /// Examples of this are, "Navigate Home" or "Navigate Up" depending on the `DISPLAY_HOME_AS_UP` display option.
+        /// If you have changed the home-as-up indicator using `setHomeAsUpIndicator` to indicate more specific functionality
+        /// such as a sliding drawer, you should also set this to accurately describe the action.
+        ///
+        /// Setting this to null will use the system default description.
+        ///
+        /// - Parameter state: Either a `String` or a `State<String>` representing the content description.
+        public func homeActionContentDescription<S>(_ state: S) -> Self where S: StateValuable, S.Value == String {
+            if let state = state.stateValue {
+                homeActionContentDescription.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                homeActionContentDescription.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set an alternate drawable to display next to the icon/logo/title when `DISPLAY_HOME_AS_UP` is enabled.
+        /// This can be useful if you are using this mode to display an alternate selection for up navigation, such as a sliding drawer.
+        ///
+        /// If you pass null to this method, the default drawable from the theme will be used.
+        ///
+        /// If you implement alternate or intermediate behavior around Up,
+        /// you should also call `setHomeActionContentDescription()` to provide a correct description of the action for accessibility support.
+        ///
+        /// - Parameter state: Either a `Drawable` or a `State<Drawable>` representing the up indicator.
+        public func homeAsUpIndicator<S>(_ state: S) -> Self where S: StateValuable, S.Value == Drawable {
+            if let state = state.stateValue {
+                homeAsUpIndicator.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                homeAsUpIndicator.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+        
+        /// Enable or disable the "home" button in the corner of the action bar.
+        /// Note that this is the application home/up affordance on the action bar, not the system wide home button.)
+        ///
+        /// This defaults to true for packages targeting
+        /// 
+        /// Setting the `DISPLAY_HOME_AS_UP` display option will automatically enable the home button.
+        ///
+        /// - Parameter state: Either a `Bool` or a `State<Bool>` representing whether the home button is enabled.
+        public func homeButtonEnabled<S>(_ state: S = State(wrappedValue: true)) -> Self where S: StateValuable, S.Value == Bool {
+            if let state = state.stateValue {
+                homeButtonEnabled.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                homeButtonEnabled.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the icon to display in the 'home' section of the action bar.
+        ///
+        /// The action bar will use an icon specified by its style or the activity icon by default.
+        /// Whether the home section shows an icon or logo is controlled by the display option `DISPLAY_USE_LOGO`.
+        ///
+        /// - Parameter state: Either a `Drawable` or a `State<Drawable>` representing the icon.
+        public func icon<S>(_ state: S) -> Self where S: StateValuable, S.Value == Drawable {
+            if let state = state.stateValue {
+                icon.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                icon.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the logo to display in the 'home' section of the action bar.
+        /// 
+        /// The action bar will use a logo specified by its style or the activity logo by default.
+        /// Whether the home section shows an icon or logo is controlled by the display option `DISPLAY_USE_LOGO`.
+        ///
+        /// - Parameter state: Either a `Drawable` or a `State<Drawable>` representing the logo.
+        public func logo<S>(_ state: S) -> Self where S: StateValuable, S.Value == Drawable {
+            if let state = state.stateValue {
+                logo.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                logo.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the ActionBar's split background.
+        /// This will appear in the split action bar containing menu-provided action buttons on some devices and configurations.
+        /// 
+        /// You can enable split action bar with `uiOptions`
+        ///
+        /// - Parameter state: Either a `Drawable` or a `State<Drawable>` representing the split background drawable.
+        public func splitBackgroundDrawable<S>(_ state: S) -> Self where S: StateValuable, S.Value == Drawable {
+            if let state = state.stateValue {
+                splitBackgroundDrawable.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                splitBackgroundDrawable.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the action bar's subtitle.
+        /// 
+        /// This will only be displayed if `DISPLAY_SHOW_TITLE` is set.
+        ///
+        /// - Parameter state: Either a `String` or a `State<String>` representing the subtitle.
+        public func subtitle<S>(_ state: S) -> Self where S: StateValuable, S.Value == String {
+            if let state = state.stateValue {
+                subtitleState.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                subtitleState.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+
+        /// Set the action bar's title.
+        /// 
+        /// This will only be displayed if `DISPLAY_SHOW_TITLE` is set.
+        ///
+        /// - Parameter state: Either a `String` or a `State<String>` representing the title.
+        public func title<S>(_ state: S) -> Self where S: StateValuable, S.Value == String {
+            if let state = state.stateValue {
+                titleState.mergeWithNonOptional(with: state).hold(in: self)
+            } else {
+                titleState.wrappedValue = state.simpleValue
+            }
+            return self
+        }
+    }
+}
+
+extension AppCompatActivity {
+    @MainActor
+    public final class ActionSubMenu: Sendable {
+        let titleState: State<String>
+        let menu: MenuBuilder.Block
+        
+        public init<S>(_ title: S, @MenuBuilder block: @escaping MenuBuilder.Block) where S: StateValuable, S.Value == String {
+            if let state = title.stateValue {
+                titleState = state
+            } else {
+                titleState = State(wrappedValue: title.simpleValue)
+            }
+            menu = block
+        }
+    }
+
+    @MainActor
+    public final class ActionMenuItem: Sendable {
+        let titleState: State<String>
+        let showAsAction: MenuItem.ShowAsAction
+        
+        public init<S>(_ title: S, _ showAsAction: MenuItem.ShowAsAction = .collapseActionView) where S: StateValuable, S.Value == String {
+            if let state = title.stateValue {
+                titleState = state
+            } else {
+                titleState = State(wrappedValue: title.simpleValue)
+            }
+            self.showAsAction = showAsAction
         }
     }
 }

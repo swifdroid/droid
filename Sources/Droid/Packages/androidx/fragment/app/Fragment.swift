@@ -113,6 +113,7 @@ open class Fragment: NativeFragment, _Fragmentable {
                 setDefaultFrameLayout(item)
             case .none:
                 setDefaultFrameLayout(item)
+            case .supportActiionBar: break
             }
         }
         proceedItem(item)
