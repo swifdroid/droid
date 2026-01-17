@@ -94,6 +94,15 @@ extension JClassNameable {
     public var className: JClassName { type(of: self).className }
 }
 
+@MainActor
+public protocol Viewable {
+    associatedtype ViewType: View
+    var view: ViewType { get }
+}
+extension View: Viewable {
+    public var view: View { self }
+}
+
 open class View: _AnyView, JClassNameable, StatesHolder, Sendable {
     public typealias Body = BodyBuilder.Result
 
