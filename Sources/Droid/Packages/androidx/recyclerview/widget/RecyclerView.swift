@@ -97,20 +97,30 @@ final class SetAdapterViewProperty: ViewPropertyToApply {
         instance.callVoidMethod(env, name: key.rawValue, args: adapterInstance.object.signed(as: .androidx.recyclerview.widget.RecyclerView.Adapter))
     }
 }
+extension Int: RecyclerView.ViewType {
+    public var rawValue: Int { self }
+    public static func from(rawValue: Int) -> Self { rawValue }
+}
 extension RecyclerView {
+    /// A protocol representing a view type for RecyclerView items.
+    public protocol ViewType {
+        var rawValue: Int { get }
+        static func from(rawValue: Int) -> Self
+    }
+
     /// Set a new adapter to provide child views on demand.
     @discardableResult
-    public func adapter<V: View>(_ adapter: RecyclerViewAdapter<V>) -> Self {
+    public func adapter<V: Viewable, VT: ViewType>(_ adapter: RecyclerViewAdapter<V, VT>) -> Self {
         SetAdapterViewProperty(self, adapter).applyOrAppend(nil, self)
     }
 
     /// Set a new adapter to provide child views on demand.
     @discardableResult
-    public func adapter<V: View>(
+    public func adapter<V: Viewable, VT: ViewType>(
         count: @escaping (() -> Int),
-        createView: @escaping (_ index: Int) -> V,
+        createView: @escaping (_ viewType: VT) -> V,
         bindView: @escaping (_ view: V, _ index: Int) -> Void,
-        viewType: @escaping ((_ index: Int) -> Int) = { _ in return 0 }
+        viewType: @escaping ((_ index: Int) -> VT)
     ) -> Self {
         SetAdapterViewProperty(self, RecyclerViewAdapter(
             count: count,
@@ -122,17 +132,30 @@ extension RecyclerView {
 
     /// Set a new adapter to provide child views on demand.
     @discardableResult
-    public func adapter<V: View, I>(
+    public func adapter<V: Viewable>(
+        count: @escaping (() -> Int),
+        createView: @escaping (_ viewType: Int) -> V,
+        bindView: @escaping (_ view: V, _ index: Int) -> Void
+    ) -> Self {
+        SetAdapterViewProperty(self, RecyclerViewAdapter(
+            count: count,
+            createView: createView,
+            bindView: bindView,
+            viewType: { _ in 0 }
+        )).applyOrAppend(nil, self)
+    }
+
+    /// Set a new adapter to provide child views on demand.
+    @discardableResult
+    public func adapter<V: Viewable, I, VT: ViewType>(
         items: @autoclosure @escaping () -> [I],
-        createView: @escaping (_ item: I, _ index: Int) -> V,
+        createView: @escaping (_ viewType: VT) -> V,
         bindView: @escaping (_ view: V, _ item: I, _ index: Int) -> Void,
-        viewType: @escaping ((_ item: I, _ index: Int) -> Int) = { _, _ in return 0 }
+        viewType: @escaping ((_ item: I, _ index: Int) -> VT)
     ) -> Self {
         SetAdapterViewProperty(self, RecyclerViewAdapter(
             count: { items().count },
-            createView: { i in
-                createView(items()[i], i)
-            },
+            createView: createView,
             bindView: { v, i in
                 bindView(v, items()[i], i)
             },
@@ -144,17 +167,30 @@ extension RecyclerView {
 
     /// Set a new adapter to provide child views on demand.
     @discardableResult
-    public func adapter<V: View, I: AnyIdentable & Hashable>(
+    public func adapter<V: Viewable, I>(
+        items: @autoclosure @escaping () -> [I],
+        createView: @escaping (_ viewType: Int) -> V,
+        bindView: @escaping (_ view: V, _ item: I, _ index: Int) -> Void
+    ) -> Self {
+        adapter(
+            items: items(),
+            createView: createView,
+            bindView: bindView,
+            viewType: { _, _ in 0 }
+        )
+    }
+
+    /// Set a new adapter to provide child views on demand.
+    @discardableResult
+    public func adapter<V: Viewable, I: AnyIdentable & Hashable, VT: ViewType>(
         items: @autoclosure @escaping () -> State<[I]>,
-        createView: @escaping (_ item: I, _ index: Int) -> V,
+        createView: @escaping (_ viewType: VT) -> V,
         bindView: @escaping (_ view: V, _ item: I, _ index: Int) -> Void,
-        viewType: @escaping ((_ item: I, _ index: Int) -> Int) = { _, _ in return 0 }
+        viewType: @escaping ((_ item: I, _ index: Int) -> VT)
     ) -> Self {
         let adapter = RecyclerViewAdapter(
             count: { items().wrappedValue.count },
-            createView: { i in
-                createView(items().wrappedValue[i], i)
-            },
+            createView: createView,
             bindView: { v, i in
                 bindView(v, items().wrappedValue[i], i)
             },
@@ -229,6 +265,21 @@ extension RecyclerView {
             }
         }.hold(in: self)
         return SetAdapterViewProperty(self, adapter).applyOrAppend(nil, self)
+    }
+
+    /// Set a new adapter to provide child views on demand.
+    @discardableResult
+    public func adapter<V: Viewable, I: AnyIdentable & Hashable>(
+        items: @autoclosure @escaping () -> State<[I]>,
+        createView: @escaping (_ viewType: Int) -> V,
+        bindView: @escaping (_ view: V, _ item: I, _ index: Int) -> Void
+    ) -> Self {
+        adapter(
+            items: items(),
+            createView: createView,
+            bindView: bindView,
+            viewType: { _, _ in 0 }
+        )
     }
 }
 

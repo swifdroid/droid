@@ -71,30 +71,30 @@ final class RecyclerViewAdapterStore: @unchecked Sendable {
 protocol AnyRecyclerViewAdapter: AnyObject, Sendable {
     nonisolated var id: Int32 { get }
     var itemsCountHandler: (() -> Int) { get }
-    var getItemViewTypeHandler: ((Int) -> Int) { get }
-    func createViewHolder(_ position: Int) -> JObject?
+    func _getItemViewTypeHandler(_ position: Int) -> Int
+    func _createViewHolder(_ position: Int) -> JObject?
     func bindViewHolder(_ holder: AnyNativeRecyclerViewHolder, _ position: Int)
     func instantiate(_ context: View.ViewInstance) -> RecyclerViewAdapterInstance?
 }
 
-public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchecked Sendable {
+public final class RecyclerViewAdapter<V: Viewable, VT: RecyclerView.ViewType>: AnyRecyclerViewAdapter, @unchecked Sendable {
     /// Unique identifier
     let id: Int32 = DroidApp.getNextViewId()
 
     /// Action handler
     let itemsCountHandler: (() -> Int)
-    let onCreateViewHolderHandler: ((Int) -> V)
+    let onCreateViewHolderHandler: ((VT) -> V)
     let onBindViewHolderHandler: ((V, Int) -> Void)
-    let getItemViewTypeHandler: ((Int) -> Int)
+    let getItemViewTypeHandler: ((Int) -> VT)
 
     /// JNI Instance
     var instance: RecyclerViewAdapterInstance?
 
     public init (
         count: @escaping (() -> Int),
-        createView: @escaping (_ index: Int) -> V,
+        createView: @escaping (_ viewType: VT) -> V,
         bindView: @escaping (_ view: V, _ index: Int) -> Void,
-        viewType: @escaping ((_ index: Int) -> Int) = { _ in return 0 }
+        viewType: @escaping ((_ index: Int) -> VT) = { _ in return 0 }
     ) {
         self.itemsCountHandler = count
         self.onCreateViewHolderHandler = createView
@@ -103,12 +103,16 @@ public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchec
         RecyclerViewAdapterStore.shared.add(self)
     }
 
-    func createViewHolder(_ position: Int) -> JObject? {
-        guard let instance else {
+    func _createViewHolder(_ viewType: Int) -> JObject? {
+        createViewHolder(.from(rawValue: viewType))
+    }
+
+    func createViewHolder(_ viewType: VT) -> JObject? {
+        guard let instance: RecyclerViewAdapterInstance else {
             return nil
         }
-        let view = onCreateViewHolderHandler(position)
-        view.willMoveToParent()
+        let view = onCreateViewHolderHandler(viewType)
+        view.view.willMoveToParent()
         if let holder = NativeRecyclerViewHolder(instance, view) {
             return holder.object
         }
@@ -116,24 +120,39 @@ public final class RecyclerViewAdapter<V: View>: AnyRecyclerViewAdapter, @unchec
     }
 
     func bindViewHolder(_ holder: AnyNativeRecyclerViewHolder, _ position: Int) {
-        guard let holder = holder as? NativeRecyclerViewHolder<V> else { return }
+        // InnerLog.t("bindViewHolder 1 holder.id: \(holder.id)")
+        guard let holder = holder as? NativeRecyclerViewHolder<V> else {
+            InnerLog.c("bindViewHolder unexpected exit \(V.self) -> \(V.ViewType.self), unable to cast holder")
+            return
+        }
         if !holder.viewMovedToParent {
-            if let instance = holder.view.instance {
-                instance.lpClassName = .androidx.recyclerview.widget.RecyclerView.LayoutParams
-                if let lp = instance.layoutParams() {
-                    holder.view.processLayoutParams(instance, lp, for: holder.view)
-                    holder.view.layoutParams(lp)
+            if let instance = holder.view.view.instance {
+                // InnerLog.t("bindViewHolder instance present")
+                if let lp = instance.layoutParams(.androidx.recyclerview.widget.RecyclerView.LayoutParams) {
+                    // InnerLog.t("bindViewHolder LP present")
+                    instance.lpClassName = .androidx.recyclerview.widget.RecyclerView.LayoutParams
+                    holder.view.view.processLayoutParams(instance, lp, for: holder.view.view)
+                    holder.view.view.layoutParams(lp)
+                } else if let emptyLP = LayoutParams(.android.view.ViewGroup.LayoutParams) {
+                    // InnerLog.t("bindViewHolder LP missing, but created empty one")
+                    instance.lpClassName = .androidx.recyclerview.widget.RecyclerView.LayoutParams
+                    holder.view.view.processLayoutParams(instance, emptyLP, for: holder.view.view)
+                    holder.view.view.layoutParams(emptyLP)
+                } else {
+                    InnerLog.c("🔴🔴🔴 bindViewHolder LP missing")
                 }
+            } else {
+                InnerLog.c("🔴🔴🔴 bindViewHolder instance missing")
             }
-            holder.view.didMoveToParent()
+            holder.view.view.didMoveToParent()
             holder.viewMovedToParent = true
         }
         onBindViewHolderHandler(holder.view, position)
     }
     
-    // deinit {
-    //     NativeRecyclerViewAdapter.store.remove(id: id)
-    // }
+    func _getItemViewTypeHandler(_ position: Int) -> Int {
+        getItemViewTypeHandler(position).rawValue
+    }
 
     func instantiate(_ viewInstance: View.ViewInstance) -> RecyclerViewAdapterInstance? {
         instance = RecyclerViewAdapterInstance(viewInstance, id)
@@ -208,7 +227,7 @@ public func NativeRecyclerViewAdapterOnCreateViewHolder(env: UnsafeMutablePointe
         return nil
     }
     let result = MainActor.assumeIsolated {
-        adapter.createViewHolder(Int(viewType))
+        adapter._createViewHolder(Int(viewType))
     }
     if let result {
         return result.ref.ref
@@ -219,9 +238,18 @@ public func NativeRecyclerViewAdapterOnCreateViewHolder(env: UnsafeMutablePointe
 @_cdecl("Java_stream_swift_droid_appkit_adapters_NativeRecyclerViewAdapter_nativeOnBindViewHolder")
 public func NativeRecyclerViewAdapterOnBindViewHolder(env: UnsafeMutablePointer<JNIEnv?>, callerClassObject: jobject, nativeId: jint, holderId: jint, holder: jobject, position: jint) {
     guard
-        let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId),
+        let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId)
+    else {
+        InnerLog.c("🔴🔴🔴 NativeRecyclerViewAdapterOnBindViewHolder adapter not found")
+        return
+    }
+    guard
         let viewHolder = RecyclerViewHolderStore.shared.find(id: holderId)
-    else { return }
+    else {
+        InnerLog.c("🔴🔴🔴 NativeRecyclerViewAdapterOnBindViewHolder holder not found")
+        return
+    }
+    // InnerLog.t("NativeRecyclerViewAdapterOnBindViewHolder calling bindViewHolder with id: \(holderId)")
     MainActor.assumeIsolated {
         adapter.bindViewHolder(viewHolder, Int(position))
     }
@@ -234,7 +262,7 @@ public func NativeRecyclerViewAdapterGetItemViewType(env: UnsafeMutablePointer<J
         let adapter = RecyclerViewAdapterStore.shared.find(id: nativeId)
     else { return 0 }
     result = MainActor.assumeIsolated {
-        Int32(adapter.getItemViewTypeHandler(Int(position)))
+        Int32(adapter._getItemViewTypeHandler(Int(position)))
     }
     return jint(result)
 }

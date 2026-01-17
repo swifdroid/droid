@@ -72,7 +72,7 @@ protocol AnyNativeRecyclerViewHolder: AnyObject, Sendable {
 }
 
 @MainActor
-public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolder, JObjectable, @unchecked Sendable {
+public final class NativeRecyclerViewHolder<V: Viewable>: AnyNativeRecyclerViewHolder, JObjectable, @unchecked Sendable {
     /// The JNI class name
     static var className: JClassName { "stream/swift/droid/appkit/adapters/NativeRecyclerViewHolder" }
 
@@ -97,26 +97,37 @@ public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolde
     }
     
     public init? (_ env: JEnv, _ context: Contextable, _ view: V) {
+        // InnerLog.t("🟡 NativeRecyclerViewHolder: init 1")
         #if os(Android)
-        guard let context = context.context else { return nil }
+        guard let context = context.context else {
+            InnerLog.c("🔴 NativeRecyclerViewHolder: init 1.1 exit, missing context")
+            return nil
+        }
+        // InnerLog.t("🟡 NativeRecyclerViewHolder: init 2")
         guard
             let clazz = JClass.load(Self.className)
         else {
+            InnerLog.c("🔴 NativeRecyclerViewHolder: init 2.1 exit, missing clazz")
             return nil
         }
+        // InnerLog.t("🟡 NativeRecyclerViewHolder: init 3")
         guard
-            let viewInstance = view.setStatusAsContentView({ [weak context] in
-                InnerLog.t("🟡 NativeRecyclerViewHolder: getting context for view (\(context != nil))")
+            let viewInstance = view.view.setStatusAsContentView({ [weak context] in
+                // InnerLog.t("🟡 NativeRecyclerViewHolder: getting context for view (\(context != nil))")
                 return context
             })
         else {
+            InnerLog.c("🔴 NativeRecyclerViewHolder: init 3.1 exit, missing context")
             return nil
         }
+        // InnerLog.t("🟡 NativeRecyclerViewHolder: init 4")
         guard
             let global = clazz.newObject(env, args: id, viewInstance.object.signed(as: .android.view.View))
         else {
+            InnerLog.c("🔴 NativeRecyclerViewHolder: init 4.1 exit, newObject failed")
             return nil
         }
+        // InnerLog.t("🟡 NativeRecyclerViewHolder: init 5")
         self.object = global
         self.view = view
         RecyclerViewHolderStore.shared.add(self)
@@ -124,8 +135,4 @@ public final class NativeRecyclerViewHolder<V: View>: AnyNativeRecyclerViewHolde
         return nil
         #endif
     }
-    
-    // deinit {
-    //     RecyclerViewHolderStore.shared.remove(id: id)
-    // }
 }
