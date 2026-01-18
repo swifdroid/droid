@@ -10,6 +10,10 @@ public protocol Identable: Hashable, AnyIdentable {
     static var idKey: IDKey { get }
 }
 
+extension String: AnyIdentable {
+    public func identHash() -> Int { hashValue }
+}
+
 extension Identable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(self[keyPath: Self.idKey])
