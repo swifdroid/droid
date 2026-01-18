@@ -3674,7 +3674,7 @@ extension View {
 
 // MARK: Visibility
 
-public enum ViewVisibility: Int32 {
+public enum ViewVisibility: Int32, Sendable {
     /// Visible on screen; the default value.
     case visible = 0
     /// Not displayed, but taken into account during layout (space is left for it).
@@ -3684,15 +3684,24 @@ public enum ViewVisibility: Int32 {
 }
 struct VisibilityProperty: ViewPropertyToApply {
     let key: ViewPropertyKey = .setVisibility
-    let value: ViewVisibility
+    let value: State<ViewVisibility>
     func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
-        instance.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
+        instance.callVoidMethod(env, name: key.rawValue, args: value.wrappedValue.rawValue)
+        value.listenDistinct { [weak instance] newValue in
+            instance?.callVoidMethod(env, name: key.rawValue, args: newValue.rawValue)
+        }.hold(in: instance)
     }
 }
 extension View {
     /// Set the visibility state of this view.
     @discardableResult
     public func visibility(_ value: ViewVisibility) -> Self {
+        VisibilityProperty(value: .init(wrappedValue: value)).applyOrAppend(nil, self)
+    }
+
+    /// Set the visibility state of this view.
+    @discardableResult
+    public func visibility(_ value: State<ViewVisibility>) -> Self {
         VisibilityProperty(value: value).applyOrAppend(nil, self)
     }
 }
