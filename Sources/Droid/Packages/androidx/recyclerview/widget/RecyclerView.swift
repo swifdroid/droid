@@ -539,6 +539,7 @@ open class LayoutManager: @unchecked Sendable {
 
     public static func linear(orientation: LinearLayout.Orientation? = nil) -> LinearLayoutManager { .init(orientation: orientation) }
     public static func grid(spanCount: Int, orientation: LinearLayout.Orientation? = nil) -> GridLayoutManager { .init(spanCount: spanCount, orientation: orientation) }
+    public static func staggeredGrid(spanCount: Int, orientation: LinearLayout.Orientation) -> StaggeredGridLayoutManager { .init(spanCount: spanCount, orientation: orientation) }
 
     var layoutParamsClass: JClassName { Self.layoutParamsClass }
     var viewHolderLayoutParamsClass: JClassName { Self.viewHolderLayoutParamsClass }
