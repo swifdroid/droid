@@ -90,12 +90,16 @@ public final class RecyclerViewAdapter<V: Viewable, VT: RecyclerView.ViewType>: 
     /// JNI Instance
     var instance: RecyclerViewAdapterInstance?
 
+    weak var recyclerView: RecyclerView?
+
     public init (
+        recyclerView: RecyclerView,
         count: @escaping (() -> Int),
         createView: @escaping (_ viewType: VT) -> V,
         bindView: @escaping (_ view: V, _ index: Int) -> Void,
         viewType: @escaping ((_ index: Int) -> VT) = { _ in return 0 }
     ) {
+        self.recyclerView = recyclerView
         self.itemsCountHandler = count
         self.onCreateViewHolderHandler = createView
         self.onBindViewHolderHandler = bindView
@@ -125,17 +129,21 @@ public final class RecyclerViewAdapter<V: Viewable, VT: RecyclerView.ViewType>: 
             InnerLog.c("bindViewHolder unexpected exit \(V.self) -> \(V.ViewType.self), unable to cast holder")
             return
         }
+        guard let layoutManager = recyclerView?.layoutManager else {
+            InnerLog.c("bindViewHolder unexpected exit, recyclerView.layoutManager is nil")
+            return
+        }
         if !holder.viewMovedToParent {
             if let instance = holder.view.view.instance {
-                // InnerLog.t("bindViewHolder instance present")
-                if let lp = instance.layoutParams(.androidx.recyclerview.widget.RecyclerView.LayoutParams) {
-                    // InnerLog.t("bindViewHolder LP present")
-                    instance.lpClassName = .androidx.recyclerview.widget.RecyclerView.LayoutParams
+                InnerLog.t("bindViewHolder instance present: layoutManager: \(layoutManager) layoutManager.viewHolderLayoutParamsClass: \(layoutManager.layoutParamsClass)")
+                if let lp = instance.layoutParams(layoutManager.layoutParamsClass) {
+                    InnerLog.t("bindViewHolder LP present")
+                    instance.lpClassName = layoutManager.layoutParamsClass
                     holder.view.view.processLayoutParams(instance, lp, for: holder.view.view)
                     holder.view.view.layoutParams(lp)
-                } else if let emptyLP = LayoutParams(.android.view.ViewGroup.LayoutParams) {
-                    // InnerLog.t("bindViewHolder LP missing, but created empty one")
-                    instance.lpClassName = .androidx.recyclerview.widget.RecyclerView.LayoutParams
+                } else if let emptyLP = LayoutParams(layoutManager.viewHolderLayoutParamsClass) {
+                    InnerLog.t("bindViewHolder LP missing, but created empty one")
+                    instance.lpClassName = layoutManager.layoutParamsClass
                     holder.view.view.processLayoutParams(instance, emptyLP, for: holder.view.view)
                     holder.view.view.layoutParams(emptyLP)
                 } else {

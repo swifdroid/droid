@@ -38,6 +38,7 @@ public final class RecyclerView: ViewGroup {
     public override class var gradleDependencies: [AppGradleDependency] { [.recyclerview] }
 
     var adapterInstance: RecyclerViewAdapterInstance?
+    weak var layoutManager: LayoutManager?
 
     @discardableResult
     public override init (id: Int32? = nil) {
@@ -72,7 +73,8 @@ extension RecyclerView {
     /// Set the `RecyclerView.LayoutManager` that this `RecyclerView` will use.
     @discardableResult
     public func layoutManager(_ layoutManager: LayoutManager) -> Self {
-        SetLayoutManagerViewProperty(layoutManager).applyOrAppend(nil, self)
+        self.layoutManager = layoutManager
+        return SetLayoutManagerViewProperty(layoutManager).applyOrAppend(nil, self)
     }
 }
 
@@ -123,6 +125,7 @@ extension RecyclerView {
         viewType: @escaping ((_ index: Int) -> VT)
     ) -> Self {
         SetAdapterViewProperty(self, RecyclerViewAdapter(
+            recyclerView: self,
             count: count,
             createView: createView,
             bindView: bindView,
@@ -138,6 +141,7 @@ extension RecyclerView {
         bindView: @escaping (_ view: V, _ index: Int) -> Void
     ) -> Self {
         SetAdapterViewProperty(self, RecyclerViewAdapter(
+            recyclerView: self,
             count: count,
             createView: createView,
             bindView: bindView,
@@ -154,6 +158,7 @@ extension RecyclerView {
         viewType: @escaping ((_ item: I, _ index: Int) -> VT)
     ) -> Self {
         SetAdapterViewProperty(self, RecyclerViewAdapter(
+            recyclerView: self,
             count: { items().count },
             createView: createView,
             bindView: { v, i in
@@ -189,6 +194,7 @@ extension RecyclerView {
         viewType: @escaping ((_ item: I, _ index: Int) -> VT)
     ) -> Self {
         let adapter = RecyclerViewAdapter(
+            recyclerView: self,
             count: { items().wrappedValue.count },
             createView: createView,
             bindView: { v, i in
@@ -429,9 +435,15 @@ public final class PagerSnapHelper: JObjectable, @unchecked Sendable {
 open class LayoutManager: @unchecked Sendable {
     /// The JNI class name
     open class var className: JClassName { .androidx.recyclerview.widget.RecyclerView.LayoutManager }
+    open class var layoutParamsClass: JClassName { .androidx.recyclerview.widget.RecyclerView.LayoutParams }
+    open class var viewHolderLayoutParamsClass: JClassName { .android.view.ViewGroup.LayoutParams }
+    open class var gradleDependencies: [AppGradleDependency] { [] }
 
     public static func linear(orientation: LinearLayout.Orientation? = nil) -> LinearLayoutManager { .init(orientation: orientation) }
     public static func grid(spanCount: Int, orientation: LinearLayout.Orientation? = nil) -> GridLayoutManager { .init(spanCount: spanCount, orientation: orientation) }
+
+    var layoutParamsClass: JClassName { Self.layoutParamsClass }
+    var viewHolderLayoutParamsClass: JClassName { Self.viewHolderLayoutParamsClass }
 
     @MainActor
     public final class LayoutManagerInstance: JObjectable, @unchecked Sendable {
@@ -813,9 +825,16 @@ extension ComGoogleAndroidPackage.FlexboxClass {
     public class FlexboxLayoutManagerClass: JClassName, @unchecked Sendable {}
     public var FlexboxLayoutManager: FlexboxLayoutManagerClass { .init(parent: self, name: "FlexboxLayoutManager") }
 }
+extension ComGoogleAndroidPackage.FlexboxClass.FlexboxLayoutManagerClass {
+    public class LayoutParamsClass: JClassName, @unchecked Sendable {}
+    public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
+}
 
 open class FlexboxLayoutManager: LinearLayoutManager, @unchecked Sendable {
     open override class var className: JClassName { .comGoogleAndroid.flexbox.FlexboxLayoutManager }
+    open override class var gradleDependencies: [AppGradleDependency] { [.flexbox] }
+    open override class var layoutParamsClass: JClassName { .comGoogleAndroid.flexbox.FlexboxLayoutManager.LayoutParams }
+    open override class var viewHolderLayoutParamsClass: JClassName { .comGoogleAndroid.flexbox.FlexboxLayoutManager.LayoutParams }
 
     public init(flexDirection: FlexboxLayout.FlexDirection? = nil, flexWrap: FlexboxLayout.FlexWrap? = nil) {
         super.init()
