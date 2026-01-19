@@ -78,6 +78,43 @@ extension RecyclerView {
     }
 }
 
+// MARK: SetLayoutManager
+
+struct SetHasFixedSizeViewProperty: ViewPropertyToApply {
+    let key: ViewPropertyKey = "setHasFixedSize"
+    let value: Bool
+    func applyToInstance(_ env: JEnv?, _ instance: View.ViewInstance) {
+        instance.callVoidMethod(env, name: key.rawValue, args: value)
+    }
+}
+extension RecyclerView {
+    /// Informs `RecyclerView` whether adapter content changes can affect its measured size.
+    ///
+    /// Default is `false`.
+    /// When `false`, `RecyclerView` re-measures itself whenever items are added, removed, or updated,
+    /// because item sizes may vary.
+    ///
+    /// Set this to `true` when all item views have a fixed and identical size
+    /// in the scrolling direction (height for vertical lists, width for horizontal lists).
+    ///
+    /// With `true`, `RecyclerView` assumes item size never changes and skips expensive
+    /// layout and measurement passes when adapter content changes.
+    ///
+    /// This is an optimization hint only. Incorrect usage can cause layout issues.
+    ///
+    /// [Original comment on SO](https://stackoverflow.com/questions/28709220/understanding-recyclerview-sethasfixedsize#comment62392637_33365341)
+    @discardableResult
+    public func hasFixedSize(_ value: Bool) -> Self {
+        SetHasFixedSizeViewProperty(value: value).applyOrAppend(nil, self)
+    }
+
+    /// Returns `true` if the app has declared that adapter changes
+    /// cannot affect the size of the `RecyclerView`.
+    public func hasFixedSize() -> Bool {
+        instance?.callBoolMethod(nil, name: "hasFixedSize") ?? false
+    }
+}
+
 // MARK: SetAdapter
 
 extension ViewPropertyKey {
