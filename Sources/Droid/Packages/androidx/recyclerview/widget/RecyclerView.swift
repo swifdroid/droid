@@ -31,6 +31,9 @@ extension LayoutParams.Class {
     static let recyclerLayout: Self = .init(.androidx.recyclerview.widget.RecyclerView.LayoutParams)
 }
 
+/// A flexible view for providing a limited window into a large data set.
+///
+/// [Learn more](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
 public final class RecyclerView: ViewGroup {
     /// The JNI class name
     public override class var className: JClassName { .androidx.recyclerview.widget.RecyclerView }
@@ -399,36 +402,43 @@ extension RecyclerView {
 
     // MARK: Insertion
 
+    /// Notifies that an item is inserted at the given position.
     public func notifyItemInserted(at position: Int) {
         adapterInstance?.callVoidMethod(nil, name: "notifyItemInserted", args: Int32(position))
     }
 
+    /// Notifies that a range of items is inserted starting at the given position.
     public func notifyItemRangeInserted(startAt: Int, count: Int) {
         adapterInstance?.callVoidMethod(nil, name: "notifyItemRangeInserted", args: Int32(startAt), Int32(count))
     }
 
     // MARK: Removal
 
+    /// Notifies that an item is removed at the given position.
     public func notifyItemRemoved(at position: Int) {
         adapterInstance?.callVoidMethod(nil, name: "notifyItemRemoved", args: Int32(position))
     }
 
+    /// Notifies that a range of items is removed starting at the given position.
     public func notifyItemRangeRemoved(startAt: Int, count: Int) {
         adapterInstance?.callVoidMethod(nil, name: "notifyItemRangeRemoved", args: Int32(startAt), Int32(count))
     }
 
     // MARK: Update
 
+    /// Notifies that an item is changed at the given position.
     public func notifyItemChanged(at position: Int) {
         adapterInstance?.callVoidMethod(nil, name: "notifyItemChanged", args: Int32(position))
     }
 
+    /// Notifies that a range of items is changed starting at the given position.
     public func notifyItemRangeChanged(startAt: Int, count: Int) {
         adapterInstance?.callVoidMethod(nil, name: "notifyItemRangeChanged", args: Int32(startAt), Int32(count))
     }
 
     // MARK: Move
 
+    /// Notifies that an item is moved from one position to another.
     public func notifyItemMoved(fromPosition: Int, toPosition: Int) {
         adapterInstance?.callVoidMethod(nil, name: "notifyItemMoved", args: Int32(fromPosition), Int32(toPosition))
     }
@@ -663,6 +673,11 @@ struct MeasurementCacheEnabledLayoutManagerProperty: LayoutManager.ParamToApply 
 
 // MARK: - LinearLayoutManager
 
+/// A `LayoutManager` implementation which provides similar functionality to `LinearLayout`.
+/// 
+/// It supports both vertical and horizontal layouts.
+///
+/// [Learn more](https://developer.android.com/reference/androidx/recyclerview/widget/LinearLayoutManager)
 open class LinearLayoutManager: LayoutManager, @unchecked Sendable {
     open override class var className: JClassName { .androidx.recyclerview.widget.LinearLayoutManager }
 
@@ -791,6 +806,9 @@ struct SmoothScrollbarEnabledLayoutManagerProperty: LayoutManager.ParamToApply {
 
 // MARK: - GridLayoutManager
 
+/// A LayoutManager that lays out items in a grid.
+///
+/// [Learn more](https://developer.android.com/reference/kotlin/androidx/recyclerview/widget/GridLayoutManager)
 open class GridLayoutManager: LinearLayoutManager, @unchecked Sendable {
     open override class var className: JClassName { .androidx.recyclerview.widget.GridLayoutManager }
 
@@ -806,9 +824,9 @@ open class GridLayoutManager: LinearLayoutManager, @unchecked Sendable {
 
     /// Sets the number of spans to be laid out.
     ///
-    /// If `orientation` is `VERTICAL`, this is the number of columns.
+    /// If `orientation` is `.vertical`, this is the number of columns.
     ///
-    /// If `orientation` is `HORIZONTAL`, this is the number of rows.
+    /// If `orientation` is `.horizontal`, this is the number of rows.
     @discardableResult
     public func spanCount(_ value: Int) -> Self {
         SpanCountLayoutManagerProperty(value: value).applyOrAppend(self)
@@ -863,6 +881,14 @@ struct UsingSpansToEstimateScrollbarDimensionsLayoutManagerProperty: LayoutManag
 
 // MARK: - StaggeredGridLayoutManager
 
+/// A LayoutManager that lays out children in a staggered grid formation.
+/// It supports horizontal and vertical layout as well as an ability to layout children in reverse.
+///
+/// Staggered grids are likely to have gaps at the edges of the layout.
+/// To avoid these gaps, `StaggeredGridLayoutManager` can offset spans independently or move items between spans.
+/// You can control this behavior via `setGapStrategy`.
+///
+/// [Learn more](https://developer.android.com/reference/kotlin/androidx/recyclerview/widget/StaggeredGridLayoutManager)
 open class StaggeredGridLayoutManager: LayoutManager, @unchecked Sendable {
     open override class var className: JClassName { .androidx.recyclerview.widget.StaggeredGridLayoutManager }
 
