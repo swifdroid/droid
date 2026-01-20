@@ -10,6 +10,9 @@ extension AndroidPackage.WidgetPackage {
     public var Space: SpaceClass { .init(parent: self, name: "Space") }
 }
 
+/// A lightweight View subclass that may be used to create gaps between components in general purpose layouts.
+///
+/// [Learn more](https://developer.android.com/reference/android/widget/Space)
 open class Space: ViewGroup {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.Space }
