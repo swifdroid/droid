@@ -1,0 +1,55 @@
+{
+  "class": {
+    "canonicalName": "androidx.constraintlayout.widget.ConstraintLayout",
+    "referenceUrl": "https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout",
+    "docSummary": "A ViewGroup that allows positioning and sizing widgets in a flexible way.",
+    "docBody": "ConstraintLayout lets you define constraints between sibling views and parent edges for responsive layouts."
+  },
+  "constructors": [
+    {
+      "id": "ConstraintLayout(android.content.Context)",
+      "name": "ConstraintLayout",
+      "signature": {
+        "name": "ConstraintLayout",
+        "parameters": [
+          {
+            "name": "context",
+            "type": "android.content.Context"
+          }
+        ],
+        "returnType": null
+      },
+      "docSummary": "Creates a ConstraintLayout.",
+      "docBody": ""
+    }
+  ],
+  "methods": [
+    {
+      "id": "setOptimizationLevel(int)",
+      "name": "setOptimizationLevel",
+      "signature": {
+        "name": "setOptimizationLevel",
+        "parameters": [
+          {
+            "name": "level",
+            "type": "int"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Sets the optimization level used by the layout engine.",
+      "docBody": ""
+    },
+    {
+      "id": "getOptimizationLevel()",
+      "name": "getOptimizationLevel",
+      "signature": {
+        "name": "getOptimizationLevel",
+        "parameters": [],
+        "returnType": "int"
+      },
+      "docSummary": "Returns the optimization level used by the layout engine.",
+      "docBody": ""
+    }
+  ]
+}

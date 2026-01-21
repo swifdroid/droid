@@ -1,0 +1,93 @@
+{
+  "class": {
+    "canonicalName": "com.google.android.material.button.MaterialButton",
+    "referenceUrl": "https://developer.android.com/reference/com/google/android/material/button/MaterialButton",
+    "docSummary": "A convenience class for creating a new Material button.",
+    "docBody": "MaterialButton provides Material styling and additional button APIs including icon, stroke, and shape controls."
+  },
+  "constructors": [
+    {
+      "id": "MaterialButton(android.content.Context)",
+      "name": "MaterialButton",
+      "signature": {
+        "name": "MaterialButton",
+        "parameters": [
+          {
+            "name": "context",
+            "type": "android.content.Context"
+          }
+        ],
+        "returnType": null
+      },
+      "docSummary": "Creates a MaterialButton.",
+      "docBody": ""
+    }
+  ],
+  "methods": [
+    {
+      "id": "clearOnCheckedChangeListeners()",
+      "name": "clearOnCheckedChangeListeners",
+      "signature": {
+        "name": "clearOnCheckedChangeListeners",
+        "parameters": [],
+        "returnType": "void"
+      },
+      "docSummary": "Remove all previously added OnCheckedChangeListener callbacks.",
+      "docBody": ""
+    },
+    {
+      "id": "getCornerRadius()",
+      "name": "getCornerRadius",
+      "signature": {
+        "name": "getCornerRadius",
+        "parameters": [],
+        "returnType": "int"
+      },
+      "docSummary": "Gets the corner radius for this button.",
+      "docBody": ""
+    },
+    {
+      "id": "setCornerRadius(int)",
+      "name": "setCornerRadius",
+      "signature": {
+        "name": "setCornerRadius",
+        "parameters": [
+          {
+            "name": "radius",
+            "type": "int"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Sets the corner radius for this button.",
+      "docBody": ""
+    },
+    {
+      "id": "getIcon()",
+      "name": "getIcon",
+      "signature": {
+        "name": "getIcon",
+        "parameters": [],
+        "returnType": "android.graphics.drawable.Drawable"
+      },
+      "docSummary": "Returns the icon shown for this button.",
+      "docBody": ""
+    },
+    {
+      "id": "setIcon(android.graphics.drawable.Drawable)",
+      "name": "setIcon",
+      "signature": {
+        "name": "setIcon",
+        "parameters": [
+          {
+            "name": "icon",
+            "type": "android.graphics.drawable.Drawable"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Sets the icon shown for this button.",
+      "docBody": ""
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "class": {
+    "canonicalName": "android.view.View",
+    "referenceUrl": "https://developer.android.com/reference/android/view/View",
+    "docSummary": "This class represents the basic building block for user interface components.",
+    "docBody": "A View occupies a rectangular area on the screen and is responsible for drawing and event handling."
+  },
+  "constructors": [
+    {
+      "id": "View(android.content.Context)",
+      "name": "View",
+      "signature": {
+        "name": "View",
+        "parameters": [
+          {
+            "name": "context",
+            "type": "android.content.Context"
+          }
+        ],
+        "returnType": null
+      },
+      "docSummary": "Simple constructor to use when creating a view from code.",
+      "docBody": ""
+    }
+  ],
+  "methods": [
+    {
+      "id": "setAlpha(float)",
+      "name": "setAlpha",
+      "signature": {
+        "name": "setAlpha",
+        "parameters": [
+          {
+            "name": "alpha",
+            "type": "float"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Sets the opacity of the view.",
+      "docBody": ""
+    },
+    {
+      "id": "getAlpha()",
+      "name": "getAlpha",
+      "signature": {
+        "name": "getAlpha",
+        "parameters": [],
+        "returnType": "float"
+      },
+      "docSummary": "Returns the opacity of the view.",
+      "docBody": ""
+    },
+    {
+      "id": "setVisibility(int)",
+      "name": "setVisibility",
+      "signature": {
+        "name": "setVisibility",
+        "parameters": [
+          {
+            "name": "visibility",
+            "type": "int"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Sets the visibility status for this view.",
+      "docBody": ""
+    },
+    {
+      "id": "getVisibility()",
+      "name": "getVisibility",
+      "signature": {
+        "name": "getVisibility",
+        "parameters": [],
+        "returnType": "int"
+      },
+      "docSummary": "Returns the visibility status for this view.",
+      "docBody": ""
+    },
+    {
+      "id": "setOnClickListener(android.view.View.OnClickListener)",
+      "name": "setOnClickListener",
+      "signature": {
+        "name": "setOnClickListener",
+        "parameters": [
+          {
+            "name": "l",
+            "type": "android.view.View.OnClickListener"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Register a callback to be invoked when this view is clicked.",
+      "docBody": ""
+    }
+  ]
+}

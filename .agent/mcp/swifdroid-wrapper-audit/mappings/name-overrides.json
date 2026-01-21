@@ -1,0 +1,13 @@
+{
+  "*": {
+    "setText": ["text"],
+    "getText": ["text"],
+    "setHint": ["hint"],
+    "getHint": ["hint"],
+    "setDuration": ["duration"],
+    "setView": ["view"],
+    "getView": ["view"],
+    "getContext": ["context"],
+    "setGravity": ["gravity"]
+  }
+}

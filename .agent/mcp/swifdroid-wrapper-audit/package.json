@@ -1,0 +1,11 @@
+{
+  "name": "@swifdroid/swifdroid-wrapper-audit-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for auditing SwifDroid Android wrappers against reference docs.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}

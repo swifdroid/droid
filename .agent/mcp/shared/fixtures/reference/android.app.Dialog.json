@@ -1,0 +1,101 @@
+{
+  "class": {
+    "canonicalName": "android.app.Dialog",
+    "referenceUrl": "https://developer.android.com/reference/android/app/Dialog",
+    "docSummary": "Base class for dialogs.",
+    "docBody": "A dialog is a small window that prompts the user to make a decision or enter additional information."
+  },
+  "constructors": [
+    {
+      "id": "Dialog(android.content.Context)",
+      "name": "Dialog",
+      "signature": {
+        "name": "Dialog",
+        "parameters": [
+          {
+            "name": "context",
+            "type": "android.content.Context"
+          }
+        ],
+        "returnType": null
+      },
+      "docSummary": "Creates a dialog window that uses the default dialog theme.",
+      "docBody": ""
+    },
+    {
+      "id": "Dialog(android.content.Context,int)",
+      "name": "Dialog",
+      "signature": {
+        "name": "Dialog",
+        "parameters": [
+          {
+            "name": "context",
+            "type": "android.content.Context"
+          },
+          {
+            "name": "themeResId",
+            "type": "int"
+          }
+        ],
+        "returnType": null
+      },
+      "docSummary": "Creates a dialog window that uses a custom dialog style.",
+      "docBody": ""
+    }
+  ],
+  "methods": [
+    {
+      "id": "addContentView(android.view.View,android.view.ViewGroup.LayoutParams)",
+      "name": "addContentView",
+      "signature": {
+        "name": "addContentView",
+        "parameters": [
+          {
+            "name": "view",
+            "type": "android.view.View"
+          },
+          {
+            "name": "params",
+            "type": "android.view.ViewGroup.LayoutParams"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Adds an additional content view to the screen.",
+      "docBody": ""
+    },
+    {
+      "id": "cancel()",
+      "name": "cancel",
+      "signature": {
+        "name": "cancel",
+        "parameters": [],
+        "returnType": "void"
+      },
+      "docSummary": "Cancels the dialog.",
+      "docBody": ""
+    },
+    {
+      "id": "dismiss()",
+      "name": "dismiss",
+      "signature": {
+        "name": "dismiss",
+        "parameters": [],
+        "returnType": "void"
+      },
+      "docSummary": "Dismisses the dialog.",
+      "docBody": ""
+    },
+    {
+      "id": "show()",
+      "name": "show",
+      "signature": {
+        "name": "show",
+        "parameters": [],
+        "returnType": "void"
+      },
+      "docSummary": "Starts the dialog and displays it on screen.",
+      "docBody": ""
+    }
+  ]
+}

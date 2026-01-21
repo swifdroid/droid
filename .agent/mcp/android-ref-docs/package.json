@@ -1,0 +1,11 @@
+{
+  "name": "@swifdroid/android-ref-docs-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for resolving official Android reference docs.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  }
+}

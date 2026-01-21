@@ -1,0 +1,87 @@
+{
+  "class": {
+    "canonicalName": "android.widget.TextView",
+    "referenceUrl": "https://developer.android.com/reference/android/widget/TextView",
+    "docSummary": "Displays text to the user and optionally allows editing.",
+    "docBody": "TextView is the base class for widgets that display text and support styled text rendering."
+  },
+  "constructors": [
+    {
+      "id": "TextView(android.content.Context)",
+      "name": "TextView",
+      "signature": {
+        "name": "TextView",
+        "parameters": [
+          {
+            "name": "context",
+            "type": "android.content.Context"
+          }
+        ],
+        "returnType": null
+      },
+      "docSummary": "Constructor used when creating a TextView from code.",
+      "docBody": ""
+    }
+  ],
+  "methods": [
+    {
+      "id": "setText(java.lang.CharSequence)",
+      "name": "setText",
+      "signature": {
+        "name": "setText",
+        "parameters": [
+          {
+            "name": "text",
+            "type": "java.lang.CharSequence"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Sets the string value of the TextView.",
+      "docBody": ""
+    },
+    {
+      "id": "getText()",
+      "name": "getText",
+      "signature": {
+        "name": "getText",
+        "parameters": [],
+        "returnType": "java.lang.CharSequence"
+      },
+      "docSummary": "Returns the text displayed by this TextView.",
+      "docBody": ""
+    },
+    {
+      "id": "setHint(java.lang.CharSequence)",
+      "name": "setHint",
+      "signature": {
+        "name": "setHint",
+        "parameters": [
+          {
+            "name": "hint",
+            "type": "java.lang.CharSequence"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Sets the hint that is displayed when the text is empty.",
+      "docBody": ""
+    },
+    {
+      "id": "addTextChangedListener(android.text.TextWatcher)",
+      "name": "addTextChangedListener",
+      "signature": {
+        "name": "addTextChangedListener",
+        "parameters": [
+          {
+            "name": "watcher",
+            "type": "android.text.TextWatcher"
+          }
+        ],
+        "returnType": "void"
+      },
+      "docSummary": "Adds a TextWatcher to receive text change callbacks.",
+      "docBody": ""
+    }
+  ]
+}
