@@ -94,6 +94,24 @@ extension JClassNameable {
     public var className: JClassName { type(of: self).className }
 }
 
+extension View {
+    public func signed(as className: JClassName? = nil) -> JSignatureItemWithValue {
+        instance.signed(as: className ?? self.className)
+    }
+}
+
+extension Optional where Wrapped: View {
+    @MainActor
+    public func signed(as className: JClassName) -> JSignatureItemWithValue {
+        switch self {
+            case .some(let view):
+                return view.instance.signed(as: className)
+            case .none:
+                return .objectNil(className)
+        }
+    }
+}
+
 @MainActor
 public protocol Viewable {
     associatedtype ViewType: View
