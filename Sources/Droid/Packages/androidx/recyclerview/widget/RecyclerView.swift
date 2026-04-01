@@ -1023,7 +1023,7 @@ struct FlexDirectionLayoutManagerProperty: LayoutManager.ParamToApply {
 // MARK: FlexWrap
 
 struct FlexWrapLayoutManagerProperty: LayoutManager.ParamToApply {
-    let key: LayoutManager.ParamKey = .setFlexDirection
+    let key: LayoutManager.ParamKey = .setFlexWrap
     let value: FlexboxLayout.FlexWrap
     func apply(_ env: JEnv?, _ layoutManager: LayoutManager.LayoutManagerInstance) {
         layoutManager.callVoidMethod(env, name: key.rawValue, args: value.rawValue)
