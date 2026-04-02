@@ -14,7 +14,7 @@ extension AndroidPackage.WidgetPackage.TableRowClass {
     public var LayoutParams: LayoutParamsClass { .init(parent: self, name: "LayoutParams", isInnerClass: true) }
 }
 extension LayoutParams.Class {
-    static let tableRow: Self = .init(.android.widget.TableLayout.LayoutParams)
+    static let tableRow: Self = .init(.android.widget.TableRow.LayoutParams)
 }
 
 open class TableRow: View {
