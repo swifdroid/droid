@@ -26,4 +26,9 @@ open class TableLayout: View {
     public override init (id: Int32? = nil) {
         super.init(id: id)
     }
+
+    @discardableResult
+    public override init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(id: id, content: content)
+    }
 }

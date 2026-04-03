@@ -27,6 +27,11 @@ open class TableRow: View {
         super.init(id: id)
     }
 
+    @discardableResult
+    public override init (id: Int32? = nil, @BodyBuilder content: BodyBuilder.SingleView) {
+        super.init(id: id, content: content)
+    }
+
     open override func applicableLayoutParams() -> [LayoutParamKey] {
         super.applicableLayoutParams() + [
             .column,
