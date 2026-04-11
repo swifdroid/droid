@@ -21,6 +21,9 @@ extension LayoutParams.Class {
     static let gridLayout: Self = .init(.android.widget.GridLayout.LayoutParams)
 }
 
+/// A wrapper for `android.widget.GridLayout`.
+///
+/// [Learn more](https://developer.android.com/reference/android/widget/GridLayout)
 open class GridLayout: View {
     /// The JNI class name
     open override class var className: JClassName { .android.widget.GridLayout }
@@ -163,5 +166,128 @@ struct RowSpecLayoutParam: LayoutParamToApply {
     let value: GridLayout.SpecType
     func apply(_ env: JEnv?, _ context: View.ViewInstance, _ lp: LayoutParams) {
         apply(env, context, lp, key, value)
+    }
+}
+
+// MARK: LayoutParams
+
+extension GridLayout {
+    /// Returns `true` if the supplied layout parameters are valid for this layout.
+    public func checkLayoutParams(_ params: LayoutParams?) -> Bool {
+        instance?.callBoolMethod(name: "checkLayoutParams", args: params?.signed(as: .android.view.ViewGroup.LayoutParams)) ?? false
+    }
+
+    /// Returns a set of default layout parameters.
+    public func generateDefaultLayoutParams() -> LayoutParams? {
+        guard
+            let returningClazz = JClass.load(.android.view.ViewGroup.LayoutParams),
+            let global = instance?.callObjectMethod(name: "generateDefaultLayoutParams", returningClass: returningClazz)
+        else { return nil }
+        return LayoutParams(global)
+    }
+
+    /// Returns a copy of supplied layout parameters.
+    public func generateLayoutParams(_ params: JObject?) -> LayoutParams? {
+        guard
+            let returningClazz = JClass.load(.android.view.ViewGroup.LayoutParams),
+            let global = instance?.callObjectMethod(
+                name: "generateLayoutParams",
+                args: params?.signed(as: .android.view.ViewGroup.LayoutParams),
+                returningClass: returningClazz
+            )
+        else { return nil }
+        return LayoutParams(global)
+    }
+}
+
+// MARK: Getters
+
+extension GridLayout {
+    /// Returns alignment mode.
+    public func alignmentMode() -> Int {
+        Int(instance?.callIntMethod(name: "getAlignmentMode") ?? 0)
+    }
+
+    /// Returns number of columns.
+    public func columnCount() -> Int {
+        Int(instance?.callIntMethod(name: "getColumnCount") ?? 0)
+    }
+
+    /// Returns orientation.
+    public func orientation() -> Int {
+        Int(instance?.callIntMethod(name: "getOrientation") ?? 0)
+    }
+
+    /// Returns number of rows.
+    public func rowCount() -> Int {
+        Int(instance?.callIntMethod(name: "getRowCount") ?? 0)
+    }
+
+    /// Returns whether default margins are used.
+    public func useDefaultMargins() -> Bool {
+        instance?.callBoolMethod(name: "getUseDefaultMargins") ?? false
+    }
+
+    /// Returns whether column order is preserved.
+    public func isColumnOrderPreserved() -> Bool {
+        instance?.callBoolMethod(name: "isColumnOrderPreserved") ?? true
+    }
+
+    /// Returns whether row order is preserved.
+    public func isRowOrderPreserved() -> Bool {
+        instance?.callBoolMethod(name: "isRowOrderPreserved") ?? true
+    }
+}
+
+// MARK: Measure & Layout
+
+extension GridLayout {
+    /// Called to assign a size and position to each child view.
+    public func onLayout(_ changed: Bool, _ left: Int, _ top: Int, _ right: Int, _ bottom: Int) {
+        instance?.callVoidMethod(name: "onLayout", args: changed, Int32(left), Int32(top), Int32(right), Int32(bottom))
+    }
+
+    /// Called to determine size requirements for this view and children.
+    public func onMeasure(_ widthMeasureSpec: Int, _ heightMeasureSpec: Int) {
+        instance?.callVoidMethod(name: "onMeasure", args: Int32(widthMeasureSpec), Int32(heightMeasureSpec))
+    }
+}
+
+// MARK: Setters
+
+extension GridLayout {
+    /// Sets alignment mode.
+    public func setAlignmentMode(_ alignmentMode: Int) {
+        instance?.callVoidMethod(name: "setAlignmentMode", args: Int32(alignmentMode))
+    }
+
+    /// Sets number of columns.
+    public func setColumnCount(_ columnCount: Int) {
+        instance?.callVoidMethod(name: "setColumnCount", args: Int32(columnCount))
+    }
+
+    /// Sets whether column order is preserved.
+    public func setColumnOrderPreserved(_ preserved: Bool) {
+        instance?.callVoidMethod(name: "setColumnOrderPreserved", args: preserved)
+    }
+
+    /// Sets orientation.
+    public func setOrientation(_ orientation: Int) {
+        instance?.callVoidMethod(name: "setOrientation", args: Int32(orientation))
+    }
+
+    /// Sets number of rows.
+    public func setRowCount(_ rowCount: Int) {
+        instance?.callVoidMethod(name: "setRowCount", args: Int32(rowCount))
+    }
+
+    /// Sets whether row order is preserved.
+    public func setRowOrderPreserved(_ preserved: Bool) {
+        instance?.callVoidMethod(name: "setRowOrderPreserved", args: preserved)
+    }
+
+    /// Sets whether default margins are used.
+    public func setUseDefaultMargins(_ useDefaultMargins: Bool) {
+        instance?.callVoidMethod(name: "setUseDefaultMargins", args: useDefaultMargins)
     }
 }
